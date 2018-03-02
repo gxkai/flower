@@ -1,0 +1,585 @@
+package com.dao;
+
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+
+public class RepDao {
+	public static boolean getExcelForORDERCODE(HttpServletResponse response,String code_start,String code_end,String ordercode,String ename)  {
+		Page<Record>page =RepDao.OrderCode(1, 1000000000, code_start, code_end,ordercode,ename);
+		List<Record> wllist = page.getList();
+		HSSFWorkbook wbook = new HSSFWorkbook();
+		HSSFSheet sheet1 = wbook.createSheet();
+		//设置列宽
+		sheet1.setColumnWidth((short)0, (short)6400);
+		sheet1.setColumnWidth((short)1, (short)6400);
+		sheet1.setColumnWidth((short)2, (short)6400);
+		sheet1.setColumnWidth((short)3, (short)6400);
+		sheet1.setColumnWidth((short)4, (short)6400);
+		sheet1.setColumnWidth((short)5, (short)6400);
+		sheet1.setColumnWidth((short)6, (short)6400);
+		wbook.setSheetName(0, "每单盈亏");
+		//首行 样式1
+       HSSFCellStyle cellStyle = wbook.createCellStyle();
+       HSSFFont font = wbook.createFont();
+       font.setColor(HSSFColor.RED.index);    //红字
+       cellStyle.setFont(font);
+       cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);  //填充单元格
+       cellStyle.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index); //填亮黄色
+       cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+       cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+       cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+       cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框    
+       cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 居中    
+       //样式2
+       HSSFCellStyle cellStyle1 = wbook.createCellStyle();
+       cellStyle1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+       cellStyle1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+       cellStyle1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+       cellStyle1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框    
+      //首行 样式2
+       HSSFCellStyle cellStyle2 = wbook.createCellStyle();
+       font = wbook.createFont();
+       font.setColor(HSSFColor.RED.index);    //红字
+       cellStyle2.setFont(font);
+       cellStyle2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);  //填充单元格
+       cellStyle2.setFillForegroundColor(HSSFColor.TAN.index); //填橘黄
+       cellStyle2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 居中    
+         
+		HSSFRow row;
+		if (wllist.size()==0) {
+			row = sheet1.createRow(0);
+			HSSFCell cell0 = row.createCell((short) 0);
+			cell0.setCellStyle(cellStyle);
+			cell0.setCellValue("批号");
+			HSSFCell cell1 = row.createCell((short) 1);
+			cell1.setCellStyle(cellStyle);
+			cell1.setCellValue("单号");
+			HSSFCell cell2 = row.createCell((short) 2);
+			cell2.setCellStyle(cellStyle);
+			cell2.setCellValue("单价");
+			HSSFCell cell3 = row.createCell((short) 3);
+			cell3.setCellStyle(cellStyle);
+			cell3.setCellValue("花材成本");
+			HSSFCell cell4 = row.createCell((short) 4);
+			cell4.setCellStyle(cellStyle);
+			cell4.setCellValue("物流成本");
+			HSSFCell cell5 = row.createCell((short) 5);
+			cell5.setCellStyle(cellStyle);
+			cell5.setCellValue("物流公司");
+			HSSFCell cell6 = row.createCell((short) 6);
+			cell6.setCellStyle(cellStyle);
+			cell6.setCellValue("盈亏");
+			HSSFCell cell7 = row.createCell((short) 7);
+			cell7.setCellStyle(cellStyle);
+			cell7.setCellValue("类型");
+		}else {
+			row = sheet1.createRow(wllist.size()+1);
+			String sumprice = RepDao.getSumPrice(code_start, code_end, ordercode, ename);
+			HSSFCell cellx = row.createCell((short) 6);
+			cellx.setCellStyle(cellStyle1);
+			cellx.setCellValue("总计:"+sumprice);
+		}
+		for(int i=0;i<wllist.size();i++){
+			if(i==0){
+				row = sheet1.createRow(i);
+				HSSFCell cell0 = row.createCell((short) 0);
+				cell0.setCellStyle(cellStyle);
+				cell0.setCellValue("批号");
+				HSSFCell cell1 = row.createCell((short) 1);
+				cell1.setCellStyle(cellStyle);
+				cell1.setCellValue("单号");
+				HSSFCell cell2 = row.createCell((short) 2);
+				cell2.setCellStyle(cellStyle);
+				cell2.setCellValue("单价");
+				HSSFCell cell3 = row.createCell((short) 3);
+				cell3.setCellStyle(cellStyle);
+				cell3.setCellValue("花材成本");
+				HSSFCell cell4 = row.createCell((short) 4);
+				cell4.setCellStyle(cellStyle);
+				cell4.setCellValue("物流成本");
+				HSSFCell cell5 = row.createCell((short) 5);
+				cell5.setCellStyle(cellStyle);
+				cell5.setCellValue("物流公司");
+				HSSFCell cell6 = row.createCell((short) 6);
+				cell6.setCellStyle(cellStyle);
+				cell6.setCellValue("盈亏");
+				HSSFCell cell7 = row.createCell((short) 7);
+				cell7.setCellStyle(cellStyle);
+				cell7.setCellValue("类型");
+			}
+			row = sheet1.createRow(i+1);
+			Record r = wllist.get(i);
+			HSSFCell cell0 = row.createCell((short) 0);
+			cell0.setCellStyle(cellStyle1);
+			cell0.setCellValue(r.getStr("code"));
+			HSSFCell cell1 = row.createCell((short) 1);
+			cell1.setCellStyle(cellStyle1);
+			cell1.setCellValue(r.getStr("ordercode"));
+			HSSFCell cell2 = row.createCell((short) 2);
+			cell2.setCellStyle(cellStyle1);
+			cell2.setCellValue(r.getStr("price1"));
+			HSSFCell cell3 = row.createCell((short) 3);
+			cell3.setCellStyle(cellStyle1);
+			cell3.setCellValue(r.getStr("price2"));
+			HSSFCell cell4 = row.createCell((short) 4);
+			cell4.setCellStyle(cellStyle1);
+			cell4.setCellValue(r.getStr("ename"));
+			HSSFCell cell5 = row.createCell((short) 5);
+			cell5.setCellStyle(cellStyle1);
+			cell5.setCellValue(r.getStr("price"));
+			HSSFCell cell6 = row.createCell((short) 6);
+			cell6.setCellStyle(cellStyle1);
+			cell6.setCellValue(r.getStr("differ"));
+			HSSFCell cell7 = row.createCell((short) 7);
+			cell7.setCellStyle(cellStyle1);
+			cell7.setCellValue(r.getStr("type"));
+		}
+		response.addHeader("Content-Disposition", "attachment;filename=" + "ordercode.xls");
+		response.setContentType("application/vnd.ms-excel;charset=utf-8");
+		try {
+			ServletOutputStream out = response.getOutputStream();
+			wbook.write(out);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	/**
+	 * 
+	 * 2018-01-24 
+	 * GUXUKAI
+	 * @param pageno
+	 * @param pagesize
+	 * @param code_start
+	 * @param code_end
+	 * @param ordercode
+	 * @return
+	 * 每单盈亏
+	 */
+	public static Page<Record>OrderCode(int pageno, int pagesize,String code_start,String code_end,String ordercode,String ename){
+		 String select = " SELECT case c.type when 1 then '双品' when 2 then '多品' when 3 then '送花'  when 4 then '节日' when 5 then '定制'  when 6 then '闪购'  when 7 then '主题'  when 8 then '拼团' when 9 then '玫瑰套餐' end as type ,"
+		 		+ "a.ename, a.ordercode,FORMAT(IFNULL(a.price,0),2) as price,a.code,FORMAT(IFNULL(sum(e.price*d.num),0),2) as price2,FORMAT(IFNULL(f.price/f.cycle,0),2) as price1,FORMAT(IFNULL(f.price/f.cycle,0)-IFNULL(sum(e.price*d.num),0)-IFNULL(a.price,0),2) as differ";
+		 String sqlExceptSelect = " from f_order_info as a"
+		 		+ " LEFT join f_order_pro as b on a.id = b.oid"
+		 		+ " LEFT JOIN f_product c on b.pid = c.id"
+		 		+ " LEFT JOIN f_product_info d on b.pid = d.pid"
+		 		+ " LEFT JOIN (select IFNULL(sum(price*totalNum)/sum(num*totalNum),0) price, code,fid from f_purchasem  group by fid,code) e on d.fid = e.fid and a.code = e.code "
+		 		+ " LEFT JOIN f_order as f on a.ordercode = f.ordercode"
+		 		+ " WHERE  b.`type`=0 ";
+		 if (StrKit.notBlank(code_start)) {
+			sqlExceptSelect+=String.format(" and a.code >= '%s'", code_start);
+		 }
+		 if (StrKit.notBlank(code_end)) {
+				sqlExceptSelect+=String.format(" and a.code <= '%s'", code_end);
+			 }
+		 if (StrKit.notBlank(ordercode)) {
+				sqlExceptSelect+=String.format(" and a.ordercode = '%s'", ordercode);
+	     }
+		 if (StrKit.notBlank(ename)) {
+				sqlExceptSelect+=String.format(" and a.ename = '%s'", ename);
+	     }
+		 sqlExceptSelect+= " GROUP by a.code,a.ordercode order by a.code desc";
+		 Page<Record>page= Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+		 return page;
+	}
+	
+	public static String getSumPrice(String code_start,String code_end,String ordercode,String ename) {
+		 String sqlColumnSelect = "select FORMAT(sum(a.sumprice),2) as sumprice ";
+			 String sqlExceptionSelect = " from "
+			 		+ " (SELECT a.code,a.ordercode,a.ename,(IFNULL(f.price/f.cycle,0)-IFNULL(sum(e.price*d.num),0)-IFNULL(a.price,0)) as sumprice  "
+			 		+ " from "
+			 		+ " f_order_info as a"
+			 		+ " LEFT join f_order_pro as b on a.id = b.oid"
+			 		+ " LEFT JOIN f_product c on b.pid = c.id"
+			 		+ " LEFT JOIN f_product_info d on b.pid = d.pid"
+			 		+ " LEFT JOIN (select IFNULL(sum(price*totalNum)/sum(num*totalNum),0) price, code,fid from f_purchasem  group by fid,code) e on d.fid = e.fid and a.code = e.code "
+			 		+ " LEFT JOIN f_order as f on a.ordercode = f.ordercode"
+			 		+ " WHERE  b.`type`=0 GROUP by a.code,a.ordercode order by a.code desc) AS a"
+			 		+ " where 1=1";
+			 if (StrKit.notBlank(code_start)) {
+				 sqlExceptionSelect+=String.format(" and a.code >= '%s'", code_start);
+			 }
+			 if (StrKit.notBlank(code_end)) {
+				 sqlExceptionSelect+=String.format(" and a.code <= '%s'", code_end);
+				 }
+			 if (StrKit.notBlank(ordercode)) {
+				 sqlExceptionSelect+=String.format(" and a.ordercode = '%s'", ordercode);
+		     }
+			 if (StrKit.notBlank(ename)) {
+				 sqlExceptionSelect+=String.format(" and a.ename = '%s'", ename);
+		     }
+			 String sumprice=Db.queryStr(sqlColumnSelect+sqlExceptionSelect);
+			 return sumprice;
+	}
+	
+
+	/**
+	 * 查询【单批发货商品统计表】
+	 * @param pageno
+	 * @param pagesize
+	 * @param code 批号
+	 * @return
+	 */
+	public static Page<Record> QuerySendGoods(int pageno, int pagesize,String picicode){
+		
+		String select="select a.ordercode,case fpid "+
+                          " when 1 then '双品鲜花' "+
+                          " when 2 then '多品鲜花' "+
+                          " when 3 then '69元礼品花' "+
+                          " when 4 then '199元礼品花' "+
+                          " when 5 then '99元礼品花' "+
+                          " else '未知名称' "+
+                          " end as 'fName', "+
+                          " case szdx "+
+                          " when 3 then '送恋人' "+
+                          " when 5 then '送朋友' "+
+                          " when 6 then '送长辈' "+
+                          " when 8 then '送自己' "+
+                          " else '无对象' "+
+                          " end as 'giveObj',count(1) 'num' ";
+		String sqlExceptSelect=" from f_order a,f_order_detail b,f_order_info c "
+              + " where a.ordercode=b.ordercode  and a.state in(1,2,3) and fpid in(1,2,3,4,5) "
+              + " and a.ordercode=c.ordercode and c.code='" +picicode +"'"
+              + " group by fpid,szdx order by fpid";
+         Page<Record> page = Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+         return page;
+	}
+	
+	
+	public static List<Record> QuerySendGoods(String picicode){
+		String selectStr="select '主品花束' title, d.name,count(*) count from f_order_info  a left join f_order_pro b on a.id=b.oid "
+				+ "left join f_product c on b.pid=c.id "
+				+ "left join f_flower_pro d on c.fpid=d.id left join f_order e on a.ordercode=e.ordercode "
+				+ "where a.code=? and b.type=0  and e.type<>3 group by d.name "
+				+ "UNION "
+				+ "select '主品周边' title, c.name,count(*) count from f_order_info  a left join f_order_pro b on a.id=b.oid "
+				+ "left join f_flower_pro c on b.pid=c.id "
+				+ "left join f_order  d on d.ordercode=a.ordercode "
+				+ "where a.code=? and b.type=1  and d.type=3 group by c.name "
+				+ "UNION "
+				+ "select '副品周边' title , c.name,count(*) count from f_order_info  a left join f_order_pro b on a.id=b.oid "
+				+ "left join f_flower_pro c on b.pid=c.id left join f_order d on a.ordercode=d.ordercode "
+				+ "where a.code=? and b.type=1  and d.type<>3 group by c.name";
+		List<Record> recordList=Db.find(selectStr,picicode,picicode,picicode); 
+		return recordList;
+	}
+	
+	public static List<Record> QuerySendOrder(String picicodeStart,String picicodeEnd){
+		String select="select  sum( if( (type=1 and price>0),1,0) ) '订阅' , sum( if( (type=1 and price=0),1,0) ) '红包兑换或鲜花卡兑换',sum(if((type=2),1,0)) '送花',sum(if((type=3),1,0)) '周边',sum(if((type=5),1,0)) '节日或闪购',sum(if((type=6),1,0)) '定制',sum(if((type=41 or type =42 or type=43),1,0)) '花籽兑换' ";
+		String sqlExceptSelect = "from f_order_info  a left join f_order e on a.ordercode=e.ordercode where 1=1  ";
+		if (StrKit.isBlank(picicodeStart)==false) {
+			sqlExceptSelect += "and a.code >=" + "'"+picicodeStart+"'"; 
+		}
+		if (StrKit.isBlank(picicodeEnd)==false) {
+			sqlExceptSelect += "and a.code <=" + "'"+picicodeEnd+"'"; 
+		}
+		String sql = select+sqlExceptSelect;
+		List<Record> list = Db.find(sql);
+		return list;
+	}
+	
+	/**
+	 * 查询【单批分配产品统计表】
+	 * @param pageno
+	 * @param pagesize
+	 * @param code 批号
+	 * @param type 1预分配  2正式分配
+	 * @return
+	 */
+	public static Page<Record> QueryAllotProduct(int pageno, int pagesize,String picicode,int type,int isprice){
+		String select="select b.pid,c.fname,count(1) num,IFNULL(d.totalprice,0) totalprice , IFNULL(d.totalprice,0)/count(1) singleprice ";
+		String sqlExceptSelect=" from f_order_info a left join f_order_pro b on a.id  = b.oid left join f_product c on b.pid = c.id and a.code = c.code left join (SELECT  c.id,a.code,sum(e.price*d.num) totalprice FROM f_order_info a  LEFT JOIN f_order_pro b on a.id =b.oid  LEFT JOIN f_product c on b.pid = c.id  LEFT JOIN f_product_info d on c.id = d.pid LEFT JOIN (select IFNULL(sum(price*totalNum)/sum(num*totalNum),0) price, code,fid from f_purchasem  group by fid,code) e on d.fid = e.fid and a.code = e.code WHERE  b.`type`=0  GROUP by c.id,a.code) AS d on b.pid = d.id and a.code = d.code where a.code ='"+picicode +"' and c.fname is not null group by b.pid,c.fname ";
+	    if(type==1){
+			 sqlExceptSelect=" from f_order_info_pre a left join f_order_pro_pre b on a.id  = b.oid left join f_product c on b.pid = c.id and a.code = c.code left join (SELECT  c.id,a.code,sum(e.price*d.num) totalprice FROM f_order_info a  LEFT JOIN f_order_pro b on a.id =b.oid  LEFT JOIN f_product c on b.pid = c.id  LEFT JOIN f_product_info d on c.id = d.pid LEFT JOIN (select IFNULL(sum(price*totalNum)/sum(num*totalNum),0) price, code,fid from f_purchasem  group by fid,code) e on d.fid = e.fid and a.code = e.code WHERE  b.`type`=0  GROUP by c.id,a.code) AS d on b.pid = d.id and a.code = d.code where a.code ='"+picicode +"' and c.fname is not null group by b.pid,c.fname ";
+
+	    }
+	    if (isprice==2) {
+	    	 select="select pid,fname,count(1) 'num' ";
+			 sqlExceptSelect=" from f_order_info a,f_order_pro b,f_product c "+
+	         " where  a.code='"+picicode+"'"+" and a.id=b.oid and c.code='"+picicode+"'"+"   and b.pid=c.id group by pid,fname";
+		    if(type==1){
+		    	sqlExceptSelect=" from f_order_info_pre a,f_order_pro_pre b,f_product c "+
+		    	         " where  a.code='"+picicode+"'"+" and a.id=b.oid and c.code='"+picicode+"'"+"   and b.pid=c.id group by pid,fname";
+		    }
+		}
+		Page<Record> page=Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+	    return page;
+	}
+	/**
+	 * 地推下单数据分析
+	 * @param pageno
+	 * @param pagesize
+	 * @param stime
+	 * @param etime
+	 * @return
+	 */
+	public static Page<Record> QueryDTanalysis(int pageno, int pagesize,String stime,String etime,String xiadan){
+		String select = "select DATE_FORMAT(a.ctime,'%y/%m/%d') 活动日期,                                                                           "+
+				"case  a.ishas  when 0 then '首单'   when 1 then '非首单'   else '非首单' end as 是否首单,                                                "+
+				"case a.reach  when 1 then '周一' when 2 then '周六' when 3 then '节日送' end as 送达日期 ,                                               "+
+				"c.name 二维码下单,a.cycle as 订阅次数,a.gname 商品类别,count(1) 订单数,sum(a.price) 订单金额                                   ";
+				
+		String sqlExceptSelect ="from "+
+				"f_order a , f_account b,    f_spread c    WHERE   c.id = SUBSTRING(b.tjid,3) and a.aid=b.id  AND a.type!=41 AND  a.type!=43 AND a.price>0 AND a.state in(1,2,3)   ";
+		if (xiadan!=null&&xiadan.equals("")==false) {
+			sqlExceptSelect += "and c.name like"+"'%"+xiadan+"%'";
+		}
+		if (stime!=null&&stime.equals("")==false) {
+			sqlExceptSelect += "and left(a.ctime,10)>="+"'"+stime+"'";
+		}
+		if (etime!=null&&etime.equals("")==false) {
+			sqlExceptSelect += "and left(a.ctime,10)<="+"'"+etime+"'";
+		}
+		if (StrKit.isBlank(stime)&&StrKit.isBlank(etime)) {
+			sqlExceptSelect += "and left(a.ctime,10)>="+"DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+		}
+		sqlExceptSelect +="	group by DATE_FORMAT(a.ctime,'%y/%m/%d') ,a.ishas,a.reach,a.cycle,a.gname,c.name  order by DATE_FORMAT(a.ctime,'%y/%m/%d') desc,c.name desc";
+	    Page<Record> page=Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+	    return page;
+	}
+	/**
+	 * 地推关注数据分析
+	 * @param pageno
+	 * @param pagesize
+	 * @param stime
+	 * @param etime
+	 * @return
+	 */
+	public static Page<Record> QueryDTanalysis2(int pageno, int pagesize,String stime,String etime,String guanzhu){
+		String select = "SELECT   DATE_FORMAT(a.ctime,'%y/%m/%d') 活动日期,c.name 二维码关注,case a.isfans when 0 then '留存' when 1 then '取关' else '取关' end as 粉丝,count(1) 粉丝数";
+				
+		String sqlExceptSelect ="from "+
+				"f_account a,f_spread c WHERE c.id = SUBSTRING(a.tjid,3)  ";
+		if (guanzhu!=null&&guanzhu.equals("")==false) {
+			sqlExceptSelect += "and c.name like"+"'%"+guanzhu+"%'";
+		}
+		if (stime!=null&&stime.equals("")==false) {
+			sqlExceptSelect += "and left(a.ctime,10)>="+"'"+stime+"'";
+		}
+		if (etime!=null&&etime.equals("")==false) {
+			sqlExceptSelect += "and left(a.ctime,10)<="+"'"+etime+"'";
+		}
+		if (StrKit.isBlank(stime)&&StrKit.isBlank(etime)) {
+			sqlExceptSelect += "and left(a.ctime,10)>="+"DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+		}
+		sqlExceptSelect +="group by c.name,DATE_FORMAT(a.ctime,'%y/%m/%d') ,a.isfans order by DATE_FORMAT(a.ctime,'%y/%m/%d') desc,c.name desc";
+	    Page<Record> page=Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+	    return page;
+	}
+	
+	/**
+	 * 查询【发货预测】
+	 * @param picicode 批号
+	 * @param type 统计类型 1:单量预报  2：定制系列待配花束预报
+	 * @return
+	 */
+	public static List<Record> QuereySendForecast(String picicode,int type){
+		
+		if(type==1){
+			String selectStr=" select name,app,style,ishas,count from "
+					+ "(select case when d.ptid=203 and mod(a.ocount,2)=0 then CONCAT(d.name,'多品')  when d.ptid=203 and mod(a.ocount,2)=1 then CONCAT(d.name,'双品') else d.name end 'name',"
+					+ " case when a.app in(1,2) then '自用' when a.app=3 then '礼物' end 'app',case when a.style=1 then '淡雅' when a.style=2 then '亮丽' when a.style=3 then '随机' end 'style',case when a.ishas=0 and a.ocount=0 then '首单首次' else '非首单首次' end 'ishas',count(*) 'count' from f_order a left join f_order_detail b on a.ordercode=b.orderCode left join f_picode c on a.ordercode=c.ordercode left join f_flower_pro d on d.id=b.fpid where c.piCode=?  and a.state in(1) and a.type!=6 and b.type=1 "
+					+ " group by case when d.ptid=203 and mod(a.ocount,2)=0 then CONCAT(d.name,'多品')  when d.ptid=203 and mod(a.ocount,2)=1 then CONCAT(d.name,'双品') else d.name end ,"
+					+ " a.app,a.style,case when a.ishas=0 and a.ocount=0 then '首单首次' else '非首单首次' end) as x "
+					+ " UNION "
+					+ " (select  '定制系列', '无' , '无' ,case when a.ishas=0 and a.ocount=0 then '首单首次' else '非首单首次' end 'ishas' ,count(*) 'count' from f_order a left join f_picode  b on a.ordercode=b.ordercode where b.piCode=? and a.type=6 and a.state=1 group by case when a.ishas=0 and a.ocount=0 then '首单首次' else '非首单首次' end) "
+					+ " UNION "
+					+ "(select d.name, '无' , '无' ,'无',count(*) 'count' from f_order a left join f_order_detail b on a.ordercode=b.orderCode left join f_picode c on a.ordercode=c.ordercode left join f_flower_pro d on d.id=b.fpid where c.piCode=? and a.state in(1) and b.type=2 and c.num=1 group by d.name) " ;
+			SimpleDateFormat sdf =   new SimpleDateFormat( "yyyyMMdd" ); 
+			try {
+				Date date = sdf.parse(picicode);
+			    Date now = new Date(); 
+			    //历史批次，从物流列表里抓数据
+				if(date.getTime() < now.getTime()){
+					selectStr="select name,app,style,ishas,count from "
+							+ " (select case when d.ptid=203 and mod(a.ocount,2)=0 then CONCAT(d.name,'多品')  when d.ptid=203 and mod(a.ocount,2)=1 then CONCAT(d.name,'双品') else d.name end 'name',"
+							+ " case when a.app in(1,2) then '自用'  when a.app=3 then '礼物' end 'app',case when a.style=1 then '淡雅' when a.style=2 then '亮丽' when a.style=3 then '随机' end 'style',case when a.ishas=0 and c.ishas=0 then '首单首次' else '非首单首次' end 'ishas',count(*) 'count' from f_order a left join f_order_detail b on a.ordercode=b.orderCode left join f_order_info c on a.ordercode=c.ordercode left join f_flower_pro d on d.id=b.fpid where c.code=? and b.type=1 and a.type!=6"
+							+ " group by case when d.ptid=203 and mod(a.ocount,2)=0 then CONCAT(d.name,'多品')  when d.ptid=203 and mod(a.ocount,2)=1 then CONCAT(d.name,'双品') else d.name end ,"
+							+ " a.app,a.style,case when a.ishas=0 and c.ishas=0  then '首单首次' else '非首单首次' end) as x "
+							+ " UNION "
+							+ " (select  '定制系列', '无' , '无' ,case when a.ishas=0 and a.ocount=0 then '首单首次' else '非首单首次' end 'ishas' ,count(*) 'count' from f_order a left join f_order_info  b on a.ordercode=b.ordercode where b.code=? and a.type=6  group by case when a.ishas=0 and a.ocount=0 then '首单首次' else '非首单首次' end) "
+							+ " UNION "
+							+ " (select d.name, '无' , '无' ,'无' ,count(*) 'count' from f_order a left join f_order_detail b on a.ordercode=b.orderCode left join f_order_info c on a.ordercode=c.ordercode left join f_flower_pro d on d.id=b.fpid where c.code=? and b.type=2 and c.ishas=0 group by d.name) ";
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			List<Record> recordList=Db.find(selectStr,picicode,picicode,picicode); 
+			return recordList;
+		}else{
+			String selectStr=" select c.`name`,count(*) 'count' from f_order a left join f_order_detail b on a.ordercode=b.ordercode "
+					+ "left join f_flower_pro c on b.fpid=c.id left join f_picode d on a.ordercode=d.orderCode "
+					+ "where a.type=6 and a.state=1 and isAllot=1 and d.piCode=? and b.type=1 group by c.`name` order by count(*) DESC" ;
+			SimpleDateFormat sdf =   new SimpleDateFormat( "yyyyMMdd" ); 
+			try {
+				Date date = sdf.parse(picicode);
+			    Date now = new Date(); 
+			    //历史批次，从物流列表里抓数据
+				if(date.getTime() < now.getTime()){
+					selectStr=" select c.`name`,count(*) 'count' from f_order a left join f_order_detail b on a.ordercode=b.ordercode "
+							+ "left join f_flower_pro c on b.fpid=c.id left join f_picode d on a.ordercode=d.orderCode "
+							+ "where a.type=6  and d.piCode=? and b.type=1 group by c.`name` order by count(*) DESC" ;
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			List<Record> recordList=Db.find(selectStr,picicode); 
+			return recordList;
+		}
+		
+		
+	}
+	
+	/**
+	 * 统计忌讳的色系
+	 * @param piCode 批号
+	 */
+	public static Map<String,Integer> QueryJhColor(String piCode){
+		
+		List<Record> colors=Db.find("select id,name from f_color ");//所有色系
+		
+		String strSelect="select GROUP_CONCAT(jh_color) 'jhColorList' from f_order a left join f_picode b on a.ordercode=b.orderCode "
+				    + "where b.piCode=? and a.state in(1)";
+		Record record=Db.findFirst(strSelect,piCode);
+
+		String jhColorListStr=record.getStr("jhColorList");//忌讳颜色列表
+		Map<String, Integer> colorMap = getStringCount(jhColorListStr);
+		Map<String, Integer> countJhColor= new HashMap<String, Integer>();
+		for (Map.Entry<String, Integer> entry : colorMap.entrySet()) {  
+			 for(Record c :colors){
+				 if(c.getInt("id").equals(Integer.valueOf(entry.getKey()))){
+					 countJhColor.put(c.getStr("name"), entry.getValue());
+				 }
+			 }
+		} 
+		return countJhColor;
+		
+	}
+	
+	/**
+	 * 统计忌讳的花类
+	 * @param piCode 批号
+	 * @return
+	 */
+	public static Map<String,Integer> QueryJhFlower(String piCode){
+		List<Record> fTypes=Db.find("select id,name from f_flower_type ");//所有花材分类
+		String strSelect="select GROUP_CONCAT(jh_list) 'jhList' from f_order a left join f_picode b on a.ordercode=b.orderCode "
+				    + "where b.piCode=? and a.state in(1)";
+		Record record=Db.findFirst(strSelect,piCode);
+		
+		String jhListStr=record.getStr("jhList");//忌讳花类列表
+		Map<String, Integer> jhMap = getStringCount(jhListStr);
+		Map<String, Integer> countJhflower = new HashMap<String, Integer>();
+		for (Map.Entry<String, Integer> entry : jhMap.entrySet()) {  
+			 for(Record ft :fTypes){
+				 if(ft.getInt("id").equals(Integer.valueOf(entry.getKey()))){
+					 countJhflower.put(ft.getStr("name"), entry.getValue());
+				 }
+			 }
+		} 
+		return countJhflower;
+	}
+	
+	
+	
+	/**
+	 * 根据逗号分隔之后，统计各字符串重复的次数
+	 * @param str
+	 * @return
+	 */
+	private static Map<String,Integer> getStringCount(String str){
+		String[] strArr= str.split(",");
+		Map<String, Integer> countMap = new HashMap<String, Integer>();
+		for (String s : strArr) {
+		    if (countMap.containsKey(s)) {
+		        countMap.put(s,countMap.get(s)+1);
+		    } else {
+		        countMap.put(s,1);
+		    }
+		}
+		return countMap;
+	}
+	
+
+	/**
+	 * 查询【重复预报】
+	 * 即将配单的批号，所包含的订单，历史配单记录，花材重复的次数。
+	 * @param piCode
+	 */
+	public static List<Record> QueryCfForecast(String piCode){
+		String sqlStr="select m.name,count(*) 'num' from f_order_pro x left join f_product y on x.pid=y.id left join f_product_info z on z.pid=y.id left join f_flower m on z.fid=m.id where x.type=0 and  oid in(select id from f_order_info where code<>'20170401' and ordercode in(select a.ordercode from f_order a left join f_picode b on a.ordercode=b.orderCode where a.state in(1) and b.piCode=?)) group by m.name ORDER BY count(*) desc";
+		List<Record> recordList=Db.find(sqlStr, piCode);
+		return recordList;
+	}
+	/**
+	 * 单日订单量
+	 */
+	public static Page<Record> QuerySalestatics(int pageno, int pagesize,String stime,String etime,int type){
+		String select = "SELECT COUNT(1) count,DATE_FORMAT(b.ctime,'%y/%m/%d') ctime,CASE b.type WHEN 1 THEN '订阅' WHEN 2 THEN '送花' WHEN 3 THEN '周边' when 4 THEN '兑换' WHEN 5 THEN '节日' WHEN 6 THEN '定制' WHEN 7 THEN '现场活动' WHEN 8 THEN '拼团' WHEN 9 THEN '多双交替' WHEN 10 THEN '主题花' WHEN 11 THEN '闪购花' when 41 THEN '兑换鲜花' WHEN 43 THEN '兑换周边' END AS type ";
+				
+		String sqlExceptSelect =" FROM f_order_info a RIGHT JOIN f_order b ON a.ordercode = b.ordercode where 1=1 ";
+		if (type !=99) {
+			sqlExceptSelect += String.format(" and b.type = %d ", type);
+		}
+		if (StrKit.notBlank(stime)) {
+			sqlExceptSelect += String.format(" and left(b.ctime,10)>= '%s'", stime);
+		}
+		if (StrKit.notBlank(etime)) {
+			sqlExceptSelect += String.format(" and left(b.ctime,10)<= '%s'", etime);
+		}
+
+		sqlExceptSelect +=" GROUP BY left(b.ctime,10),b.type  ORDER BY left(b.ctime,10) desc";
+	    Page<Record> page=Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+	    return page;
+	}
+	/**
+	 * 单日粉丝量
+	 */
+	public static Page<Record> QueryFansstatics(int pageno, int pagesize,String stime,String etime){
+		String select = "select DATE_FORMAT(time,'%y/%m/%d') time,cfans,xfans,jfans,totalfans  ";
+				
+		String sqlExceptSelect =" from f_fans_statics where 1=1 ";
+		if (StrKit.notBlank(stime)) {
+			sqlExceptSelect += String.format(" and time>= '%s'", stime);
+		}
+		if (StrKit.notBlank(etime)) {
+			sqlExceptSelect += String.format(" and time<= '%s'", etime);
+		}
+		sqlExceptSelect +="   and DATE_SUB(CURDATE(), INTERVAL 30 DAY) <=date(time)";
+		sqlExceptSelect +="   ORDER BY time desc";
+	    Page<Record> page=Db.paginate(pageno, pagesize, select, sqlExceptSelect);
+	    return page;
+	}
+	
+	
+	
+	
+	
+	
+}

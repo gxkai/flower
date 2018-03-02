@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>商品管理 - 花材管理</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 花材管理<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加花材管理</a></span> 
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入分类查询" value="${ftype!}" id="ftype" maxlength="20">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入名称查询" value="${fname!}" id="fname" maxlength="20">
+			</span>
+			<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="flower_serch()">
+			<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> </div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th width="200">分类</th>
+						<th>名称</th>
+						<th width="80">色系</th>
+						<th width="80">状态</th>
+						<th width="120">花材用途分类</th>
+						<th width="200">创建日期</th>
+						<th width="80">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if flowerlist?? && flowerlist?size gt 0>
+					<#list flowerlist as flower>
+					<tr class="text-c">
+						<td>${flower_index+1}</td>
+						<td>${flower.tname}</td>
+						<td>${flower.name}</td>
+						<td>${flower.cname!'无'}</td>
+						<td><#if flower.state==0><span class="c-warning">下架</span><#else><span class="c-success">上架</span></#if></td>
+						<td><#if flower.ftype==1><span>主花材</span><#elseif flower.ftype==2><span>辅助花材</span><#else><span>未设置</span></#if></td>
+						<td>${flower.ctime}</td>
+						<td class="td-manage">
+							<a title="编辑" onclick="_edit(${flower.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<#if flower.state==0>
+							<a title="上架" onclick="_upordown(${flower.id},1)" class="f-16 ml-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6dc;</i></a>
+							<#else>
+							<a title="下架" onclick="_upordown(${flower.id},0)" class="f-16 ml-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6de;</i></a>
+							</#if>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="7" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+			var ftype = '${ftype!}', fname = '${fname!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/product/flower/'+e.curr+ '-' +ftype+ '-' +fname);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function flower_serch(){
+				ftype = encodeURI($.trim($('#ftype').val()));
+				fname = encodeURI($.trim($('#fname').val()));
+				if($.trim($('#ftype').val())!=''){
+					var reg = /^[a-zA-Z0-9_\u0391-\uFFE5 ]{1,30}$/;
+					if(!reg.test($('#ftype').val())){
+						layer.tips('不允许有特殊字符，最多20个字符', '#ftype', {tips: [1, '#34495E']});return;
+					}					
+				}
+				if($.trim($('#fname').val())!=''){
+					var reg = /^[a-zA-Z0-9_\u0391-\uFFE5 ]{1,30}$/;
+					if(!reg.test($('#fname').val())){
+						layer.tips('不允许有特殊字符，最多20个字符', '#fname', {tips: [1, '#34495E']});return;
+					}					
+				}
+				location.replace('/manage/iframe/product/flower/1-' + ftype + '-' + fname);
+			}
+			function _add(){
+				parent.open_window('添加花材管理','/product/getFlower', 540, 340);
+			}
+			function _edit(id){
+				parent.open_window('编辑花材管理','/product/getFlower/'+id, 540, 340);
+			}
+			function _upordown(id, state){
+				$.post('/manage/iframe/product/upordownFlower/'+id+'-'+state, function(data){
+					if(data){
+						layer.msg('操作成功', {time: 1000}, function(){
+							location.replace(location.href);
+						});
+					}else{
+						layer.msg('操作失败', {time: 1000});
+					}
+				});
+			}
+		</script> 
+	</body>
+</html>

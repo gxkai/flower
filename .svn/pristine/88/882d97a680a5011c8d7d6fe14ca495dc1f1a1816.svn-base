@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>添加</title>
+<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+<script src="/resource/flower/js/jquery-solarlunar-xp1.0.js"></script>
+<script type="text/javascript" src="/resource/layer/layer.js"></script>
+</head>
+<style type="text/css">
+	body{
+		height: 100vh;
+		margin: auto;
+	}
+	.container{
+		max-width: 768px;
+		margin: 0 4%;
+	}
+	.item{
+		border-bottom: 1px solid #ccc;
+		padding: 10px 0;
+		margin: 0;
+	}
+	.item dt{
+		width: 25%;
+    	float: left;
+    	padding: 5px 0px;
+    	font-size: 15px;
+	}
+	.item dt img{
+		width: 22%;
+		vertical-align: middle;
+	}
+	.item dd{
+		margin-left: 25%;
+	    padding: 5px 0px;
+	}
+	.item dd #date{
+		width: 100%;
+		border: 0;
+		padding: 5px 0px;
+	}
+	.item dd #select{
+		padding: 5px 15px;
+	}
+	.edit{
+		text-align: center;
+    	margin: 15px;
+	}
+	
+	.confirm{
+		background-color: #e2527b;
+		text-align: center;
+		width: 50%;
+		display: inline-block;
+		color: #fff;
+		border: 1px solid #e2527b; 
+		border-radius: 30px;
+		padding: 5px;
+	}
+	#calendar{
+		padding: 15px;
+		margin-top: 5px;
+	}
+	#slct select {
+		vertical-align: middle;
+	    padding: 5px;
+	}
+	#slct option{
+		width: 50%;
+	} 
+	#year,#lyear{
+		display: none;
+	}
+</style>
+<body>
+
+<div class="container">
+	<form>
+    <dl class="item">
+        <dt><img src="/resource/flower/image/memory_e.png"/>&nbsp;&nbsp;标记</dt>
+        <dd>
+            <select id="select">
+			  	<option value ="0">请选择</option>
+			 	<option value ="1">父亲生日</option>
+			  	<option value="2">母亲生日</option>
+			  	<option value="3">爱人生日</option>
+			  	<option value="4">结婚纪念日</option>
+			</select>
+        </dd>
+    </dl>
+    <dl class="item">
+        <dt><img src="/resource/flower/image/memory_d.png"/>&nbsp;&nbsp;日期</dt>
+        <dd>
+            <input type="text" name="date" id="date" readonly="readonly">
+        </dd>
+    </dl>
+    </form>
+    <div class="edit">
+	    <span class="confirm">确认</span>
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+	$(function() {
+		
+		var time = new Date();
+		var y = time.getFullYear();
+		var m = time.getMonth() + 1;
+		var d=time.getDate();
+			$("#date").solarlunar({
+		    linkage: false, //是否在选公历（农历）时，农历（公历）联动变化。
+		    minyear: 1892, //最小年
+		    maxyear: 2100, //最大年 本插件年份支持极值为（1892-2100）
+		    type: "solar", //初始显示公历还是农历。（solar公历，lunar农历）
+		    year: 2016, //初始显示的公历年份
+		    month: 1, //初始显示的公历月份
+		    day: 1, //初始显示的公历日
+		    lyear: 2018, //初始显示的农历年份
+		    lmonth:1 , //初始显示的农历月份
+		    lday: 1 //初始显示的农历日
+		});
+		
+		$(".edit .confirm").click(function() {
+			var id=0;
+			var type=$('#select').val();
+			var format=$("input[name='calendar']:checked").val();
+			var date=$('#date').val();
+			if($.trim(date)==''){
+				layer.msg('请填写日期', {time:2000});return;
+			}
+			if($.trim(type)=='' || $.trim(type)==0){
+				layer.msg('请选择类型', {time:2000});return;
+			}
+			$.post('/account/saveMemory/',{
+				'id':id, 
+				'type':type,
+				'format':format,
+				'date':date,
+			}, function(data){
+				window.location.href ='/account/memory';
+    		})
+		})
+		
+	})
+</script>
+
+</html>

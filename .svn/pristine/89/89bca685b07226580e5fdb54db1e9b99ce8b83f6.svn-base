@@ -1,0 +1,380 @@
+<html>
+  <head>
+  <!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+        <title>花美美企业定制</title>
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/LArea.css">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+        <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/LArea3.js"></script>
+		<style>
+			*{
+				margin: 0;
+			    padding: 0;
+			    -webkit-box-sizing:border-box;
+				-moz-box-sizing:border-box;
+				box-sizing:border-box;
+				-webkit-tap-highlight-color:transparent;
+				outline:none;
+				-webkit-tap-highlight-color:rgba(0,0,0,0);
+			}
+			input::-moz-placeholder,textarea::-moz-placeholder {
+				color: #ccc;
+			}
+			input:-ms-input-placeholder,textarea:-ms-input-placeholder {
+				color: #ccc;
+			}
+			input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {
+				color: #ccc;
+			}
+			
+			body{
+				color:#999;
+				background:#eaeaea;
+			}
+			img{
+				width:100%;
+				height:auto;
+			}
+			.page{
+				box-shadow: 0 0 1px rgba(0,0,0,.2);
+			}
+			.company_model_out,.company_contact_out{
+				padding:10px 5px 0 5px;
+			}
+			.company_model{
+				padding:15px;
+				background:#fff;
+				border-radius:3px;
+			}
+			.company_model>p{
+				color:#333;
+			}
+			.company_model>ul{
+				display:flex;
+				display:-webkit-flex;
+				justify-content:space-between;
+				-webkit-justify-content:space-between;
+				flex-wrap:wrap;
+				-webkit-flex-wrap:wrap;
+				list-style: none;
+			}
+			.company_model>ul>li{
+				width:46%;
+				text-align:center;
+				padding:10px 0;
+				position:relative;
+				margin-top:20px;
+				font-size: 14px;
+				border-radius: 2px;
+			}
+			.border1pxgray{
+				border: 1px solid #d9d9d9;
+			}
+			.company_model>ul>.on{
+				color: #FF6688;
+				border: 1px solid #f396ab;
+			}
+			.company_contact{
+				padding:15px;
+				background:#fff;
+				border-radius:3px;
+			}
+			.company_form_tit{
+				color:#333;
+				margin-bottom:5px;
+			}
+			.company_contact .item{
+				padding:15px 0;
+				overflow:hidden;
+			}
+			.company_contact .item dt{
+				width: 79px;
+			    float: left;
+			    line-height: 16px;
+			    color:#333;
+			    position:relative;
+			    padding-left:8px;
+			}
+			.company_contact .item dt u {
+			    color: #ff6688;
+			    text-decoration: none;
+			    position: absolute;
+			    left: 0;
+			    top: 50%;
+			    height: 7px;
+			    transform: translate(0%,-50%);
+			    -webkit-transform: translate(0%,-50%);
+			}
+			.company_contact .item dd{
+				margin-left:79px;
+			}
+			.company_contact .item input{
+				border:0;
+				outline:none!important;
+			    width: 100%;
+			    line-height: 16px;
+			    color: #5d5b5b;
+			}
+			.item .select-box{
+				padding:0 20px;
+			}
+			.item select {
+			    border: 0 none;
+			    background: #fff;
+			    padding: 0!important;
+			    -webkit-tap-highlight-color: transparent;
+			    -webkit-appearance: none;
+			    outline: none;
+			    color: #5d5b5b;
+			}
+			.address_area .form-control{
+				height:25px;
+			}
+			.item textarea{
+				width:100%;
+			    height:80px;
+			    -webkit-appearance: none;
+			    -webkit-tap-highlight-color: transparent;
+			    outline: none;
+			    resize: none;
+			    border:0;
+			}
+			.fixheight{
+				width:100%;
+				height:30px;
+				background:none;
+			}
+			.com_sub_out{
+				width:100%;
+				padding:10px;
+				background:#fff;
+				position:fixed;
+				bottom:0;
+				left:0;
+				border-top:1px solid #F5F5F5;
+			}
+			.company_submit{	
+				background:#343535;
+				text-align:center;
+				padding:12px 0;
+				border-radius:2px;
+				color:#fff;
+				border:0;
+				width:100%;
+			}
+			.company_xq{
+				margin:15px 0;
+				border:1px solid #ededed;
+				border-radius:2px;
+			}
+			.company_xq input{
+				width:100%;
+				border:0;
+				padding-left:7px;
+			}
+			.company_xq textarea{
+				height:80px;
+				width:100%;
+				padding:10px;
+				overflow-y: hidden;
+				border:none;
+			}
+			.borderBottom{
+				border-bottom: 1px solid #d9d9d9;
+			}
+			.conpany_bottom{
+				margin-bottom: 60px;
+			}
+		</style>
+  </head>
+  <body>
+	  <div class="container page">
+	    <div class="company_top">
+	        <img src="/image/cpytop.jpg" alt="">
+	    </div>
+	    <div class="company_model_out">
+	        <div class="company_model">
+	            <p>合作类型</p>
+	            <ul class="ctype">
+	                <li class="border1pxgray" data-type="1">商务合作</li>
+	                <li class="border1pxgray" data-type="2">批量采集</li>
+	                <li class="border1pxgray" data-type="3">花艺课</li>
+	                <li class="border1pxgray" data-type="4">其他</li>
+	            </ul>
+	        </div>
+	    </div>
+	    <form action="" id="company_form">
+	        <div class="company_contact_out">
+	            <div class="company_contact">
+	                <p class="company_form_tit">简述您的需求：</p>
+	                <div class="company_xq">
+	                    <textarea placeholder="在此输入您的需求" name="customer_describe"></textarea>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="company_contact_out">
+	            <div class="company_contact">        
+	                <p class="company_form_tit">您的联系方式：</p>
+	                <input type="hidden" name="ctype">
+	                <dl class="item borderBottom">
+	                    <dt><u>*</u>姓　　名:</dt>
+	                    <dd>
+	                        <input type="text" name="name" id="name" placeholder="">
+	                    </dd>
+	                </dl>
+	                <dl class="item borderBottom">
+	                    <dt><u>*</u>联系方式:</dt>
+	                    <dd>
+	                       <input type="tel" name="tel" id="tel" placeholder="">
+	                    </dd>
+	                </dl>
+	                <dl class="item borderBottom">
+	                    <dt><u>*</u>所在地区:</dt>
+	                    <dd>
+	                    	<p>
+								<input  type="text" id="address" readonly="readonly" placeholder="选择省份&#12288;选择城市&#12288;选择区县"/>
+								<input type="hidden" name="area" id="addrvalue"/>
+							</p>
+	                    </dd>
+	                </dl>
+	                <dl class="item borderBottom">
+	                    <dt>公司名称:</dt>
+	                    <dd>
+	                        <input type="text" name="company_name">
+	                    </dd>
+	                </dl>
+	            </div>
+	        </div>
+	    </form>
+	    <div class="fixheight"></div>
+	    <div class="com_sub_out">
+	        <button type="button" class="company_submit">提交</button>
+	    </div>
+	   
+	    <div class="conpany_bottom">
+	        <img src="/image/cpybottom.jpg" alt="">
+	    </div>
+	    
+		<script type="text/javascript">
+			var areadata = new Array();
+			var queryString = '${queryString!}';
+			$().ready(function(){
+				areadata = ${areajson};
+				selectArea('address', 'addrvalue', areadata);
+			});
+			
+			//请求参数格式化，方便读取
+			function getQueryString(name) {
+			    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+			    var r = queryString.match(reg);
+			    if (r != null) {
+			        return unescape(r[2]);
+			    }
+			    return null;
+			} 
+			
+		    var is_running = false;
+		    $(document).ready(function () {
+		        $(".ctype li").click(function () {
+		            if ($(this).hasClass('on')) {
+		                $(this).removeClass('border1px');
+		                $(this).removeClass('on').addClass('border1pxgray');
+		            } else {
+		                $(this).addClass('border1px');
+		                $(this).addClass('on').removeClass('border1pxgray');
+		            }
+		            			$(this).siblings('li').removeClass('on').removeClass('border1px').addClass('border1pxgray');
+		        });
+		
+		        $(".company_submit").click(function () {
+		        	var ctype = $(".ctype").find('.on').attr('data-type');
+		        	var describe = $('textarea[name="customer_describe"]').val();
+		        	var name = $('input[name="name"]').val();
+		        	var tel = $('input[name="tel"]').val();
+					var area = $('#addrvalue').val();
+		            if(is_running){
+		                return;
+		            }
+		            if (ctype) {
+		                $("input[name='ctype']").val(ctype);
+		            } else {
+		            	layer.msg('请选择合作类型！', {time:2000});
+		                return;
+		            }
+		            if ($.trim(describe)=='') {
+		            	layer.msg('请输入您的需求', {time:2000});return;
+		            }
+		            if ($.trim(name)=='') {
+		            	layer.msg('请输入姓名', {time:2000});return;
+		            }
+		            var reggh = /^0[\d]{10,11}$/;
+					var regsj = /^1(3|4|5|7|8)\d{9}$/;
+					if($.trim(tel)==''){
+						layer.msg('请输入 联系人手机号或固话', {time:2000});return;
+					}
+					if(!reggh.test(tel) && !regsj.test(tel)){
+						layer.msg('手机号或固话格式错误', {time:2000});return;
+					}
+					if($.trim(area)==''){
+						layer.msg('请选择所在地区', {time:2000});return;
+					}else{
+						var c = ","; // 要计算的字符
+						var regex = new RegExp(c, 'g'); // 使用g表示整个字符串都要匹配
+						var result = area.match(regex);
+						var count = !result ? 0 : result.length;
+						if(count<2){
+							layer.msg('所选区域必须包含【省市区】三级地址', {time:2000});return;
+						}
+					}
+		            is_running = true;
+		            var btn = $(this);
+		            btn.text('正在提交...');
+		            var load = layer.load();
+					$.ajax({
+						url: '/service/saveCustom',
+						data: $('form').serialize(),
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success: function(data){
+							layer.close(load);
+							if(data){
+								window.location.href ='/front/service/custom_success.html';
+							}else{
+								layer.msg('提交失败', {time: 2000});
+							}
+						}
+					}); 
+		            
+		        })
+		    }); 
+		    
+		    
+		</script>
+	
+		</div>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.account.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<title>意见反馈</title>
+	</head>
+	<body>
+		<div class="container">
+			<p class="feedback">
+				<input type="text" class="feedback_title" placeholder="标题" maxlength="40">
+			</p>
+			<p class="feedback">
+				<textarea class="feedback_info" placeholder="可以对物流问题、鲜花品质问题、支付问题提供宝贵的意见，谢谢！" maxlength="200"></textarea>
+			</p>
+			<p class="feedback">
+				<span class="feedback_submit" onclick="saveFeedback(this)" data-lock="0">提交反馈</span>
+			</p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,843 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.zhoubian{display: none;}
+			.none{display: none;}
+		</style>
+		<title>商品管理 - 商品列表 - 商品详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if flowerpro??>
+				<input type="hidden" name="id" value="${flowerpro.id}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>所属商品：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v1">
+						  	<select class="select" size="1" name="ptid" id="ptid">
+						    	<option value="0" selected>--选择所属商品--</option>
+						    	<#list typelist as type>
+						    	<#if type.code_value?number==flowerpro.ptid>
+						    	<option value="${type.code_value}" selected>${type.code_name}</option>
+						    	<#else>
+						    	<option value="${type.code_value}">${type.code_name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="dx <#if flowerpro.ptid lt 4>zhoubian</#if>">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>适合对象：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="vs">
+						  	<select class="select" size="1" name="protype">
+						    	<option value="3" selected>--选择适合对象--</option>
+						    	<option value="0" <#if flowerpro.type==0>selected</#if>>所有</option>
+						    	<option value="1" <#if flowerpro.type==1>selected</#if>>首单</option>
+						    	<option value="2" <#if flowerpro.type==2>selected</#if>>多单</option>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="name" value="${flowerpro.name}">
+					</div>
+				</div>
+				
+				<#if (flowerpro.ptid gt 0 && flowerpro.ptid lt 3) || flowerpro.ptid==203 || flowerpro.ptid==11>
+				<!-- banner1 - banner2 - banner3 -->
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">banner1：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v3_1" value="${flowerpro.imgurl1!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr1_1" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.imgurl1!}')">&#xe695;</i>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">banner2：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v3_2" value="${flowerpro.imgurl2!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr1_2" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.imgurl2!}')">&#xe695;</i>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">banner3：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v3_3" value="${flowerpro.imgurl3!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr1_3" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.imgurl3!}')">&#xe695;</i>
+					</div>
+				</div>
+				<#else>
+				
+				<!-- 商品图片 -->
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">商品图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v3" value="${flowerpro.imgurl1!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr1" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.imgurl1!}')">&#xe695;</i>
+					</div>
+				</div>
+				</#if>
+				
+
+				
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">产品描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_1" value="${flowerpro.itinfo1!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_1" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.itinfo1!}')">&#xe695;</i>
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">发货详情：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_2" value="${flowerpro.itinfo2!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_2" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.itinfo2!}')">&#xe695;</i>
+					</div>
+				</div>
+				
+				<!-- 购花须知 -->
+				<div class="row cl" >
+					<label class="col-xs-3 col-sm-2 text-r">购花须知：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_3" value="${flowerpro.itinfo3!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_3" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.itinfo3!}')">&#xe695;</i>
+					</div>
+				</div>
+				
+				<div class="row cl " >
+				     <#if flowerpro.ptid != 202>
+					    <label class="col-xs-3 col-sm-2 text-r">品质保障：</label>
+					 <#else>
+					    <label class="col-xs-3 col-sm-2 text-r">拼团邀请图片：</label>
+					 </#if>   
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_4" value="${flowerpro.itinfo4!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_4" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${flowerpro.itinfo4!}')">&#xe695;</i>
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v5" name="price" value="${flowerpro.price!}">
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<textarea class="input-text" style="height: 90px;" id="v6" name="describe" maxlength="50">${flowerpro.describe!}</textarea>
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>配花优先级：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v7" name="priority" value="${flowerpro.priority!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>X坐标：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v8" name="x" value="${flowerpro.x!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>Y坐标：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v9" name="y" value="${flowerpro.y!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">说明：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v10" name="describe2" value="${flowerpro.describe2!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">商品状态：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v11" name="state" value="${flowerpro.state!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">花籽数：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v12" name="seeds" value="${flowerpro.seeds!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">几人团：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v13" name="ptCount" value="${flowerpro.ptCount!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">拼团时限：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v14" name="ptHours" value="${flowerpro.ptHours!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">拼团价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v15" name="ptPrice" value="${flowerpro.ptPrice!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否计入首单(1是0否)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v16" name="isinfirst" value="${flowerpro.isinfirst!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否允许顺延(1允许0不允许)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v17" name="allowSY" value="${flowerpro.allowSY!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">花材价格等级(0：订阅级 1：送花级 2：节日级)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v18" name="fpc" value="${flowerpro.fpc!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">分享标题：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v19" name="shareTitle" value="${flowerpro.shareTitle!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">分享描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v20" name="shareDes" value="${flowerpro.shareDes!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">多买立减：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v21" name="dmlj" value="${flowerpro.dmlj!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">送达日期分类：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v22" name="reachtype" value="${flowerpro.reachtype!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">参团用户限制(0不限制,1只允许新用户参团)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v23" name="allownew" value="${flowerpro.allownew!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">团长是否免单(0不免单,1免单)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v24" name="isptFree" value="${flowerpro.isptFree!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否支持退款(0不支持,1支持)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v25" name="allowRefund" value="${flowerpro.allowRefund!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否支持机器人(0不支持,1支持)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v26" name="allowRobotis" value="${flowerpro.allowRobotis!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">公益基金百分比：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v27" name="fundper" value="${flowerpro.fundper!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">体验次数：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v28" name="ptNum" value="${flowerpro.ptNum!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">入团介绍人佣金：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v29" name="jsMoney" value="${flowerpro.jsMoney!}">
+					</div>
+				</div>
+				
+				<#if flowerpro.state != 2 && flowerpro.ptid == 4>
+				<div class="row cl judge">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_changeState(${flowerpro.id},2)" class="btn btn-primary btn-block" value="售空">
+					</div>
+				</div>
+				</#if>
+				
+				<#if flowerpro.state == 2 && flowerpro.ptid == 4>
+				<div class="row cl judge">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_changeState(${flowerpro.id},0)" class="btn btn-primary btn-block" value="到货">
+					</div>
+				</div>
+				</#if>
+
+<!-- 添加商品 -->
+				<#else>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>所属商品：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v1">
+						  	<select class="select" size="1" name="ptid" id="ptid" onchange="selectchange(this)">
+						    	<option value="0" selected>--选择所属商品--</option>
+						    	<#list typelist as type>
+						    	<option value="${type.code_value}">${type.code_name}</option>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="dx zhoubian">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>适合对象：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="vs">
+						  	<select class="select" size="1" name="protype"  id="protype">
+						    	<option value="3" selected>--选择适合对象--</option>
+						    	<option value="0">所有</option>
+						    	<option value="1">首单</option>
+						    	<option value="2">多单</option>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="name">
+					</div>
+				</div>
+				<div class="sp1">
+					<div class="row cl">
+						<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>banner1：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="btn-upload form-group" style="width: 100%">
+								<input class="input-text upload-url" type="text" id="v3_1" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+								<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+								<input type="file" multiple name="file" class="input-file">
+								<input type="hidden" name="basestr1_1" class="pro-imgsrc">
+							</span>
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>banner2：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="btn-upload form-group" style="width: 100%">
+								<input class="input-text upload-url" type="text" id="v3_2" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+								<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+								<input type="file" multiple name="file" class="input-file">
+								<input type="hidden" name="basestr1_2" class="pro-imgsrc">
+							</span>
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>banner3：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="btn-upload form-group" style="width: 100%">
+								<input class="input-text upload-url" type="text" id="v3_3" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+								<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+								<input type="file" multiple name="file" class="input-file">
+								<input type="hidden" name="basestr1_3" class="pro-imgsrc">
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="sp2 none">
+					<div class="row cl">
+						<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>商品图片：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="btn-upload form-group" style="width: 100%">
+								<input class="input-text upload-url" type="text" id="v3" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+								<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+								<input type="file" multiple name="file" class="input-file">
+								<input type="hidden" name="basestr1" class="pro-imgsrc">
+							</span>
+						</div>
+					</div>
+				</div>
+		
+				<div class="row cl">
+				    <label class="col-xs-3 col-sm-2 text-r">
+				      <span id="span1" class="c-red">*</span>
+				                  产品描述：
+				    </label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: 100%">
+							<input class="input-text upload-url" type="text" id="v4_1" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_1" class="pro-imgsrc">
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span id="span2" class="c-red">*</span>发货详情：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: 100%">
+							<input class="input-text upload-url" type="text" id="v4_2" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_2" class="pro-imgsrc">
+						</span>
+					</div>
+				</div>
+				<div class="zhoubian xz">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span id="span3" class="c-red">*</span>购花须知：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: 100%">
+							<input class="input-text upload-url" type="text" id="v4_3" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_3" class="pro-imgsrc">
+						</span>
+					</div>
+				</div>
+				<div class="row cl" >
+					<label class="col-xs-3 col-sm-2 text-r"><span id="span4" class="c-red">*</span>品质保障：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: 100%">
+							<input class="input-text upload-url" type="text" id="v4_4" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr2_4" class="pro-imgsrc">
+						</span>
+					</div>
+				</div>
+				</div>
+				
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v5" name="price">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<textarea class="input-text" style="height: 90px;" id="v6" name="describe" maxlength="50"></textarea>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>配花优先级：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v7" name="priority" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>X坐标：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v8" name="x" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>Y坐标：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v9" name="y" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">说明：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v10" name="describe2" value="">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">商品状态：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v11" name="state" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">花籽数：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v12" name="seeds" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">几人团：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v13" name="ptCount" value="1">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">拼团时限：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v14" name="ptHours" value="48">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">拼团价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v15" name="ptPrice" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否计入首单(1是0否)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v16" name="isinfirst" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否允许顺延(1允许0不允许)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v17" name="allowSY" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">花材价格等级(0：订阅级 1：送花级 2：节日级)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v18" name="fpc" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">分享标题：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v19" name="shareTitle" value="FlowerMM">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">分享描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v20" name="shareDes" value="FlowerMM">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">多买立减：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v21" name="dmlj" value="0_0_0_0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">送达日期分类格式(1:周一或周六;2:T+1;3:20170901_20170902)注意冒号为英文冒号</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v22" name="reachtype" value="1:周一或周六">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">参团用户限制(0不限制,1只允许新用户参团)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v23" name="allownew" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">团长是否免单(0不免单,1免单)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v24" name="isptFree" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否支持退款(0不支持,1支持)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v25" name="allowRefund" value="1">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">是否支持退款(0不支持,1支持)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v26" name="allowRobotis" value="1">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">公益基金百分比：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v27" name="fundper" value="0">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">拼团体验次数：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v28" name="ptNum" value="1">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">入团介绍人佣金：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v29" name="jsMoney" value="0">
+					</div>
+				</div>
+				</#if>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			function selectchange(ptid){
+				var hid = ${hid!};
+				_ptid=$(ptid).find('option:selected').val();
+				if( (_ptid > 0 && _ptid < 4 && _ptid!=hid)||(_ptid==201)||(_ptid==301)||(_ptid==401)){
+					$('.zhoubian').removeClass('zhoubian');
+					$('.dx').addClass('zhoubian');
+				}else{
+					$('.xz').addClass('zhoubian');
+					$('.dx').removeClass('zhoubian');
+				}
+				if((_ptid > 0 && _ptid < 3)||_ptid==203 ||_ptid==11){
+					$('.none').removeClass('none');
+					$('.sp2').addClass('none');
+				}
+				else{
+					$('.sp1').addClass('none');
+					$('.sp2').removeClass('none');
+					
+				}
+				/* 当定制花束时，这两个属性只有第一个需要填写，所以不是必填项 */
+				if(_ptid==201 || _ptid==301||_ptid==401){
+					document.getElementById("span1").style.visibility="hidden" ;
+					document.getElementById("span2").style.visibility="hidden"; 
+					document.getElementById("span3").style.visibility="hidden";
+					document.getElementById("span4").style.visibility="hidden"; 
+				}else{
+					document.getElementById("span1").style.visibility="visible" ;
+					document.getElementById("span2").style.visibility="visible" ;
+					document.getElementById("span3").style.visibility="visible" ;
+					document.getElementById("span4").style.visibility="visible" ;
+				}
+			}
+			$().ready(function(){
+				$('.input-file').on('change', function(){
+					var $proImg = $(this).siblings(".pro-imgsrc");
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						var base64 = e.target.result;
+						$proImg.val(base64);
+					};
+					reader.readAsDataURL(this.files[0]);
+					this.files = [];
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _changeState(id,state){
+				$.post('/manage/iframe/product/updateVaseState/'+id+'-'+state, function(data){
+					if(data){
+						parent.refresh_iframe();
+						layer.msg('提交成功', {time: 1000}, function(){
+							layer_close();
+						});
+					}else{
+						layer.msg('提交失败', {time: 1000});
+					}
+				});
+			}
+			
+			function _save(){
+				var tid = $("#ptid option:selected").val();
+				var protype = $("#protype option:selected").val();
+				var name = $('#v2').val();
+				var imgurl = $('#v3').val();
+				var imgurl1 = $('#v3_1').val();
+				var imgurl2 = $('#v3_2').val();
+				var imgurl3 = $('#v3_3').val();
+// 				var infoimg = $('#v4_1').val();
+				
+				var itinfo1 = $('#v4_1').val();
+				var itinfo2 = $('#v4_2').val();
+				var itinfo3 = $('#v4_3').val();
+				var itinfo4 = $('#v4_4').val();
+				var itinfo5 = $('#v4_5').val();
+				
+				var price = $('#v5').val();
+				var describe = $('#v6').val();
+				var priority=$('#v7').val();
+				var x=$('x').val();
+				var y=$('y').val();
+			    var describe2=$('describe2').val();
+			    var state=$('#v11').val();
+			    var seeds=$('#v12').val();
+			     
+			    
+			    if(state!=0&&state!=1&&state!=2){
+			    	layer.tips('商品状态0在售 1售罄不显示 2售罄显示', '#v11', {tips: [1, '#34495E']});return;
+			    }
+			    if(tid==402){
+			    	 var regSeeds = /^\+?[1-9]\d*$/;
+					    if(seeds<0||$.trim(seeds)=='null'||regSeeds.test(seeds) == false){
+					    	layer.tips('花籽数必须是大于等于0的整数', '#v12', {tips: [1, '#34495E']});return;
+					    }
+			    }
+			   
+				var reg = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+				if(tid==0){
+					layer.tips('请选择所属商品', '#v1', {tips: [1, '#34495E']});return;
+				}
+				if(!$('.dx').hasClass('zhoubian') && protype==3){
+					layer.tips('请选择适合对象', '#vs', {tips: [1, '#34495E']});return;
+				}
+				if($.trim(name)==''){
+					layer.tips('请输入商品名称', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(name)=='null' || $.trim(name)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}
+				
+				/* if(tid > 0 && tid < 3||tid==203){
+					if($('#v0').length==0 && $.trim(imgurl1)==''){
+						layer.tips('请选择图片', '#v3_1', {tips: [1, '#34495E']});return;
+					}
+					if($('#v0').length==0 && $.trim(imgurl2)==''){
+						layer.tips('请选择图片', '#v3_2', {tips: [1, '#34495E']});return;
+					}
+					if($('#v0').length==0 && $.trim(imgurl3)==''){
+						layer.tips('请选择图片', '#v3_3', {tips: [1, '#34495E']});return;
+					}
+				}else{
+					if($('#v0').length==0 && $.trim(imgurl)==''){
+						layer.tips('请选择图片', '#v3', {tips: [1, '#34495E']});return;
+					}
+				} */
+				
+// 				if($('#v0').length==0 && $.trim(infoimg)==''){
+// 					layer.tips('请选择图片', '#v4_1', {tips: [1, '#34495E']});return;
+// 				}
+				/* 当定制花束时，这两个属性(产品描述、发货详情)只有第一个需要填写，所以不是必填项 */
+				/* if(tid!=201&&tid!=301&&tid!=401){
+					if($('#v0').length==0 && $.trim(itinfo1)==''){
+						layer.tips('请选择图片', '#v4_1', {tips: [1, '#34495E']});return;
+					}
+					if($('#v0').length==0 && $.trim(itinfo2)==''){
+						layer.tips('请选择图片', '#v4_2', {tips: [1, '#34495E']});return;
+					}
+				}
+				
+				if(tid < 4){
+					if($('#v0').length==0 && $.trim(itinfo3)==''){
+						layer.tips('请选择图片', '#v4_3', {tips: [1, '#34495E']});return;
+					}
+					if($('#v0').length==0 && $.trim(itinfo4)==''){
+						layer.tips('请选择图片', '#v4_4', {tips: [1, '#34495E']});return;
+					}
+					if($('#v0').length==0 && $.trim(itinfo5)==''){
+						layer.tips('请选择图片', '#v4_5', {tips: [1, '#34495E']});return;
+					}
+				} */
+				
+				
+				if($.trim(price)==''){
+					layer.tips('请输入商品价格', '#v5', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(describe)==''){
+					layer.tips('请完善商品描述', '#v6', {tips: [1, '#34495E']});return;
+				}else if($.trim(describe)=='null' || $.trim(name)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v6', {tips: [1, '#34495E']});return;
+				}
+				
+				console.log($('form').serialize());
+				
+				var lock = true;
+				if(lock){
+					lock = false;
+					var load = layer.load();
+					$.post('/manage/iframe/product/saveFlower_pro', $('form').serialize(), function(data){
+						layer.close(load);
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							if (data.XYrepeat) {
+								layer.msg('保存失败,重复坐标', {time: 1000}, function(){
+									lock = true;
+								});return;
+							}
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

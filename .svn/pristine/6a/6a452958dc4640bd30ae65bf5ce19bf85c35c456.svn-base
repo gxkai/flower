@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>文章管理 - 生活美学</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 文章管理 <span class="c-gray en">&gt;</span> 生活美学<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="dictionary_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加生活美学</a></span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入标题查询" value="${titlecode!}" id="tcode" maxlength="30">
+			</span>
+			 <input class="btn btn-primary ml-10" type="submit" value="查找" onclick="dictionary_serch()">
+			<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> </div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th width="80">缩略图</th>
+						<th>标题</th>
+						<th width="200">创建日期</th>
+						<th width="80">类型</th>
+						<th width="100">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if estheticslist?? && estheticslist?size gt 0>
+					<#list estheticslist as esthetics>
+					<tr class="text-c">
+						<td>${esthetics_index+1}</td>
+						<td><img src="${esthetics.imgurl!}" width="30"/></td>
+						<td>${esthetics.title}</td>
+						<td>${esthetics.ctime}</td>
+						<td><#if esthetics.istop==0>普通<#else>置顶</#if></td>
+						<td class="td-manage">
+							<a title="编辑" onclick="dictionary_edit(${esthetics.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<a title="删除" onclick="dictionary_del(${esthetics.id})" class="f-16" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+							<#if esthetics.istop==0>
+								<a title="置顶" onclick="_istop(${esthetics.id}, ${esthetics.istop})" class="f-16 ml-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe674;</i></a>
+							<#else>
+								<a title="取消置顶" onclick="_istop(${esthetics.id}, ${esthetics.istop})" class="f-16 ml-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe679;</i></a>
+							</#if>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="6" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新 
+				            location.replace('/manage/iframe/article/esthetics/'+e.curr+'-'+tcode);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function dictionary_add(){
+				parent.open_window('添加生活美学','/article/getEsthetics', 970, 540);
+			}
+			function dictionary_edit(id){
+				parent.open_window('编辑生活美学','/article/getEsthetics/'+id, 970, 540);
+			}
+			function dictionary_serch(){
+				tcode = encodeURI($('#tcode').val());
+				if($.trim($('#tcode').val())!=''){
+					var reg = /^[a-zA-Z0-9_\u0391-\uFFE5]{1,30}$/;
+					if(!reg.test($('#tcode').val())){
+						layer.tips('不允许有特殊字符，最多30个字符', '#tcode', {tips: [1, '#34495E']});return;
+					}					
+				}
+				location.replace('/manage/iframe/article/esthetics/1-' + tcode);
+			}
+			function dictionary_del(id){
+				parent.actconfirm('确认要删除吗？', function(){
+					$.post('/manage/iframe/article/delEsthetics/'+id, function(data){
+						if(data){
+							layer.msg('删除成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('删除失败', {time: 2000});
+						}
+					});
+				});
+			}
+			function _istop(id, istop){
+				$.post('/manage/iframe/article/istopEsthetics/'+id+'-'+istop, function(data){
+					if(data){
+						layer.msg('操作成功', {time: 1000}, function(){
+							location.replace(location.href);
+						});
+					}else{
+						layer.msg('操作失败', {time: 2000});
+					}
+				});
+			}
+		</script> 
+	</body>
+</html>

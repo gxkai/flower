@@ -1,0 +1,212 @@
+@CHARSET "UTF-8";
+
+/**
+ * @author Glacier
+ * @Dec pintuanDetail
+ * @data 2017-08-25
+ */
+
+
+	body{
+		margin: 0;
+		padding: 0;
+		background: #efefef;
+		}
+    .group_img{
+		width: 100%;
+		padding-top: 5px;
+	}
+	.group_goods{
+		width: 100%;
+		background: white;
+		padding:5px 0;
+		
+		display: flex;
+	    justify-content: center;
+	    align-items: center;
+	}
+	.group_goods_left{
+		width: 35%;
+	}
+	.group_goods_left img{
+		width:100%;
+	}
+	.group_goods_right{
+		width: 63%;
+		padding:0 3px;
+		/* border: 1px red solid;  */
+		display:inline-block;
+	}
+	
+	.group_goods_right span{
+		font-family:"微软雅黑";
+		font-size:12px;
+	}
+	
+	.group_goods_right .group_title{
+		font-family: "幼圆";
+		font-weight: bold;
+	}
+	.group_goods_right .group_describe{
+		font-size: 12px;
+		height:80px;
+		font-family: "微软雅黑";
+		color: #f3b4c6;
+		font-weight: 300;
+	}
+	.group_goods_right fieldset{
+		width:80%; 
+		border-radius: 5px;
+		outline: none;
+		border-width:1px;
+		border-color: #008000; 
+	}
+	.group_show{
+		clear:both;
+		background: white;
+		margin-top: 3px;
+		text-align: center;
+		padding-top: 10px;
+	}
+	
+	/*进度条样式*/
+	.pro,.result{
+			width: 200px;
+			margin: 0 auto;
+		}
+		.result {
+			text-align: center;
+			text-shadow: 0 0 5px #333333;
+			color: #FFFFFF;
+		}
+	
+	/*按钮样式*/
+	.groupbtn{
+		width: 40%;
+	    height: 46px;
+	    line-height: 46px;
+	    text-align: center;
+	    background-color: #E96388;
+	    margin: 10px 0 10px 0;
+	    border-radius: 3px;
+	    color: white;
+	    text-decoration: none;
+		border:none;
+		outline:none;
+		/* margin-left: 6.6%; */
+	}
+	.groupbtn2{
+		width: 30%;
+	    height: 46px;
+	    line-height: 46px;
+	    text-align: center;
+	    background-color: #E96388;
+	    margin: 10px 0 10px 0;
+	    border-radius: 3px;
+	    color: white;
+	    text-decoration: none;
+		border:none;
+		outline:none;
+		/* margin-left: 6.6%; */
+	}
+	
+	/*按钮样式*/
+	.nextbtn{
+		width: 100%;
+	    height: 46px;
+	    line-height: 46px;
+	    text-align: center;
+	    background-color: #E96388;
+	    margin: 10px 0 10px;
+	    border-radius: 3px;
+	    color: white;
+	    text-decoration: none;
+		border:none;
+		outline:none;
+	}
+	.subscription{
+		display: flex;
+  		justify-content: center;
+  		align-items: center;
+	}
+	.subscription span{
+		width: 24%;
+		height: 40px;
+		float: left;
+		text-align: center;
+		box-sizing: border-box;
+		padding: 4px 3px;
+		color: #666;
+		line-height: 30px;
+		font-size: 13px;
+		overflow: hidden; 
+		text-overflow:ellipsis;
+		border-radius: 3px;
+		border: 1px solid #ccc;
+		margin-bottom: 5px;
+	 	margin-right:2px; 
+	}
+	
+	/* 按钮选中样式  */
+	.giveselect{
+		background: #E96388;
+		color: white!important;
+		border: 0!important;
+	}
+	
+	/* 二维码 */
+	.shareImg img{
+		position:absolute;
+		left:0px;
+		top:0px;
+		z-index:-1;
+		/*border: 1px red solid;*/
+   	}
+   	#qrcode{
+   		display: flex;
+		justify-content: center;
+		align-items: center;
+   		/*float: right;*/
+   	}
+   	.layfoot{
+   		width: 100%;
+    	position:absolute;
+    	bottom: 0;
+		clear:both;
+		text-align: center;
+		font-family:"微软雅黑";
+		color:#ababab;
+		font-weight:300;
+   	}
+   	
+   	.group_record{
+   		/* border:1px red solid; */
+   		font-family:"微软雅黑";
+   		font-weight:300;
+   		font-size:12px;
+   		/* padding-left:10px; */
+   		background:white;
+   		margin:3px;
+   	}
+   	.group_record_list{
+   		width:100%;
+		display: flex;
+		justify-content: left;
+        align-items: center;
+        border-bottom:1px #eee solid;
+        padding:3px 0px;
+        padding-left:10px;
+   	}
+   	.group_record_list span{
+   		width:50%;
+   		/* border:1px red solid; */
+   		margin-left:15px;
+   	}
+   	
+   	.addclass{
+   		width:100% !important ;
+   		left:none !important;
+   	}
+   	
+
+

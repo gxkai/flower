@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+		<!-- 微信接口 -->
+		<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<!--icon-->
+		<link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+		
+		
+		<title>留言</title>
+		<style type="text/css">
+			body{
+				margin: 0;
+				padding: 0;
+			}
+			.container{
+				height: 100%;
+				max-width: 710px;
+				margin: 0 auto;
+			}
+			.photo{
+				height: 210px;
+				overflow: hidden;
+			}
+			.photo:after { 
+				content: ''; 
+				display: table; 
+				clear: both;
+			}
+			.photo img{
+			    position: relative;
+			    width: 100%;
+			    height: 0;
+			    overflow: hidden;
+			    margin: 0;
+			    padding-bottom: 100%;
+			    background-position: center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
+			}
+			.content_header{
+				box-sizing: border-box;
+				background: #85b7c0;
+				height: 200px;
+				padding:5px 50px;
+			}
+			.content_header input{
+				background:none;
+				border:none;
+				outline:none;
+			}
+			
+			.content{
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				padding: 20px 0;
+				box-sizing: border-box;
+			}
+			.content_left,.content_right{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			.content_left img,.content_right img{
+				width: 50%;
+			}
+			.content_right{
+				margin: ;
+			}
+			.footer{
+				background-color: #f7f2df;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 20px 0;
+				box-sizing: border-box;
+			}
+			
+			/*留言*/
+			textarea{
+				border:none;
+			    width: 100%;
+			    height: 90px;  
+			    outline: none;
+			    resize:none;
+			    display:block;
+			    margin:0 auto;
+			    overflow: hidden;
+			    box-sizing: border-box;
+			    padding:5px;
+			    
+			    white-space: normal;
+			}
+			.content_text_title{
+				color: #8b8b8b;
+				font-size:0.8em;
+			}
+			.content_text_other{
+				color: #c4c4c4;
+				font-size:0.6em;
+			}
+			
+			.jindutiao{
+				width: 60%;
+				background: #c4ed89;
+				display: inline-block;
+				text-align: right;
+				padding:3px 10px 3px 0px;
+				box-sizing: border-box;
+				margin-left: 5px;
+				border-radius:5px;
+			}
+			.vedio_content{	
+				height:100px;
+				display: flex;
+				justify-content: center;
+				align-items:center;
+			}
+			.vedio_content img{
+				width: 2.45em;
+				border-radius: 5px;
+				margin-left: 8px;
+			}
+				
+			fieldset{
+				font-size:0.6em;
+				box-sizing: border-box;
+				padding:10px 20px;
+				letter-spacing: 2px;
+			}
+			
+		</style>
+	
+	</head>
+	<body>
+		
+		<div class="container">
+			<div class="header photo" >
+				<img id="header_img" src="http://ozdzt401n.bkt.clouddn.com/raw_1516776968.jpeg" style="background-image:url(http://ozdzt401n.bkt.clouddn.com/raw_1516776968.jpeg)"/>
+			</div>
+			
+			<!-- 语音 -->
+			<!-- <div class="vedio_content">
+				<span style="color:#ccc">12"</span>
+				<span class="jindutiao" id="listen" data-value="0"><i class="ion-arrow-right-b"></i></span> 
+				<img src="http://wx.qlogo.cn/mmopen/YChLVIdvaSXAAUCnj022kcVSNiaeeRo9SqhxTibrPia2pB8HFmlDq9wjRvPeOjUL6mxeyVTE0S9DIV00JwFSrntHHVwtJcO414H/0"/>
+			</div> -->
+			
+			<div class="content_header">
+				<span style="display: block;border-bottom:1px dashed white;padding-top:5px;padding-bottom:10px;box-sizing: border-box;"><i class="ion-edit"></i>&nbsp;留言板</span>
+				
+				<div style="text-align:left;margin-top:10px;">
+				<image src="http://ozdzt401n.bkt.clouddn.com/dear_icon_1.png" style="width:20%;">
+				<input id="giveperson" style="width:30%;color:white;" value="TA的称呼" type="" name="giveperson" id=""/>
+				</div>
+				
+				<textarea style="background:#85b7c0;color:white" name="text" id="text">输入想对ta说的话</textarea>
+				<div style="text-align:right;">
+				<font style="font-size:0.8em;color:white">来自：</font>
+				<input style="width:20%;color:white;"  value="署名" type="" name="writer" id="writer"/>
+				</div>
+				
+			</div>
+			
+			<script>
+				$(function(){
+					
+					$("#text").bind("focus", function () {
+						var text = $("#text").val()
+						if(text.trim() === "输入想对ta说的话"){
+							 $("#text").val("")
+						}
+				    });
+					
+					$("#text").blur(function(){
+				        var text = $("#text").val()
+				        if(text == null || text ==""){
+				        	$("#text").val("输入想对ta说的话")
+				        } 
+				    });
+					
+					$("#giveperson").blur(function(){
+					  	console.log("失去焦点")
+					  	var value = $('#giveperson').val()
+						if(value == "" || value == null){
+							$('#giveperson').val("TA的称呼")
+						}
+					});
+					$("#giveperson").focus(function(){
+						console.log("获得焦点");
+						var value = $('#giveperson').val()
+						if(value == "TA的称呼"){
+							$('#giveperson').val("")
+						}
+					});
+					
+					$("#writer").blur(function(){
+						console.log("失去焦点")
+						var value = $('#writer').val()
+						if(value == "" || value == null){
+							$('#writer').val("署名")
+						}
+					});
+					$("#writer").focus(function(){
+						console.log("获得焦点");
+						var value = $('#writer').val()
+						if(value == "署名"){
+							$('#writer').val("")
+						}
+					});
+					
+				})
+			</script>
+			
+			
+			<div class="content">
+				<div class="content_left">
+					<img id="uploadimg" src="http://ozdzt401n.bkt.clouddn.com/raw_1516775989.png"/>
+					<!-- <button id="uploadimg">上传图片</button> -->
+					<div class="content_text_title">上传相册</div>
+					<div class="content_text_other">填满爱的回忆</div>
+				</div>
+				<!-- <div class="content_right">
+					<img src="http://ozdzt401n.bkt.clouddn.com/raw_1516775990.png" id="talk_btn"/>
+					<button id="talk_btn" >长按录音</button>
+					<div class="content_text_title">讲给TA的密语</div>
+					<div class="content_text_other">补充爱的寄语</div>
+				</div> -->
+			</div>
+			<div class="footer">
+				<img src="http://ozdzt401n.bkt.clouddn.com/raw_1516776067.png" style="width: 40%;" id="upload"/>
+				<fieldset style="border-color: #9a8773;border-radius: 5px;width: 70%;margin-top: 10px;">
+				  <legend style="color: #dc741e;font-weight: 600;letter-spacing:2px;">攻略说明</legend>
+				  &nbsp;&nbsp;&nbsp;&nbsp;
+				    本页面为贺卡制作页面，可以书写文字或者上传相片，用来制作爱的小纸条，两项功能
+				    至少要完成一项才可以生成哦。
+				</fieldset>
+			</div>
+		</div>
+		
+		<form id="form" hidden>
+			<input name="dearNick" value="">
+			<input name="msg" value="">
+			<input name="imgBase64" value="">
+			<input name="myNick" value="">
+		</form>
+		
+		<script>
+		wxconfig(window.location);
+		var START,END
+		var voice={
+			localId: []
+		}
+		//假设全局变量已经在外部定义
+		//按下开始录音
+		$('#talk_btn').on('touchstart', function(event){
+			console.log("开始录音")
+		    event.preventDefault();
+		    START = new Date().getTime();
+
+		    recordTimer = setTimeout(function(){
+		        wx.startRecord({
+		            success: function(){
+		                localStorage.rainAllowRecord = 'true';
+		            },
+		            cancel: function () {
+		                alert('用户拒绝授权录音');
+		            }
+		        });
+		    },300);
+		});
+		//松手结束录音
+		$('#talk_btn').on('touchend', function(event){
+			console.log("结束录音")
+		    event.preventDefault();
+		    END = new Date().getTime();
+		    
+		    if((END - START) < 300){
+		        END = 0;
+		        START = 0;
+		        //小于300ms，不录音
+		        clearTimeout(recordTimer);
+		    }else{
+		        wx.stopRecord({
+		          success: function (res) {
+		            voice.localId = res.localId;
+		            console.log(res.localId)
+		            //uploadVoice();
+		          },
+		          fail: function (res) {
+		            alert(JSON.stringify(res));
+		          }
+		        });
+		    }
+		});
+		
+		
+		var images = {
+	      localId: [],
+	      serverId: []
+	    };
+		//图片上传
+		$("#uploadimg").on('click',function(event){
+			wx.chooseImage({
+				count: 1, // 默认9
+				sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+				sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+				success: function (res) {
+					images.localId = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+					// 选择完成之后生成预览
+					$("#header_img").attr('src',images.localId[0]);
+					
+					var localId=images.localId;
+					
+					var index = layer.load(1, {
+				    	  shade: [0.4, '#393D49']//0.1透明度的白色背景
+				    	});	
+					
+					if(window.__wxjs_is_wkwebview){  
+						wx.getLocalImgData({
+							localId:localId[0], // 图片的localID
+							success: function (res) {
+								var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+								localData = localData.replace('jgp', 'jpeg');
+								$("input[name='imgBase64']").val(localData);
+								$("#header_img").css("background-image","url("+localData+")");
+								layer.close(index);
+								}
+							});
+						
+					}else{
+						$("#header_img").css("background-image","url("+images.localId[0]+")");
+						wx.getLocalImgData({
+							localId:localId[0], // 图片的localID
+							success: function (res) {
+								var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+								$("input[name='imgBase64']").val(localData);
+								layer.close(index);
+								}
+							});
+						}
+					}
+				});
+		})
+		
+		
+		$("#upload").on("click",function(event){
+			//进行处理 这边需要判断一下是不是默认图片
+			var src = $("#header_img")[0].src; 
+			if( src == "http://ozdzt401n.bkt.clouddn.com/raw_1516776968.jpeg"){
+				$("input[name='imgBase64']").val("");
+			}
+			
+			var giveperson = $("input[name='giveperson']").val()
+			var text = $("#text").val()
+			var writer = $("input[name='writer']").val()
+			
+			if(giveperson == null || giveperson == '' || giveperson =="TA的称呼"){
+				layer.msg("你还没有告诉我ta是谁呢")
+				return;
+			}
+			if(text == null || text == '' || text =="输入想对ta说的话"){
+				layer.msg("为ta写一句暖心的话吧")
+				return;
+			}
+			if(writer == null || writer == '' || writer == "署名"){
+				layer.msg("如果您不想署名的话，以下名称可能会给他惊喜：梅花国王，樱木花道 ...")
+				return;
+			}
+			
+			$("input[name='dearNick']").val(giveperson)
+			$("input[name='msg']").val(text)
+			$("input[name='myNick']").val(writer)
+			
+			var index = layer.load(1, {
+	    	  shade: [0.1,'#ccc'] //0.1透明度的白色背景
+	    	});	
+			$.ajax({
+	       	 	url: '/account/submitInfo',
+				data: $('form').serialize(),
+				type: 'post',
+				dataType: 'json',
+				cache: false,
+				success: function(data){
+				layer.close(index);
+				if(data.resultMsg){
+					layer.msg("上传成功，与ta分享，让ta邂逅惊喜吧！")
+					location.replace('/account/valentine_poster/'+data.id +"-" + data.md5Str);
+				}else{
+					alert(data.msg)
+				}
+			  }
+			});   
+			
+		})
+		
+		//上传录音
+		$("#uploadVedio").on('click',function(event){
+			
+			if(voice.localId){
+				//调用微信的上传录音接口把本地录音先上传到微信的服务器
+			    //不过，微信只保留3天，而我们需要长期保存，我们需要把资源从微信服务器下载到自己的服务器
+			    wx.uploadVoice({
+			        localId: voice.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+			        isShowProgressTips: 1, // 默认为1，显示进度提示
+			        success: function (res) {
+			            //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
+			             $.ajax({
+			                url: '/account/uploadVoice',
+			                type: 'post',
+			                data: {
+			                	voiceid :res.serverId
+			                	},
+			                dataType: "json",
+			                success: function (data) {
+			                    alert('文件已经保存到七牛的服务器');//这回，我使用七牛存储
+			                },
+			                error: function (xhr, errorType, error) {
+			                    console.log(error);
+			                }
+			            });  
+			        }
+			    });
+			}
+			 
+		})
+		
+		//试听录音
+		$("#listen").on("click",function(){
+			var value = $("#listen").data("value")
+			
+			if(voice.localId.length <= 0 || voice.localId == null){
+				layer.msg("没有录音")
+				return;
+			}
+			// console.log(value)
+			if(value == 0 ){
+				$("#listen").html('<i class="ion-pause"></i>')
+				$("#listen").data("value",1)
+				// 播放
+				wx.playVoice({
+					localId: voice.localId // 需要播放的音频的本地ID，由stopRecord接口获得
+					});
+				
+			}else{
+				$("#listen").html('<i class="ion-arrow-right-b"></i>')
+				$("#listen").data("value",0)
+				// 停止
+				wx.stopVoice({
+					localId: voice.localId  // 需要停止的音频的本地ID，由stopRecord接口获得
+					});
+			}
+			
+
+		})
+
+		</script>
+	</body>
+</html>

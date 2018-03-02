@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>祝福卡</title>
+    <script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+    <style type="text/css">
+    	.container{
+    		position: absolute;
+    		margin: 0 auto;
+    	}
+    	canvas{
+    		margin: 10px 40px;
+    	}
+    </style>
+    <script type="text/javascript" src="/resource/flower/js/jquery-qrcode-0.14.0.min.js"></script>
+    <script language="JavaScript">
+        function loadImage() {
+            console.log("贺卡加载完毕");
+            var options = {
+                render: "canvas",
+                ecLevel: 'H',//识别度
+                fill: '#000',//二维码颜色
+                background: '#ffffff',//背景颜色
+                quiet: 2,//边距
+                width: 200,//宽度
+                height: 200,
+                text: 'http://'+window.location.host+'/account/seecardinfo',//二维码内容
+                //中间logo start
+                mode: 4,
+                mSize: 25 * 0.01,
+                mPosX: 50 * 0.01,
+                mPosY: 50 * 0.01,
+                image:$('#img-buffer')[0],//logo图片
+                //中间logo end
+                label: 'jQuery.qrcode',
+                fontname: 'Ubuntu',
+                fontcolor: '#ff9818',
+            };
+            $('#container').empty().qrcode(options);
+        }
+    </script>
+</head>
+<body>
+   <div id="code"></div>
+   <div id="container">这里是电子贺卡显示位置</div>
+   <img id="img-buffer" onload="loadImage()" src="/resource/flower/image/ecard.png" hidden>
+</body>
+</html>

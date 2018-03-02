@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .all:hover {overflow:visible;position: absolute;font-weight: bolder;}
+         .allp:hover {overflow:visible;position: absolute;font-weight: bolder;}         
+		</style>
+		<title>物流管理 - 出货扫描</title>
+	</head>
+	<body style="width: 1180px;">
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>物流管理 <span class="c-gray en">&gt;</span>出货扫描<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">			
+				<span style="font-weight:bold;color: #FF8C00;font-style: oblique;font-size: 20px;"  >扫描:</span>	
+				<input type="text"  id="lognumber" maxlength="50" style="width:150px;height:20px" >
+				<span id="spanproduct" style="margin: 10px 10px 10px 150px;color: red;font-size:24px"></span>
+				<span id="spanwuliu" style="margin: 10px 10px 10px 200px;color: #000080;font-size:24px"></span>
+			</div>	
+			<div class="mt-10">
+			     <table class="table table-border table-bordered radius table-bg" >
+			       <thead>
+						<tr class="text-c">
+						    <th width="210" style="font-size: 20px;">按产品类别分</th>
+							<th width="210" style="font-size: 20px;">按订单类型分</th>
+							<th width="210" style="font-size: 20px;">按物流公司分</th>
+						</tr>
+					</thead>
+				  </table>
+				  <table class="table table-border table-bordered radius table-bg" >
+				  <tr>
+				  <td style="vertical-align:text-top">
+				  <table class="table table-border table-bordered radius table-bg"  >
+					<thead>
+						<tr class="text-c">
+							<th width="170" style="font-size: 20px;">产品名称</th>
+							<th width="65" style="font-size: 20px;">应出</th>
+							<th width="65" style="font-size: 20px;">实出</th>
+						</tr>
+				    </thead>
+				    <tbody id="product">
+					<#if typeproductlist?? && typeproductlist?size gt 0>
+					<#list typeproductlist as li>
+					<tr class="text-c">
+						<td class="allp" style="font-size: 20px;">${li.name!}</td>
+						<td style="font-size: 20px;">${li.count!}</td>
+						<td style="color: red;font-size: 20px;">0</td>
+					</tr>
+					</#list>
+					</#if>
+					</tbody>
+					<tbody id="productsum">
+					<tr class="text-c">
+					   <td style="font-size: 20px;">总计</td>
+					   <td style="font-size: 20px;">${productsum!}</td>
+					   <td style="color: red;font-size: 20px;">0</td>
+					</tr>
+				   </tbody>
+                  </table>
+                  </td>
+                   <td style="vertical-align:text-top">
+				  <table class="table table-border table-bordered radius table-bg" >
+					<thead>
+						<tr class="text-c">
+							<th width="180" style="font-size: 20px;">订单类型</th>
+							<th width="65" style="font-size: 20px;">应出</th>
+							<th width="65" style="font-size: 20px;">实出</th>
+						</tr>
+				    </thead>
+				    <tbody id="order">
+					<#if typeorderlist?? && typeorderlist?size gt 0>
+					<#list typeorderlist as li>
+					<tr class="text-c">
+						<td class="all" style="font-size: 20px;">${li.gName!}</td>
+						<td style="font-size: 20px;">${li.count!}</td>
+						<td style="color: red;font-size: 20px;">0</td>
+					</tr>
+					</#list>
+					</#if>
+					</tbody>
+					<tbody id="ordersum">
+					<tr class="text-c">
+					   <td style="font-size: 20px;">总计</td>
+					   <td style="font-size: 20px;">${ordersum!}</td>
+					   <td style="color: red;font-size: 20px;">0</td>
+					</tr>
+				   </tbody>
+                  </table>
+                  </td>
+                   <td style="vertical-align:text-top">
+				  <table class="table table-border table-bordered radius table-bg" >
+					<thead>
+						<tr class="text-c">
+							<th width="70" style="font-size: 20px;">物流</th>
+							<th width="70" style="font-size: 20px;">应出</th>
+							<th width="70" style="font-size: 20px;">实出</th>
+						</tr>
+				    </thead>
+				    <tbody id="wuliu">
+					<#if typewuliulist?? && typewuliulist?size gt 0>
+					<#list typewuliulist as li>
+					<tr class="text-c">
+						<td style="font-size: 20px;">${li.ename!}</td>
+						<td style="font-size: 20px;">${li.count!}</td>
+						<td style="color: red;font-size: 20px;">0</td>
+					</tr>
+					</#list>
+					</#if>
+					</tbody>
+					<tbody id="wuliusum">
+					<tr class="text-c">
+					   <td style="font-size: 20px;">总计</td>
+					   <td style="font-size: 20px;">${wuliusum!}</td>
+					   <td style="color: red;font-size: 20px;">0</td>
+					</tr>
+				   </tbody>
+                  </table>
+                  </td>
+                  </tr>
+                  </table>
+			</div>
+		
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+				function add(ename,pname,oname,lognumber) {
+					if (ename==null||ename=="") {
+						fault();
+						layer.msg("该单号没有物流信息！", {time: 2000});return;
+					}else if (pname==null||pname=="") {
+						fault();
+						layer.msg("该单号没有产品信息！", {time: 2000});return;
+					}else if (oname==null||oname=="") {
+						fault();
+						layer.msg("该单号没有订单信息！", {time: 2000});return;
+					}
+					product(pname);
+					order(oname);
+				    wuliu(ename);
+					success(lognumber);							
+				}
+				function success(lognumber) {
+					$.post('/manage/iframe/logistics/success/'+lognumber,function(data){
+						var audio = new Audio("/resource/flower/audio/s.wav");
+						audio.play();
+				    });
+					
+				}
+				function fault() {
+					var audio = new Audio("/resource/flower/audio/f.wav");
+					audio.play();
+				}
+				function product(pname) {
+					var spanname = "";
+					for (var i = 0; i < pname.length; i++) {
+						$("#product").find("tr").each(function(){
+					        var tdArr = $(this).children();
+					        var name =  tdArr.eq(0).text();//物流
+					        var number = tdArr.eq(2).text();//实出
+					        if (name == pname[i].name) {
+					        	number++;
+					        	tdArr.eq(2).text(number)
+							}
+					        
+					    });
+						  productsum();
+						  if (spanname=="") {
+						  spanname += pname[i].name;
+						  }else {
+							spanname += ("+"+pname[i].name);
+						}
+					}
+					$("#spanproduct").html(spanname);
+				}
+				function order(oname) {
+					$("#order").find("tr").each(function(){
+				        var tdArr = $(this).children();
+				        var name =  tdArr.eq(0).text();//物流
+				        var number = tdArr.eq(2).text();//实出
+				        if (name == oname) {
+				        	number++;
+				        	tdArr.eq(2).text(number)
+						}
+				        
+				    });
+					 ordersum();
+				}
+				function wuliu(ename) {
+					$("#wuliu").find("tr").each(function(){
+				        var tdArr = $(this).children();
+				        var name =  tdArr.eq(0).text();//物流
+				        var number = tdArr.eq(2).text();//实出
+				        if (name == ename) {
+				        	number++;
+				        	tdArr.eq(2).text(number)
+						}  
+				    });
+			        wuliusum();
+			        $("#spanwuliu").html(ename);
+				}
+				function productsum() {
+					var productsum = $("#productsum").find("tr").children().eq(2).text();
+					productsum++;
+					$("#productsum").find("tr").children().eq(2).text(productsum);
+				}
+				function ordersum() {
+					var ordersum = $("#ordersum").find("tr").children().eq(2).text();
+					ordersum++;
+					$("#ordersum").find("tr").children().eq(2).text(ordersum);
+				}
+				function wuliusum() {
+					var wuliusum = $("#wuliusum").find("tr").children().eq(2).text();
+					wuliusum++;
+					$("#wuliusum").find("tr").children().eq(2).text(wuliusum);
+				}
+				$("#lognumber").keyup(function(event){
+					  if(event.keyCode ==13){
+					    submit();
+					    $("#lognumber").val("");
+					  }
+					});
+				function submit() {
+					var lognumber = $("#lognumber").val();
+					if (lognumber==""||lognumber==null) {
+						layer.msg("请输入物流单号", {time: 2000});return;
+					}
+					$.post('/manage/iframe/logistics/wuliuinfo/'+lognumber,function(data){
+							add(data.ename,data.pname,data.oname,lognumber);
+					});
+				}
+			});	
+		</script> 
+	</body>
+</html>

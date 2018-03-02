@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>批次管理 - 花价管理</title>
+		<style type="text/css">
+			.flower{width: 116px;height: 26px;float: left;line-height: 26px;}
+			.flower img {width: 26px;height: 26px;float: left;margin-right: 10px;}
+		</style>
+	</head>
+	<body>
+		<div class="page-container skin-minimal">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<tr>
+					<th colspan="4">订阅花材</th>
+				</tr>
+				<tr>
+					<td>批次</td>
+					<td>花材</td>
+					<td>预测市价</td>
+					<td>实际市价</td>
+				</tr>
+				<#list pricelist as flower>
+				<#if flower.type==0>
+				<tr>
+					<td>${flower.code}</td>
+					<td>
+						<div class="flower">
+			    			<label style="display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" title="${flower.name}">${flower.name}</label>
+		  				</div>
+  					</td>
+  					<td>&yen;${(flower.price1!0)?string('0.00')}</td>
+  					<td><input type="text" class="input-text size-S" data-code="${flower.code}" value="${(flower.price2!0)?string('0.00')}" id="0-fid2-${flower.fid!}"></td>
+  				</tr>
+  				</#if>
+	  			</#list>
+	  			<tr>
+					<th colspan="4">送花花材</th>
+				</tr>
+				<tr>
+					<td>批次</td>
+					<td>花材</td>
+					<td>预测市价</td>
+					<td>实际市价</td>
+				</tr>
+				<#list pricelist as flower>
+				<#if flower.type==1>
+				<tr>
+					<td>${flower.code}</td>
+					<td>
+						<div class="flower">
+			    			<label style="display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" title="${flower.name}">${flower.name}</label>
+		  				</div>
+  					</td>
+  					<td>&yen;${(flower.price1!0)?string('0.00')}</td>
+  					<td><input type="text" class="input-text size-S" data-code="${flower.code}" value="${(flower.price2!0)?string('0.00')}" id="1-fid2-${flower.fid!}"></td>
+  				</tr>
+  				</#if>
+	  			</#list>
+	  			<tr>
+					<th colspan="4">节日送花花材</th>
+				</tr>
+				<tr>
+					<td>批次</td>
+					<td>花材</td>
+					<td>预测市价</td>
+					<td>实际市价</td>
+				</tr>
+				<#if pricelist?size gt 0>
+				<#list pricelist as flower>
+				<#if flower.type==2>
+				<tr>
+					<td>${flower.code}</td>
+					<td>
+						<div class="flower">
+			    			<label style="display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" title="${flower.name}">${flower.name}</label>
+		  				</div>
+  					</td>
+  					<td>&yen;${(flower.price1!0)?string('0.00')}</td>
+  					<td><input type="text" class="input-text size-S" data-code="${flower.code}" value="${(flower.price2!0)?string('0.00')}" id="2-fid2-${flower.fid!}"></td>
+  				</tr>
+  				</#if>
+	  			</#list>
+  				</#if>
+			</table>
+			<input type="button" onClick="_save()" class="btn btn-primary btn-block mt-15" value="保存">
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			var lock = true;
+			function _save(){
+				var fidxx;
+				var price;
+				var fp;
+				var $fid0 = $('[id^="0-fid2-"]');
+				var $fid1 = $('[id^="1-fid2-"]');
+				var $fid2 = $('[id^="2-fid2-"]');
+				var flist  = new Array();
+				for(var i=0;i<$fid0.length;i++){
+					fidxx = $fid0.eq(i).get(0);
+					price = fidxx.value;
+					fp = $('#'+fidxx.id).data('code')+'-'+0+'-'+fidxx.id.substr(7)+'-'+price;
+					flist.push(fp);
+				}
+				for(var i=0;i<$fid1.length;i++){
+					fidxx = $fid1.eq(i).get(0);
+					price = fidxx.value;
+					fp = $('#'+fidxx.id).data('code')+'-'+1+'-'+fidxx.id.substr(7)+'-'+price;
+					flist.push(fp);
+				}
+				for(var i=0;i<$fid2.length;i++){
+					fidxx = $fid2.eq(i).get(0);
+					price = fidxx.value;
+					fp = $('#'+fidxx.id).data('code')+'-'+2+'-'+fidxx.id.substr(7)+'-'+price;
+					flist.push(fp);
+				}
+				if(lock){
+					lock = false;
+					var load = layer.load();
+					$.post('/manage/iframe/product/savePriceSee', {'flist':flist.join(',')}, function(data){
+						layer.close(load);
+						if(data){
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+							parent.refresh_iframe();
+						}else{
+							lock = true;
+							layer.msg('保存失败', {time: 2000});
+						}
+					});
+				}
+			}
+		</script> 
+	</body>
+</html>

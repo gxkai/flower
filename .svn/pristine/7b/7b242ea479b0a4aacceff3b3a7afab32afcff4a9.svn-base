@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+		.all:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>报表管理 - 每单盈亏</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 报表管理 <span class="c-gray en">&gt;</span> 每单盈亏<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+		   <div class="cl pd-5 bg-1 bk-gray">
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="起始批号" value="${code_start!}" id="code_start">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="终止批号" value="${code_end!}" id="code_end">
+			</span>
+		    <span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="单号" value="${ordercode!}" id="ordercode">
+			</span>
+			<span class="select-box l ml" style="width: 130px" id="wl">
+					  	<select class="select" size="1"  id="ename">
+					    	<option value="" <#if ename=="">selected</#if>>--选择物流--</option>
+							<#if wuliulist?? && wuliulist?size gt 0>
+					    	<#list wuliulist as wuliu>
+					    	<option value="${wuliu.name}" <#if ename==wuliu.name>selected</#if>>${wuliu.name}</option> 
+					    	</#list>
+							</#if>
+					  	</select>
+			</span>
+			<a onclick="_export()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe644;</i> 导出</a>	
+			<input class="l btn btn-primary ml-10" type="submit" value="查询" onclick="search()">	
+			<span class="r" style="line-height:31px;">盈亏总计：<strong> ${sumprice!}</strong>元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共有数据：<strong>${totalrow}</strong> 条</span> 
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th width="120">批号</th>
+						<th width="80">单号</th>
+						<th width="100">单价</th>
+						<th width="100">花材成本</th>
+						<th width="100">物流成本</th>
+						<th width="100">物流公司</th>						
+						<th width="100">盈亏</th>					
+						<th width="100">类型</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if list?? && list?size gt 0>
+					<#list list as li>
+					<tr class="text-c">
+						<td>${li_index+1}</td>
+						<td>${li.code!}</td>
+						<td>${li.ordercode!}</td>
+						<td>${li.price1!}</td>
+						<td>${li.price2!}</td>
+						<td>${li.ename!}</td>
+						<td>${li.price!}</td>
+						<td>${li.differ!}</td>
+						<td>${li.type!}</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="10" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+			var code_start = '${code_start!}',code_end = '${code_end!}', ordercode='${ordercode!}',ename = '${ename!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				        	layer.load();
+				            location.replace('/manage/iframe/report/ordercode?pageno='+e.curr+'&code_start='+code_start+'&code_end='+code_end+'&ordercode='+ordercode+'&ename='+ename);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function search() {
+				var code_start =$.trim($("#code_start").val());
+				var code_end =$.trim($("#code_end").val());
+				var ordercode = $("#ordercode").val();
+				var ename = $("#ename").val();
+				layer.load();
+				location.replace('/manage/iframe/report/ordercode?pageno=1&code_start='+code_start+'&code_end='+code_end+'&ordercode='+ordercode+'&ename='+ename);
+			}
+			function _export(){
+				var code_start =$.trim($("#code_start").val());
+				var code_end =$.trim($("#code_end").val());
+				var ordercode = $("#ordercode").val();
+				var ename = $("#ename").val();
+				window.open('/manage/iframe/report/exportExcel_ordercode?code_start='+code_start+'&code_end='+code_end+'&ordercode='+ordercode+'&ename='+ename, '_blank');
+			}
+		</script> 
+	</body>
+</html>

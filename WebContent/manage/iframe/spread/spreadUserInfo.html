@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>地推二维码</title>
+	<!--jqueryjs文件-->
+	<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+	<!--二维码js文件-->
+	<script type="text/javascript" src="/resource/flower/js/jquery.qrcode.min.js"></script>
+	<!--自定义js函数-->
+	<script type="text/javascript">
+	 $(function(){
+		 $('#code').qrcode({
+			 render: "table",
+			 mode:4,
+			 width:500,
+			 height:500,
+			 image:("/resource/flower/image/1101001.png"),
+			 text:"http://weixin.qq.com/q/sDs-0prliDzxCxjeYhPk"  //任意内容
+		 }); 
+	 });
+	</script>
+</head>
+<body>
+  <div id="code"></div> 
+</body>
+</html>

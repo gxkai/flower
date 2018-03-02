@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="UTF-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes, minimum-scale=0.5, maximum-scale=1.0" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="format-detection" content="telephone=no" />		
+<title>刮刮乐</title>
+<style type="text/css">
+html,body{
+    margin: 0;
+    padding: 0;
+}
+.hidden {
+	display: none;
+	
+}
+.hidden .arrow{
+    float: right;
+}
+.hidden .head{
+    float: left;
+    font-size: 3vw;
+    color:white;
+    margin-left: 1vw;
+    margin-top: 2vw;
+}
+.head a{
+    margin-left: 1vw;
+}
+.trophy{
+    width:5vw;height:5vw;vertical-align:middle;
+}
+#backcanvas{
+	display: none;
+}
+#frontcanvas{
+	display: none;
+}
+#maincanvas{
+margin-left: 20vw;margin-top: 35vw; width: 60vw; height: 25vw;background-color: gray;
+border-style:dotted; 
+border-color:yellow;
+/* border-image:url(/resource/flower/image/guagua/border.png) 30 30 round;
+-webkit-border-image:url(/resource/flower/image/guagua/border.png) 80 80 round;
+-o-border-image:url(/resource/flower/image/guagua/border.png) 30 30 round; */
+}
+footer{
+    background-image: url("/resource/flower/image/guagua/guize.png");
+    background-size:100% 100%;
+    width:94vw;
+    height:80vw;
+    margin-top:5vw;
+    margin-left: 3vw;
+}
+article{
+    position: relative;
+    top: 16vw;
+    margin-left:1vw;
+    font-size: 3vw;
+    font-weight: bold;
+}
+article p{
+    padding: 0;
+    margin: 0;
+}
+</style>
+<script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="/resource/flower/js/guagua.js"></script>
+<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript">
+$(function () {
+	var name = '恭喜您中了${rd.money!}元';
+	if(${rd.money!}==0){
+		name = '谢谢惠顾';
+	}
+	 if (${result!}==true) {
+		init(name);
+	}else{  
+		 var prizesArr = [
+		        {color: "rgba(0, 0, 0, 1)"},
+		        {color: "rgba(0, 255, 0, 1)"},
+		        {color: "rgba(255,255,0, 1)"},
+		        {color: "rgba( 	255,192,203,.6)"},
+		    ];
+
+	    // 随机获取到背景色
+	    var prizeObj = prizesArr[ Math.floor(Math.random() * 4) ];
+	    var canvas = document.getElementById('maincanvas');
+	    var context = canvas.getContext('2d');  //获取对应的2D对象(画笔)
+	    context.fillStyle = 'red';  //设置填充的背景颜色
+	    context.fillRect(0,0,canvas.width,canvas.height); //绘制 800*300 像素的已填充矩形：
+	    context.fillStyle = prizeObj.color;
+	   // context.strokeStyle = '#fff'; //设置笔触的颜色
+	    context.font = "25px 微软雅黑"; //设置字体
+	  //  context.textBaseline = 'hanging'; //在绘制文本时使用的当前文本基线
+	    context.textAlign = "center";
+	    context.textBaseLine = "middle";
+	    context.fillText(name ,canvas.width/2 ,canvas.height/2); //设置文本内容
+	    if (name!='谢谢惠顾') {
+	    	context.font = "14px 微软雅黑"; //设置字体
+	 	    context.fillStyle = "black";
+	 	    context.fillText("点击右上角分享,累加金额", canvas.width/2, canvas.height/2+60);	
+		}
+	    $('#main').show();
+	    
+	}
+	
+	wxconfig(window.location);
+	wx.ready(function(){
+		wx.onMenuShareTimeline({
+			 title:' ${rd.nick!}正在参加花美美双11翻牌游戏,领取可叠加使用花票,你也来试试吧', // 分享描述
+			 link: 'http://'+window.location.host+'/service/turn11/'+'${rd.id!}', // 分享链接
+			 imgUrl: 'http://'+window.location.host+'${iconurl!}', // 分享图标
+		     type: 'link', // 分享类型,music、video或link，不填默认为link
+		     dataUrl: '',
+		     success: function () {
+		    	 location.replace('/service/turn11/'+'${rd.id!}');
+			 },
+			 cancel: function () {
+				        // 用户取消分享后执行的回调函数
+			 }
+
+		});
+		wx.onMenuShareAppMessage({
+			title: '${rd.nick!}正在参加花美美双11翻牌游戏,领取可叠加使用花票,你也来试试吧', // 分享标题
+			desc: '来帮${rd.nick!}翻牌！', // 分享描述
+		    link: 'http://'+window.location.host+'/service/turn11/'+'${rd.id!}', // 分享链接
+		    imgUrl: 'http://'+window.location.host+'${iconurl!}', // 分享图标
+		    type: 'link', // 分享类型,music、video或link，不填默认为link
+		    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		    success: function () {
+		    	location.replace('/service/turn11/'+'${rd.id!}');
+		    },
+		    cancel: function () {
+		        // 用户取消分享后执行的回调函数
+		    }
+		});
+		
+		
+	});
+})
+</script>
+</head>
+<body style="background-image: url('${imgurl!}'); background-repeat: no-repeat;background-size: cover;">
+	<canvas id="backcanvas"  ></canvas>
+	<canvas id="frontcanvas" ></canvas>
+	<div class="hidden" id="main">
+	        <span class="head" onclick="window.location.href='/service/getMyPrizeList11';"><img class="trophy"  src="/resource/flower/image/icon/record_icon.png" ><a>查看记录</a> </span>
+	        <img class="arrow" src="/resource/flower/image/guagua/share-it.png" > 
+			<canvas id="maincanvas" >
+			</canvas>
+	</div>
+	<footer>
+	<article>
+	<p>1.活动日期:2017年10月31日~2017年11月10日;</p><br/>
+	<p>2.每人每天有1次刮奖机会,刮奖后将页面分享给好友翻牌;</p><br/>
+	<p>3.每次翻牌花票面额随机累加,活动期间最多允许100个好友给您翻牌;</p><br/>
+	<p>4.活动期间获得的所有花票会在2017年11月11日自动累加成1张花票,自动推送至您的账号(相当于叠加使用),此花票仅限2017年11月11日当天使用,过期作废,花票不提现,不找零;</p><br/>
+	<p>5.如有任何疑问请加客服微信:FLOWERMM001;</p><br/>
+	<p>6.本活动最终解释权归花美美平台所有.</p>
+	</article>
+	</footer>	
+</body>
+</html>

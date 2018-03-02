@@ -1,0 +1,243 @@
+package com.config;
+
+import java.util.Timer;
+import com.controller.UploadCtrl;
+import com.controller.WeixinApiCtrl;
+import com.controller.WeixinMsgController;
+import com.controller.WuLiuCtrl;
+import com.controller.front.FrontAccountCtrl;
+import com.controller.front.FrontIndexCtrl;
+import com.controller.front.FrontOnlineCtrl;
+import com.controller.front.FrontServiceCtrl;
+import com.controller.front.ServiceCtrl;
+import com.controller.manage.ManageArticleCtrl;
+import com.controller.manage.ManageBbsCtrl;
+import com.controller.manage.ManageBenefitCtrl;
+import com.controller.manage.ManageCardCtrl;
+import com.controller.manage.ManageCardPicCtrl;
+import com.controller.manage.ManageGroupsCtrl;
+import com.controller.manage.ManageIndexCtrl;
+import com.controller.manage.ManageLogisticsCtrl;
+import com.controller.manage.ManageLuckDrawCtrl;
+import com.controller.manage.ManageMemberCtrl;
+import com.controller.manage.ManageOrderCtrl;
+import com.controller.manage.ManageProductCtrl;
+import com.controller.manage.ManageProxyCtrl;
+import com.controller.manage.ManagePurchaseCtrl;
+import com.controller.manage.ManageRedPacketsCtrl;
+import com.controller.manage.ManageReportCtrl;
+import com.controller.manage.ManageServiceCtrl;
+import com.controller.manage.ManageSpreadCtrl;
+import com.controller.manage.ManageSystomCtrl;
+import com.handler.WebSocketHandler;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
+import com.jfinal.core.Const;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.util.TaskService;
+import com.util.TaskService2;
+import com.util.TimerBuckleSeeds;
+import com.util.TimerFans;
+import com.util.TimerRefundsRedRacket;
+import com.util.TimerRobot;
+import com.util.TimerSendMsgHuapiaodaoqi;
+import com.util.TimerSendMsgJiNianRi;
+import com.util.TimerSendMsgPtcg;
+import com.util.TimerSendMsgPtdjstx;
+import com.util.TimerSendMsgRedRacket;
+import com.util.TimerSendMsgShtx;
+import com.util.TimerSendMsgSrshtx;
+import com.util.TimerSendRedPacket;
+import com.util.TimerTarget;
+import com.util.TimerUpdateGrade;
+
+
+public class WeixinConfig extends JFinalConfig {
+	
+	
+		
+	@Override
+	public void configConstant(Constants me) {
+		//果园
+		PropKit.use("config_develop.txt");
+		//e合作社
+		//PropKit.use("config_develop_e.txt");	
+		//PropKit.use("config.txt");	
+		me.setDevMode(true);
+		ApiConfigKit.setDevMode(me.getDevMode());
+		me.setError404View("/error/404.html");
+		me.setError500View("/error/500.html");
+		me.setMaxPostSize(100*Const.DEFAULT_MAX_POST_SIZE);//默认10M,此处设置为最大1000M
+	}
+
+	@Override
+	public void configRoute(Routes me) {
+		/*************** 前台 **************/
+		// 首页
+		me.add("/", FrontIndexCtrl.class, "/front");
+		// 会员相关
+		me.add("/account", FrontAccountCtrl.class, "/front/account");
+		// 业务相关
+		me.add("/service", FrontServiceCtrl.class, "/front/service");
+		// 在线客服
+		me.add("/online", FrontOnlineCtrl.class, "/front/online");
+		// 调查
+		me.add("/survey", ServiceCtrl.class, "/front/survey");
+		
+		
+		/*************** 后台 **************/
+		me.add("/manage", ManageIndexCtrl.class);
+		// 商品管理
+		me.add("/manage/iframe/product", ManageProductCtrl.class);
+		// 订单管理
+		me.add("/manage/iframe/order", ManageOrderCtrl.class);
+		// 系统管理
+		me.add("/manage/iframe/systom", ManageSystomCtrl.class);
+		// 服务管理
+		me.add("/manage/iframe/service", ManageServiceCtrl.class);
+		// 文章管理
+		me.add("/manage/iframe/article", ManageArticleCtrl.class);
+		// 物流管理
+		me.add("/manage/iframe/logistics", ManageLogisticsCtrl.class);
+		// 会员管理
+		me.add("/manage/iframe/member", ManageMemberCtrl.class);
+		// 优惠管理
+		me.add("/manage/iframe/benefit", ManageBenefitCtrl.class);
+		// 推广管理
+		me.add("/manage/iframe/spread", ManageSpreadCtrl.class);
+		//鲜花兑换卡
+		me.add("/manage/iframe/card",ManageCardCtrl.class);
+		//报表管理
+		me.add("/manage/iframe/report",ManageReportCtrl.class);
+		//红包管理
+		me.add("/manage/iframe/redpackets",ManageRedPacketsCtrl.class);
+		//拼团管理
+		me.add("/manage/iframe/groups",ManageGroupsCtrl.class);
+		//采购管理
+		me.add("/manage/iframe/purchase",ManagePurchaseCtrl.class);
+		//抽奖管理
+		me.add("/manage/iframe/luckDraw",ManageLuckDrawCtrl.class);
+		//卡片管理
+		me.add("/manage/iframe/cardpic",ManageCardPicCtrl.class);
+		//美美社区管理
+		me.add("/manage/iframe/bbs",ManageBbsCtrl.class);
+		
+		
+		//总代理,所有与微信的交互都通过这里
+		me.add("/manage/iframe/proxy",ManageProxyCtrl.class);
+		
+		/*************** 微信 **************/
+		me.add("/weixin", WeixinApiCtrl.class, "/manage/iframe");
+		
+		/*************** 文件上传 **************/
+		me.add("/upload", UploadCtrl.class);
+		
+		/*************** 物流 **************/
+		me.add("/wuliu", WuLiuCtrl.class, "/");
+		
+		/****************消息处理**************/
+		me.add("/msg",WeixinMsgController.class);
+		
+	}
+
+	@Override
+	public void configPlugin(Plugins me) {
+		C3p0Plugin c3p0Plugin = new C3p0Plugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password"));
+//		c3p0Plugin.setMinPoolSize(50);		// 连接池中保留的最小连接数
+//		c3p0Plugin.setMaxPoolSize(200);		// 连接池中保留的最大连接数
+//		c3p0Plugin.setInitialPoolSize(50);	// 初始链接数
+//		c3p0Plugin.setMaxIdleTime(60);		// 每60秒检查所有连接池中的空闲连接。Default: 0
+//		c3p0Plugin.setAcquireIncrement(10);	// 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数
+		me.add(c3p0Plugin);
+		ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0Plugin);
+		me.add(arp);
+	}
+
+	@Override
+	public void configInterceptor(Interceptors me) {}
+
+	@Override
+	public void configHandler(Handlers me) {
+		me.add(new WebSocketHandler());
+	}
+
+	/**
+	 * 定时执行
+	 * 若需要在测试环境测试定时服务时，将连接字符串改成测试地址即可
+	 */
+	private Timer timerTaskService = new Timer();
+	private Timer timerTaskService2 = new Timer();
+	private Timer timerSendRedPacket = new Timer();
+	private Timer timerSendMsgRedRacket= new Timer();
+	private Timer timerSendMsgHuapiaodaoqi= new Timer();
+	private Timer timerSendMsgJiNianRi= new Timer();
+	private Timer timerBuckleSeeds= new Timer();
+	private Timer timerUpdateGrade= new Timer();
+	private Timer timerSendMsgShtx = new Timer();
+	private Timer timerSendMsgSrshtx = new Timer();
+	private Timer timerRobot=new Timer();
+	private Timer timerFans=new Timer();
+	//private Timer timerSendMsgPtcg = new Timer();
+	//private Timer timerSendMsgPtdjstx = new Timer();
+	//private Timer timerTarget=new Timer();
+	
+	@Override
+	public void afterJFinalStart() {
+		super.afterJFinalStart();
+		
+		
+		if(PropKit.get("jdbcUrl").equals("jdbc:mysql://rm-k1hrtji3q71wivt01.mysql.rds.aliyuncs.com:3306/homedb2?autoReconnect=true&rewriteBatchedStatements=TRUE&zeroDateTimeBehavior=convertToNull")==true){
+			timerTaskService.schedule(new TaskService(), 1000*60*60*6, 1000*60*60*24*4);//首次发执行时间：发布后6小时，间隔时间：4天 
+			timerTaskService2.schedule(new TaskService2(), 1000*60*60*6, 1000*60*60*12*1); //首次发执行时间：发布后6小时，间隔时间：12小时
+			timerSendRedPacket.schedule(new TimerSendRedPacket(), 1000*60, 1000*60*50);//首次执行时间：发布后60秒；间隔时间：50分钟
+			timerSendMsgRedRacket.schedule(new TimerSendMsgRedRacket(), 1000*60, 1000*60*10);//首次执行时间：发布后60秒；间隔时间：10分钟
+			timerSendMsgHuapiaodaoqi.schedule(new TimerSendMsgHuapiaodaoqi(), 1000*60, 1000*60*60);//首次执行时间：发布后60秒；间隔时间：60分钟
+			timerSendMsgJiNianRi.schedule(new TimerSendMsgJiNianRi(), 1000*60, 1000*60*60);//首次执行时间：发布后60秒；间隔时间：60分钟
+			timerBuckleSeeds.schedule(new TimerBuckleSeeds(), 1000*120, 1000*60*60);//首次执行时间：发布后120秒；间隔时间：60分钟
+			timerUpdateGrade.schedule(new TimerUpdateGrade(), 1000*60, 1000*60*10); //首次执行时间：发布后60秒；间隔时间：10分钟
+			timerSendMsgShtx.schedule(new TimerSendMsgShtx(), 1000*60,1000*60*60*24);//首次执行时间：发布后60秒；间隔时间：24小时
+			timerSendMsgSrshtx.schedule(new TimerSendMsgSrshtx(), 1000*60,1000*60*60*24);//首次执行时间：发布后60秒；间隔时间：24小时
+			timerRobot.schedule(new TimerRobot(), 1000*60,1000*60*10);//首次执行时间：发布后60秒；间隔时间：10分钟
+			timerFans.schedule(new TimerFans(), 1000*60,1000*60*60*24);//首次执行时间：发布后60秒；间隔时间：24小时
+			//拼团成功后给每个团员发客服消息；
+			//timerSendMsgPtcg.schedule(new TimerSendMsgPtcg(), 1000*60,1000*60*10);
+			//团结束前4小时，给团长发【倒计时提醒】
+			//timerSendMsgPtdjstx.schedule(new TimerSendMsgPtdjstx(), 1000*60,1000*60*10);
+			//红包退款  红包发出去 超过48小时没人抢则退款  一天执行一次
+			/*timerUpdateGrade.schedule(new TimerRefundsRedRacket(), 1000*60, 1000*60*60*24);*/ //首次执行时间：发布后60秒；间隔时间：10分钟
+			//小目标发奖品
+			//timerTarget.schedule(new TimerTarget(), 1000*30,1000*30);//首次执行时间：发布后30秒；间隔时间：30秒
+		}
+		
+		
+		
+	}
+
+	@Override
+	public void beforeJFinalStop() {
+		// TODO Auto-generated method stub
+		super.beforeJFinalStop();
+		timerTaskService.cancel();  
+		timerTaskService2.cancel(); 
+		timerSendRedPacket.cancel();
+		timerSendMsgRedRacket.cancel();
+		timerSendMsgHuapiaodaoqi.cancel();
+		timerSendMsgJiNianRi.cancel();
+		timerBuckleSeeds.cancel();
+		timerUpdateGrade.cancel();
+		timerSendMsgShtx.cancel();
+		timerSendMsgSrshtx.cancel();
+		timerRobot.cancel();
+		timerFans.cancel();
+		//timerSendMsgPtcg.cancel();
+		//timerSendMsgPtdjstx.cancel();
+		//timerTarget.cancel();
+	}
+}

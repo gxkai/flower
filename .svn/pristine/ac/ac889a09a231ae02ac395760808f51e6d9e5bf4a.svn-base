@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+      <meta charset="utf-8">
+	  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	  <meta http-equiv="Cache-Control" content="no-siteapp" />
+	  <meta name="format-detection" content="telephone=no" />
+      <link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+      <title>我的礼品</title>
+      <style type="text/css">
+      body {
+           background-color: #EEE;
+      }
+      .weui-cell__hd img{
+           width:80px;
+           margin-right:5px;
+           display:block;
+           border-radius: 5px;
+      }
+      .weui-cell__bd p{
+          font-size: 15px;
+      }
+      .weui-cells__title span{
+          height:40px;
+          background-color: #f36b93;
+          display: block;
+          text-align: center;
+          border-radius: 8px;
+          color: white;
+          font-size: 20px;
+          line-height: 40px;
+      }
+      </style>
+</head>
+
+<body>
+
+        <div class="weui-cells__title"><span onclick="huizeng()">回&nbsp;赠</span> </div> 
+        <div class="weui-cells">
+        
+            <#list infoList as info>
+            <a class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><img src="${info.imgurl1!}" alt=""></div>
+                <div class="weui-cell__bd">
+                    <p>${info.gName!}</p>
+                    <p>下单时间:${info.ctime}</p>
+                    <p>祝福语:${info.zhufu!}</p> 
+                </div>
+            </a>
+            </#list>
+            
+        </div>
+    
+</body>
+<script type="text/javascript">
+function huizeng(){
+	location.replace('/index');
+}
+</script>
+</html>

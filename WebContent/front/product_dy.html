@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<title>| 鲜 花 | 订 阅 |</title>
+		<style type="text/css">
+			body{
+				margin: 0 auto;
+				padding: 0;
+				max-width:720px;
+			}
+			.container{
+				font-family: "微软雅黑";
+				/*border: 1px red solid;*/
+				padding: 8px;
+			}
+			.goods_info{
+				/*border:1px black solid;*/
+				margin:5px auto;
+			}
+			.goods_info img{
+				width: 100%;
+			}
+			.span_title{
+				font-size: 16px;
+				font-weight: 600;
+				font-family: "幼圆";
+				letter-spacing:2px
+			}
+			.span_describe{
+				display:inline-block;
+				width:100%;
+				font-size: 12px;
+				color: #cfcfcf;
+				overflow: hidden;
+				text-overflow:ellipsis;
+				white-space: nowrap;
+				letter-spacing:2px;
+			}
+			.goods_price{
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+				margin-top: 5px;
+				padding-bottom: 8px;
+				border-bottom: 1px #ccc solid;
+			}
+			.span_price{
+				color: #ff6162;
+			}
+			.span_btn{
+				width: 20%;
+			    font-size: 12px;
+			    text-align: center;
+			    padding: 3px 4px;
+			    border-radius: 2px;
+			    border: 1px solid #ccc;
+				color: #6b6b6b;
+			    text-decoration: none;
+				outline:none;
+			}
+			
+			/*页脚*/
+			.cell_footer{
+				width: 100%;
+				text-align: center;
+				padding-top: 24px;
+				display: table;
+				font-weight:300;
+			}
+			.cell_footer span{
+				font-size: 12px;
+			}
+			.cell_footer_2 img{
+				width: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div class="container">
+			<!-- 倾心 -->
+			<#if qingxin ??>
+			<div class="goods_info">
+			<img src="${qingxin.imgurl1!}"/>			
+			<span class="span_title">${qingxin.name!}</span><br />
+			<span class="span_describe" >${qingxin.describe2}</span><br />
+			<div class="goods_price">
+				<span class="span_btn" onclick="window.location.href='/product/2';">查看详情</span>
+			</div>
+			</div>
+			</#if>
+			
+			<!-- 遇见 -->
+			<#if yujian ??>
+			<div class="goods_info">
+			<img src="${yujian.imgurl1!}"/>			
+			<span class="span_title">${yujian.name!}</span><br />
+			<span class="span_describe" >${yujian.describe2}</span><br />
+			<div class="goods_price">
+				<span class="span_btn" onclick="window.location.href='/product/1';">查看详情</span>
+			</div>
+			</div>
+			</#if>
+			
+			<!-- 小别 -->
+			<#if xiaobie??>
+			<div class="goods_info">
+			<img src="${xiaobie.imgurl1!}"/>			
+			<span class="span_title">${xiaobie.name!}</span><br />
+			<span class="span_describe" >${xiaobie.describe2}</span><br />
+			<div class="goods_price">
+				<span class="span_btn" onclick="window.location.href='/product/203';">查看详情</span>
+			</div>
+			</div>
+			</#if>
+			
+			<!-- 定制 -->
+			<#if dingzhi ??>
+			<div class="goods_info">
+			<img src="${dingzhi.imgurl!}"/>			
+			<span class="span_title">私人定制</span><br />
+			<span class="span_describe" >${dingzhi.describe2}</span><br />
+			<div class="goods_price">
+				<span class="span_btn" onclick="window.location.href='/product/201';">查看详情</span>
+			</div>
+			</div>
+			</#if>
+			
+			<div class="cell_footer">
+				<span onclick="location.replace('/index');">首页 </span>|
+				<span onclick="location.replace('/account/center')">会员中心 </span>|
+				<span onclick="location.replace('/question')">常见问题</span>
+				<!-- <div class="cell_footer_2">
+					<img src="/resource/flower/image/logo.png">		
+				</div> -->
+				<!-- <span>—  用鲜花传递爱  —</span> -->
+			</div>
+			
+		</div>
+		
+	</body>
+</html>

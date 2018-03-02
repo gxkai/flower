@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>订单管理 - 会员列表 - 带颜详情</title>
+	</head>
+	<body>
+		<div class="page-container">
+			<div class="row cl">
+				<label class="col-xs-3 col-sm-3">总人数：${dyrs.allCount!}</label>
+				<label class="col-xs-3 col-sm-3">首单购买成功人数：${dyrs.successCount!}</label>
+			</div>
+		
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">会员ID</th>
+						<th width="100">会员昵称</th>
+						<th width="100">电话</th>
+						<th width="120">创建日期</th>
+						<th width="80">用户状态</th>
+						<th width="120">订单编号</th>
+						<th width="60">收货人姓名</th>
+						<th width="120">收货人电话</th>
+						<th width="150">收货人地址</th>
+						<th width="80">总价</th>
+						<th width="120">下单日期</th>
+						<th width="80">是否首单</th>
+					</tr>
+				</thead>
+				 <tbody>
+					<#if dyxqlist?? && dyxqlist?size gt 0>
+					   <#list dyxqlist as dyxq>
+					      <tr class="text-c">
+						    <td>${dyxq.id!}</td>
+						    <td>${dyxq.nick!}</td>
+						    <td>${dyxq.tel_a!}</td>
+						    <td>${dyxq.ctime_a!}</td>
+						    <td><#if dyxq.state==0><span class="c-success">正常</span><#else><span class="c-warning">冻结</span></#if></td>
+						    <td>${dyxq.ordercode!}</td>
+						    <td>${dyxq.name!}</td>
+						    <td>${dyxq.tel_b!}</td>
+						    <td>${dyxq.addr!}</td>
+						    <td>${dyxq.price!}</td>
+						    <td>${dyxq.ctime_b!}</td>
+						    <td><#if dyxq.ishas==0><span class="c-green">首单</span><#else><span class="c-red">非首单</span></#if></td>
+					     </tr>
+					   </#list>
+					<#else>
+					<tr>
+						<td colspan="12" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody> 
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+			
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+		</script>
+	</body>
+</html>

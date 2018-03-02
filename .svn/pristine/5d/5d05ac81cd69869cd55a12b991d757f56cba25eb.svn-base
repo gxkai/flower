@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>不觉时光老</title>
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+		<!--icon-->
+		<link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+		
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			.container{
+				max-width: 720px;
+				margin: 0 auto;
+				text-align: center;
+			}
+			.header{
+				
+			}
+			.header img{
+				width: 100%;
+			}
+			.content{
+				width: 80%;
+				margin: 0 auto;
+			}
+			.content_main{
+				margin-top: 15px;
+				display: flex;
+				flex-direction: column;
+			}
+			#giveperson{
+				display: block;
+				text-align: left;
+			}
+			#writesth{
+				margin-top:5px ;
+			}
+			.content img {
+				width: 80%;
+			}
+			.footer{
+				position: fixed;
+				margin-top:50px ;
+			}
+			.jindutiao{
+				width: 60%;
+				background: #8fdb21;
+				display: inline-block;
+				text-align: right;
+				padding:3px 10px 3px 0px;
+				box-sizing: border-box;
+				margin-left: 5px;
+			}
+			.vedio_content{	
+				display: flex;
+				justify-content: flex-end;
+				align-items:flex-end;
+			}
+			.vedio_content img{
+				width: 3.25em;
+				border-radius: 50%;
+				margin-left: 8px;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div class="container">
+			<div class="header">
+				<img src="img/raw_1516779610.jpeg"/>
+			</div>
+			
+			<div class="content">
+				<img src="http://ozdzt401n.bkt.clouddn.com/valentine_day.png"/>
+				
+				<div class="content_main">
+					<span id="giveperson" style="font-weight: 600;">Dear : 张女士</span>
+					<span id="writesth">
+						有你在身边，每天都是情人节
+					</span>
+				</div>
+				
+				<br />
+				<div class="vedio_content">
+					<span id="">12"</span>
+					<span class="jindutiao"><i class="ion-arrow-right-b"></i></span> 
+					<img src="http://wx.qlogo.cn/mmopen/YChLVIdvaSXAAUCnj022kcVSNiaeeRo9SqhxTibrPia2pB8HFmlDq9wjRvPeOjUL6mxeyVTE0S9DIV00JwFSrntHHVwtJcO414H/0"/>
+				</div>
+				
+			</div>
+			<div class="footer">
+				<img src="http://ozdzt401n.bkt.clouddn.com/valentine_logo.png" style="width: 100%;"/>
+			</div>
+		</div>
+		
+	</body>
+</html>

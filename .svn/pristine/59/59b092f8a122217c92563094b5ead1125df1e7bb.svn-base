@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/icheck/icheck.css" />
+<title>红包商品维护</title>
+</head>
+<body>
+   <div style=" margin-left: 10px;margin-right: 10px;">
+    <form class="form form-horizontal">
+     <!-- 编辑商品-->
+     <#if rd??>
+          <table class="table table-border table-bordered table-hover table-bg table-sort f-l mt-15">
+				<tr style=" display: none">
+					<td>红包商品ID号</td>
+					<td><input type="text" class="input-text size-S" id="vId" name="id" value="${rd.id!}"></td>
+				</tr>
+				<tr>
+					<td width="120">红包商品简称</td>
+					<td><input type="text" class="input-text size-S" id="vName" name="name" value="${rd.name!}"></td>
+				</tr>
+				<tr>
+  					<td>商品名称</td>
+  					<td>
+						<span class="select-box" id="v2">
+						  	<select class="select" size="1" id="vFpid" name="fpid">
+						    	<#list flowerproductlist as pl>
+						    	<#if rd.fpid?? && rd.fpid==pl.id>
+						    	<option value=${pl.id} selected>${pl.name}</option>
+						    	<#else>
+						    	<option value=${pl.id}>${pl.name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+  					</td>
+  				</tr>
+  				<tr>
+					<td>数量</td>
+					<td><input type="text" class="input-text size-S" id="vPnum" name="pnum" value="${rd.pnum!}"></td>
+  				</tr>
+  				<tr>
+					<td>金额</td>
+					<td><input type="text" class="input-text size-S" id="vPmoney" name="pmoney" value="${(rd.pmoney!0)?string('0.00')}"></td>
+  				</tr>
+  				<tr>
+					<td width="120">状态：0下架1上架</td>
+					<td><input type="text" class="input-text size-S" id="vState" name="state" value="${rd.state!}"></td>
+  				</tr>
+  				<tr>
+					<td width="120">类型：1主品2副品</td>
+					<td><input type="text" class="input-text size-S" id="vprotype" name="protype" value="${rd.protype!}"></td>
+  				</tr>
+  				<tr>
+  				   <td width="120">大图：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_1" value="${rd.imgurl01!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img01" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${rd.imgurl01!}')">&#xe695;</i></td>
+  				</tr>
+  				<tr>
+  				   <td width="120">详情图：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_1" value="${rd.imgurl02!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img02" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${rd.imgurl02!}')">&#xe695;</i></td>
+  				</tr>
+  				<tr>
+  				   <td width="120">小图：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="v4_1" value="${rd.imgurl03!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img03" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${rd.imgurl03!}')">&#xe695;</i></td>
+  				</tr>
+  				<tr>
+					<td width="120">适用的用户：1总裁专用2普通用户</td>
+					<td><input type="text" class="input-text size-S" id="vuserType" name="userType" value="${rd.userType!}"></td>
+  				</tr>
+  				<tr>
+					<td width="120">排序顺序</td>
+					<td><input type="text" class="input-text size-S" id="vorderId" name="orderId" value="${rd.orderId!}"></td>
+  				</tr>		
+			</table>
+			<input type="button" onClick="editsave()" class="btn btn-primary btn-block" value="编辑保存">
+       
+  <!-- 添加商品 -->
+   <#else> 
+       <table class="table table-border table-bordered table-hover table-bg table-sort f-l mt-15">
+				<tr style=" display: none">
+					<td>红包商品ID号</td>
+					<td><input type="text" class="input-text size-S" id="vId" name="id" value="0"></td>
+				</tr>
+				<tr>
+					<td width="120">红包商品简称</td>
+					<td><input type="text" class="input-text size-S" id="vName" name="name" value=""></td>
+				</tr>
+				<tr>
+  					<td>商品名称</td>
+  					<td>
+						<span class="select-box" id="v2">
+						  	<select class="select" size="1" id="vFpid" name="fpid">
+						    	<option value="0" selected>--选择适商品名称--</option>
+						    	<#list flowerproductlist as pl>
+						    	   <option value=${pl.id}>${pl.name}</option>
+						    	</#list>
+						  	</select>
+						</span>
+  					</td>
+  				</tr>
+  				<tr>
+					<td>数量</td>
+					<td><input type="text" class="input-text size-S" id="vPnum" name="pnum" value="1"></td>
+  				</tr>
+  				<tr>
+					<td>金额</td>
+					<td><input type="text" class="input-text size-S" id="vPmoney" name="pmoney" value="0.00"></td>
+  				</tr>
+  				<tr>
+					<td width="120">状态：0下架1上架</td>
+					<td><input type="text" class="input-text size-S" id="vState" name="state" value="1"></td>
+  				</tr>
+  				<tr>
+					<td width="120">类型：1主品2副品</td>
+					<td><input type="text" class="input-text size-S" id="vprotype" name="protype" value="1"></td>
+  				</tr>
+  				<tr>
+  				   <td width="120">大图：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="imgurl01" value="" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img01" class="pro-imgsrc">
+						</span>
+  				</tr>
+  				<tr>
+  				   <td width="120">详情图：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="imgurl02" value="" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img02" class="pro-imgsrc">
+						</span>
+  				</tr>
+  				<tr>
+  				   <td width="120">小图：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="imgurl03" value="" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img03" class="pro-imgsrc">
+						</span>
+  				</tr>
+  				<tr>
+					<td width="120">适用的用户：1总裁专用2普通用户</td>
+					<td><input type="text" class="input-text size-S" id="vuserType" name="userType" value="2"></td>
+  				</tr>
+  				<tr>
+					<td width="120">排序顺序</td>
+					<td><input type="text" class="input-text size-S" id="vorderId" name="orderId" value="1"></td>
+  				</tr>	
+  				
+			</table>
+			<input type="button" onClick="addsave()" class="btn btn-primary btn-block mt-15" value="新增保存">
+     </#if>
+     </form>
+   </div>
+   
+   
+  <script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+  <script type="text/javascript" src="/resource/layer/layer.js"></script>
+  <script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+  <script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+  <script type="text/javascript">
+    //图片生成新地址
+	$('.input-file').on('change', function(){
+		var $proImg = $(this).siblings(".pro-imgsrc");
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var base64 = e.target.result;
+			$proImg.val(base64);
+		};
+		reader.readAsDataURL(this.files[0]);
+		this.files = [];
+	});
+		
+	function addsave() {
+		
+		var name=$('#vName').val();//红包商品简称
+		var fpid=$('#vFpid').find('option:selected').val();//商品编号
+		var pnum=$('#vPnum').val();//数量
+		var pmoney=$('#vPmoney').val();//单价
+		var state=$('#vState').val();//状态
+		var protype=$('#vprotype').val();//类型
+		if(state!=0&&state!=1){
+			layer.tips('0下架1上架', '#vState', {tips: [1, '#34495E']});return;
+		}
+		if(protype!=1&&protype!=2){
+			layer.tips('1主品2副品', '#vprotype', {tips: [1, '#34495E']});return;
+		}
+		var lock = true;
+		if(lock){
+			lock = false;
+			var load = layer.load();
+			$.post('/manage/iframe/redpackets/SaveProduct', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data.result){
+					parent.refresh_iframe();
+					layer.msg('新增成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('新增失败', {time: 1000}, function(){
+						lock = true;
+					});
+				}
+			});
+		}
+	}
+	function editsave(){
+		var id=$('#vId').val();//红包商品ID号
+		var name=$('#vName').val();//红包商品简称
+		var fpid=$('#vFpid').find('option:selected').val();//商品编号
+		var pnum=$('#vPnum').val();//数量
+		var pmoney=$('#vPmoney').val();//单价
+		var state=$('#vState').val();//状态
+		var protype=$('#vprotype').val();//类型
+		if(state!=0&&state!=1){
+			layer.tips('0下架1上架', '#vState', {tips: [1, '#34495E']});return;
+		}
+		if(protype!=1&&protype!=2){
+			layer.tips('1主品2副品', '#vprotype', {tips: [1, '#34495E']});return;
+		}
+		var lock = true;
+		if(lock){
+			lock = false;
+			var load = layer.load();
+			$.post('/manage/iframe/redpackets/EditProduct', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data.result){
+					parent.refresh_iframe();
+					layer.msg('编辑成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('编辑失败', {time: 1000}, function(){
+						lock = true;
+					});
+				}
+			});
+		}
+	}
+	
+		
+		
+		
+		
+		 
+		
+	
+	
+  </script>
+   
+          
+
+</body>
+</html>

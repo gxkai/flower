@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.wid{width: 27%;margin-left:5px;}
+			.pd-r{padding-right: 7px;}
+		</style>
+		<title>推广管理 - 地推人员 - 人员详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if spread??>
+				<input type="hidden" name="id" value="${spread.id}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>员工号：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<span>${spread.number}</span>
+						<input type="hidden" class="input-text" id="v1" name="number" value="${spread.number}" readonly="readonly">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>姓名：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v2" name="name" value="${spread.name}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>电话：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v3" name="tel" value="${spread.tel}" maxlength="13">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>性别：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="radio" name="sex" value="0" <#if spread.sex==0>checked="checked"</#if>>男&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="sex" value="1" <#if spread.sex==1>checked="checked"</#if>>女
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>区域：</label>
+					<div class="formControls" style="width: 75%;float: right;">
+						<span class="select-box l wid" style="margin-left: 15px;">
+						  	<select class="select" id="prov" size="1" onchange="searchprovince(this)">
+						    	<option value="a" >--选择省--</option>
+						    	<option value="${prov.id}" selected="selected" >${prov.name}</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="city" size="1" onchange="searchcity(this)">
+						    	<option value="a" >--选择市--</option>
+						    	<option value="${city.id}" selected="selected" >${city.name}</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="county" size="1">
+						    	<option value="a" >--选择区县--</option>
+						    	<option value="${county.id}" selected="selected">${county.name}</option>
+						  	</select>
+						</span>
+					</div>
+				</div>				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>地区：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v6" name="address" value="${spread.address}">
+					</div>
+				</div>
+			<!--	<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>花票主题：</label>
+					<div class="formControls" style="width: 75%;float: right;">
+						<span class="select-box l wid" style="margin-left: 15px;width: 180px;">
+						  	<select class="select" id="themeId" name="themeId" size="1" >
+						  	<option value="0">请选择花票</option>
+						  	<#list themelist as themelist>
+						    	<option value="${themelist.id!}"  <#if spread.cashthemeId==themelist.id>selected="selected"</#if>>${themelist.name!}</option>
+						    </#list>	
+						  	</select>
+						</span>
+					</div>
+				</div> -->
+				<#else>
+				<div class="row cl" style="display: none;">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>员工号：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v1" name="number" value="1">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>姓名：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v2" name="name">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>电话：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v3" name="tel" maxlength="13">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>性别：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="radio" name="sex" value="0" checked="checked">男&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="sex" value="1">女
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>区域：</label>
+					<div class="formControls" style="width: 75%;float: right;">
+						<span class="select-box l wid" style="margin-left: 15px;">
+						  	<select class="select" id="prov" size="1" onchange="searchprovince(this)">
+						    	<option value="a" >--选择省--</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="city" size="1" onchange="searchcity(this)">
+						    	<option value="a" >--选择市--</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="county" size="1">
+						    	<option value="a" >--选择区县--</option>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>地区：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="v6" name="address">
+					</div>
+				</div>
+			<!--	<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>花票主题：</label>
+					<div class="formControls" style="width: 75%;float: right;">
+						<span class="select-box l wid" style="margin-left: 15px;width: 150px;">
+						  	<select class="select" id=themeId  size="1" name = "themeId" >
+						  	<option value="0">请选择花票</option>
+						  	<#list themelist  as themelist>
+						    	<option value="${themelist.id!}" >${themelist.name!}</option>
+						    </#list>
+						  	</select>
+						</span>
+					</div>
+				</div>   -->
+				</#if>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			  	<input type="hidden" name="prov">
+			  	<input type="hidden" name="city">
+			  	<input type="hidden" name="county">
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			var areadata = new Array();
+			arealist = ${arealist};
+			var provs_data=[],citys_data=[],dists_data=[];
+			for(var i=0;i<arealist.length;i++){
+				if(arealist[i]['pid'] == 0){
+					// 省级
+					var prov = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString()};
+					provs_data.push(prov);
+				}else{
+					if(arealist[i]['ppid']==0 && arealist[i]['pid']!=0){
+						// 市级
+						var city = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+						citys_data.push(city);
+					}else{
+						// 区县
+						var county = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+						dists_data.push(county);
+					}
+				}
+			}
+			
+			$(document).ready(function(){
+				prov = $('#prov').find('option:selected').val();
+				city = $('#city').find('option:selected').val();
+				county = $('#county').find('option:selected').val();
+				if(prov == 'a'){
+					for(var i=0;i<provs_data.length;i++){
+						var prov_name = provs_data[i]['text'];
+						var prov_id = provs_data[i]['value'];
+						$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+					}
+				}else{
+					for(var i=0;i<provs_data.length;i++){
+						var prov_name = provs_data[i]['text'];
+						var prov_id = provs_data[i]['value'];
+						if(prov!=prov_id){
+							$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+						}
+					}
+					for(var j=0;j<citys_data.length;j++){
+						if(prov == citys_data[j]['pid']){
+							var city_name = citys_data[j]['text'];
+							var city_id = citys_data[j]['value'];
+							if(city!=city_id){
+								$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+							}
+						}
+					}
+					for(var z=0;z<dists_data.length;z++){
+						if(city == dists_data[z]['pid']){
+							var dist_name = dists_data[z]['text'];
+							var dist_id = dists_data[z]['value'];
+							if(county!=dist_id){
+								$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+							}
+						}
+					}
+				}
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			
+			function searchprovince(_obj){
+				prov = $(_obj).find('option:selected').val();
+				$('#city').find("option:not(:first)").remove();
+				$('#county').find("option:not(:first)").remove();
+				for(var j=0;j<citys_data.length;j++){
+					if(prov == citys_data[j]['pid']){
+						var city_name = citys_data[j]['text'];
+						var city_id = citys_data[j]['value'];
+						$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+					}
+				}
+				
+			}
+			
+			function searchcity(_obj){
+				city = $(_obj).find('option:selected').val();
+				$('#county').find("option:not(:first)").remove();
+				for(var z=0;z<dists_data.length;z++){
+					if(city == dists_data[z]['pid']){
+						var dist_name = dists_data[z]['text'];
+						var dist_id = dists_data[z]['value'];
+						$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+					}
+				}
+			}
+			
+			function _save(){
+				var name = $('#v2').val();
+				var tel = $('#v3').val();
+				var themeId = $("#themeId").val();
+				var sex = 0;
+				var sexs = document.getElementsByName("sex");
+				for(var i=0 ;i < sexs.length; i++){
+					if(sexs[i].checked){
+						sex = i;
+						break;
+					}
+				}
+				prov = $('#prov').find('option:selected').val();
+				city = $('#city').find('option:selected').val();
+				county = $('#county').find('option:selected').val();
+				//省
+				$('input[name="prov"]').val(prov);
+				//市
+				$('input[name="city"]').val(city);
+				//区县
+				$('input[name="county"]').val(county);
+				
+				var address = $('#v6').val();
+				var reg = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+				
+				if($.trim(name)==''){
+					layer.tips('请输入姓名', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(name)=='null' || $.trim(name)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}else if(!reg.test(name)){
+					layer.tips('不能包含特殊字符', '#v2', {tips: [1, '#34495E']});return;
+				}
+				
+				var reggh = /^0[\d]{10,11}$/;
+				var regsj = /^1(3|4|5|7|8)\d{9}$/;
+				if($.trim(tel)==''){
+					layer.tips('请输入手机号', '#v3', {tips: [1, '#34495E']});return;
+				}else if(!reggh.test(tel) && !regsj.test(tel)){
+					layer.tips('手机号或固话格式错误', '#v3', {tips: [1, '#34495E']});return;
+				}
+				
+				if(prov=='a'){
+					layer.tips('请选择省', '#prov', {tips: [1, '#34495E']});return;
+				}
+				if(city=='a'){
+					layer.tips('请选择市', '#city', {tips: [1, '#34495E']});return;
+				}
+				if(county=='a'){
+					layer.tips('请选择区县', '#county', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(address)==''){
+					layer.tips('请输入地区', '#v6', {tips: [1, '#34495E']});return;
+				}else if($.trim(address)=='null' || $.trim(address)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v6', {tips: [1, '#34495E']});return;
+				}else if(!reg.test(address)){
+					layer.tips('不能包含特殊字符', '#v6', {tips: [1, '#34495E']});return;
+				}
+				
+				var lock = true;
+				if(lock){
+					lock = false;
+					$.post('/manage/iframe/spread/saveSpreadPreson', $('form').serialize(), function(data){
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

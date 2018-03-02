@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+      <meta charset="utf-8">
+	  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	  <meta http-equiv="Cache-Control" content="no-siteapp" />
+	  <meta name="format-detection" content="telephone=no" />
+      <link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+      <script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+      <script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+      <title>我的礼品</title>
+      <style type="text/css">
+      body {
+           background-color: #EEE;
+      }
+      .weui-cell__hd img{
+           width:40px;
+           margin-right:5px;
+           display:block;
+           border-radius: 5px;
+      }
+      .weui-cell__bd p{
+          font-size: 13px;
+      }
+      .tab span{
+      	  width: 50%;
+      	  background-color: #d4d4d4;
+      	  padding: 10px 0;
+      	  color: #6f6f6f;
+      	  display: inline-block;
+    	  text-align: center;
+    	  box-sizing: border-box;
+      }
+      .tab span.on{
+      	  background-color: #f5849c;
+      	  color: white;
+      }
+      .outer{
+			margin: 5vw;
+			background-color: #fff;
+			width: 80%;
+			padding: 5vw;
+			box-shadow: 0px 3px 5px #ccc;
+			border-radius: 4px;
+		}
+		.outer .div1 img{
+			width: 45%;
+			vertical-align: middle;
+		}
+		.outer .div1{
+			padding: 3vw 3vw 0vw;
+		}
+		.outer .time{
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 2vw;
+		}
+		.outer .div1 div{ 
+			display: inline-block;
+			width: 44%;
+		    vertical-align: middle;
+		    margin-left: 5vw;
+		}
+		.outer .div1 div .xq{
+			background-color: #f96585;
+			color: #fff;
+			padding: 10px;
+		    width: 100px;
+		    text-align: center;
+		    margin-top: 3vw;
+    		border-radius: 20px;
+		}
+		.no{
+			width: 100%;
+			text-align: center;
+			margin-top: 60px;
+		}
+      </style>
+</head>
+
+<body>
+   	<div class="container">
+        <div class="tab">
+        	<span>祝福卡</span><span>礼品</span>
+        </div>	
+        
+        <div class="content">
+        	<#if cards?size gt 0>
+        	<#list cards as card>
+					<#if card.picId!=0>
+						<div class="outer">
+							<p class="time">${card.ctime!}</p>
+							<div class="div1">
+								<img src="${card.imgurl01}"/>
+								<div>
+									<p style="font-size: 15px;">送花人：${(card.songhua)!"匿名"}</p>
+									<p class="xq" onclick="location.href='/account/cardcontent/${card.ordercode!}'">祝福语详情</p>
+								</div>
+							</div>
+						</div>
+					<#else>
+						<div class="outer">
+							<p class="time">${card.ctime!}</p>
+							<div class="div1">
+								<img src="/resource/flower/image/envelop1.jpg"/>
+								<div>
+									<p style="font-size: 15px;">送花人：${(card.songhua)!"匿名"}</p>
+									<p class="xq" onclick="location.href='/account/cardcontent/${card.ordercode!}'">祝福语详情</p>
+								</div>
+							</div>
+						</div>
+					 </#if>
+				</#list>
+			<#else>
+				<div class="no">您当前没有祝福卡哦！</div>
+			</#if>
+        </div>
+        
+        <div class="content">
+        
+	        <#if userList?? && userList?size gt 0>
+	        <!-- <div class="weui-cells__title">带图标、说明、跳转的列表项</div> -->
+	        <div class="weui-cells">
+	        
+	            <#list userList as user>
+	            <a class="weui-cell weui-cell_access" href="javascript:location.replace('/account/getGiftsInfo/${user.ordercode}');;">
+	                <div class="weui-cell__hd"><img src="${user.headimg}" alt=""></div>
+	                <div class="weui-cell__bd">
+	                    <p>${user.nick}</p>
+	                    <p>生日:${user.birthday!}</p>
+	                </div>
+	                <div class="weui-cell__ft">${user.times!}</div>
+	            </a>
+	            </#list>
+	        </div>
+	        
+	        <#else>
+	               <div>
+	                    <span style="position: absolute;width: 100%;text-align: center;padding-top: 200px;font-family: Microsoft Yahei; color: #f36b93">OMG！没人给我送过花！</span>
+	               </div>
+	        </#if>
+	        
+        </div>
+     </div>
+     <script type="text/javascript">
+	    $(function(){
+	   	     $(".tab span").click(function(){
+	    	 	$(this).addClass("on").siblings().removeClass("on"); 
+	    	 	var num=$(this).index(); 
+	    	 	$(".content").eq(num).show().siblings(".content").hide(); 
+	    	 });
+	    	 $(".tab span").eq(0).trigger("click");
+	    	 $.cookie('isChild', 'y',{path: "/account/center"}); 
+    	});
+     </script>
+</body>
+
+</html>

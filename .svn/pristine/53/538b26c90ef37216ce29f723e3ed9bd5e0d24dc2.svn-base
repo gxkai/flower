@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/jquery.autocomplete.css"/>
+		<style type="text/css">
+			.wid{width: 27%;margin-left:5px;}
+			.pd-r{padding-right: 7px;}
+			.fid {  
+			    width: 11%;  
+			    height: 106px;  
+			    margin-left: -15px;  
+			    outline: none;  
+			    border: 1px solid #999;  
+			    margin-top: 40px;
+			    width:200px;
+			    position:relative;
+			    z-index:1;
+			}  
+			.makeupCo {  
+			    width: 200px;  
+			    top: 9px;  
+			    outline: none;  
+			    border: 0pt;  
+			    position: absolute;  
+			    line-height: 30px;  
+			    left: 8px;  
+			    height: 30px;  
+			    border: 1px solid #999; 
+			    margin-left: -10px; 
+			}  
+		</style>
+		<title>采购管理 - 采购列表 - 采购单编辑</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>批号：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="code" name="code" value="${list.code!}"  onblur="addpidoption()">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>销售类型：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<span class="select-box l wid" style="margin: 1px 2px 10px 1px; width: 90px;" >
+						 <select class="select"  id="channel" name="type" size="1"  style="width: 80px" >
+							 <option value="1" <#if list.type==1>selected</#if>>线下单</option>
+							  <option value="0" <#if list.type==0>selected</#if>>市场单</option>
+							   <option value="2" <#if list.type==2>selected</#if>>拍摄单</option>							 
+						 </select>
+					    </span>												
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>销售类型细分：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<span class="select-box l wid" style="margin: 1px 2px 10px 1px; width: 110px;" >
+						 <select class="select"  id="type_detail" name="type_detail" size="1"  style="width: 100px" onchange="changeType(this)" >
+							 <option value="0" <#if type_detail==0>selected</#if>>按花材销售</option>
+							 <option value="1" <#if type_detail==1>selected</#if>>按产品销售</option>							 
+						 </select>
+					    </span>												
+					</div>
+				</div>
+				<#if type_detail==0>
+				<div class="row cl" id="xsxf-0">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>花材名称：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r"  style="height: 40px;">		    
+						<span class="formControls col-xs-8 col-sm-9 pd-r" >  
+						        <input type="text" name="makeupCo" id="makeupCo" class="input-text makeupCo" onfocus="setfocus(this)" oninput="setinput(this);" placeholder="请选择或输入" value="${list.name}"/>  
+						        <select name="fid" id="fid" onchange="changeF(this)" size="10" style="display:none;" class="fid">  
+						            <#list flowerlist as flower>
+							            <option value="${flower.id!}" <#if flower.id==list.fid>selected</#if>>${flower.name!}</option>
+						            </#list>  
+						        </select> 
+						    </span>
+					</div>
+				</div>
+				</#if>
+				<div class="row cl" id="xsxf-1"  <#if type_detail==0>style="display: none;"</#if>>
+				   <label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>产品名称：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r"  style="height: 40px;">		    
+						<span class="formControls col-xs-8 col-sm-9 pd-r" style="margin-left:-14px; width: 200px;" >  
+						        <select class="select" name="ptid" id="ptid" size="1"  style="width: 180px;height: 30px;">  
+						              <#if type_detail==1><option value="${list.fid!}">${list.fname}</option></#if>
+						        </select> 
+						    </span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>销售数量：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="num" name="num" value="${list.num!0}" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>区域：</label>
+					<div class="formControls" style="width: 75%;float: right;">
+						<span class="select-box l wid" style="margin-left: 15px;">
+						  	<select class="select" id="prov" size="1" onchange="searchprovince(this)">
+						    	<option value="a" >--选择省--</option>
+						    	<option value="${prov.id!}" selected="selected" >${prov.name!}</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="city" size="1" onchange="searchcity(this)">
+						    	<option value="a" >--选择市--</option>
+						    	<option value="${city.id!}" selected="selected" >${city.name!}</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2" style="width: 110px">
+						  	<select class="select" id="county" size="1" style="width: 100px;">
+						    	<option value="a" >--选择区县--</option>
+						    	<option value="${county.id!}" selected="selected">${county.name!}</option>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>地区：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="address" name="address" value="${list.address!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>时间：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="htime" name="htime" value="${list.htime!}"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+					</div>
+				</div>					   
+				<input type="button" onClick="save()" class="btn btn-primary btn-block mt-15" value="保存">
+				<input type="hidden" name="prov">
+			  	<input type="hidden" name="city">
+			  	<input type="hidden" name="county">
+				<input type="hidden" class="input-text" id="id" name="id" value="${list.id!}" readonly="readonly">									  	
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.autocomplete.min.js"></script>		
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+		var areadata = new Array();
+		arealist = ${arealist};
+		var provs_data=[],citys_data=[],dists_data=[];
+		for(var i=0;i<arealist.length;i++){
+			if(arealist[i]['pid'] == 0){
+				// 省级
+				var prov = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString()};
+				provs_data.push(prov);
+			}else{
+				if(arealist[i]['ppid']==0 && arealist[i]['pid']!=0){
+					// 市级
+					var city = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+					citys_data.push(city);
+				}else{
+					// 区县
+					var county = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+					dists_data.push(county);
+				}
+			}
+		}
+		function searchprovince(_obj){
+			prov = $(_obj).find('option:selected').val();
+			$('#city').find("option:not(:first)").remove();
+			$('#county').find("option:not(:first)").remove();
+			for(var j=0;j<citys_data.length;j++){
+				if(prov == citys_data[j]['pid']){
+					var city_name = citys_data[j]['text'];
+					var city_id = citys_data[j]['value'];
+					$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+				}
+			}
+			
+		}
+		
+		function searchcity(_obj){
+			city = $(_obj).find('option:selected').val();
+			$('#county').find("option:not(:first)").remove();
+			for(var z=0;z<dists_data.length;z++){
+				if(city == dists_data[z]['pid']){
+					var dist_name = dists_data[z]['text'];
+					var dist_id = dists_data[z]['value'];
+					$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+				}
+			}
+		}
+		var TempArr=[],TempArrVal=[];//存储option  
+		  $(function(){  
+		      /*先将数据存入数组*/  
+		      $("#fid option").each(function(index, el) {  
+		          TempArr[index] = $(this).text();
+		          TempArrVal[index] = $(this).val(); 
+		      });
+		      prov = $('#prov').find('option:selected').val();
+				city = $('#city').find('option:selected').val();
+				county = $('#county').find('option:selected').val();
+				if(prov == 'a'){
+					for(var i=0;i<provs_data.length;i++){
+						var prov_name = provs_data[i]['text'];
+						var prov_id = provs_data[i]['value'];
+						$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+					}
+				}else{
+					for(var i=0;i<provs_data.length;i++){
+						var prov_name = provs_data[i]['text'];
+						var prov_id = provs_data[i]['value'];
+						if(prov!=prov_id){
+							$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+						}
+					}
+					for(var j=0;j<citys_data.length;j++){
+						if(prov == citys_data[j]['pid']){
+							var city_name = citys_data[j]['text'];
+							var city_id = citys_data[j]['value'];
+							if(city!=city_id){
+								$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+							}
+						}
+					}
+					for(var z=0;z<dists_data.length;z++){
+						if(city == dists_data[z]['pid']){
+							var dist_name = dists_data[z]['text'];
+							var dist_id = dists_data[z]['value'];
+							if(county!=dist_id){
+								$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+							}
+						}
+					}
+				}
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+		      $(document).bind('click', function(e) {    
+		          var e = e || window.event; //浏览器兼容性     
+		          var elem = e.target || e.srcElement;    
+		          while (elem) { //循环判断至跟节点，防止点击的是div子元素     
+		              if (elem.id && (elem.id == 'fid' || elem.id == "makeupCo")) {    
+		                  return;    
+		              }    
+		              elem = elem.parentNode;    
+		          }    
+		          $('#fid').css('display', 'none'); //点击的不是div或其子元素     
+		      });    
+		  })  
+		    
+		  function changeF(this_) {  
+		      $("#makeupCo").val($(this_).find("option:selected").text());
+		      $("#fid").css({"display":"none"});  
+		  }  
+		  function setfocus(this_){
+			  $("#fid").html("");
+		      $("#fid").css({"display":""});  
+		      for(i=0;i<TempArr.length;i++){  
+		          $("#fid").append("<option value='"+TempArrVal[i]+"'>"+TempArr[i]+"</option>");  
+		      }  
+		  }  
+		    
+		  function setinput(this_){  
+		      $("#fid").html("");  
+		      for(i=0;i<TempArr.length;i++){  
+		          //若找到以txt的内容开头的，添option  
+		          if(TempArr[i].substring(0,this_.value.length).indexOf(this_.value)==0){  
+			          $("#fid").append("<option value='"+TempArrVal[i]+"'>"+TempArr[i]+"</option>");  
+		          }  
+		      }  
+		  } 
+		function save(){
+			if(!checkInput()){
+				  return;	
+				}
+			var load = layer.load();
+			$.post('/manage/iframe/purchase/excplatsaleSaveEdit/', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data){
+					parent.refresh_iframe();
+					layer.msg('保存成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('保存失败', {time: 1000}, function(){
+					});
+				}
+			});
+			
+		}
+		function checkInput() {
+			var type_detail = $("#type_detail").find("option:selected").val();
+			var ptid = $('#ptid').find('option:selected').val();
+			var reg1 = /^[0-9]{8}$/;//检查批号
+			var reg2 = /^[0-9]{1,11}$/;//检查数量
+			var code = $("#code").val();
+			var price = $("#price").val();
+			var num = $("#num").val();
+			var htime = $("#htime").val();
+			var prov = $('#prov').find('option:selected').val();
+			var city = $('#city').find('option:selected').val();
+			var county = $('#county').find('option:selected').val();
+			//省
+			$('input[name="prov"]').val(prov);
+			//市
+			$('input[name="city"]').val(city);
+			//区县
+			$('input[name="county"]').val(county);
+			var address = $('#address').val();
+			var makeupCo = $('#makeupCo').val();
+			if(prov=='a'){
+				layer.tips('请选择省', '#prov', {tips: [1, '#34495E']});return;
+			}
+			if(city=='a'){
+				layer.tips('请选择市', '#city', {tips: [1, '#34495E']});return;
+			}
+			if(county=='a'){
+				layer.tips('请选择区县', '#county', {tips: [1, '#34495E']});return;
+			}
+			
+			if($.trim(address)==''){
+				layer.tips('请输入地区', '#address', {tips: [1, '#34495E']});return;
+			}
+			if($.trim(htime)==''){
+				layer.tips('请选择时间', '#htime', {tips: [1, '#34495E']});return;
+			}
+			if(type_detail=="0"){
+				if($.trim(makeupCo)==''){
+					layer.tips('请选择花材', '#makeupCo', {tips: [1, '#34495E']});return;
+				}
+			}
+			if (type_detail=="1") {
+				if (ptid=="") {
+					layer.tips('请选择产品', '#ptid', {tips: [1, '#34495E']});return;
+				}
+			}
+			if(!reg1.test(code)){
+				layer.tips('请输入8位数字', "#code", {tips: [1, '#34495E']});
+				return;
+			}
+			if(!reg2.test(num)){
+				layer.tips('只能输入最多11位的整数', "#num", {tips: [1, '#34495E']});
+				return;
+			}
+			return true;
+		}
+		function changeType(this_) {
+			if ($(this_).find("option:selected").val()=="0") {
+				$("#xsxf-1").css("display","none");
+				$("#xsxf-0").css("display","block");
+			}else {
+				var code = $.trim($("#code").val());
+				if (code=="") {
+					layer.tips('请输入8位数字', "#code", {tips: [1, '#34495E']});
+					$(this_).val("0");
+					return;
+				}
+				$.post("/manage/iframe/purchase/getProduct/"+code,function(data){
+					if (data.length>0) {
+						$("#xsxf-0").css("display","none");
+						$("#ptid").empty();
+						$("#xsxf-1").css("display","block");
+						$("#ptid").append('<option value="">请选择产品</option>');
+						$.each(data, function(index,item){
+							$("#ptid").append('<option value='+item.id+'>'+item.fname+'</option>');
+						})
+					}else {
+						$("#xsxf-0").css("display","none");
+						$("#ptid").empty();
+						$("#xsxf-1").css("display","block");
+						$("#ptid").append('<option value="">请选择产品</option>');
+						layer.msg('批次'+code+'没有维护产品', {time: 1000});
+					}
+				});
+			}
+		}
+		function addpidoption() {
+			var code = $.trim($("#code").val());
+			$("#ptid").empty();
+			$("#ptid").append('<option value="">请选择产品</option>');
+			$.post("/manage/iframe/purchase/getProduct/"+code,function(data){
+				if (data.length>0) {
+					$.each(data, function(index,item){
+						$("#ptid").append('<option value='+item.id+'>'+item.fname+'</option>');
+					})
+				}
+			});
+		}
+			
+		</script>
+	</body>
+</html>

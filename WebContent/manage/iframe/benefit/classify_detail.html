@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>优惠管理 - 主题分类 - 分类详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if classify??>
+				<input type="hidden" name="id" value="${classify.id}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>面额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v1" name="money" value="${classify.money}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>购满金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="benefit" value="${classify.benefit}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>适用产品：</label>
+					<span class="select-box l ml-10" style="width: 160px">
+				  	<select class="select"  name="ptid" id="v3">
+				  	    <option value="0" <#if classify.ptid==0>selected</#if>>所有产品</option>
+				    	<#if flowerprolist?size gt 0>
+				    	<#list flowerprolist as flowerpro>
+					    	<option value="${flowerpro.id!}" <#if classify.ptid==flowerpro.id>selected</#if>>${flowerpro.name}</option>
+				    	</#list>
+				    	</#if>
+				  	</select>
+			        </span>	
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>限首单使用吗？(1是0否)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v4" name="onlyfirst" value="${classify.onlyfirst}">
+					</div>
+				</div>
+				
+				<#else>
+				<input type="hidden" name="tid" value="${tid}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>面额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v1" name="money">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>购满金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="benefit">
+					</div>
+				</div>
+					<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>适用产品：</label>
+					<span class="select-box l ml-10" style="width: 160px">
+				  	<select class="select"  name="ptid" id="v3">
+				  	    <option value="0" <#if ptid==0>selected</#if>>所有产品</option>
+				    	<#if flowerprolist?size gt 0>
+				    	<#list flowerprolist as flowerpro>
+					    	<option value="${flowerpro.id!}" <#if ptid==flowerpro.id>selected</#if>>${flowerpro.name}</option>
+				    	</#list>
+				    	</#if>
+				  	</select>
+			       </span>	
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>限首单使用吗？(1是0否)：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v4" name="onlyfirst" value="0">
+					</div>
+				</div>
+				</#if>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			function _save(){
+				var money = $('#v1').val();//花票面额
+				var benefit = $('#v2').val();//购满金额
+				var ptid = $('#v3').val();//适用产品
+				var onlyfirst=$('#v4').val();
+				
+				if(Number($.trim(benefit))<Number($.trim(money))){
+					layer.tips('【购满金额】必须大于【花票面额】', '#v1', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(money)==''){
+					layer.tips('请输入购满金额', '#v1', {tips: [1, '#34495E']});return;
+				}else if($.trim(money)=='null' || $.trim(money)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v1', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(benefit)==''){
+					layer.tips('请输入优惠金额', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(benefit)=='null' || $.trim(benefit)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}
+				
+				if(onlyfirst!=0&&onlyfirst!=1){
+					layer.tips('1：限首单使用；0不作限制', '#v4', {tips: [1, '#34495E']});return;
+				} 
+				
+				var lock = true;
+				if(lock){
+					lock = false;
+					$.post('/manage/iframe/benefit/saveClassify', $('form').serialize(), function(data){
+						if(data.result){
+							layer.msg('保存成功', {time: 1000}, function(){
+								parent.location.replace(parent.location.href);
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+					
+				}
+			}
+		</script>
+	</body>
+</html>

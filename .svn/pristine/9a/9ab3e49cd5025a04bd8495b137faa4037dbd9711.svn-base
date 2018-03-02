@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery-qrcode-0.14.0.min.js"></script>
+		<style type="text/css">
+			#qrcode{text-align: center;}
+			.info{
+				width: 100%;
+				box-sizing: border-box;
+				font-weight: bolder;
+			}
+			.info span:nth-child(1){
+				float: left;
+				width: 50%;
+				text-align: right;
+			}
+			.info span:nth-child(2){
+				float: right;
+				width: 50%;
+				text-align: left;
+			}
+		</style>
+		<title>推广管理 - 地推人员 - 二维码</title>
+		<script type="text/javascript">
+	        $(function(){
+				var img = new Image();
+				img.src = '/resource/flower/image/1101001.png';
+				img.onload = function(){
+					var options = {
+		                render: "canvas",
+		                ecLevel: 'H',//识别度
+		                fill: '#000',//二维码颜色
+		                background: '#FFF',//背景颜色
+		                quiet: 2,//边距
+		                width: 200,//宽度
+		                height: 200,
+		                text: $('#qrurl').val(),//二维码内容
+		                //中间logo start
+		                mode: 4,
+		                mSize: 20 * 0.01,
+		                mPosX: 50 * 0.01,
+		                mPosY: 50 * 0.01,
+		                image: img,//logo图片
+		                //中间logo end
+		                label: 'jQuery.qrcode',
+		                fontname: 'Ubuntu',
+		                fontcolor: '#ff9818',
+		            };
+		            $('#qrcode').empty().qrcode(options);
+				}
+	        });
+    	</script>
+	</head>
+	<body>
+		<article class="page-container">
+			<input type="hidden" id="qrurl" value="${qrurl!}">
+			<div id="qrcode"></div>
+			<div class="info"><span>员工号：</span><span>${number}</span></div>
+			<div class="info"><span>姓名：</span><span>${name}</span></div>
+		</article>
+	</body>
+</html>

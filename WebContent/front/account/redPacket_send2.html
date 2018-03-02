@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery-qrcode-0.14.0.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<!-- 生成红包二维码页面 -->
+		<title>红包</title>
+		<style type="text/css">	
+			#qrimghide{
+				display: none;
+			}
+			#headimghide{
+				display: none;
+				border-radius: 25px;
+			}
+			
+			.page_h{
+				text-align: center;
+			}
+			.page_h span:NTH-CHILD(1){
+				color: red;
+    			font-weight: bold;
+    			display: block;
+    			margin-top: 30px;
+    			margin-bottom: 10px;
+			}
+			.page_h span:NTH-CHILD(2){
+				background-color: #FB4947;
+    			border-radius: 4px;
+    			color: white;
+    			padding: 2px;
+			}
+			.page_h span:NTH-CHILD(3){
+				display: block;
+    			margin-top: 20px;
+    			margin-bottom: 10px;
+			}
+			.page_b{		
+
+			}
+			.inv_1 {
+				text-align: center;
+			}
+			.inv_1 img{
+				width:300px;
+				height:300px;
+			}
+			.page_f{
+				text-align: center;
+			}
+			.page_f span:NTH-CHILD(3){
+				color: #f36b93;
+				font-size: 20px;
+			}	
+				
+		</style>
+		<script type="text/javascript">
+		 	
+	        function imgload(imgobj){
+	        	
+	        	var options = {
+		                render:"image",
+		                ecLevel: 'H',//识别度
+		                fill: '#000',//二维码颜色
+		                background: '#FFF',//背景颜色
+		                quiet: 1,//边距
+		                width: 200,//宽度
+		                height: 200,
+		                text: $('#qrurl').val(),//二维码内容
+		               /*  //中间logo start
+		                mode: 4,
+		                mSize: 28 * 0.01,
+		                mPosX: 50 * 0.01,
+		                mPosY: 50 * 0.01,
+		                image: imgobj,//logo图片
+		                //中间logo end
+		                label: 'jQuery.qrcode',
+		                fontname: 'Ubuntu',
+		                fontcolor: '#ff9818', */
+		            };
+	        	$('#qrimghide').qrcode(options);
+	            
+		        var c = document.createElement('canvas'); 
+		       /*  var c = document.getElementById('myCanvas'); */
+				var ct = c.getContext('2d');
+				c.width = 600;
+				c.height = 600;
+				ct.rect(0, 0, c.width, c.height);
+				ct.fillStyle = 'transparent';	//画布填充颜色
+				ct.fill();
+				   
+			    var bgimg = new Image();
+			    bgimg.src = '/resource/flower/image/redPacket.png';
+			    
+			    bgimg.onload = function(){
+	            	ct.drawImage(bgimg, 0, 0, 300*2, 300*2);  // 背景
+	            	
+	            	ct.font = "50px serif";
+	            	ct.fillStyle = "#FFFFFF";
+	            	ct.textAlign="center"; 
+	            	// context.fillText(text,x,y,maxWidth);
+	            	ct.fillText("你收到了一个红包",150*2,100*2);
+	            	
+		            
+	            	/* ct.strokeText($('#msg').val(),150*2,100*2); // 红包 留言 */
+	            	ct.drawImage($('#qrimghide img')[0], 120*2, 140*2, 65*2, 65*2); // 二维码
+	            	//裁剪用户头像
+	            	createCircleClip(ct); 
+	            	ct.drawImage(imgobj, 125*2, 20*2, 50*2, 50*2);  //头像     
+	          
+					var image = new Image();
+					image.src = c.toDataURL("image/png");
+					
+					image.width = 600;
+					image.height = 600;
+				 	$('#qrcode').html(image);
+				 	
+	            }
+	        }
+	        
+	        //圆形裁剪 
+	        function createCircleClip(context) {
+	             context.beginPath();
+	             context.arc(150*2, 45*2, 25*2, 0, Math.PI * 2, true);
+	             context.closePath();
+	             context.clip();
+	         }
+	        
+	        function fresh(){
+	        	location.replace(location.href);
+	        }
+    	</script>
+	</head>
+<body>
+	<div class="container">
+		
+		<div class="page_h">
+			<span>红包已准备好</span>		
+			<span>${type!}</span>		
+			<span>长按图片选择发送给好友吧</span>
+		</div>
+		
+		<div class="page_b" >
+		
+			<input type="hidden" id="qrurl" value="${qrurl!}">
+			<input type="hidden" id="nick" value="${nick!}">
+			<input type="hidden" id="msg" value="${msg!}">
+			
+			<!-- <canvas id="myCanvas" style="border:1px red solid" onload="imgload(this)"></canvas> -->
+			
+			<img src="<#if headimg??>data:image/png;base64,${headimg!}<#else>/resource/flower/image/logo.png</#if>" 
+			style="display: none; width:600px;height:600px" onload="imgload(this)">
+			
+			<div class="inv_1" id="qrcode"></div>
+			
+			<div id="qrimghide" ></div><!-- 二维码 -->
+			
+		</div>
+		
+		<div class="page_f">
+			<span>如您的二维码异常</span>	<i class="Hui-iconfont" style="color: #f36b93;">&#xe67a;</i><span onclick="fresh()">更新</span>
+		</div>
+		
+	</div>
+</body>
+</html>

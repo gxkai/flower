@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	<meta charset="utf-8">
+	<meta name="/renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+	<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+	<script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="/resource/layer/layer.js"></script>
+	<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<title>星座幸运戳</title>
+</head>
+<style>
+.container {
+    width: 100%;
+    max-width: 768px;
+    margin: 0 auto;
+    display: table;
+    font-family: Microsoft Yahei;
+    padding: 0;
+}
+.content{
+	background-color: #ffa0ca;
+	padding: 5vw 2vw;
+	text-align: center;
+}
+ul{
+	margin: auto;
+	width: 98%;
+}
+.content img{
+	width: 100%;
+}
+li{
+	width: 29%;
+	display: inline-block;
+	margin-bottom: 3vw;
+}
+li p{
+	color: #fff;
+	font-size: 12px;
+}
+.outer{
+	position: relative;
+	width: 26vw;
+	height: 26vw;
+	display: inline-block;
+}
+.outer div{
+    position: absolute;
+    transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;	/* IE 9 */
+	-moz-transform-style: preserve-3d;	/* Firefox */
+	-webkit-transform-style: preserve-3d; /* Safari 和 Chrome */
+	-o-transform-style: preserve-3d; 	/* Opera */
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;	/* Chrome 和 Safari */
+	-moz-backface-visibility:hidden; 	/* Firefox */
+	-ms-backface-visibility:hidden; 	/* Internet Explorer */
+    transition:all 3s;
+     -ms-transition: all 3s;	/* IE 9 */
+	-moz-transition: all 3s;	/* Firefox */
+	-webkit-transition: all 3s; /* Safari 和 Chrome */
+	-o-transition: all 3s; 	/* Opera */
+}
+.div1{
+    transform:rotateY(0deg);
+	-ms-transform:rotateY(0deg); 	/* IE 9 */
+	-moz-transform:rotateY(0deg);	/* Firefox */
+	-webkit-transform:rotateY(0deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(0deg); 	/* Opera */
+}
+.div2{
+    transform:rotateY(-180deg);
+    -ms-transform:rotateY(-180deg); 	/* IE 9 */
+	-moz-transform:rotateY(-180deg);	/* Firefox */
+	-webkit-transform:rotateY(-180deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(-180deg); 	/* Opera */
+}
+.result{
+	position: absolute;
+	top: 50%;
+    left: 27%;
+    font-family: cursive;
+   /*   animation: word 2s;
+    -webkit-animation: word 2s;
+    -o-animation: word 2s;
+    -moz-animation: word 2s;  */
+}
+.result p{
+ text-align: center;
+ color: #f37317;
+}
+@keyframes word
+{
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+@-wekit-keyframes word
+{
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+@-moz-keyframes word
+{
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+@-o-keyframes word
+{
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+#showDiv{
+	background-color: #3a3939;
+	width:70vw;
+	height:auto;
+	display:none;
+	z-index: 99;
+	opacity: 0.9;
+	margin-left: 8vw;
+	text-align:center;
+	margin-top: 60vw;
+	color: #fff;
+	font-size: 14px;
+	padding: 5px;
+}
+.bottom{
+	background-color: #ff6eaf;
+    font-size: 13px;
+    color: #fff;
+}
+.bottom_text{
+	padding: 6vw 4vw 0vw 5vw;
+}
+.p1{
+	text-align: center;
+	color: #fff;
+	font-family: cursive;
+	margin: 3vw;
+	position: relative;
+	letter-spacing: 2px;
+}
+.p1:before, .p1:after {
+    content: '';                 
+    position: absolute;         
+    top: 52%;
+    background: #fff;       
+    width: 9%;
+    height: 1px;
+}
+.p1:before{
+    left: 12%;        
+}
+.p1:after {
+    right: 12%;
+}
+@media (min-width: 768px) {
+	.outer {
+	    width: 80%;
+	    height: 170px;
+	}
+}
+</style>
+<body>
+	<div class="container">
+		<div class="turnbg" style="">
+			<div class="content">
+				<ul>
+					<li>
+						<div class="outer">
+						<div id="showDiv" class=""></div>
+							<div class="div1">
+								<img src="${img.img03}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(1.20-2.18)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img04}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(2.19-3.20)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img05}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(3.21-4.19)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img06}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(4.20-5.20)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img07}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(5.21-6.21)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img08}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(6.22-7.22)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img09}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(7.23-8.22)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img10}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(8.23-9.22)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img11}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(9.23-10.23)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img12}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(10.24-11.22)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img13}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(11.23-12.21)</p>
+					</li>
+					<li>
+						<div class="outer">
+							<div class="div1">
+								<img src="${img.img14}"/>
+							</div>
+							<div class="div2">
+								<img src="/resource/flower/image/turn12bg2.png"/>
+							</div>
+						</div>	
+						<p>(12.22-01.19)</p>
+					</li>
+				</ul>
+			</div>
+			<div class="bottom">
+				<div class="bottom_text">
+					活动有效时间：<br />
+					2017.12.05 至 2017.12.12 <br />
+					活动说明：<br />
+					1.点击自己所属星座，获得专属花票，每人仅可玩一次。<br />
+					2.关注花美美，在【会员中心->我的花票】中查看花票。<br />
+					3.本活动最终解释权归花美美所有。
+				</div>
+				<p class="p1">活动已有<span style="background-color: #d71b19;color:#fff;padding: 0 8px;border-radius: 5px;">${result.num!}</span>人参加</p>
+				<div style="text-align: center;">
+					<img src="/resource/flower/image/turnqr.png" style="width: 22vw;" />
+					<p class="p2" style="color: #fff;font-family: cursive;padding-bottom: 1vw;">关注使用花票</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			wxconfig(window.location);
+			wx.ready(function(){
+				wx.onMenuShareTimeline({
+					title:'戳星座,赢高额花票,直接抵扣', // 分享描述
+					 link: 'http://'+window.location.host+'/service/turn12', // 分享链接
+					 imgUrl: '${img.img02!}', // 分享图标
+				     type: 'link', // 分享类型,music、video或link，不填默认为link
+				     dataUrl: '',
+				     success: function () {
+				    	 location.replace('/service/turn12');
+					 },
+					 cancel: function () {
+						        // 用户取消分享后执行的回调函数
+					 }
+
+				});
+				wx.onMenuShareAppMessage({
+					title: '戳星座,赢高额花票,直接抵扣', // 分享标题
+					desc: '我幸运地戳到了大花票，您也来试试吧', // 分享描述
+				    link: 'http://'+window.location.host+'/service/turn12', // 分享链接
+				    imgUrl: '${img.img02!}', // 分享图标
+				    type: 'link', // 分享类型,music、video或link，不填默认为link
+				    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+				    success: function () {
+				    	location.replace('/service/turn12');
+				    },
+				    cancel: function () {
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+			});
+			$(".outer").on('click',function(){
+				var that =this;
+				$(".outer").css('pointer-events','none');
+				      $.ajax({
+			       	url: '/service/turn12_result',
+					data: {
+						
+					},
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if (data.isoutdate) {
+							$("#showDiv").append("活动已经结束");
+							$("#showDiv").show();
+							setTimeout(() => {
+								$("#showDiv").html("");
+								$("#showDiv").hide();
+								$(".outer").css('pointer-events','auto');
+							}, 5000);return;
+						}
+						if (data.isoutnum) {
+							$("#showDiv").append("您的1次机会用完了");
+							$("#showDiv").show();
+							setTimeout(() => {
+								$("#showDiv").html("");
+								$("#showDiv").hide();
+								$(".outer").css('pointer-events','auto');
+							}, 5000);return;
+						}
+						if(data.result){ 
+							$(that).find(".div2").append("<div class='result'><p>"+data.rd.msg+"</p></div>");
+							$(that).find(".div1").css({'transform':'rotateY(-180deg)','-o-transform':'rotateY(-180deg)','-webkit-transform':'rotateY(-180deg)','-moz-transform':'rotateY(-180deg)'});
+							$(that).find(".div2").css({'transform':'rotateY(0deg)','-o-transform':'rotateY(0deg)','-webkit-transform':'rotateY(0deg)','-moz-transform':'rotateY(0deg)'});					
+						
+							$("#showDiv").append(data.rd.pMsg);
+							setTimeout(() => {
+								$("#showDiv").show();
+							}, 3000);
+							
+							setTimeout(() => {
+								$("#showDiv").html("");
+								$("#showDiv").hide();
+								$(".outer").css('pointer-events','auto');
+								$(that).css('pointer-events','none');
+							}, 6000);		    
+						 }
+					}
+				});  
+			})
+		})
+	</script>
+</body>
+</html>

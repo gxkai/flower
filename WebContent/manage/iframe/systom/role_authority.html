@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/zTree/css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/zTree/css/zTreeStyle/zTreeStyle.css" />
+		<title>系统管理 - 角色管理 - 角色详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<div class="row cl">
+		      	<div class="col-5 col-offset-3">
+		        	<ul id="treeDemo" class="ztree"></ul>
+		      	</div>
+		      	<div class="col-4"></div>
+		    </div>
+		    <input type="button" class="btn btn-primary size-S pos-f right bottom mt-20 mr-20" value="保存" onclick="_save()" />
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/zTree/js/jquery.ztree.core-3.5.js"></script>
+		<script type="text/javascript" src="/resource/zTree/js/jquery.ztree.excheck-3.5.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			var id='${id!}',mid='${mid!}',rid='${rid!}';
+			var setting = {
+				check: {
+					enable: true
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				}
+			}
+			var zNodes = [];
+			var menuarr = mid.split(',');
+			init();
+			function init(){
+				$.post('/manage/iframe/systom/allMenu', function(data){
+					$(data).each(function(){
+						var str = {};
+						str["id"] = this.id;
+						str["name"] = this.name;
+						str["pId"] = this.pid;
+						if(this.pid==0){
+							str["open"] = true;
+						}
+						for(var o in menuarr){
+							if(menuarr[o] == this.id){
+								str["checked"] = true;
+							}
+						}
+						zNodes.push(str);
+					});
+					$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+				});
+			}
+			var lock = true;
+			function _save(){
+				var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+				var nodes = treeObj.getCheckedNodes(true);
+				var myArray = new Array(nodes.length);
+				for (var a = 0; a < nodes.length; a++) {
+					myArray[a] = nodes[a].id;
+				}
+				if(lock){
+					lock = false;
+					$.post('/manage/iframe/systom/saveAuthority', {'id':id,'mid':myArray.join(),'rid':rid}, function(data){
+						if(data){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

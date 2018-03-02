@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>订单管理 - 采购订单</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 采购订单<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+				<a href="javascript:;" onclick="_create()" class="btn btn-primary radius l"><i class="Hui-iconfont">&#xe6a2;</i> 生成采购订单</a>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入批次查询" value="${ordercode!}" id="ordercode" maxlength="8">
+				</span>
+				<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="ordercode_search()">
+				<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> 
+			</div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-hover table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="60">序列</th>
+							<th>批次</th>
+							<th>配单总打量</th>
+							<th>采购总打量</th>
+							<th>总价格</th>
+							<th>生成采购订单时间</th>
+							<th width="80">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#if purchaselist?? && purchaselist?size gt 0>
+						<#list purchaselist as purchase>
+						<tr class="text-c">
+							<td>${purchase_index+1}</td>
+							<td>${purchase.code}</td>
+							<td>${purchase.numa}</td>
+							<td>${purchase.numb}</td>
+							<td>&yen;${purchase.totalprice?string('0.00')}</td>
+							<td>${purchase.ctime}</td>
+							<td class="td-manage">
+								<a title="查看详情" onclick="_see('${purchase.code}')" style="text-decoration:none;" class="f-16 mr-10"><i class="Hui-iconfont">&#xe665;</i></a>
+								<a title="导出采购单" onclick="_export('${purchase.code}')" style="text-decoration:none" class="f-16 ml-10"><i class="Hui-iconfont">&#xe644;</i></a>
+							</td>
+						</tr>
+						</#list>
+						<#else>
+						<tr>
+							<td colspan="7" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+						</#if>
+					</tbody>
+				</table>
+				<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				ordercode = '$(ordercode!)';
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/order/purchase?pageno='+e.curr+'&ordercode='+ordercode);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _create(){
+				var load = layer.load();
+				$.post('/manage/iframe/order/createpurchase', function(data){
+					layer.close(load);
+					layer.msg(data['M'], {time:2000}, function(){
+						if(data){
+							location.replace(location.href);
+						}
+					});
+				});
+			}
+			function _see(code){
+				parent.open_window('采购详情','/order/purchaseinfo/'+code, 970, 540);
+			}
+			function _export(code){
+				window.open('/manage/iframe/order/exportpurchase/'+code, '_blank');
+			}
+			function ordercode_search(code){
+				ordercode = $('#ordercode').val();
+				if($.trim(ordercode)!=''){
+					reg = /^[0-9]{1,8}$/;;
+					if(!reg.test(ordercode)){
+						layer.tips('请输入正确格式','#ordercode', {tips: [1, '#34495E']});return;
+					}
+				}
+				location.replace('/manage/iframe/order/purchase?pageno=1&ordercode='+ordercode);
+			}
+		</script> 
+	</body>
+</html>

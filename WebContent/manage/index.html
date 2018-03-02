@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<LINK rel="Bookmark" href="/favicon.ico" >
+		<LINK rel="Shortcut Icon" href="/favicon.ico" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/skin/default/skin.css" id="skin" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/style.css" />
+		<title>花美美 - 后台管理系统</title>
+	</head>
+	<body>
+		<header class="navbar-wrapper">
+			<div class="navbar navbar-fixed-top">
+				<div class="container-fluid cl">
+					<img src="/resource/flower/image/houtai_2.png" width="190" height="66" style="position:absolute;top:0;left:0">&nbsp;
+					<img src="/resource/flower/image/houtai_top.png" height="66" style="position:absolute;  margin-left: 200px;">
+					<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+						<ul class="cl" style="margin-top: 3%">
+							<li style="display: none;"><img src="/resource/flower/image/houtai_rili.png"><span id="timetable"></span></li>
+							<li class="dropDown dropDown_hover"> 
+								<a href="#" class="dropDown_A">
+							   		<img src="/resource/flower/image/houtai_admin.png">&nbsp;${name!}-${username!}
+							    </a>
+								<ul class="dropDown-menu menu radius box-shadow">
+									<li><a href="javascript:;" onclick="psw_change()" style="text-align: center;">修改密码</a></li>
+								</ul>
+							</li>
+							<li class="dropDown dropDown_hover"> 
+							<a href="/manage/adminExit/${username!}"><img src="/resource/flower/image/houtai_tuichu.png">&nbsp;退出</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+		<aside class="Hui-aside">
+			<input runat="server" id="divScrollValue" type="hidden" value="" />
+			<div class="menu_dropdown bk_2 menu_flower_mm">
+				<#list menulist as menu_a>
+				<#if menu_a.pid==0>
+				<dl>
+					<dt><i class="Hui-iconfont" id="temp_${menu_a.id}"></i> ${menu_a.name}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+					<dd>
+						<ul>
+							<#list menulist as menu_b>
+							<#if menu_a.id==menu_b.pid>
+							<li><a _href="${menu_b.url!}" data-title="${menu_b.name}" href="javascript:void(0)">${menu_b.name}</a></li>
+							</#if>
+							</#list>
+						</ul>
+					</dd>
+				</dl>
+				</#if>
+				</#list>
+			</div>
+		</aside>
+		<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+		<section class="Hui-article-box">
+			<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+				<div class="Hui-tabNav-wp">
+					<ul id="min_title_list" class="acrossTab cl">
+						<li class="active"><span title="我的桌面" data-href="iframe/desktop.html">我的桌面</span><em></em></li>
+					</ul>
+				</div>
+				<div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d4;</i></a><a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d7;</i></a></div>
+			</div>
+			<div id="iframe_box" class="Hui-article">
+				<div class="show_iframe">
+					<div style="display:none" class="loading"></div>
+					<iframe scrolling="yes" frameborder="0" src="/manage/desktop"></iframe>
+				</div>
+			</div>
+		</section>
+		<div id="yulanimg" class="hide layui-layer-wrap" style="display: none;"></div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/dateTime.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/admin.flower.js"></script>
+		<script type="text/javascript">
+			function psw_change(){
+				parent.open_window('修改密码','/systom/psw_change.html','540','340');
+			}
+		</script>
+	</body>
+</html>

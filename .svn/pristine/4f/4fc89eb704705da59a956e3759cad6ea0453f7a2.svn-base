@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>系统管理 - 数据字典 - 节日送花</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if holiday??>
+				<input type="hidden" name="id" value="${holiday.id}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>节日名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hName}" id="v1" name="hName">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>送达日期：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hDate}" id="v2" name="hDate">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>送达日期是周几：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hWeek}" id="v3" name="hWeek">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>状态：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hState}" id="v4" name="hState">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>显示的送达日期：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hReach}" id="v5" name="hReach">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>商品编号：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hPtid}" id="v6" name="hPtid">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>标题：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${holiday.hTitle}" id="v7" name="hTitle">
+					</div>
+				</div>
+				<#else>
+				<div class="row cl">
+					sorry 没有数据！
+				</div>
+				</#if>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="holiday_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			 function holiday_save(){
+				var id = $("#v0").val();
+				var hName = $('#v1').val();
+				var hDate = $('#v2').val();
+				var hWeek = $('#v3').val();
+				var hState = $('#v4').val();
+			    var hReach=$('#v5').val();
+			    var hPtid=$('#v6').val();
+			    var hTitle=$('#v7').val();
+			    var reg = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+			    
+				if($.trim(hName)==''){
+					layer.tips('关键字不能为空', '#v1', {tips: [1, '#34495E']});return;
+				}else if($.trim(hName)=='null' || $.trim(hName)=='NULL'){
+					layer.tips('关键字不能为NULL或者null', '#v1', {tips: [1, '#34495E']});return;
+				}else if(!reg.test(hName)){
+					layer.tips('关键字不能包含特殊字符', '#v1', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(hDate)==''){
+					layer.tips('送达日期不能为空', '#v2', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(hWeek)==''){
+					layer.tips('送达日期是周几？该项不能为空哦！', '#v3', {tips: [1, '#34495E']});return;
+				}
+
+				if($.trim(hState)==''){
+					layer.tips('状态不能为空', '#v4', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(hReach)==''){
+					layer.tips('显示的送达日期不能为空', '#v5', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(hPtid)==''){
+					layer.tips('显示的送达日期不能为空', '#v6', {tips: [1, '#34495E']});return;
+				} 
+				
+				if($.trim(hTitle)==''){
+					layer.tips('显示的送达日期不能为空', '#v7', {tips: [1, '#34495E']});return;
+				} 
+				
+				var lock = true;
+				if(lock){
+					lock = false;
+					var load = layer.load();
+					$.post('/manage/iframe/systom/saveHoliday', $('form').serialize(), function(data){
+						layer.close(load);
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}  
+			} 
+		</script>
+	</body>
+</html>

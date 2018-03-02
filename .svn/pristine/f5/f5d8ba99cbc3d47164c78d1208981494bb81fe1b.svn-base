@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/resource/multiselect/bootstrap.min.css" />	
+		<script type="text/javascript" src="/resource/multiselect/bootstrap.min.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/resource/multiselect/bootstrap-multiselect.css" />	
+		<script type="text/javascript" src="/resource/multiselect/bootstrap-multiselect.js"></script>
+		<style type="text/css">
+         .allStr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>订单管理 - 订单列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 订单列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+			    <span class="select-box l" style="width: 135px">
+				  	<select class="select" size="1" onchange="search()" id="sendCycle">
+				    	<option value="10" <#if sendCycle==10>selected</#if>>--选择发货周期--</option>
+				    	<option value="1" <#if sendCycle==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一周一次</option>
+				    	<option value="2" <#if sendCycle==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两周一次</option>
+				    	<option value="3" <#if sendCycle==3>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一月一次</option>
+				  	</select>
+				</span>
+				<span class="select-box l" style="width: 135px">
+				  	<select class="select" size="1" onchange="search()" id = "time">
+				    	<option value="0" <#if time==0>selected</#if>>--选择送达时间--</option>
+				    	<option value="1" <#if time==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周一送</option>
+				    	<option value="2" <#if time==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周六送</option>
+				    	<option value="3" <#if time==3>selected</#if>>&nbsp;&nbsp;&nbsp;指定时间送</option>
+				  	</select>
+				</span>
+				<span class="l" style="width: 100px;display: none" id="piCodeSpan">
+					<input style="background-color: yellow;" type="text" class="input-text" placeholder="输入发货批号" value="${piCode!}" id="piCode" maxlength="11">
+				</span>
+				<span class="select-box l" style="width: 130px">
+				  	<select class="select" size="1" onchange="search()" id ="type">
+				    	<option value="0" <#if type==0>selected</#if>>--选择类型--</option>
+				    	<option value="1" <#if type==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订阅</option>
+				    	<option value="2" <#if type==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;送花</option>
+				    	<option value="3" <#if type==3>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周边</option>
+				    	<option value="5" <#if type==5>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;节日</option>
+				    	<option value="6" <#if type==6>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定制</option>
+				    	<option value="41" <#if type==41>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;兑换订阅鲜花</option>
+				    	<option value="43" <#if type==43>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;兑换周边</option>
+				    	<option value="7" <#if type==7>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现场活动</option>
+				    	<option value="8" <#if type==8>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拼团</option>
+				    	<option value="9" <#if type==9>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多双交替</option>
+				  	    <option value="10" <#if type==10>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主题花</option>
+				  	    <option value="11" <#if type==11>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;闪购花</option>
+				  	    <option value="411" <#if type==411>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;兑换闪购鲜花</option>
+				  	    <option value="410" <#if type==410>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;兑换主题鲜花</option>
+				  	    <option value="45" <#if type==45>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;兑换节日鲜花</option>
+				  	</select>
+				</span>
+				<span class="select-box l" style="width: 110px">
+				  	<select class="select" size="1" onchange="search()" id="ishas">
+				    	<option value="2" <#if ishas==2>selected</#if>>--是否首单--</option>
+				    	<option value="0" <#if ishas==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是</option>
+				    	<option value="1" <#if ishas==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;否</option>
+				  	</select>
+				</span>
+				<span class="select-box l" style="width: 140px">
+				  	<select class="select" size="1" onchange="search()" id="app">
+				    	<option value="10" <#if app==10>selected</#if>>--选择用途--</option>
+				    	<option value="1" <#if app==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;自用</option>
+				    	<option value="3" <#if app==3>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;礼物</option>
+				  	</select>
+				</span>
+				<span class="select-box l" style="width: 110px">
+				  	<select class="select" size="1" onchange="search()" id="style">
+				    	<option value="10" <#if style==10>selected</#if>>--选择格调--</option>
+				    	<option value="1" <#if style==1>selected</#if>>&nbsp;&nbsp;&nbsp;淡雅</option>
+				    	<option value="2" <#if style==2>selected</#if>>&nbsp;&nbsp;&nbsp;亮丽</option>
+				    	<option value="3" <#if style==2>selected</#if>>&nbsp;&nbsp;&nbsp;随机</option>
+				  	</select>
+				</span>
+				<span class="select-box l" style="width: 120px">
+				  	<select class="select"  id="state" multiple="multiple" style="max-height:20px;">
+				    	<option value="0" <#if state?index_of("0")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;待付款</option>
+				    	<option value="6" <#if state?index_of("6")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;待成团</option>
+				    	<option value="1" <#if state?index_of("1")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;服务中</option>
+				    	<option value="2" <#if state?index_of("2")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;待评价</option>
+				    	<option value="3" <#if state?index_of("3")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;已完成</option>
+				    	<option value="4" <#if state?index_of("4")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;退款</option>
+				    	<option value="5" <#if state?index_of("5")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;交易取消</option>
+				  	</select>
+				</span>
+				<span class="r" style="line-height: 32px;">共有数据：<strong>${totalrow}</strong> 条</span>
+				
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray">
+			    <span class="l" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入收货人电话查询" value="${tel!}" id="tel" maxlength="11">
+				</span>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入订单编号查询" value="${ordercode!}" id="code" maxlength="17">
+				</span>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入收货人查询" value="${receiver!}" id="receiver" maxlength="17">
+				</span>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入会员ID查询" value="${aid!}" id="aid" maxlength="17">
+				</span>
+				
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入团号查询" value="${ptNo!}" id="ptNo" maxlength="17">
+				</span>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入商品名称" value="${gName!}" id="gName" >
+				</span>
+				<span class="l ml-10">
+					<input type="text" placeholder="最先下单时间" class="input-text Wdate" value="${time_a!}" id="datemin" name="time_a" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'datemax\')||\'{%y}-%M-%d\'}'})">
+				</span>
+				<span class="l ml-10">
+					<input type="text" placeholder="最后下单时间" class="input-text Wdate" value="${time_b!}" id="datemax" name="time_b" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'#F{\'{%y}-%M-%d\'}' })">
+				</span>
+				
+				
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray">
+			    <input class="btn btn-primary" type="submit" value="查询" onclick="search()">
+				<a onclick="_export()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe644;</i> 订单导出</a>
+				<a onclick="_lodge()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe6d0;</i> 客诉补单</a>
+				<a onclick="greet()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe668;</i> 祝福卡二维码</a>
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					    <th width="80">操作</th>
+						<th width="60">序列</th>
+						<th width="80">会员ID</th>
+						<th width="160">订单编号</th>
+						<th width="100">商品名称</th>
+						<th width="80">收货人</th>
+						<th width="120">收货人电话</th>
+						<th width="150">忌讳的花类</th>
+						<th width="80">忌讳色系</th>
+						<th width="60">订阅次数</th>
+						<th width="60">已发次数</th>
+						<th width="80">送达时间</th>
+						<th width="80">发货周期</th>
+						<th width="80">用途</th>
+						<th width="80">格调</th>
+						<th width="80">支付总额</th>
+						<th width="80">类型</th>
+						<th width="80">是否首单</th>
+ 						<th width="80">顺延次数</th>
+						<th width="160">下单时间</th>
+						<th width="80">状态</th>
+						<th width="80">团号</th>
+						<th width="160">成团时间</th>
+						<th width="80">公益基金</th>
+						<th width="80">入团介绍人</th>
+						<th width="160">入团介绍人佣金</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<#if orderlist?? && orderlist?size gt 0>
+					<#list orderlist as order>
+					<tr class="text-c">
+					    <td class="td-manage">
+							<a title="查看详情" onclick="_see('${order.ordercode}')" style="text-decoration:none" class="f-16 mr-10"><i class="Hui-iconfont">&#xe665;</i></a>
+							<!-- <a title="取消顺延" onclick="_cancelsy('${order.ordercode}')" style="text-decoration:none" class="f-16 ml-10"><i class="Hui-iconfont">&#xe66b;</i></a> -->
+						</td>
+						<td>${order_index+1}</td>
+						<td>${order.aid}</td>
+						<td>${order.ordercode}</td>
+						<td class="allStr">${order.gName!}</td>
+						<td>${order.receiver}</td>
+						<td>${order.tel}</td>
+						<td>${order.jihui!'未填'}</td>
+						<td>${order.color!'未填'}</td>
+						<td>${order.cycle}</td>
+						<td>${order.ocount}</td>
+						<td>
+						   <#if order.week??>${order.week}
+						   <#else>
+						   <#if order.reach==1>周一送
+						   <#elseif order.reach==2>周六送
+						   <#elseif order.reach==3>指定时间送</#if>
+						   </#if>
+						   </td>
+						<td>
+						    <#if order.sendCycle==1>一周一次
+						    <#elseif order.sendCycle==2>两周一次
+						    <#elseif order.sendCycle==4>四周一次
+						    <#else>未设置
+						    </#if>
+						</td>
+						<td>
+						    <#if order.app==1>自用
+						    <#elseif order.app==2>自用
+						    <#elseif order.app==3>礼物
+						    <#else>未设置
+						    </#if>
+						</td>
+						<td>
+						    <#if order.style==1>淡雅
+						    <#elseif order.style==2>亮丽
+						    <#elseif order.style==3>随机
+						    <#else>未设置
+						    </#if>
+						</td>
+						<td>&yen;${order.totalprice?string('0.00')}</td>
+						<td>
+						   <#if order.type==1>订阅
+						   <#elseif order.type==2>送花
+						   <#elseif order.type==3>周边
+						   <#elseif order.type==4>兑换
+						   <#elseif order.type==5>节日
+						   <#elseif order.type==6>定制
+						   <#elseif order.type==41>兑换订阅鲜花
+						   <#elseif order.type==43>兑换周边
+						   <#elseif order.type==7>现场活动
+						   <#elseif order.type==8>拼团
+						   <#elseif order.type==9>多双交替
+						   <#elseif order.type==10>主题花
+						   <#elseif order.type==11>闪购花
+						   <#elseif order.type==411>兑换闪购鲜花
+						   <#elseif order.type==410>兑换主题鲜花
+						   <#elseif order.type==45>兑换节日鲜花
+						   </#if>
+						 </td>
+						<td><#if order.ishas == 0>是<#else>否</#if></td>
+						<td>${order.is_sy}</td> 
+						<td>${order.ctime}</td>
+						<td>
+							<#if order.state==0>待付款
+							<#elseif order.state==6>待成团
+							<#elseif order.state==1>服务中
+							<#elseif order.state==2>待评价
+							<#elseif order.state==3>已完成
+							<#elseif order.state==4>退款
+							<#elseif order.state==5>交易取消
+							</#if>
+						</td>
+						<td>${order.ptNo}</td>
+						<td>${order.ptSusTime!}</td>
+						<td>${order.fund!}</td>
+						<td>${order.jsAid!}</td>
+						<td>${order.jsMoney!}</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="17" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+			var time='${time!}',type='${type!}',state='${state!}',code='${ordercode!}',ishas='${ishas!}',receiver='${receiver!}',time_a='${time_a!}',time_b='${time_b!}',aid='${aid!}', tel='${tel!}',sendCycle='${sendCycle!}',app='${app!}',style='${style!}',piCode='${piCode!}',ptNo='${ptNo!}',gName = '${gName!}';
+			$(document).ready(function(){
+				 $('#state').multiselect({ buttonWidth: '100px',
+			            dropRight: true});
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/order/orderlist?pageno='+e.curr+'&time='+time+'&type='+type+'&state='+state+'&code='+code+'&ishas='+ishas+'&receiver='+receiver+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&tel='+tel+'&sendCycle'+sendCycle+'&app='+app+'&style='+style+'&piCode='+piCode+'&ptNo='+ptNo+'&gName='+gName);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+				if(time==3){
+					$("#piCodeSpan").css("display","block");
+				}else{
+					
+					$("#piCodeSpan").css("display","none");
+				}
+			});
+			function search(){
+				sendCycle=$("#sendCycle").find('option:selected').val();
+				app=$("#app").find('option:selected').val();
+				style=$("#style").find('option:selected').val();
+				time=$("#time").find('option:selected').val();
+				if(time==3){
+					$("#piCodeSpan").css("display","block");
+				}else{
+					
+					$("#piCodeSpan").css("display","none");
+				}
+				type=$("#type").find('option:selected').val();
+				ishas=$("#ishas").find('option:selected').val();
+				code=$('#code').val();
+				receiver = encodeURI($.trim($('#receiver').val()));
+				var time_a=$('#datemin').val();
+				var time_b=$('#datemax').val();
+				aid = $('#aid').val();
+				tel=$('#tel').val();
+				piCode=$('#piCode').val();
+				ptNo = $('#ptNo').val();
+				state = $('#state').val();
+				gName = $('#gName').val();
+				
+				var reg;
+				if($.trim(tel)!=''){
+					reg = /^[0-9]{11}$/;
+					if(!reg.test(tel)){
+						layer.tips('请输入11位手机号', '#tel', {tips: [1, '#34495E']});return;
+					}
+				}
+				if($.trim(code)!=''){
+					code = code.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[0-9]{1,17}$/;
+					if(!reg.test(code)){
+						layer.tips('请输入正确格式', '#code', {tips: [1, '#34495E']});return;
+					}
+				}
+				if($.trim(aid)!=''){
+					reg = /^[0-9]*$/;
+					if(!reg.test(aid)){
+						layer.tips('请输入正确格式的会员ID', '#aid', {tips: [1, '#34495E']});return;
+					}
+				}	
+				location.replace('/manage/iframe/order/orderlist?pageno=1&time='+time+'&type='+type+'&state='+state+'&code='+code+'&ishas='+ishas+'&receiver='+receiver+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&tel='+tel+'&sendCycle='+sendCycle+'&app='+app+'&style='+style+'&piCode='+piCode+'&ptNo='+ptNo+'&gName='+gName);
+			}
+			function _see(ordercode){
+				parent.open_window('查看订单详情','/order/orderinfo/'+ordercode, 1000, 540);
+			}		
+			function _cancelsy(ordercode){
+				parent.actconfirm('确定取消&nbsp;<span style="color: #9c27b0;font-weight: bold;">'+ordercode+'</span>&nbsp;订单的顺延？', function(){
+					$.post('/manage/iframe/order/cancelsy/'+ordercode, function(data){
+						if(data.R){
+							layer.msg(data.msg, {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg(data.msg, {time: 1000});
+						}
+					});
+				});
+			}
+			/**
+			 *@desc 订单导出
+			 *@date 2016/10/29 
+			 *@
+			*/
+			function _export(){
+				code=$('#code').val();
+				if($.trim(code)!=''){
+					reg = /^[0-9]{1,17}$/;
+					if(!reg.test(code)){
+						layer.tips('请输入正确格式', '#code', {tips: [1, '#34495E']});return;
+					}
+
+				}
+				window.open('/manage/iframe/order/exportOrderList?pageno=1&time='+time+'&type='+type+'&state='+state+'&code='+code+'&ishas='+ishas+'&receiver='+receiver+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&tel='+tel+'&sendCycle='+sendCycle+'&app='+app+'&style='+style+'&piCode='+piCode, '_blank');
+			}
+			
+			function _lodge(){
+				code=$('#code').val();
+				if(code == ''){
+					layer.tips('请输入需要补单的订单号', '#code', {tips: [1, '#34495E']});return;
+				}else{
+					code = code.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[0-9]{17}$/;
+					if(!reg.test(code)){
+						layer.tips('请输入正确格式的17位订单号', '#code', {tips: [1, '#34495E']});return;
+					}
+				}
+				parent.open_window('客诉补单','/order/customorder/'+code, 540, 600);
+			}
+			
+			function greet(){
+				parent.open_window('祝福卡二维码','/order/ecard.html', 300, 300);
+			}
+		</script> 
+	</body>
+</html>

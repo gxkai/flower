@@ -1,0 +1,463 @@
+<!DOCTYPE >
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+
+<title>幸运抽奖</title>
+<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+</script>
+<style type="text/css">
+body{
+	margin: 0px;
+	padding: 0px;
+	background:white;
+	font-family:"微软雅黑";
+}
+.container{
+	
+}
+
+.header{
+	font-size:12px;
+	color:white;
+	/* margin:5px; */
+	padding:5px;
+	display: flex;
+	justify-content: space-between;
+}
+.content{
+	margin: 0px;
+	padding: 0px;
+	background:url(/image/luckyDraw_bg.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+#lottery{
+	border: 1px hsla(0,0%,100%,.01) solid;
+	/*width:574px;
+	height:584px;*/
+	/* width: 100vw; */
+	height: 100vw;
+	/*margin:20px auto 0;*/
+	background:url(/image/lucky_bg.png) no-repeat;
+	background-size: 100% 100%;
+	}
+	
+#lottery table{
+	margin-top: 7vw;
+	margin-left: 8vw;
+	margin-right: 8.35vw;
+}	
+	
+#lottery table td{
+	width: 24.73vw;
+	border: 1px solid whitesmoke;
+	text-align:center;
+	vertical-align:middle;
+	font-size:24px;
+	color:#333;
+	font-index:-999;
+	}
+#lottery table td a{
+	/*width:284px;
+	height:284px;
+	line-height:150px;*/
+	width: 100%;
+	height: 40vw;
+	display:block;
+	text-decoration:none;
+	}
+#lottery table td img{
+	width: 19.5vw;
+	height: 20.35vw;
+}	
+	
+#lottery table td.active{
+	 background-color:#ea0000; 
+	/* border:1px red solid; */
+}
+
+.myscroll {
+	width: 80%;
+	height: 15vw;
+	margin: 0 auto;
+	border: 1px solid #ccc;
+	line-height: 26px;
+	font-size: 12px;
+	overflow: hidden;
+	border-radius:2px;
+}
+
+.myscroll li {
+	height: 26px;
+	margin-left: 25px;
+	word-break:keep-all;/* 不换行 */
+	white-space:nowrap;/* 不换行 */
+	overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+	text-overflow:ellipsis;
+	color:white;
+}
+
+.myscroll ul,li{
+	list-style:none;
+	padding:0px;
+}
+.myscroll ul{
+background:white;
+opacity: 0.4;
+}
+
+.myscroll a {
+	color: #333;
+	text-decoration: none;
+}
+
+.myscroll a:hover {
+	color: #ED5565;
+	text-decoration: underline;
+}
+
+
+.span_btn{
+	width: 25%;
+    font-size: 12px;
+    text-align: center;
+    line-height:20px;
+    display:block;
+    padding:3px 4px;
+    border-radius: 2px;
+	/* color: white;
+	background:#18525d; */
+	outline:none;
+	float:right;
+}
+
+.lucky_rule{
+	/* width:100%; */
+	font-size:12px;
+	font-family:"微软雅黑";
+	border:1px white solid;
+	background:white;
+	margin-top:10px;
+	padding-top:10px;
+}
+
+.lucky_rule .span_info label{
+	width:90%;
+	margin:0 auto;
+	display:block;
+	line-height:20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="content">
+
+<div class="header" >
+	<!-- <span>您还有xx次抽奖机会 <a herf="">分享获得抽奖机会</a></span> -->
+	<span style="margin:4px;">花籽数量： <span id="seeds" data-time="${seeds!}">${seeds!}</span> 粒</span>
+	<span class="span_btn" onclick="window.location.href='/service/getMyPrizeList';">
+	<img src="/resource/flower/image/icon/record_icon.png" style="width:15px;height:15px;vertical-align:middle"> 我的奖品</span>
+</div>
+<div id="lottery" >
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="lottery-unit lottery-unit-0"><img src="${lucky[0]}"></td>
+			<td class="lottery-unit lottery-unit-1"><img src="${lucky[1]}"></td>
+			<td class="lottery-unit lottery-unit-2"><img src="${lucky[2]}"></td>
+            <td class="lottery-unit lottery-unit-3"><img src="${lucky[3]}"></td>
+		</tr>
+		<tr>
+			<td class="lottery-unit lottery-unit-11"><img src="${lucky[11]}"></td>
+			<td colspan="2" rowspan="2"><a href=""></a></td>
+			<td class="lottery-unit lottery-unit-4"><img src="${lucky[4]}"></td>
+		</tr>
+		<tr>
+			<td class="lottery-unit lottery-unit-10"><img src="${lucky[10]}"></td>
+			<td class="lottery-unit lottery-unit-5"><img src="${lucky[5]}"></td>
+		</tr>
+        <tr>
+			<td class="lottery-unit lottery-unit-9"><img src="${lucky[9]}"></td>
+			<td class="lottery-unit lottery-unit-8"><img src="${lucky[8]}"></td>
+			<td class="lottery-unit lottery-unit-7"><img src="${lucky[7]}"></td>
+            <td class="lottery-unit lottery-unit-6"><img src="${lucky[6]}"></td>
+		</tr>
+	</table>
+</div>
+
+<!-- <center>
+<span style="color:white;text-shadow: black 0 1px 0;">您已抽中：
+<span style="color:#feb104;letter-spacing:3px">5粒花籽</span>
+</span>
+</center> -->
+
+
+<script type="text/javascript" src="/resource/layer/layer.js"></script>
+
+<script src="/resource/flower/js/scroll.js"></script>
+
+<script type="text/javascript">
+
+var lottery={
+	index:-1,	//当前转动到哪个位置，起点位置
+	count:0,	//总共有多少个位置
+	timer:0,	//setTimeout的ID，用clearTimeout清除
+	speed:20,	//初始转动速度
+	times:0,	//转动次数
+	cycle:50,	//转动基本次数：即至少需要转动多少次再进入抽奖环节
+	prize:-1,	//中奖位置
+	init:function(id){
+		if ($("#"+id).find(".lottery-unit").length>0) {
+			$lottery = $("#"+id);
+			$units = $lottery.find(".lottery-unit");
+			this.obj = $lottery;
+			this.count = $units.length;
+			$lottery.find(".lottery-unit-"+this.index).addClass("active");
+		};
+	},
+	roll:function(){
+		var index = this.index;
+		var count = this.count;
+		var lottery = this.obj;
+		$(lottery).find(".lottery-unit-"+index).removeClass("active");
+		index += 1;
+		if (index>count-1) {
+			index = 0;
+		};
+		$(lottery).find(".lottery-unit-"+index).addClass("active");
+		this.index=index;
+		return false;
+	},
+	stop:function(index){
+		this.prize=index;
+		return false;
+	}
+};
+
+//修改花籽数量(每次抽奖减少对应花籽数量)
+function changeSeeds(){
+	var seeds = $('#seeds').data("time");
+	seeds = seeds - seedNum;
+	$('#seeds').html(seeds);
+	$('#seeds').data('time',seeds);
+}
+
+//修改花籽数量
+function addSeeds(num){
+	var seeds = $('#seeds').data("time");
+	seeds = seeds + num;
+	$('#seeds').html(seeds);
+	$('#seeds').data('time',seeds);
+}
+
+function roll(){
+	lottery.times += 1;
+	lottery.roll();
+	if (lottery.times > lottery.cycle+10 && lottery.prize==lottery.index) {
+		clearTimeout(lottery.timer);
+		layer.msg(msg);
+		
+		if(origin==2){
+			addSeeds(contentId)
+		}
+		
+		lottery.prize=-1;
+		lottery.times=0;
+		click=false;
+		//抽奖结束 解锁
+		lock = 0;
+		
+	}else{
+		if (lottery.times<lottery.cycle) {
+			lottery.speed -= 10;
+		}else if(lottery.times==lottery.cycle) {
+			// var index = Math.random()*(lottery.count)|0; // index是显示的位置
+			var index = showIndex - 1 ; 
+			lottery.prize = index;
+			console.log("index: "+index)
+		}else{
+			if (lottery.times > lottery.cycle+10 && ((lottery.prize==0 && lottery.index==7) || lottery.prize==lottery.index+1)) {
+				lottery.speed += 110;
+			}else{
+				lottery.speed += 20;
+			}
+		}
+		if (lottery.speed<40) {
+			lottery.speed=40;
+		};
+		lottery.timer = setTimeout(roll,lottery.speed);
+	}
+	return false;
+}
+var click=false;
+var msg = ""; // 中奖物品
+var showIndex = 1;// 中奖位置
+var seedNum = '${seedNum!}'; //抽奖消耗的花籽数量
+var lock = 0; //锁
+var origin = 0;//奖品来源
+var contentId = 0;//奖品数量 （前台只处理花籽）
+
+window.onload=function(){
+	lottery.init('lottery');
+	$("#lottery a").click(function(){
+		
+		// 判断当前花籽数量
+		var seeds = $('#seeds').data("time");
+		seeds = seeds - seedNum;
+		console.log(seeds);
+		
+		if(seeds == null || seeds < 0){
+		layer.msg("花籽数量不够！", {time: 2000});
+		return false;
+		}
+		
+		if(lock == 1){
+			return false;
+		}
+		
+		//上锁
+		lock = 1;
+		
+		//修改花籽数量
+		changeSeeds()
+		
+		$.ajax({
+       	 url: '/service/luckDraw',
+			data: {
+				"tt":"tt"
+			},
+			type: 'post',
+			dataType: 'json',
+			cache: false,
+			success: function(data){
+				//layer.close(load);
+				if(data.result){
+					showIndex = data.rd.rowno - 1;
+					if(showIndex < 0){
+						showIndex = 0;
+					}
+					msg = data.rd.pMsg;
+					origin = data.rd.origin;
+					contentId = data.rd.contentId;
+				}else{
+					layer.msg("服务器繁忙！稍后再试！", {time: 2000});return;
+				}
+			}
+		}); 
+		
+		if(click) {
+			return false;
+		}
+		else{
+			lottery.speed=100;
+			roll();
+			click=true;
+			return false;
+		}
+		
+	});
+};
+
+
+</script>
+
+
+<script type="text/javascript">
+$(function(){
+	$('.myscroll').myScroll({
+		speed: 80, //数值越大，速度越慢
+		rowHeight: 26 //li的高度
+	});
+});
+</script>
+<div class="myscroll" style="height:30px;">
+	<ul> 
+	<#if lucklist?? && lucklist.size() gt 0>
+		<#list lucklist as luck>
+		<li><a href="#">恭喜
+		 ${luck.nick!} 获得 <span style="color:#feb105"> ${luck.pname!} </span> ！</a></li>
+		</#list>
+	</#if>
+	
+	</ul>
+</div>
+
+
+<div class="lucky_rule">
+		<span class="span_info">
+			<label>抽奖说明：</label>
+			<label>1. 每次抽奖消费${seedNum!}粒花籽；新用户获取更多抽奖机会<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzIyMTYwMDU5MA==&scene=124#wechat_redirect"  style="color:#ae2a39">请点这里关注</a>，
+			<a href="/account/flowerseed" style="color:#ae2a39"> 如何获取更多花籽</a>； </label>
+			<label>2. 抽中的花票、花籽、花束会自动发送到您的账户，可在<a href="/account/center"  style="color:#ae2a39">会员中心</a>里查看；</label>
+			<label>3. 抽中的实物奖品，花小美会联系给您寄出；</label>
+			<label>4. 为方便给你寄出奖品，请您在会员中心<a href="/account/myInfo" style="color:#ae2a39">绑定手机号码</a>（绑定得花籽）</label>
+		</span>
+	</div>
+
+</div>
+
+	<script type="text/javascript">
+			 
+			 $().ready(function(){
+					upordown('f_u_d');
+					wxconfig(window.location);
+					wx.ready(function(){
+						wx.onMenuShareTimeline({
+							title: '我在这里抽到了大奖，你也来试试手气',
+							link: 'http://' +window.location.host+window.location.pathname,
+							imgUrl: 'http://'+window.location.host+'/image/lucky_share.png'
+						});
+						wx.onMenuShareAppMessage({
+							title: '花美美幸运抽奖',
+						    desc: '我在这里抽到了大奖，你也来试试手气', // 分享描述
+						    link: 'http://' +window.location.host+window.location.pathname, // 分享链接
+						    imgUrl: 'http://'+window.location.host+'/image/lucky_share.png', // 分享图标
+						    type: 'link', // 分享类型,music、video或link，不填默认为link
+						    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+						    success: function () {
+						        // 用户确认分享后执行的回调函数
+						    },
+						    cancel: function () {
+						        // 用户取消分享后执行的回调函数
+						    }
+						});
+					});
+				});
+		</script>
+	
+	
+</div>
+</body>
+</html>

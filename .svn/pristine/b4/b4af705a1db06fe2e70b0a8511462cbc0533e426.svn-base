@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/icheck/icheck.css" />
+		<title>批次管理 - 产品列表 - 产品详情</title>
+		<style type="text/css">
+			.flower{width: 100px;height: 26px;float: left;line-height: 26px;}
+			.flower img {width: 26px;height: 26px;float: left;margin-right: 10px;}
+		</style>
+	</head>
+	<body>
+		<div class="page-container skin-minimal">
+			<input type="hidden" name="typeid" value="${typeid}">
+			<input type="hidden" name="id" value="${id!}">
+			<div>
+				<input type="text" class="input-text" style="width: 273px;" placeholder="检索花材" value="${flotype!}" id="flotype" maxlength="30">
+			</div>
+			<table class="table table-border table-bordered table-hover table-bg table-sort mt-10 f-l" style="width: 45%;" id="tab">
+				<tr>
+					<td>花材</td>
+					<td width="40">数量</td>
+					<td width="70">分类</td>
+				</tr>
+	  		<#list flowerlist as flower>
+	  			<tr>
+	  				<td>
+						<div class="check-box flower">
+			    			<input type="checkbox" id="flower-${flower.id}" name="fid" data-name="${flower.name}" data-flower="${flower.id}" onchange="xxflower(this)" <#if flower.num??>checked</#if>>
+			    			<label for="flower-${flower.id}">${flower.name}</label>
+		  				</div>
+  					</td>
+  					<td>
+  						<input type="text" onblur="xxflowernum(this)" data-name="${flower.name}" data-flower="${flower.id}" class="input-text size-S<#if flower.num??><#else> disabled</#if>" <#if flower.num??><#else>readonly="readonly"</#if> value="${flower.num!}" id="num-${flower.id}" >
+  					</td>
+  					<td>
+  					 <select class="select" size="1" value="${flower.ftype!}" id="ftype-${flower.id}" onchange="change('${flower.id}')"  <#if flower.ftype??><#else> disabled</#if>>
+					    	<option value="1" <#if flower.ftype??&&flower.ftype==1>selected</#if>>主花材</option>
+					    	<option value="2" <#if flower.ftype??&&flower.ftype==2>selected</#if>>辅花材</option>
+					  	</select>
+<!--   						<input type="text" class="input-text size-S<#if flower.ftype??><#else> disabled</#if>" <#if flower.ftype??><#else>readonly="readonly"</#if> value="${flower.ftype!}" id="ftype-${flower.id}">
+ -->  					</td>
+  				</tr>
+			</#list>
+			</table>
+			<table class="table table-border table-bordered table-hover table-bg table-sort mt-10 f-r" style="width: 45%;" id="hav">
+				<tr>
+					<td>已选中的花材</td>
+					<td width="40">数量</td>
+					<td width="50">分类</td>
+				</tr>
+				<#list floalllist as flower>
+				<#if flower.num??>
+				<tr id="flo_${flower.id}">
+					<td>
+						<div class="check-box flower">
+			    			<input type="checkbox" data-flower="${flower.id}" id="select-${flower.id}" onchange="selectflower(this)" checked>
+			    			<label>${flower.name}</label>
+			    		</div>
+					</td>
+					<td id="new_${flower.id}">${flower.num!}</td>
+					<td id="new2_${flower.id}" ><#if flower.ftype==1>主花材<#else>辅花材</#if></td>
+				</tr>
+  				</#if>
+				</#list>
+			</table>
+			<table class="table table-border table-bordered table-hover table-bg table-sort f-l mt-15">
+				<tr>
+					<td width="70">产品名称</td>
+					<td><input type="text" class="input-text size-S" id="v1" name="fname" value="${fname!}"></td>
+				</tr>
+				<tr>
+					<td>产品简称</td>
+					<td><input type="text" class="input-text size-S" id="v2" name="sname" value="${sname!}" disabled="disabled"></td>
+  				</tr>
+  				<tr>
+					<td>产品用途</td>
+					<td>
+					<span class="select-box l" style="width: 130px">
+					  	<select class="select" size="1" id="app">
+					    	<option value="1" <#if app==1>selected</#if>>&nbsp;&nbsp;&nbsp;自用</option>
+					    	<option value="3" <#if app==3>selected</#if>>&nbsp;&nbsp;&nbsp;礼物</option>
+					  	</select>
+					</span>
+					</td>
+					
+  				</tr>
+  				<tr>
+					<td>产品格调</td>
+					<td>
+					  <span class="select-box l" style="width: 130px">
+					  	<select class="select" size="1" id="style">
+					    	<option value="1" <#if style==1>selected</#if>>&nbsp;&nbsp;&nbsp;淡雅</option>
+					    	<option value="2" <#if style==2>selected</#if>>&nbsp;&nbsp;&nbsp;亮丽</option>
+					    	<option value="3" <#if style==3>selected</#if>>&nbsp;&nbsp;&nbsp;中性</option>
+					  	</select>
+					  </span>
+					</td>
+					
+  				</tr>
+  				<#if typeid==5>
+  				  <tr>
+  				    <td width="70">配花优先级</td>
+					<td><input type="text" class="input-text size-S" id="v10" name="priority" value="${priority!}"></td>
+  				  </tr>
+  				</#if>
+  				<#if typeid==3 || typeid==4 || typeid==5 || typeid==6 || typeid==7 || typeid==8||typeid==9>
+  				<tr>
+  					<td>产品类型</td>
+  					<td>
+						<span class="select-box" id="v3">
+						  	<select class="select" size="1" name="fpid">
+						    	<option value="0" selected>--选择商品类型--</option>
+						    	<#list ptlist as pl>
+						    	<#if fpid?? && fpid==pl.id>
+						    	<option value=${pl.id} selected>${pl.name}</option>
+						    	<#else>
+						    	<option value=${pl.id}>${pl.name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+  					</td>
+  				</tr>
+  				</#if>
+  				<#if typeid==3>
+  				<tr>
+  					<td>适赠对象</td>
+  					<td>
+						<span class="select-box" id="v4">
+						  	<select class="select" size="1" name="iid">
+						    	<option value="0" selected>--选择适赠对象--</option>
+						    	<#list idoneitylist as idoneity>
+						    	<#if iid?? && iid==idoneity.id>
+						    	<option value="${idoneity.id}" selected>${idoneity.title}</option>
+						    	<#else> 
+						    	<option value="${idoneity.id}">${idoneity.title}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+  					</td>
+  				</tr>
+  				</#if>
+  				<#if typeid==1>
+  				<tr>
+  					<td>指定订单</td>
+  					<td>
+						<span class="select-box" id="v11">
+						  	<select class="select" size="1" name="appoint">
+						    	<option value="0" <#if appoint==0>selected</#if>>非【首单首次】</option>
+						    	<option value="1" <#if appoint==1>selected</#if>>首单首次</option>
+						  	</select>
+						</span>
+  					</td>
+  				</tr>
+  				</#if>
+			</table>
+			<input type="button" onClick="_save()" class="btn btn-primary btn-block mt-15" value="保存">
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/icheck/jquery.icheck.min.js"></script>
+		<script type="text/javascript">
+			var typeid,id,iid,fpid,typename;
+			$(function(){
+				$('.skin-minimal input').iCheck({
+					checkboxClass: 'icheckbox-blue',
+					radioClass: 'iradio-blue',
+					increaseArea: '20%'
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+				typeid = $('input[name="typeid"]').val();
+				if (typeid==1) {
+					typename="【双品】";
+				}else if (typeid==2) {
+					typename="【多品】";
+				}else if (typeid==3) {
+					typename="【送花】";
+				}else if (typeid==4) {
+					typename="【节日】";
+				}else if (typeid==5) {
+					typename="【定制】";
+				}else if (typeid==6) {
+					typename="【闪购】";
+				}else if (typeid==7) {
+					typename="【主题】";
+				}else if (typeid==8) {
+					typename="【拼团】";
+				}else if (typeid==9) {
+					typename="【玫瑰套餐】";
+				}else {
+					typename="【其他】";
+				}
+				id = $('input[name="id"]').val();
+				if($('[id^="flo_"]').length==0){
+					$('#hav').append('<tr id="zw"><td colspan="2" style="text-align: center;">暂无</td></tr>');
+				}
+			});
+			function change(flower) {
+				$('#new2_'+flower).html($('select[id="ftype-'+flower+'"]').find("option:selected").text());
+			}
+			
+			//匿名函数
+			(function ($) {
+			  jQuery.expr[':'].Contains = function(a,i,m){
+			      return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
+			  };
+			  function filterList(header, list) { 
+			  $('#flotype').change( function () {
+			        var filter = $(this).val();
+			        if(filter) {
+					  $matches = $(list).find('label:Contains(' + filter + ')').parent().parent().parent();
+					  $('tr', list).not($matches).slideUp();
+					  $matches.slideDown();
+			        } else {
+			          $(list).find("tr").slideDown();
+			        }
+			        return false;
+			      })
+			    .keyup( function () {
+			        $(this).change();
+			    });
+			  }
+			  $(function () {
+			    filterList($("#flotype"), $("#tab tbody"));
+			  });
+			}(jQuery));
+			
+			function selectflower(_obj){
+				var flower = $(_obj).data('flower');
+			    var old =$(_obj).parents('td').find('label').text()+$(_obj).parents('td').next().text();
+				$("input[name='sname']").val($("input[name='sname']").val().replace(old,""));
+				$('#flo_'+flower).remove();
+				$('#num-'+flower).val('');
+				$('#ftype-'+flower).get(0).selectedIndex=0;
+				$('#flower-'+flower).parent().removeClass('checked');
+				$('#flower-'+flower).attr('checked', false);
+				$('#num-'+flower).addClass('disabled');
+				$('#num-'+flower).prop('readonly', 'readonly');
+				$('#ftype-'+flower).attr('disabled',true);
+				if($('[id^="flo_"]').length==0){
+					$('#hav').append('<tr id="zw"><td colspan="2" style="text-align: center;">暂无</td></tr>');
+				}
+			}
+			
+			function xxflower(_obj){
+				var flower = $(_obj).data('flower');
+				var fname = $(_obj).data('name');
+				if(_obj.checked){
+					$('#num-'+flower).removeClass('disabled');
+					$('#num-'+flower).removeProp('readonly');
+					$('#num-'+flower).val("0");
+					$('#ftype-'+flower).attr('disabled',false);
+					$('#ftype-'+flower).get(0).selectedIndex=0;
+					$('#flower-'+flower).parent().addClass('checked');
+					$('.f-r').append('<tr id="flo_'+flower+'"><td><div class="check-box flower">'+
+							'<div class="icheckbox-blue checked"><input type="checkbox" data-flower="'+flower+'" id="select-'+flower+'" onclick="selectflower(this)" checked style="cursor: pointer;width: 20px;opacity: 0;"></div>'+
+							'<label>'+fname+'</label></div></td><td id="new_'+flower+'">0</td><td id="new2_'+flower+'">主花材</td></tr>');
+					$("input[name='sname']").val($("input[name='sname']").val()+fname+$('#num-'+flower).val());
+					/**$('#num-'+flower).blur(function(){
+						var old = fname+ $('#new_'+flower).html();
+						$('#new_'+flower).html($('input[id="num-'+flower+'"]').val());
+						$('#new2_'+flower).html($('select[id="ftype-'+flower+'"]').find("option:selected").text());
+						$("input[name='sname']").val($("input[name='sname']").val().replace(old,fname+$('#new_'+flower).html()));
+					});**/
+					$('#zw').remove();
+				}else{
+					var old = fname+$('#num-'+flower).val();
+					$('#num-'+flower).val('');
+					$('#num-'+flower).addClass('disabled');
+					$('#num-'+flower).prop('readonly', 'readonly');
+					$('#ftype-'+flower).attr('disabled',true);
+					$('#ftype-'+flower).get(0).selectedIndex=0;
+					$('#flower-'+flower).parent().removeClass('checked');
+					$('#flo_'+flower).remove();
+					if($('[id^="flo_"]').length==0){
+						$('#hav').append('<tr id="zw"><td colspan="2" style="text-align: center;">暂无</td></tr>');
+					}
+					$("input[name='sname']").val($("input[name='sname']").val().replace(old,""));
+				}
+				
+			}
+			function xxflowernum(_obj) {
+				var flower = $(_obj).data('flower');
+				var fname = $(_obj).data('name');
+				var old = fname+ $('#new_'+flower).html();
+				$('#new_'+flower).html($('input[id="num-'+flower+'"]').val());
+				$('#new2_'+flower).html($('select[id="ftype-'+flower+'"]').find("option:selected").text());
+				$("input[name='sname']").val($("input[name='sname']").val().replace(old,fname+$('#new_'+flower).html()));
+		
+			}
+			
+			var lock = true;
+			function _save(){
+				var $flower = $('[id^="flower-"]:checked');
+				var reg1 = /^\d+$/;
+				var reg2 = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+				var reg3= /^[1-9]*[1-9][0-9]*$/;
+				
+				var fname = $('#v1').val();
+				var sname = $('#v2').val();
+				if (sname.indexOf(typename)==-1) {
+					sname=typename+sname;
+				}
+				var priority=$('#v10').val();
+				var appoint=$('#v11 select option:selected').val();
+				
+				
+				if($.trim(fname)==''){
+					layer.tips('请添加产品名称', '#v1', {tips: [1, '#34495E']});return;
+				}else if($.trim(fname)=='null' || $.trim(fname)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v1', {tips: [1, '#34495E']});return;
+				}else if(!reg2.test(fname)){
+					layer.tips('不能包含特殊字符', '#v1', {tips: [1, '#34495E']});return;
+				}
+				/* alert(priority);
+				if(!reg3.test(priortiy)){
+					layer.tips('必须为正整数', '#v10', {tips: [1, '#34495E']});return;
+				}
+				alert(priority); */
+				if($.trim(sname)==''){
+					layer.tips('请添加产品简称', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(sname)=='null' || $.trim(sname)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}else if(!reg2.test(sname)){
+					layer.tips('不能包含特殊字符', '#v2', {tips: [1, '#34495E']});return;
+				}
+				if(typeid==3){
+					fpid = $("#v3 select option:selected").val();
+					iid = $("#v4 select option:selected").val();
+					cid = 0;
+					if(fpid==0){
+						layer.tips('请选择商品', '#v3', {tips: [1, '#34495E']});return;
+					}
+					if(iid==0){
+						layer.tips('请选择适赠对象', '#v4', {tips: [1, '#34495E']});return;
+					}
+				}
+				if(typeid==4||typeid==5||typeid==6||typeid==7){
+					fpid = $("#v3 select option:selected").val();
+					cid = 0;
+					if(fpid==0){
+						layer.tips('请选择商品', '#v3', {tips: [1, '#34495E']});return;
+					}
+				}
+				var app=$("#app option:selected").val();//用途
+				var style=$("#style option:selected").val();//格调
+				var fpid=$("#v3 select option:selected").val();//商品代码
+			    
+				
+				if($flower.length > 0){
+					var flowerarr = new Array;
+					for(var i=0;i<$flower.length;i++){
+						var fid = $flower.eq(i).data('flower');
+						var num = $('#num-'+fid).val();
+						var ftype = $('#ftype-'+fid).val();
+						if($.trim(num)=='' || !reg1.test(num)){
+							layer.msg('当前产品的花材数量未完善', {time: 2000});return;
+// 							layer.tips('请正确填写花材数量', '#num-'+fid, {tips: [1, '#34495E']});return;
+						}else{
+							var flowerstr = fid + '-' + num + '-' +ftype;
+							flowerarr.push(flowerstr);
+						}
+					}
+					
+					if(lock){
+						var load = layer.load();
+						lock = false;
+						$.post('/manage/iframe/product/saveProduct', {'typeid':typeid, 'id':id, 'flist':flowerarr.join(), 'fname':fname, 'sname':sname, 'fpid':fpid, 'iid':iid,'app':app,'style':style,'priority':priority,'appoint':appoint}, function(data){
+							layer.close(load);
+							if(data['R']){
+								parent.refresh_iframe();
+								layer.msg(data['msg'], {time: 1000}, function(){
+									layer_close();
+								});
+							}else{
+								lock = true;
+								layer.msg(data['msg'], {time: 2000});
+							}
+						});
+					}
+				}else{
+					layer.msg('请选择花材', {time:1000});
+				}
+			}
+		</script> 
+	</body>
+</html>

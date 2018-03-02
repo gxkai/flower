@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.order.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.logistics.css" />
+		<style type="text/css">
+			.pdhistory{border: 0;width: 100%; float: left; box-sizing: border-box; padding: 15px; border-bottom: 1px solid #EEE; line-height: 20px;}
+			.pdhistory_span{width: 100%;float: left;color: #48505B;padding: 5px 0;font-size: 16px;}
+			.query_logistics{position: fixed;bottom: 0;}
+			.div_pici_1{width:100%;float:left;display:table;background-color: #F3F3F3;border-bottom:1px dashed #CCC;}
+			.div_pici_2{width:100%;float:left;display:table;border-bottom:1px dashed #CCC;}
+			.div_pici_3{width:100%;float:left;display:table;border-bottom:1px dashed #CCC;}
+			.pici_l{width: calc(100% - 76px);float: left;display: table;margin: 0;}
+			.pici_l span:nth-child(1){width:100%;float:left;color:#555;font:16px/24px 'Microsoft Yahei';}
+			.pici_l span:nth-child(2){width:100%;float:left;color:#555;font:15px/24px 'Microsoft Yahei';}
+			.pici_3{width:100%;float:left;color:#797E85;font:15px/24px 'Microsoft Yahei';}
+			.find{width:70px;height:28px;float:right;font-size:14px;color:#797E85;line-height: 29px;text-align: center;border-radius: 4px;border: 1px solid #CCC;margin-top: 9px;}
+			.zwjl{font-size: 15px;float: left;color: #797E85;padding: 3px 0;}
+		</style>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<title>订单详情</title>
+		<script type="text/javascript">
+			$(function(){
+				if($('#jh').find('span').length==0){
+					$('#jh').hide();					
+				}
+				var scrq = $('.pdhistory .pici_l span').eq(0).html();
+				scrq = scrq.replace('发货日期：','');
+				$('#scrq').html(scrq);
+			});
+			function topay(ordercode){
+				$.ajax({
+					url: '/service/exchangevalid_new_2/'+ordercode,
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if(data){
+							$.ajax({
+								url: '/service/unSellCount/'+ordercode,
+								data: $('form').serialize(),
+								type: 'post',
+								dataType: 'json',
+								cache: false,
+								success: function(data){
+									if(data==0){
+										$('input[name="ordercode"]').val(ordercode);
+										$('form').submit();
+									}else{
+										layer.msg('订单所包含的商品已经下架,不再支持付款操作。', {time: 2000});return;
+									}
+								}
+							});
+						}else{
+							layer.msg('花籽不足，无法兑换', {time: 2000});return;
+						} 
+					}
+				});
+			}
+			function cancel(ordercode){
+				layer.confirm('确定取消订单?', function(index){
+					$.post('/service/cancelorder/'+ordercode, function(data){
+						if(data){
+							layer.msg('订单已取消',{time:2000},function(){
+								location.replace('/service/myorder');
+							});
+						}else{
+							layer.msg('操作失败',{time:2000});
+						}
+					});
+				});
+			}
+			function chooseAddress(){
+				location.href = "/service/changeaddress?type=" + $('#ordertype').val() + "&addr=" + $('#address').val() + "&ordercode=" + $('#ordercode').val();
+			}
+			function chOrderreach(ordercode){
+				$.post('/service/isAllowChange/'+ordercode, function(data){
+					if(data){
+						location.href = "/service/chOrderreach?ordercode=" + $('#ordercode').val() + "&id=" + $('#address').val();
+					}else{
+						layer.msg('本周鲜花已经打包好,即将为您配送，不支持变更送达日期了哦，敬请谅解',{time:5000});
+					}
+				});
+				
+			}
+			function refund(ordercode){
+				$.ajax({
+					url: '/service/isallowResund/'+ordercode,
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if(data){
+							location.href='/service/refund/'+ordercode;
+						}else{
+							alert('购买所得的花籽,已经被您使用了,故此单不支持退订了哦');
+						}
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+		
+			<div class="oi_1">
+				<span>订单状态：</span>
+				<span>
+					<#if order.state==0>待付款
+					<#elseif order.state==1>服务中
+					<#elseif order.state==6>待成团
+					<#elseif order.state==2>待评价
+					<#elseif order.state==3>已完成
+					<#elseif order.state==4>退款
+					<#elseif order.state==5>交易取消</#if>
+				</span>
+				<span>下单时间：</span><span>${order.ctime}</span>
+				<#if order.type!=7>
+				  <span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if>送达时间：</span><span>${order.firstDate}</span>
+				</#if>  
+			</div>
+			
+			<div class="oi_1">
+			   <#if order.type==7 >
+			       <span>现场自提</span>
+			   <#else>    
+				   <span>配送方式：</span><span>快递配送</span>
+				   <span>收货人/手机：</span><span>${order.receiver}/${order.tel}</span>
+				   <span>收货地址：</span><span>${order.addr}</span>
+				   <input type="hidden" id="address" value="${addrid!0}" >
+				   <input type="hidden" id="ordertype" value="${order.type}">
+				</#if>   
+			</div>
+			
+			<div class="oi_2">
+				<img src="${order.imgurl}" width="80">
+				<p class="oi_2_a">
+					<span>${order.name!}</span>
+					<span>&yen;${order.price?string('0.00')}</span>
+					<#if order.type==3 || order.type==7>
+						<span>${order.describe!}</span>
+					<#else>
+						<span>
+							<#if order.type!=41&& order.type!=43>订阅次数:${order.cycle!}周;&nbsp;花瓶:
+								<#if order.isvase==1>已购买
+								<#elseif order.isvase==0>
+									<#if order.ishas==0>首单赠送
+									<#else>未购买
+									</#if>
+								</#if>;&nbsp;
+								
+							</#if>
+							
+							<#if order.type!=5 && order.type!=10 && order.type!=11><br/><#if order.type==41||order.type==43>扣除花籽:${order.needSeeds}粒;</#if>送达时间:
+								<#if order.reach==1>周一送
+								<#else>周六送
+								</#if>;
+							</#if>	
+													
+							
+							<#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:
+								<#if order.sendCycle==1>一周一次
+								<#elseif order.sendCycle==2>两周一次
+								<#elseif order.sendCycle==4>四周一次<#else>未设置
+								</#if>;
+							</#if>
+							
+							<#if order.type==6><br/><span style="color: #f36b93;">${order.gName!};</span>
+							
+							</#if>
+							
+						</span>
+					</#if>
+					
+				</p>
+			</div>
+			
+			<div class="oi_1">
+				<span>订单号：</span><span>${order.ordercode}</span>
+				<input type="hidden" id="ordercode" value="${order.ordercode}" >
+			</div>
+			
+			<div class="oi_1" id="jh">
+			
+				<#if order.type!=4>
+				
+				<#if order.zhufu??>
+				<span>祝福语：</span><span>&nbsp;${order.zhufu}</span>
+				</#if>
+				
+				<#if order.songhua??>
+				<span>送花人：</span><span>&nbsp;${order.songhua}</span>
+				</#if>
+				
+				</#if>
+				
+				<#if order.fpid==1>
+				<span>忌讳的花：</span><span>${order.jihui!'无'}</span>
+				</#if>
+				<#if order.fpid==1>
+				<span>忌讳色系：</span><span>${order.color!'无'}</span>
+				</#if>
+				
+				<#if order.type!=41 && order.type!=43 && order.type!=3>
+					<span>商品总额：</span><span>&yen;${allprice?string('0.00')}</span>
+					<span>优惠总额：</span><span>&yen;${yh?string('0.00')}</span>
+					<span>付款金额：</span><span style="color: #E96388;">&yen;${order.totalprice?string('0.00')}</span>
+				<#elseif order.type==3>
+				    <span>商品单价：</span><span>&yen;${allprice?string('0.00')}</span>
+				    <span>购买数量：</span><span>${order.num}</span>
+				    <span>付款金额：</span><span style="color: #E96388;">&yen;${order.totalprice?string('0.00')}</span>
+				</#if>
+				
+			</div>
+			
+			 <div class="pdhistory">
+				<span class="pdhistory_span">派单记录：</span>
+				<#if picilist?size gt 0 && order.state != 0 && order.state != 5>
+					<#list picilist as pici>
+					<#if pici.number!=''>
+					<div class="<#if pici.state==3>div_pici_1<#else>div_pici_2</#if>">
+						<p class="pici_l">
+							<span>发货日期：${pici.piCode}</span>
+							<span>物流：${pici.number}</span>
+						</p>
+						<span class="find" onclick="open_query_mylogistics('${pici.number}')">查看物流</span>
+					</div>
+					<#else>
+					<div class="div_pici_3">
+						<p class="pici_l">
+						    <#if order.type!=7>
+							   <span>发货日期：${pici.piCode}</span>
+							   <span>物流：未发货</span>
+							 <#else>
+							    <span>自提时间：${order.ctime}</span>
+							 </#if>   
+						</p>
+					</div>
+					</#if>
+					</#list>	
+				<#else>
+					<span class="zwjl">暂无记录</span>
+				</#if>
+			</div> 
+			
+			<div class="oi_3">
+			<#if order.state==0>
+				<form action="/service/payfororder" method="post" style="display: none;">
+					<input type="text" name="ordercode">
+				</form>
+				<a class="oi_3_a" onclick="topay('${order.ordercode}')">立即支付</a>
+				<a class="oi_3_b" onclick="cancel('${order.ordercode}')">取消订单</a>
+			<#elseif order.state==1>
+			
+				<#if order.type==5><a class="oi_3_a" onclick="chooseAddress()">更改地址</a>
+				<#else>
+				    <#if isAllowSY==true>
+				       <a class="oi_3_a" onclick="chOrderreach('${order.ordercode}')">修改/顺延</a>
+				     </#if>  
+				</#if>
+				
+				<#if order.type==1><a class="oi_1_pinjia" style="display: none;" href="/service/orderreceive/${order.ordercode}">赠送好友</a></#if>
+				<#if order.type!=4 && yhfs != 3 && yhfs != 4 &&countwl==0 && allowRefund==1 >
+				<a class="oi_3_c" onclick="refund('${order.ordercode}')">申请退款</a>
+				<#else>
+				<#if order.type!=4>
+				     <#if order.type!=7>
+					    <a class="oi_1_pinjia" href="/product/${order.fpid}">再去购买</a>
+					 </#if>   
+			    <#else>
+			         <a class="oi_1_pinjia" href="/account/seedshoplist">再去兑换</a>
+			     </#if>
+				</#if>
+			<#elseif order.state==2>
+				<a class="oi_1_pinjia" href="/service/evaluate/${order.ordercode}">去评价</a>
+			<#else>
+			    <#if order.type!=4>
+					  <#if order.type!=7 && order.type!=8>
+					    <a class="oi_1_pinjia" href="/product/${order.fpid}">再去购买</a>
+					 </#if> 
+			    <#else>
+			          <a class="oi_1_pinjia" href="/account/seedshoplist">再去兑换</a>
+			     </#if>
+				
+			</#if>
+			</div>
+			
+		</div>
+		<div class="query_logistics"></div>
+	</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/jqprint/print.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/jqprint/jquery.jqprint-0.3.js"></script>
+		<script type="text/javascript" src="/resource/jqprint/jquery-migrate-1.1.0.js"></script>
+		<script type="text/javascript" src="/resource/jqprint/jquery-barcode.js"></script>
+		<script type="text/javascript">
+			function  a(){
+				$("#printshow").jqprint();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="printshow">
+			<!-- F1 -->
+			<div class="print_son">
+				<table>
+					<tr>
+						<td>收件人</td>
+						<td>时娟&#12288;13452659875</td>
+					</tr>
+					<tr>
+						<td>地&#12288;址</td>
+						<td>江苏省南通市海安县晓星大道8号</td>
+					</tr>
+					<tr>
+						<td>订单号</td>
+						<td>
+							<span class="barcode_1_1"></span>
+							<span class="number_1_1">12365498754</span>
+						</td>
+					</tr>
+				</table>
+				<script type="text/javascript">
+					$(".barcode_1_1").barcode($('.number_1_1').text(), "code128",{barWidth:1, barHeight:30,showHRI:false});
+				</script>
+				<!-- F2 -->
+				<table class="table2">
+					<tr style="height: 1.5cm;">
+						<td colspan="2" class="zhan">
+							<span>扬州二站</span>
+							<span>9</span>
+							<span>花美美</span>
+						</td>
+					</tr>
+					<tr style="height: 1.5cm;">
+						<td>订单号</td>
+						<td colspan="2">
+							<span class="barcode_1_2"></span>
+							<span class="number_1_2">12365498754</span>
+						</td>
+					</tr>
+					<tr>
+						<td>收件人</td>
+						<td colspan="2">时娟&#12288;13452659875</td>
+					</tr>
+					<tr>
+						<td>地&#12288;址</td>
+						<td colspan="2">江苏省南通市海安县晓星大道8号</td>
+					</tr>
+					<tr>
+						<td>商&#12288;品</td>
+						<td colspan="2">双品订阅花束</td>
+					</tr>
+					<tr>
+						<td>备&#12288;注</td>
+						<td colspan="2">速度</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="qian">
+						    <span>客户签名:</span>
+							<span>年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</span>    
+						</td>
+					</tr>
+				</table>
+				<script type="text/javascript">
+					$(".barcode_1_2").barcode($('.number_1_2').text(), "code128",{barWidth:1, barHeight:30,showHRI:false});
+				</script>
+			</div>
+		</div>
+		<input type="button" onclick="a()" value="打印"/>
+	</body>
+</html>

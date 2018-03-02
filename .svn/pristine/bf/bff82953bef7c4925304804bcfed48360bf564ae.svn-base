@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+	<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" />
+	<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/resource/layer_mobile/layer.js"></script>
+	<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+    <title>长按二维码关注花美美</title>
+    <!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+    
+    <style type="text/css">
+    .img_wrap {
+    width: 300px;
+    height: 300px;
+    display: table-cell; 
+    vertical-align: middle;
+    text-align: center;
+    position:absolute;  
+    left:50%;  
+    top:50%;  
+    margin:-150px 0 0 -150px 
+     }
+    </style>
+    
+   
+</head>
+<body>
+     <div class="img_wrap">
+         <img style=" width: 200px;height: 260px;position:absolute;  left:50%;   top:50%;  margin:-130px 0 0 -100px" alt="二维码" src="/resource/flower/image/qrcode.png">
+     </div>
+</body>
+</html>

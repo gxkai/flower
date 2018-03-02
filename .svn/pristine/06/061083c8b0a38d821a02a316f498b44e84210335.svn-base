@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+	<title>物流管理 - 物流列表- 线下单物流导入</title>
+	</head>	
+	<body>
+	    <form id="myFormId" action="/manage/iframe/logistics/importExcel_xx" method="post"enctype="multipart/form-data" >
+		<div>
+		<input type="file" name="uploadfile" id="uploadfile" accept="application/vnd.ms-excel">
+		</div>
+		<div>
+		<span style="width: 200px;">
+		<select id="wl" name ="wl">
+		<option value="">--选择物流--</option>
+		<#if wuliulist??&&wuliulist?size gt 0>
+		<#list wuliulist as li>
+		<option value="${li.code!}">${li.name!}</option>
+		</#list>
+		</#if>
+		</select> 
+		</span> 
+		</div>
+		<div>
+		<button id="upload" name="upload" onclick="return false;">导入</button>
+		</div>
+		</form>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery-form.js"></script>		
+        <script type="text/javascript" src="/resource/flower/js/ajaxfileupload.js"></script> 
+        <script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>		
+		<script type="text/javascript">
+		 $(document).ready(function() {
+			    $('#upload').click(function() {
+			    	var wl= $("#wl").find("option:selected").val();
+			    	if (wl=="") {
+			    		layer.msg('请先选择物流',{time : 2000});return;
+					}
+			    	var uploadfile= $("#uploadfile").val();
+			    	if (uploadfile==null ||uploadfile=="") {
+			    		layer.msg('请选择要上传的文件',{time : 2000});return;
+					} else {
+						 var fileExtend = uploadfile.substring(uploadfile.lastIndexOf('.')).toLowerCase();
+						 if(fileExtend == '.xls'){
+							 initComplete();				 
+						 }else {
+							 layer.msg('文件格式需要.xls格式',{time : 2000});return;
+						}
+					}   
+			    });
+			});
+		 function initComplete(){
+			 var load = layer.load();
+			 $('#myFormId').ajaxSubmit({
+		                success: function(data){
+		                	layer.close(load);
+		                	if (data.result) {
+				            	parent.refresh_iframe();
+								layer.msg(data.msg, {time: 1000}, function(){
+									layer_close();
+								})
+							}else {
+								layer.tips(data.msg, '#upload', {tips: [2, 'red'],time:5000});return;
+							}
+				        }
+		            }); 
+		     
+		    }
+		</script>
+	</body>
+</html>

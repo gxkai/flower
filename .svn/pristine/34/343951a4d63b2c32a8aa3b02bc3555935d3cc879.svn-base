@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" /> 
+			
+		<title>红包领取</title>
+		<style type="text/css">
+		body{
+			box-sizing:border-box;
+			/* background-color: #FFF6ED; */
+			background: url('/resource/flower/image/result_page_bg.jpg') no-repeat;
+			background-size:100%;
+		}
+		.page_h {
+			text-align: center;
+		}
+		
+		.page_h_1 img{
+			width: 100%;
+		}
+		.page_h_2 {
+			margin-top:35%;
+			margin-bottom:10px;
+			position: relative;
+		}
+		.page_h_2 span{
+			color: #999;
+			font-size: 14px;
+		}
+		.page_h_2_1 img {
+			width: 50px;
+			height: 50px;
+			border-radius: 25px;
+		}
+		.page_h_3 span {
+			font-weight: bold;
+    		font-size: 18px;
+		}
+		.page_h_4_1 {
+			text-align: center;
+		}
+		.page_h_4_1 img {
+			width: 60px;
+			height: 60px;
+		}
+		
+		.page_h_5{
+			width: 80%;
+   			height: 45px;
+   			margin-left: 10%;
+   			background-color: #FF4844;
+   			border-radius: 30px;
+   			text-align: center;
+   			margin-top: 20px;
+   			line-height: 3;
+   			}
+		
+		.page_h_5 a {
+			/* margin-top:20px;
+			color: #EA9216;
+    		font-size: 14px; */
+    		color:white;
+    		text-decoration: none;
+		}
+		
+		.page_b{
+			margin-top:15%;
+		}
+		
+		
+		.weui-cells {
+     		background-color: transparent; 
+     		font-size: 14px;
+		}
+		.weui-cells__title{
+			font-family:"微软雅黑";
+			font-size:12px;
+		}
+		.weui-cells__title a {
+			
+			font-size: 12px;
+			float: right;
+		}
+		.weui-cell__bd{
+			margin-left:10px;
+		}
+		.weui-cell__hd img {
+			width: 40px;
+			height: 40px;
+			border-radius: 20px;
+		}
+		.weui-cell__ft {
+    		color: black;
+    		font-size:12px;
+		}
+		</style>
+
+	</head>
+<body>
+	<div class="container">
+	
+		<div class="page_h">
+			
+			<div class="page_h_2">
+				<div class="page_h_2_1">
+					<img alt="" src="${headimg!}">
+				</div>			
+				<span>${nick!} 的红包</span>
+			</div>
+			
+	 	  <#if isGrab != 3>
+			<#if num gt 0>
+				收到的礼物
+				<#list giftList as gift>
+				
+					<#if gift.nick ?exists >
+						<div class="page_h_4">
+							<div class="page_h_4_1">
+								<img alt="" src="${imgurl!}">
+							</div>	
+							<span style="font-size:14px">${gift.name!}</span>
+						</div>
+					</#if>
+				</#list>
+				
+			<#else>
+			    <#if type==2>
+				   <div class="page_h_3">		
+					 <span>红包已领完</span>
+				   </div>
+				</#if>
+			</#if>
+			<#if type==1 >
+				 <div class="page_h_5" onclick="javascript:location.replace('/account/myRedPackets/2');">
+				 <a>去兑换</a>		
+		    <#else>
+		        <div class="page_h_5" onclick="javascript:location.replace('/service/redPacketExchange/${redpacketcode!}');">		
+					<a>去兑换</a>
+				</div>
+			</#if>
+			
+		</#if>
+		</div>
+		
+		<!-- 礼物领取详情 -->
+		<div class="page_b">
+			<div class="weui-cells__title">
+				<span>已领取     
+				
+				<#if (quantity1+1) lt quantity2 >
+				${quantity1+1}
+				<#else>
+				${quantity2}
+				</#if>
+				
+				个红包，共${quantity1!}个红包</span>
+				
+			</div>
+			
+        	<div class="weui-cells">
+    <!--     如果不是发包人查看红包详情则正常显示， -->
+         <#if isGrab !=3>
+        		<!-- 礼物领取详情-列表 -->
+        		<#list allgiftList as allgift>
+        			<#if allgift.nick ?exists >
+	            	<div class="weui-cell">
+	                	<div class="weui-cell__hd">
+	                		<img src="${allgift.headimg!}" alt="" >
+	                	</div>
+	                	<div class="weui-cell__bd">
+	                    	<p style="text-align:left">${allgift.nick!}</p>
+	                    	<p style="font-size:12px;text-align:left">${allgift.gtime!}</p>
+	                	</div>
+	               		<div class="weui-cell__ft">${allgift.name!} 
+	               			<#if allgift_index == 0 && type==2>
+	               			   <p> 
+	               			     <img src="/resource/flower/image/icon/yunqizuijia.png" style="width:20px;height:20px;"/> 
+	               			     <label style="margin:2px;float:right">手气最佳</label> 
+	               			   </p>
+	               			</#if>
+	               		</div>
+	            	</div>
+            		</#if>
+            	</#list>
+            	
+           <#else>
+            	<#list allgiftList as allgift>
+        			<#if allgift.isopen==1 || allgift.isopen==4 >
+		            	<div class="weui-cell">
+		                	<div class="weui-cell__hd">
+		                		<img src="${allgift.headimg!}" alt="" >
+		                	</div>
+		                	<div class="weui-cell__bd" >
+		                    	<p >${allgift.nick!}</p>
+		                    	<p style="font-size:12px;">${allgift.gtime!}</p>
+		                	</div>
+		               		<div class="weui-cell__ft">${allgift.name!}  
+		               			<#if allgift_index == 0 && type==2>
+		               			<p> 
+		               			<img src="/resource/flower/image/icon/yunqizuijia.png" style="width:20px;height:20px;"/> 
+		               			<label style="margin:2px;float:right;color:#ffc600">手气最佳</label> 
+		               			</p>
+		               			</#if>
+		               		</div>
+		            	</div>
+            		
+            		<#else>
+            			<div class="weui-cell">
+		                	<div class="weui-cell__hd" style="margin:8px 0;">
+		                		<!-- <img src="" alt="" > -->
+		                		尚未派送
+		                	</div>
+		                	<div class="weui-cell__bd">
+		                    	<!-- <p>${allgift.nick!}</p> -->
+		                    	<!-- <p style="font-size:12px">${allgift.gtime!}</p> -->
+		                	</div>
+		               		<div class="weui-cell__ft">${allgift.name!}  
+		               		</div>
+		            	</div>
+            		</#if>
+            		
+            	</#list>
+            	
+            </#if>
+            
+         
+			</div>
+				<#if isGrab !=3>
+			    <center><a href="/service/sendRedPackets" style="font-size:14px;text-decoration: underline;">我也要发红包</a></center>
+			    </#if>
+				<#if flat gt 0>
+            	<p style="color:#f76687;font-size: 14px; display:block;text-align: center;margin:10px 0"
+            	onclick="location.replace('/service/shareRedpacket/${redpacketcode!}')" >红包尚未领完，点击继续派送</p>
+           		</#if>
+		</div>
+		
+	</div>
+</body>
+</html>

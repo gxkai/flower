@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>见证我的目标</title>
+		<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+		<!--滚屏插件-->
+		<link rel="stylesheet" href="/resource/flower/css/jquery.fullPage.css" rel="stylesheet"/>
+		<script src="/resource/flower/js/jquery.fullPage.min.js" charset="utf-8"></script>
+		<script src="http://cdn.staticfile.org/jquery-easing/1.3/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+		<script>
+			$(function(){
+				$('#dowebok').fullpage({
+					
+					anchors: ['page1', 'page2', 'page3', 'page4','page5', 'page6', 'page7', 'page8','page9', 
+					'page10','page11'],
+					menu: '#menu',
+					//滚动到某一屏后的回调函数
+					afterLoad: function(anchorLink, index){
+						var numName = ".img_num_" + index 
+						var contentImgLeft = ".content_left_" + index
+						var contentImgRight = ".content_right_" + index
+						var aimText = "#aim_text_" + index
+						var btnImg = ".btn_img_" + index
+						
+						//图片序列
+						$(numName).delay(500).animate({
+							left: '40%'
+						}, 1000, 'easeOutExpo');
+						//左边图片
+						$(contentImgLeft).delay(500).animate({
+							left: '0'
+						}, 1000, 'easeOutExpo');
+						//右边图片
+						$(contentImgRight).delay(500).animate({
+							right: '10%'
+						}, 1000, 'easeOutExpo');	
+						//下方按钮
+						$(btnImg).delay(500).animate({
+							bottom: '0'
+						}, 1000, 'easeOutExpo');
+						
+//						$(aimText).removeClass('animated infinite bounce')
+						
+					},
+					//滚动前的回调函数
+					onLeave: function(index, direction){
+
+						var numName = ".img_num_" + index 
+						var contentImgLeft = ".content_left_" + index
+						var contentImgRight = ".content_right_" + index
+						var aimText = ".aim_text_" + index
+						var btnImg = ".btn_img_" + index
+						
+						//图片序列
+						$(numName).delay(500).animate({
+							bottom: '-120%'
+						}, 1000, 'easeOutExpo');
+						//左边图片
+						$(contentImgLeft).delay(500).animate({
+							left: '-120%'
+						}, 1000, 'easeOutExpo');
+						//右边图片
+						$(contentImgRight).delay(500).animate({
+							right: '-120%'
+						}, 1000, 'easeOutExpo');	
+						//下方按钮
+						$(btnImg).delay(500).animate({
+							bottom: '-120%'
+						}, 1000, 'easeOutExpo');
+						
+//						$(aimText).addClass('animated infinite bounce')
+						
+					}
+				});
+			});
+		</script>
+
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			.container{
+				height: 100%;
+				max-width: 710px;
+				margin: 0 auto;
+			}
+			/*header*/
+			.header{
+			}
+			/*content*/
+			.content{
+			}
+			.witness_btn{
+			}
+			/*footer*/
+			.footer{
+				font-family: "微软雅黑";
+				font-size: 12px;
+				margin-bottom: 10px;
+			}
+			.footer span{
+				display: block;
+				width: 80%;
+				margin: 0 auto;
+			}
+			
+			.section{
+				background: url(http://ozdzt401n.bkt.clouddn.com/aims_comment_universal_bg.png);
+				background-size: cover;
+				text-align: center;
+			}
+			
+			.section img{
+				max-width: 320px;
+			}
+			
+			/*中间图片样式*/
+			.aim_imgs{position: relative;text-align: center; }
+			.aim_imgs img{width: 70%;}
+			/*动态效果  分为4块*/
+			.img_num_2,.img_num_3,.img_num_4,.img_num_5,
+			.img_num_6,.img_num_7,.img_num_8,.img_num_9,
+			.img_num_10,.img_num_11{ position: absolute;top: 5%;left: -120%;}
+			
+			.btn_img_2,.btn_img_3,.btn_img_4,.btn_img_5,
+			.btn_img_6,.btn_img_7,.btn_img_8,.btn_img_9,
+			.btn_img_10,.btn_img_11 {position: relative; bottom: -120%;}
+			
+			.content_left_2,.content_left_3,.content_left_4,.content_left_5,
+			.content_left_6,.content_left_7,.content_left_8,.content_left_9,
+			.content_left_10,.content_left_11{position: relative; left: -120%;}
+			
+			.content_right_2,.content_right_3,.content_right_4,.content_right_5,
+			.content_right_6,.content_right_7,.content_right_8,.content_right_9,
+			.content_right_10,.content_right_11{position: absolute;right: -120%;}
+			
+			#aim_text_1{width: 100%;}
+			#aim_text_1 img{width: 60%;}
+			.title_left{position: absolute;left: -5%;}
+			.title_right{position: absolute;right: 5%;}
+		</style>
+		
+	</head>
+	<body>
+	 <audio src="/image/target.mp3" controls="controls"  hidden="true" autoplay="autoplay" ></audio>
+		<div class="container">
+			<!--header-->
+			<div class="header">
+			</div>
+			<!--content-->
+			<div class="content">
+				<div id="dowebok">
+					
+				<div class="section section1">
+					<img src="http://ozdzt401n.bkt.clouddn.com/page1_logo.png" style="position: absolute;left: 3%;top:3% ; width: 25%;"/>
+					
+					<div id="aim_text_1" style="position: relative;">
+						<img src="http://ozdzt401n.bkt.clouddn.com/page1_2018.png" style="width: 50%;"/>
+						<img src="http://ozdzt401n.bkt.clouddn.com/page1_title1.png"/>
+						<img class="title_left" src="http://ozdzt401n.bkt.clouddn.com/page1_title_left.png" style="width: 30%;"/>
+						<img class="title_right" src="http://ozdzt401n.bkt.clouddn.com/page1_title_right.png" style="width: 30%;"/>
+						<img src="http://ozdzt401n.bkt.clouddn.com/page1_title2.png"/>
+					</div>
+					<div class="btn_img_1" style="position: relative;">
+						<img src="http://ozdzt401n.bkt.clouddn.com/page1_people.png" style="width: 40%;"/>
+						<a href="#page2"><img class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/page1_next.png" 
+							style="width: 40%;position: absolute;left: 30%;bottom: 10%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  1/10 -->
+				<div class="section section2">
+					<img class="img_num_2" src="http://ozdzt401n.bkt.clouddn.com/time_01.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_2" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_2" src="http://ozdzt401n.bkt.clouddn.com/aims_img_2.png"/>
+					</div>
+					<img id="aim_text_2" class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/aims_2.png" style="margin-top:20px;"/>
+					<div class="btn_img_2">
+						<a class="choose_img" data-img="1"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page3"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  2/10 -->
+				<div class="section section3">
+					<img class="img_num_3" src="http://ozdzt401n.bkt.clouddn.com/time_02.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_3" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_3" src="http://p1ygfzkbj.bkt.clouddn.com/aims_img_2.png"/>
+					</div>
+					<img id="aim_text_3" class="animated infinite bounce" src="http://p1ygfzkbj.bkt.clouddn.com/aims_2.png" style="margin-top:20px;"/>
+					<div class="btn_img_3">
+						<a class="choose_img" data-img="2"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page4"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面 3/10 -->
+				<div class="section section4">
+					<img class="img_num_4" src="http://ozdzt401n.bkt.clouddn.com/time_03.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_4" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_4" src="http://ozdzt401n.bkt.clouddn.com/aims_img_4.png"/>
+					</div>
+					<img id="aim_text_4" class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/aims_4.png" style="margin-top:20px;"/>
+					<div class="btn_img_4">
+						<a class="choose_img" data-img="3"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page5"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  4/10 -->
+				<div class="section section5">
+					<img class="img_num_5" src="http://ozdzt401n.bkt.clouddn.com/time_04.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_5" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_5" src="http://ozdzt401n.bkt.clouddn.com/aims_img_5.png"/>
+					</div>
+					<img id="aim_text_5" class="animated infinite bounce" src="http://p1ygfzkbj.bkt.clouddn.com/aims_4.png" style="margin-top:20px;"/>
+					<div class="btn_img_5">
+						<a class="choose_img" data-img="4"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page6"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  5/10 -->
+				<div class="section section6">
+					<img class="img_num_6" src="http://ozdzt401n.bkt.clouddn.com/time_05.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_6" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_6" src="http://ozdzt401n.bkt.clouddn.com/aims_img_6.png"/>
+					</div>
+					<img id="aim_text_6" class="animated infinite bounce" src="http://p1ygfzkbj.bkt.clouddn.com/aims_5.png" style="margin-top:20px;"/>
+					<div class="btn_img_6">
+						<a class="choose_img" data-img="5"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page7"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  6/10 -->
+				<div class="section section7">
+					<img class="img_num_7" src="http://ozdzt401n.bkt.clouddn.com/time_06.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_7" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_7" src="http://ozdzt401n.bkt.clouddn.com/aims_img_7.png"/>
+					</div>
+					<img id="aim_text_7" class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/aims_7.png" style="margin-top:20px;"/>
+					<div class="btn_img_7">
+						<a class="choose_img" data-img="6"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page8"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  7/10 -->
+				<div class="section section8">
+					<img class="img_num_8" src="http://ozdzt401n.bkt.clouddn.com/time_07.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_8" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_8" src="http://ozdzt401n.bkt.clouddn.com/aims_img_8.png"/>
+					</div>
+					<img id="aim_text_8" class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/aims_8.png" style="margin-top:20px;"/>
+					<div class="btn_img_8">
+						<a class="choose_img" data-img="7"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page9"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  8/10 -->
+				<div class="section section9">
+					<img class="img_num_9" src="http://ozdzt401n.bkt.clouddn.com/time_08.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_9" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_9" src="http://ozdzt401n.bkt.clouddn.com/aims_img_9.png"/>
+					</div>
+					<img id="aim_text_9" class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/aims_9.png" style="margin-top:20px;"/>
+					<div class="btn_img_9">
+						<a class="choose_img" data-img="8"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page10"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  9/10 -->
+				<div class="section section10">
+					<img class="img_num_10" src="http://ozdzt401n.bkt.clouddn.com/time_09.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_10" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_10" src="http://ozdzt401n.bkt.clouddn.com/aims_img_10.png"/>
+					</div>
+					<img id="aim_text_10" class="animated infinite bounce" src="http://ozdzt401n.bkt.clouddn.com/aims_10.png" style="margin-top:20px;"/>
+					<div class="btn_img_10">
+						<a class="choose_img" data-img="9"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page11"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				<!-- 目标页面  10/10 -->
+				<div class="section section11">
+					<img class="img_num_11" src="http://ozdzt401n.bkt.clouddn.com/time_10.png" style="width:20%;"/>
+					<div class="aim_imgs">
+						<img class="content_left_11" src="http://ozdzt401n.bkt.clouddn.com/aims_bg.png"/>
+						<img class="content_right_11" src="http://p1ygfzkbj.bkt.clouddn.com/aims_img_10.png"/>
+					</div>
+					<img id="aim_text_11" class="animated infinite bounce" src="http://p1ygfzkbj.bkt.clouddn.com/aims_10.png" style="margin-top:20px;"/>
+					<div class="btn_img_11">
+						<a class="choose_img" data-img="10"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_choose.png" style="width: 80%;"/></a>
+						<a href="#page2"><img src="http://ozdzt401n.bkt.clouddn.com/aims_comment_next.png" style="width: 50%;"/></a>
+					</div>
+				</div>
+				
+			</div>
+				
+			</div>
+			
+		
+		
+			<form id="form" action="/account/saveAims" method="post" hidden>
+				<input id="contentStr" name="contentStr" value="小赚一个亿"/>
+			</form>
+			<script>
+			var flat = 1;
+			$('.choose_img').click(function(){
+				var id = $(this).data("img")
+				console.log(id)
+				if(id =="1"){contentStr ="小赚100万"}
+				// 修改
+				if(id =="2"){contentStr ="事业顺利</br>薪水翻倍"}
+				if(id =="3"){contentStr ="不再熬夜"}
+				// 修改
+				if(id =="4"){contentStr ="来一场说走就走的旅行"}
+				// 修改
+				if(id =="5"){contentStr ="找个可以结婚的男朋友"}
+				if(id =="6"){contentStr ="择一城与一人终老"}
+				if(id =="7"){contentStr ="练出马甲线</br>体重减10斤"}
+				if(id =="8"){contentStr ="拥有自己的房和车"}
+				if(id =="9"){contentStr ="看100本书</br>或听100堂课程"}
+				// 修改
+				if(id =="10"){contentStr ="生个萌娃阖家欢乐"}
+				
+				$('#contentStr').val(contentStr)
+				
+				console.log($('#contentStr').val())
+				
+				// 加锁
+				if(flat == 1){
+					flat = 0;
+					
+					// 判断活动是否关闭
+					$.ajax({
+						url: '/account/isClose',
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success: function(data){
+							flat = 1;
+							if(data==true){
+								//提交目标
+								// 判断是否可以制定目标
+								$.ajax({
+									url: '/account/isAllowSaveAims',
+									type: 'post',
+									dataType: 'json',
+									cache: false,
+									success: function(data){
+										flat = 1;
+										if(data==true){
+											//提交目标
+											$('#form').submit();
+										}else{
+											layer.msg('你已经制定过小目标了，去平台查看自己的分享海报');
+										}
+									}
+								});
+							}else{
+								layer.msg('客官,来的不巧，小目标活动暂停了');
+							}
+						}
+					});
+					
+					
+				}else{
+					layer.msg('服务器繁忙！');
+				}
+				
+			})
+			</script>
+		</div>
+		
+	</body>
+</html>

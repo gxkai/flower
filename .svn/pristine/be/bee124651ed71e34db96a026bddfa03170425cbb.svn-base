@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script src="/resource/flower/layer/layer.js"></script>
+		<title>为他/她见证</title>
+	</head>
+	<style type="text/css">
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		
+		body{
+			background: url(/resource/flower/image/readyTargetbg.jpg) no-repeat;
+		  	background-size: cover;
+			/*max-width: 768px;*/
+			margin: auto;
+			height: 100%;
+		}
+		.target_top .p1{
+			color: #fff;
+			margin-top: 40%;
+			text-align: center;
+			font-size: 5vw;
+		}
+		.p1 span{
+			vertical-align: middle;
+		}
+		.p1 .nick{
+			max-width: 30vw;
+		    display: inline-block;
+		    overflow: hidden;
+		    white-space: nowrap;
+		    text-overflow: ellipsis;
+		    font-size: 5vw;
+    		vertical-align: middle;
+		}
+		.target_top .p2{
+			color: #d85a5c;
+			margin-top: 9%;
+			text-align: center;
+			font-size: 5.5vw;
+		}
+		.target_top .p3{
+			color: #ab4250;
+			margin-top: 4%;
+			text-align: center;
+			font-size: 5vw;
+			text-shadow: 1px 0px;
+    		font-weight: 100;
+		}
+		.p3 img{
+			width:10%;
+			vertical-align: middle;
+		}
+		.target_text{
+			margin-top: 27%;
+			text-align: center;
+		}
+		.target_text textarea{
+		    width: 84%;
+			height: 70px;
+			border-radius: 14%;
+			padding: 4%;
+			font-size: 18px;
+		}
+		.target_btn{
+			padding: 0% 4% 4%;
+    		margin-top: 4%;
+		}
+		img{
+			width: 100%;
+		}
+		.target_btn span{
+			width: 42%;
+			margin: 2%;
+			display: inline-block;
+			background-color: #ee5267;
+			color: #fff;
+			text-align: center;
+			border-radius: 20px;
+			padding: 3px;
+			box-shadow: 5px 5px 5px #d73f54;
+		}
+		.target_a.on{
+			background-color: #b5b5b5;
+		}
+	</style>
+	<body>
+		<div class="container">
+			<div class="target_top">
+				<p class="p1"><span class="nick">${rd.nick!}</span><span>的目标</span></p>
+				<p class="p2">${rd.contentStr!}</p>
+				<p class="p3"><img src="/resource/flower/image/yinzi.png" class=""/><span>已见证人数：</span> <span class="num"></span></p>
+			</div>
+			<div class="target_text">
+				<textarea name="" rows="" cols="" id="message"></textarea>
+			</div>
+			<div class="target_btn">
+				<span class="target_a">见证完毕</span>
+				<span class="target_b" onclick="location.href='/account/aims_index'">我也参加</span>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+		$(function(){
+			var w=window.screen.width;
+			var n=50/(1-(w-320)/w)-50;
+			$('.target_text textarea').css({
+				height:50+n
+			});
+		
+			var wnum=${rd.wNumNew}+${rd.wNumOld};
+			$(".target_top .p3 .num").html(wnum);
+			var tgid=${rd.id};
+			var num=0;
+			$(".target_a").click(function() {
+				num++;
+				if(num==1){
+					var wMsg=$("#message").val();
+					$.post('/account/isAllowSaveWitness/'+tgid, function(data){
+						if(data==true){
+							if($.trim(wMsg)==''){
+								layer.msg('留言不能为空', {time:2000});return;
+							}
+							$.post('/account/saveWitness/', {
+								'tgid':tgid, 
+								'wMsg':wMsg,
+								}, 
+								function(data){
+									$(".target_top .p3 .num").html(${rd.wNumNew}+${rd.wNumOld}+1);
+									$("#message").val("");  
+									$("target_a").addClass("on");
+									layer.msg('见证成功！花美美给你发个个小红包，快去查看吧!', {time:2000});return;
+				    		})
+						}else{
+							layer.msg('每个人只有一次给好友见证机会！', {time:2000});return;
+						}
+		    		})
+				}else{
+					layer.msg('见证一次就可以了哦，不需要重复提交', {time:2000});return;
+				}
+			})
+		})
+		</script>
+	</body>
+</html>

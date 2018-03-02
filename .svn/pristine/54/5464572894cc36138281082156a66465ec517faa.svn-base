@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>编辑</title>
+<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+<script src="/resource/flower/js/jquery-solarlunar-xp1.0.js"></script>
+<script type="text/javascript" src="/resource/layer/layer.js"></script>
+</head>
+<style type="text/css">
+	body{
+		height: 100vh;
+		margin: auto;
+	}
+	.container{
+		max-width: 768px;
+		margin: 0 4%;
+	}
+	.item{
+		border-bottom: 1px solid #ccc;
+		padding: 10px 0;
+		margin: 0;
+	}
+	.item dt{
+		width: 25%;
+    	float: left;
+    	padding: 5px 0px;
+    	font-size: 15px;
+	}
+	.item dt img{
+		width: 22%;
+		vertical-align: middle;
+	}
+	.item dd{
+		margin-left: 25%;
+	    padding: 5px 0px;
+	}
+	.item dd #date{
+		width: 100%;
+		border: 0;
+		padding: 5px 0px;
+	}
+	.item dd #select{
+		padding: 5px 15px;
+	}
+	#calendar{
+		padding: 15px;
+		margin-top: 5px;
+	}
+	#slct select {
+		vertical-align: middle;
+	    padding: 5px;
+	}
+	#slct option{
+		width: 50%;
+	} 
+	.edit{
+		text-align: center;
+    	margin: 15px;
+	}
+	.edit span{
+		text-align: center;
+		width: 40%;
+		border-radius: 5px;
+		padding: 5px;
+		color: #fff;
+		display: inline-block;
+		margin: 5px;
+	}
+	.edit .dele{
+		background-color: #a8a8a8;
+	}
+	.edit .save{
+		background-color: #e2527b;
+	}
+	#year,#lyear{
+		display: none;
+	}
+</style>
+
+<body>
+
+<div class="container">
+    <dl class="item borderBottom">
+        <dt><img src="/resource/flower/image/memory_e.png"/>&nbsp;&nbsp;标记</dt>
+        <dd>
+            <select id="select">
+            	<#if memory.type==1>
+				  	<option value ="1">父亲生日</option>
+				  	<option value="2">母亲生日</option>
+				  	<option value="3">爱人生日</option>
+				  	<option value="4">结婚纪念日</option>
+			  	<#elseif memory.type==2>
+				  	<option value="2">母亲生日</option>
+				  	<option value ="1">父亲生日</option>
+				  	<option value="3">爱人生日</option>
+				  	<option value="4">结婚纪念日</option>
+			  	<#elseif memory.type==3>
+				  	<option value="3">爱人生日</option>
+				  	<option value ="1">父亲生日</option>
+				  	<option value="2">母亲生日</option>
+				  	<option value="4">结婚纪念日</option>
+			  	<#elseif memory.type==4>
+				  	<option value="4">结婚纪念日</option>
+				  	<option value ="1">父亲生日</option>
+				  	<option value="2">母亲生日</option>
+				  	<option value="3">爱人生日</option>
+			  	</#if>
+			</select>
+        </dd>
+    </dl>
+    <dl class="item borderBottom">
+        <dt><img src="/resource/flower/image/memory_d.png"/>&nbsp;&nbsp;日期</dt>
+        <dd>
+            <input type="text" name="date" value="${memory.date!}" id="date" readonly="readonly">
+        </dd>
+    </dl>
+    <div class="edit">
+	    <span class="dele">删除</span>
+	    <span class="save">保存</span>
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+	$(function() {
+		var id='${memory.id}';
+		$(".edit .dele").click(function() {
+			if (window.confirm("确认删除这条记录吗？")) {
+				$.post('/account/deleMemory/'+id, function(data){
+					window.location.href ='/account/memory';
+	    		})
+			} else {
+				window.close();
+			}
+		})
+		
+		var time = new Date();
+		var y = time.getFullYear();
+		var m = time.getMonth() + 1;
+		var d=time.getDate();
+		$("#date").solarlunar({
+		    linkage: false, //是否在选公历（农历）时，农历（公历）联动变化。
+		    minyear: 1892, //最小年
+		    maxyear: 2100, //最大年 本插件年份支持极值为（1892-2100）
+		    type: "solar", //初始显示公历还是农历。（solar公历，lunar农历）
+		    year: 2016, //初始显示的公历年份
+		    month: 1, //初始显示的公历月份
+		    day: 1, //初始显示的公历日
+		    lyear: 2018, //初始显示的农历年份
+		    lmonth:1 , //初始显示的农历月份
+		    lday: 1 //初始显示的农历日
+		});
+		
+		$("#date").val("${memory.date!}");
+		
+		$(".edit .save").click(function() {
+			if (window.confirm("确认保存这条记录吗？")) {
+				var type=$('#select').val();
+				var format=$("input[name='calendar']:checked").val();
+				var date=$('#date').val();
+				if($.trim(date)==''){
+					layer.msg('请填写日期', {time:2000});return;
+				}
+				$.post('/account/saveMemory/', {
+					'id':id, 
+					'type':type,
+					'format':format,
+					'date':date,
+					},
+					function(data){
+					window.location.href ='/account/memory';
+	    		})
+			} else {
+				window.close();
+			}
+		})
+		
+	})
+</script>
+
+</html>

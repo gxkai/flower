@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>会员管理 - 花籽列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <span class="c-gray en">&gt;</span> 花籽列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+				<span class="select-box l" style="width: 150px">
+				  	<select class="select" id="seedType" name="seedType" size="1" onchange="search()"  style="width: 130px">	   
+						   <option value=""   <#if remarks=="">selected</#if>>--选择花籽来源--</option>
+					       <#list seedtype_list as list>
+					       <option value="${list!}" <#if remarks=="${list!}">selected</#if>>${list!}</option>
+					      </#list> 
+					</select>
+				</span>
+				<span class="select-box l" style="width: 150px">
+				  	<select class="select" id="state" name="state" size="1" onchange="search()"  style="width: 130px">
+						    	<option value="9" <#if state==9>selected</#if>>--选择花籽状态--</option>
+						    	<option value="0" <#if state==0>selected</#if>>未使用</option>
+						    	<option value="1" <#if state==1>selected</#if>>已使用</option>
+						    	<option value="2" <#if state==2>selected</#if>>未签到失效</option>
+						    	<option value="3" <#if state==3>selected</#if>>退款腐烂</option>
+						    	<option value="4" <#if state==4>selected</#if>>抽奖扣除</option>
+					</select>
+				</span>
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow!}</strong> 条</span> 
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray">
+			<span class="l" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入会员ID查询" value="${aid!}" id="aid" name="aid" maxlength="11">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入会员昵称查询" value="${nick!}" id="nick" name="nick" maxlength="11">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入会员手机号查询" value="${tel!}" id="tel" maxlength="11">
+			</span>
+			<span class="l ml-10">
+               <input type="text" placeholder="获得花籽开始时间" class="input-text Wdate" id="ctime_start" name="ctime_start" value="${ctime_start!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+            </span>
+            <span class="l ml-10">
+               <input type="text" placeholder="获得花籽结束时间" class="input-text Wdate" id="ctime_end" name="ctime_end" value="${ctime_end!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+            </span>
+			<input class="l btn btn-primary ml-10" type="submit" value="查找" onclick="search()">					
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					    <th width="80">序号</th>
+						<th width="100">会员ID号</th>
+						<th width="80">会员昵称</th>
+						<th width="120">会员手机号</th>
+						<th width="120">获取时间</th>
+						<th width="120">花籽来源</th>
+						<th width="80">花籽状态</th>	
+						<th width="120">操作账号/订单号</th>			
+					</tr>
+				</thead>
+				<tbody>
+					<#if flowerseedlist?? && flowerseedlist?size gt 0>
+					<#list flowerseedlist as flowerseed>
+					<tr class="text-c">
+					    <td>${flowerseed_index+1!}</td>
+						<td>${flowerseed.aid!}</td>
+						<td>${flowerseed.nick!}</td>
+						<td>${flowerseed.tel!}</td>
+						<td>${flowerseed.ctime!}</td>
+						<td>${flowerseed.remarks!}</td>					 
+						<td>
+						   <#if flowerseed.state==0>未使用
+						   <#elseif flowerseed.state==1>已使用
+						   <#elseif flowerseed.state==2>未签到失效
+						   <#elseif flowerseed.state==3>退款腐烂
+						   <#elseif flowerseed.state==4>抽奖扣除
+						   </#if> 
+						</td>
+						<td>${flowerseed.username!}</td>			
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="17" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		
+		
+		<script type="text/javascript">
+		var state = '${state!}',remarks='${remarks!}',aid='${aid!}',nick='${nick!}',tel = '${tel!}',ctime_start='${ctime_start!}',ctime_end='${ctime_end!}';
+	    var seedtype_list = ${seedtype_list_!};
+        $(document).ready(function () {
+        	laypage({
+			    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+			    pages: ${totalpage}, //总页数
+			    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+			    groups: 5, //连续显示分页数
+			    curr: ${pageno!},
+			    jump: function(e, first){ //触发分页后的回调
+			        if(!first){ //一定要加此判断，否则初始时会无限刷新
+			            location.replace('/manage/iframe/member/flowerseed?pageno='+e.curr+'&state='+state+'&remarks='+remarks+'&aid='+aid+'&nick='+nick+'&tel='+tel+'&ctime_start='+ctime_start+'&ctime_end='+ctime_end);
+			        }
+			    }
+			});
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+        function search() {
+        	var state = $("#state").val();
+        	var remarks = $("#seedType").val();
+        	var aid = $("#aid").val();
+        	var nick = $("#nick").val();
+        	var tel = $("#tel").val();
+        	var ctime_start = $("#ctime_start").val();
+        	var ctime_end = $("#ctime_end").val();
+            location.replace('/manage/iframe/member/flowerseed?pageno=1+&state='+state+'&remarks='+remarks+'&aid='+aid+'&nick='+nick+'&tel='+tel+'&ctime_start='+ctime_start+'&ctime_end='+ctime_end);
+		}
+		</script> 
+	</body>
+</html>

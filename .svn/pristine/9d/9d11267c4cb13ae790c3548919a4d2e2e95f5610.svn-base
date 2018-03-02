@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8" />
+		<title>我的团购</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<style type="text/css">
+			body{
+				margin: 0;	
+				padding: 0;
+				background: #f3f3f3;
+				font-family: "微软雅黑";
+			}
+			.container{
+			}
+			.header{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-top: 5px;
+			}
+			.header span{
+				width: 50%;
+				text-align: center;
+				height: 46px;
+				line-height: 46px;
+				margin: 2px;
+				background: white;
+				font-size: 14px;
+			}
+			
+			.content1,.content2{
+				margin-top: 3px;
+				background: white;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding:5px;
+			}
+			.goods_img{
+				width: 25%;
+			}
+			.goods_img img{
+				width: 100%; 
+			}
+			
+			
+			.goods_describe{
+				width: 70%;
+				margin-left: 8px;
+			}
+			.goods_describe .goods_btn{
+				border:  1px #f04e7a solid;
+				color: #f04e7a;
+				height: 25px;
+				line-height: 25px;
+				width: 75px;
+				font-size: 12px;
+				text-align: center;
+			}
+			.goods_info{
+				font-weight: 300;
+				color: #ababab;
+				font-size: 12px;
+				display: block;
+				margin-top:5px;
+			}
+			
+			.page_selected{
+				color: #f04e7a;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<!--待成团-->
+				<span id="content1" class="page_selected" onclick="switchPage(this)">待成团</span>
+				<!--已成团-->
+				<span id="content2" onclick="switchPage(this)">已成团</span>
+				
+			</div>
+			
+			<!--待成团-->
+			<#if group_wait ??>
+			<#list group_wait as wait>
+			<div class="content1" >
+				<div class="goods_img">
+					<img src="${wait.imgurl!}" />
+				</div>
+				<div class="goods_describe">
+					<span class="goods_name" style="font-family: '微软雅黑';font-weight: bolder;">${wait.name!}</span>
+					<span style="float: right;margin-right: 5px;">&yen;${wait.price?string("0.00")}</span><br />
+					<span class="goods_info">距离成团还差${wait.needCount - wait.hadCount}人
+					</span>
+					<span class="goods_btn" style="float: right;margin-right: 5px"  onclick="toDetail(${wait.ptNo!})">查看详情</span>
+				</div>
+			</div>
+			</#list>
+			</#if>
+			
+			<!--已成团-->
+			<#if group_finish ??>
+			<#list group_finish as finish>
+			<div class="content2" style="display: none;">
+				<div class="goods_img">
+					<img src="${finish.imgurl!}"/>
+				</div>
+				<div class="goods_describe">
+					<span class="goods_name" style="font-family: '微软雅黑';font-weight: bolder;">${finish.name!}</span>
+					<span style="float: right;margin-right: 5px;">&yen;${finish.price?string("0.00")}</span><br />
+					<span class="goods_info">已成团
+					</span>
+					<span class="goods_btn" style="float: right;margin-right: 5px" onclick="toDetail(${finish.ptNo!})">查看详情</span>
+				</div>
+			</div>
+			</#list>
+			</#if>
+			
+			<script type="text/javascript">
+				
+				function switchPage(_boj){
+					$('.content1').hide();
+					$('.content2').hide();
+					
+					$("."+_boj.id).show();
+					$('.page_selected').removeClass('page_selected');
+					$("#"+_boj.id).addClass('page_selected');
+				}
+				
+				function toDetail(ptNo){
+					window.location.href="groupDetail/"+ ptNo;
+				}
+				
+			</script>
+			
+		</div>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>订单管理 - 采购订单 - 采购详情</title>
+	</head>
+	<body>
+		<div class="page-container">
+			<table class="table table-border table-bordered table-hover table-bg table-sort mt-15">
+				<thead>
+					<tr class="text-c">
+						<td>双品订单：${flowerMap['stnum'][0]}束</td>
+						<td>多品订单：${flowerMap['stnum'][1]}束</td>
+						<td>送花订单：${flowerMap['stnum'][2]}束</td>
+						</td>
+					</tr>
+				</thead>
+			</table>
+			<table class="table table-border table-bordered table-hover table-bg table-sort mt-15">
+				<thead>
+					<tr class="text-c"><th colspan="5">订阅级</th></tr>
+					<tr class="text-c">
+						<th>种类</th>
+						<th>名称</th>
+						<th>单价</th>
+						<th>配单打量</th>
+						<th>采购打量</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if flowerMap['listA']?size gt 0>
+					<#list flowerMap['listA'] as flower>
+					<tr class="text-c">
+						<td>${flower.tname}</td>
+						<td>${flower.name}</td>
+						<td>&yen;${flower.price?string('0.00')}</td>
+						<td>${flower.num_a!0}</td>
+						<td><input type="text" class="input-text text-c flowerpc" value="${flower.num_b!0}" data-num="${flower.num_a}" data-fid="1-${flower.fid}" maxlength="11"/></td>
+					</tr>
+					</#list>
+					<#else>
+					<tr class="text-c">
+						<td colspan="5">暂无数据</td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<table class="table table-border table-bordered table-hover table-bg table-sort mt-15">
+				<thead>
+					<tr class="text-c"><th colspan="5">送花级</th></tr>
+					<tr class="text-c">
+						<th>种类</th>
+						<th>名称</th>
+						<th>单价</th>
+						<th>配单量</th>
+						<th>打量</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if flowerMap['listB']?size gt 0>
+					<#list flowerMap['listB'] as flower>
+					<tr class="text-c">
+						<td>${flower.tname}</td>
+						<td>${flower.name}</td>
+						<td>&yen;${flower.price?string('0.00')}</td>
+						<td>${flower.num_a!0}</td>
+						<td><input type="text" class="input-text text-c flowerpc" value="${flower.num_b!0}" data-num="${flower.num_a}" data-fid="2-${flower.fid}" maxlength="11"/></td>
+					</tr>
+					</#list>
+					<#else>
+					<tr class="text-c">
+						<td colspan="5">暂无数据</td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<input type="hidden" name="code" value="${code!}">
+			<input type="button" class="btn btn-primary mt-20 btn-block" value="保存" onclick="_save()">
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _save(){
+				var fplist = $('.flowerpc');
+				var numarr = new Array();
+				for(var i=0;i<fplist.size();i++){
+					var flower = fplist.eq(i);
+					var fid = flower.data('fid');
+					var numa = flower.data('num');
+					var numb = flower.val();
+					reg=/^\d{1,11}$/;
+					if($.trim(numb)=='' || !reg.test(numb) || numb<numa){
+						layer.tips('采购量为1-11位数字，且不能小于配单量', flower.get(0), {tips: [1, '#34495E']});return;
+					}else{
+						var numstr = fid + '-' + numb;
+						numarr.push(numstr);
+					}
+				}
+				var code = $('input[name="code"]').val();
+				var load = layer.load();
+				$.post('/manage/iframe/order/updatepurchase',{'code':code,'numarr':numarr.join()},function(data){
+					layer.close(load);
+					if(data){
+						layer.msg('保存成功', {time: 2000}, function(){
+							parent.refresh_iframe();
+							layer_close();
+						});
+					}else{
+						layer.msg('保存失败', {time: 2000});
+					}
+				});
+			}
+		</script> 
+	</body>
+</html>

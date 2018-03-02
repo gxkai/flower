@@ -1,0 +1,571 @@
+package com.controller.manage;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.omg.CORBA.PolicyErrorCodeHelper;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.controller.WeixinApiCtrl;
+import com.dao.FCDao;
+import com.dao.MCDao;
+import com.dao.OrderDao;
+
+import com.interceptor.ManageInterceptor;
+import com.jfinal.aop.Before;
+import com.jfinal.core.Controller;
+import com.jfinal.kit.JsonKit;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.util.SendMouldMsgUtil;
+
+
+
+/**
+ * @Desc 订单管理
+ * @author lxx
+ * @date 2016/9/21
+ * */
+@Before(ManageInterceptor.class)
+public class ManageOrderCtrl extends Controller {
+	/*********************订单列表*********************/
+	/**
+	 * 订单列表
+	 */
+	public void orderlist(){
+		//获取页面传来的参数信息
+		Integer pageno = getParaToInt("pageno")==null?1:getParaToInt("pageno");
+		Integer time = getParaToInt("time")==null?0:getParaToInt("time");//送货时间
+		Integer sendCycle=getParaToInt("sendCycle")==null?10:getParaToInt("sendCycle");//发货周期
+		Integer app=getParaToInt("app")==null?10:getParaToInt("app");//用途
+		Integer style=getParaToInt("style")==null?10:getParaToInt("style");//格调
+		Integer type = getParaToInt("type")==null?0:getParaToInt("type");
+		String state = (String) (getPara("state")==null?"1":getPara("state"));//默认显示【服务中】
+		String ordercode = getPara("code");
+		Integer ishas = getParaToInt("ishas")==null?2:getParaToInt("ishas");
+		String receiver = getPara("receiver");
+		String time_a = getPara("time_a");
+		String time_b = getPara("time_b");
+		String aid = getPara("aid");
+		String tel = getPara("tel");
+		String gName = getPara("gName");
+		String piCode=getPara("piCode");//特定的发货日期，用于节日或客户指定
+		
+		String ptNo = getPara("ptNo"); //根据团号查询
+		
+		if(receiver!=null){
+			try {
+				receiver = URLDecoder.decode(receiver,"utf-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		//查询信息
+		Page<Record> page = MCDao.getOrderList(pageno, 16, time, type, state, ordercode, ishas, receiver, time_a, time_b, aid, tel,sendCycle,app,style,piCode,ptNo,gName);
+		//将后台的参数返回给页面
+		setAttr("time", time);
+		setAttr("type", type);
+		setAttr("state", state);
+		setAttr("ordercode", ordercode);
+		setAttr("ishas", ishas);
+		setAttr("receiver", receiver);
+		setAttr("time_a", time_a);
+		setAttr("time_b", time_b);
+		setAttr("aid", aid);
+		setAttr("tel", tel);
+		setAttr("sendCycle",sendCycle);
+		setAttr("app",app);
+		setAttr("style",style);
+		setAttr("piCode",piCode);
+		setAttr("gName",gName);
+		
+		setAttr("pageno", page.getPageNumber());
+		setAttr("totalpage", page.getTotalPage());
+		setAttr("totalrow", page.getTotalRow());
+		setAttr("orderlist", page.getList());
+		setAttr("ptNo", ptNo);
+		//渲染页面
+		render("order_list.html");
+		
+	}
+	
+	/**
+	 * 订单列表(用于订单信息修改)
+	 */
+	public void changelist(){
+		//获取页面传来的参数信息
+		Integer pageno = getParaToInt("pageno")==null?1:getParaToInt("pageno");
+		Integer state = 1;//默认显示【服务中】
+		String tel = getPara("tel");
+		String piCode=getPara("piCode");//特定的发货日期，用于节日或客户指定
+		String ordercode=getPara("ordercode");//订单编号
+		String receiver = getPara("receiver");
+		if(receiver!=null){
+			try {
+				receiver = URLDecoder.decode(receiver,"utf-8");
+				
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		//查询信息
+		Page<Record> page = MCDao.getChangeList(pageno, 16, receiver, tel,piCode,state,ordercode);
+		//将后台的参数返回给页面
+		setAttr("tel",tel);
+		setAttr("piCode",piCode);
+		setAttr("ordercode",ordercode);
+		setAttr("receiver",receiver);
+		setAttr("pageno", page.getPageNumber());
+		setAttr("totalpage", page.getTotalPage());
+		setAttr("totalrow", page.getTotalRow());
+		setAttr("orderlist", page.getList());
+		//渲染页面
+		render("change_list.html");		
+	}
+	
+	/**
+	 * 获取单条订单信息
+	 */
+	public void editlist(){
+		String id = getPara(0);
+		Record order = Db.findFirst("select a.state, a.id, a.name,a.addr,a.zhufu,a.reach,d.piCode,a.tel,a.ordercode, a.type FROM f_order a  left join f_picode d on d.ordercode=a.ordercode where  IFNULL(d.num ,0)<=1 and a.id = ?", id);
+		if(order.getInt("type")==5){
+			String holidate = Db.queryStr("select piCode from f_picode where ordercode=?",order.getStr("ordercode"));
+			order.set("week", holidate);
+		}
+		String ordercode = order.get("ordercode");
+		String addr = Db.queryStr("select a.addr FROM f_order a  left join f_picode d on d.ordercode=a.ordercode where  IFNULL(d.num ,0)<=1 and a.id = ?", id);
+		String[] area = addr.split("-");
+		Record proc = Db.findFirst("select id,name from f_area where name = ?", area[0]);
+		Record city = Db.findFirst("select id,name from f_area where name = ?", area[1]);
+		Record country = Db.findFirst("select id,name from f_area where name = ?", area[2]);
+		List<Record> picode = Db.find("select * from f_picode where orderCode=? and  not EXISTS (select code from f_order_info where orderCode=? and piCode = code)",ordercode,ordercode);
+		String picode_ = JsonKit.toJson(picode);
+		String order_ = JsonKit.toJson(order);
+		setAttr("prov", proc);
+ 		setAttr("city", city);
+ 		setAttr("county", country);
+ 		setAttr("order", order);
+ 		setAttr("order_", order_);
+ 		setAttr("address", area[3]);
+ 		setAttr("picodelist", picode);
+ 		setAttr("picodelist_", picode_);
+		String areas =  FCDao.getArea();
+		setAttr("arealist", areas);
+		render("change_list_detail.html");
+	}
+	
+	// 保存数据
+		public void saveorderlist() throws IOException{
+			boolean result = false;
+			//获取信息
+			String tel = getPara("tel");
+			String picode_data = getPara("picode_data");
+			String orderlist = getPara("orderlist_old");
+			String picodelist = getPara("picodelist_old");
+            String ordercode = getPara("ordercode");
+    		String receiver = getPara("receiver");
+			String zhufu = getPara("zhufu");
+			String reach = getPara("reach");
+            String addr = getPara("addr");
+            int state = getParaToInt("state");
+            Record admin = getSessionAttr("admin");
+    		String event_user=admin.getStr("username");//操作账号
+    		String event_name ;
+			//获取新发货批号
+    		JSONArray picode_data_new = new JSONArray();
+			LinkedHashMap<String, String> jsonMap = JSON.parseObject(picode_data, new TypeReference<LinkedHashMap<String, String>>() {
+	        });
+	        for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+	        	picode_data_new.add(entry.getValue());
+	        }
+	        //获取旧f_order 并更新
+        	Map<String,String> orderlist_old=new HashMap<String,String>();
+	        LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(orderlist, new TypeReference<LinkedHashMap<String, String>>() {
+	        });
+	        for (Map.Entry<String, String> entry : jsonMap2.entrySet()) {
+	        	orderlist_old.put(entry.getKey(),entry.getValue());
+	        }
+	        Record f_order_update = Db.findById("f_order_update", orderlist_old.get("id"));
+            //更新表中如果没有记录，则添加add记录
+            if(f_order_update==null){
+            	event_name = "add";
+            	Record rec = new Record();
+            	rec.set("id", orderlist_old.get("id"));
+            	rec.set("ordercode", orderlist_old.get("ordercode"));
+            	rec.set("name",orderlist_old.get("name") );
+            	rec.set("tel",orderlist_old.get("tel") );
+            	rec.set("addr",orderlist_old.get("addr") );
+            	rec.set("reach",orderlist_old.get("reach") );
+            	rec.set("zhufu",orderlist_old.get("zhufu") );
+				rec.set("state",orderlist_old.get("state") );
+            	rec.set("event_name", event_name);
+            	rec.set("event_user", event_user);
+            	rec.set("event_datetime", new Date());
+            	Db.save("f_order_update", rec);
+            }
+            //更新表中如果有记录，则添加update记录
+        	event_name = "update";
+        	Record record = new Record();
+        	record.set("id", orderlist_old.get("id"));
+        	record.set("ordercode", ordercode);
+        	record.set("name", receiver);
+        	record.set("tel", tel);
+        	record.set("addr", addr);
+        	record.set("reach", reach);
+        	record.set("zhufu", zhufu);
+        	record.set("event_name", event_name);
+        	record.set("event_user", event_user);
+			record.set("state", state);
+        	record.set("event_datetime", new Date());
+        	Db.save("f_order_update", record);	
+			int result_order_update = Db.update("update f_order set tel=?,name=?,addr=?,zhufu=?,reach=?,state=?   where id=?",tel,receiver,addr,zhufu,reach,state, orderlist_old.get("id"));
+            if (result_order_update==1) {
+				result=true;
+			} else {
+				result=false;
+				renderJson("result", result);return;
+			}
+            //获取旧f_picode并更新
+	        JSONArray jarr=JSONArray.parseArray(picodelist);
+	        List<String> idList = new ArrayList<String>();  
+	        List<String> orderCodeList = new ArrayList<String>();  
+	        List<String> piCodeList = new ArrayList<String>();  
+	        List<String> reachList = new ArrayList<String>();
+	        //Gson返回double型数据          需进行(Double)xxx.intValue() 转换 
+	       /* Gson gson = new Gson();
+			List<Map<String, Object>> glist = gson.fromJson(picodelist, ArrayList.class);
+			for (int i = 0; i < glist.size(); i++) {
+				System.out.println(glist.get(i).get("id"));
+			}*/
+	        int j =0 ;
+	        List<Map<String, String>> listHashMap =  new ArrayList<Map<String, String>>(); 
+	        for(Object object : jarr){  
+	            @SuppressWarnings("unchecked")  
+	            Map<String , Object> map = JSONObject.parseObject(object.toString() , Map.class) ;  
+	            idList.add(map.get("id").toString());  
+	            orderCodeList.add(map.get("orderCode").toString());  
+	            piCodeList.add(map.get("piCode").toString()); 
+	            reachList.add(map.get("reach").toString());        
+	            Map<String , String> m = new HashMap<String , String>() ;  
+	            listHashMap.add(m);  
+	            m.put("id", idList.get(j));  
+	            m.put("orderCode", orderCodeList.get(j));  
+	            m.put("piCode", piCodeList.get(j));
+	            m.put("reach", reachList.get(j));  
+	            j++;  
+	        }
+	        for (int i=listHashMap.size()-1;i>=0;i--) {  
+	            Record f_picode_update = Db.findById("f_picode_update", listHashMap.get(i).get("id"));
+	            //更新表中如果没有记录，则添加add记录
+				if(f_picode_update==null){
+	            	event_name = "add";
+	            	Record rec = new Record();
+	            	rec.set("id", listHashMap.get(i).get("id"));
+	            	rec.set("ordercode", listHashMap.get(i).get("orderCode"));
+	            	rec.set("reach", listHashMap.get(i).get("reach"));
+	            	rec.set("piCode",listHashMap.get(i).get("piCode") );
+	            	rec.set("event_name", event_name);
+	            	rec.set("event_user", event_user);
+	            	rec.set("event_datetime", new Date());
+	            	Db.save("f_picode_update", rec);
+	            }
+	            //更新表中如果有记录，则添加update记录
+            	event_name = "update";
+            	Record rec = new Record();
+            	rec.set("id",  listHashMap.get(i).get("id"));
+            	rec.set("ordercode", ordercode);
+            	rec.set("reach", reach);
+            	rec.set("piCode",picode_data_new.get(i));
+            	rec.set("event_name", event_name);
+            	rec.set("event_user", event_user);
+            	rec.set("event_datetime", new Date());
+            	Db.save("f_picode_update", rec);
+				int result_picode_update = Db.update("update f_picode set piCode = ? ,reach=?  where id = ?",picode_data_new.get(i),reach,listHashMap.get(i).get("id"));
+                if (result_picode_update==1) {
+                	result = true;
+				} else {
+					renderJson("result", result);return;
+				}
+	        }
+           
+			renderJson("result", result);
+		}
+	
+	/**
+	 * @see 导出订单物流信息
+	 * @author yetangtang add
+	 * @date 2016/10/29
+	 */
+	public void exportOrderList(){
+		
+		int time = getParaToInt("time");
+		int type = getParaToInt("type");
+		String state = getPara("state");
+		String ordercode = getPara("code");
+		int ishas = getParaToInt("ishas");
+		String receiver = getPara("receiver");
+		String time_a = getPara("time_a");
+		String time_b = getPara("time_b");
+		String aid = getPara("aid");
+		String tel = getPara("tel");
+		int sendCycle=getParaToInt("sendCycle");
+		int app=getParaToInt("app");
+		int style=getParaToInt("style");
+		String piCode=getPara("piCode");
+		String gName=getPara("gName");
+		if(receiver!=null){
+			try {
+				receiver = URLDecoder.decode(receiver,"utf-8");
+				OrderDao.exportOrderList(getResponse(),time,type,state,ordercode,ishas,receiver,time_a,time_b,aid,tel,sendCycle,app,style,piCode,gName);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}else{
+			OrderDao.exportOrderList(getResponse(),time,type,state,ordercode,ishas,receiver,time_a,time_b,aid,tel,sendCycle,app,style,piCode,gName);
+		}
+		renderNull();
+	}
+	
+	// 详情
+	public void orderinfo(){
+		String ordercode = getPara();
+		Map<String, Object> map = MCDao.getorderInfo(ordercode); 
+		setAttr("order", map.get("order"));
+		setAttr("detaillist", map.get("detaillist"));
+		setAttr("flowerSjlist", map.get("flowerSjlist"));
+		setAttr("picilist", map.get("picilist"));
+		setAttr("picivase", map.get("picivase"));
+		setAttr("picodeList",map.get("picodeList"));
+		setAttr("picodeModifyLog",map.get("picodeModifyLog"));
+		render("order_detail.html");
+	}
+	
+	// 客诉补单
+	public void customorder(){
+		String code = getPara();
+		boolean rs = MCDao.validateorder(code);
+		if(rs){
+			Map<String, Object> map = MCDao.getorderInfo(code);
+			Record order = (Record) map.get("order");
+			setAttr("vaseid", MCDao.getVase(code)==null?0:MCDao.getVase(code));
+			setAttr("vases", MCDao.getVases());
+			setAttr("floid", MCDao.getFlowerPro(code)==null?0:MCDao.getFlowerPro(code));
+			setAttr("flopros", MCDao.getFlowerPros());
+			setAttr("order", order);
+			setAttr("detaillist", map.get("detaillist"));
+			setAttr("flowerSjlist", map.get("flowerSjlist"));
+			setAttr("picilist", map.get("picilist"));
+			setAttr("picivase", map.get("picivase"));
+			setAttr("arealist", FCDao.getArea());
+			
+			String area = order.getStr("addr");
+     		String[] areas = area.split("-");
+     		Record prov = Db.findFirst("select id,name from f_area where name=?", areas[0]);
+     		Record city = Db.findFirst("select id,name from f_area where name=? and pid = ?", areas[1], prov.getInt("id"));
+     		Record county = Db.findFirst("select id,name from f_area where name=? and pid = ?", areas[2], city.getInt("id"));
+     		
+     		setAttr("prov", prov);
+     		setAttr("city", city);
+     		setAttr("county",county);
+     		setAttr("place", areas[3]);
+		}
+		render("order_custom.html");
+	}
+	
+	// 客诉下单
+	public void createorderks(){
+		String ordercode = getPara("ordercode");	//原订单号
+		String aid = getPara("aid");	//原订单号
+		Integer szdx = getParaToInt("szdx");		// 适赠对象ID
+		int pid = getParaToInt("pid");				// 商品ID
+		int type = Db.queryLong("SELECT CASE WHEN ptid IN (1,2) THEN 1 WHEN ptid IN (3) THEN 2 ELSE 3 END TYPE FROM f_flower_pro WHERE id =?", pid).intValue();// 商品类型(1订阅,2送花,3周边)
+		Integer vase = getParaToInt("vase");		// 花瓶ID
+		int reach = getParaToInt("reach");			// 送达日期
+		int cycle = getParaToInt("cycle");			// 周期
+		String zhufu = getPara("zhufu");			// 祝福卡
+		String songhua = getPara("songhua");		// 送花人
+		String jh_list = getPara("jh_list");		// 忌讳的花
+		String jhcolor_list = getPara("jhcolor_list");		// 忌讳色系
+		String recommend = getPara("recommend");	// 邀请人手机号
+		Integer cash = getParaToInt("cash");		// 花票
+		Integer activity = getParaToInt("activity");// 活动
+		Integer prov = getParaToInt("prov");// 省
+		Integer city = getParaToInt("city");// 区
+		Integer county = getParaToInt("county");// 县
+		String area = prov+","+city+","+county;
+		String address = getPara("address");// 详细地址
+		String name = getPara("name");// 收货人姓名
+		String tel = getPara("tel");// 收货人电话
+		Double yh = 0.00;	// 优惠总额
+		// 创建订单
+		boolean result = MCDao.createorderks(ordercode, aid, pid, vase, area, address, reach, cycle, zhufu, songhua, jh_list, jhcolor_list, type, 
+				recommend, szdx, cash, activity, yh, name, tel);
+		renderJson(result);
+	}
+	
+	//取消顺延
+	public void cancelsy() throws ParseException{
+		Map<String, Object> map = new HashMap<>();
+		boolean r = false;
+		String msg = new String();
+		String ordercode = getPara();
+		Number Cnum = Db.queryNumber("select count(1) from f_order where is_sy=1 and ordercode=?", ordercode);
+		if(Cnum.intValue()==0){
+			msg = "此订单无顺延";
+		}else{
+			int Unum = Db.update("update f_order set is_sy=0,sy_code=? where ordercode=?", null , ordercode);
+			if(Unum==0){
+				msg = "取消失败";
+			}else{
+				r = true;
+				msg = "取消成功";
+			}
+		}
+		map.put("msg", msg);
+		map.put("R", r);
+		renderJson(map);
+	}
+	/*********************采购订单*********************/
+	// 列表
+	public void purchase(){
+		Integer pageno = getParaToInt("pageno")==null?1:getParaToInt("pageno");
+		String ordercode = getPara("ordercode");
+		Page<Record> page = MCDao.getPurchaseList(pageno, 16, ordercode);
+		setAttr("ordercode", ordercode);
+		setAttr("pageno", page.getPageNumber());
+		setAttr("totalpage", page.getTotalPage());
+		setAttr("totalrow", page.getTotalRow());
+		setAttr("purchaselist", page.getList());
+		render("purchase_list.html");
+	}
+	// 生成采购订单
+	public void createpurchase(){
+		renderJson(MCDao.createPurchase());
+	}
+	// 详情
+	public void purchaseinfo(){
+		String code = getPara();
+		setAttr("code", code);
+		setAttr("flowerMap", MCDao.getPurchaseInfo(code));
+		render("purchase_detail.html");
+	}
+	// 修改采购数量
+	public void updatepurchase(){
+		String code = getPara("code");
+		String numarr = getPara("numarr");
+		renderJson(MCDao.updatePurchase(code, numarr));
+	}
+	// 导出采购单
+	public void exportpurchase(){
+		String code = getPara();
+		//MCDao.getPurchaseInfoForExcel_a(getResponse(), code);
+		MCDao.getPurchaseInfoForExcel_b(getResponse(), (Record) getSessionAttr("admin"), code);
+		renderNull();
+	}
+
+	/*********************退款申请*********************/
+	// 列表
+	public void refundlist(){
+		Integer pageno = getParaToInt(0)==null?1:getParaToInt(0);
+		Integer state = getParaToInt(1)==null?0:getParaToInt(1);
+		String ordercode = getPara(2);
+		
+		Page<Record> page = MCDao.getRefundList(pageno, 16, state, ordercode);
+		
+		setAttr("state", state);
+		setAttr("ordercode", ordercode);
+		
+		setAttr("pageno", page.getPageNumber());
+		setAttr("totalpage", page.getTotalPage());
+		setAttr("totalrow", page.getTotalRow());
+		setAttr("refundlist", page.getList());
+		render("refund_list.html");
+	}
+	// 详情
+	public void refundinfo(){
+		String ordercode = getPara();
+		Map<String, Object> map = MCDao.getRefundInfo(ordercode); 
+		setAttr("refund", map.get("refund"));
+		setAttr("order", map.get("order"));
+		setAttr("detaillist", map.get("detaillist"));
+		render("refund_detail.html");
+	}
+	// 退款处理
+	public void refundaction(){
+		String ordercode = getPara("ordercode");
+		String money = getPara("cash");
+		renderJson(MCDao.refundAction(ordercode, Double.parseDouble(money)));
+	}
+	
+	// 订单评价
+	public void comment(){
+		Integer pageno = getParaToInt(0)==null?1:getParaToInt(0);
+		Page<Record> page = MCDao.getCommentList(pageno, 16);
+		setAttr("pageno", page.getPageNumber());
+		setAttr("totalpage", page.getTotalPage());
+		setAttr("totalrow", page.getTotalRow());
+		setAttr("commentlist", page.getList());
+		render("comment.html");
+	}
+
+	// 撤销退款
+	public void restorefund() throws UnsupportedEncodingException{
+		String ordercode = getPara(0);
+		String content = URLDecoder.decode(getPara(1), "UTF-8");
+		boolean result= MCDao.restorefund(ordercode);
+		if (result) {
+			WeixinApiCtrl.setApiConfig();
+			String openid = Db.queryStr("select b.openid from f_order a left join f_account b on a.aid = b.id where a.ordercode = ?",ordercode);
+			String url =  PropKit.get("host")+"/service/myorder";
+			SendMouldMsgUtil.SendRefundUndoMsg(openid, url, content);
+		}
+		renderJson(result);
+	}
+	/*********************分享订单*********************/
+	// 列表
+	public void sharelist(){
+		Integer pageno = getParaToInt(0)==null?1:getParaToInt(0);
+		Integer time = getParaToInt(1)==null?0:getParaToInt(1);
+		String ordercode = getPara(2);
+		
+		Page<Record> page = MCDao.getShareList(pageno, 16, time, ordercode);
+		
+		setAttr("time", time);
+		setAttr("ordercode", ordercode);
+
+		setAttr("pageno", page.getPageNumber());
+		setAttr("totalpage", page.getTotalPage());
+		setAttr("totalrow", page.getTotalRow());
+		setAttr("sharelist", page.getList());
+		render("share_list.html");
+	}
+	
+	// 详情
+	public void shareinfo(){
+		String ordercode = getPara();
+		Map<String, Object> map = MCDao.getShareInfo(ordercode); 
+		setAttr("order", map.get("order"));
+		setAttr("detaillist", map.get("detaillist"));
+		setAttr("flowerSjlist", map.get("flowerSjlist"));
+		setAttr("picilist", map.get("picilist"));
+		setAttr("picivase", map.get("picivase"));
+		render("share_detail.html");
+	}
+}

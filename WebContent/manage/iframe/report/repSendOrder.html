@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+<title>发货单量统计表</title>
+</head>
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>报表管理 <span class="c-gray en">&gt;</span> 发货单量统计表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray">
+         <span class="l ml-10" style="width: 170px">
+			<input type="text" class="input-text" placeholder="输入初始批次" value="${picicodeStart!}" id="picicodeStart" maxlength="8">
+		 </span>
+         <span class="l ml-10" style="width: 170px">
+			<input type="text" class="input-text" placeholder="输入结束批次" value="${picicodeEnd!}" id="picicodeEnd" maxlength="8">			
+         </span>		 
+		 <input class="btn btn-primary ml-10" type="submit" value="查找" onclick="searchcode()">
+    </div>
+
+     <div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="80">订单类型</th>
+						<th width="80">发货票数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if list?? && list?size gt 0>
+					<#list list as listRecord>
+					<tr class="text-c">
+						<td>订阅</td>
+						<td>${listRecord.订阅!}</td>
+					</tr>
+					<tr class="text-c">
+						<td>红包兑换或鲜花卡兑换</td>
+						<td>${listRecord.红包兑换或鲜花卡兑换!}</td>
+					</tr>
+					<tr class="text-c">
+						<td>花籽兑换</td>
+						<td>${listRecord.花籽兑换!}</td>
+					</tr>
+					<tr class="text-c">
+						<td>送花</td>
+						<td>${listRecord.送花!}</td>
+					</tr>
+					<tr class="text-c">
+						<td>周边</td>
+						<td>${listRecord.周边!}</td>
+					</tr>
+					<tr class="text-c">
+						<td>节日或闪购</td>
+						<td>${listRecord.节日或闪购!}</td>
+					</tr>
+					<tr class="text-c">
+						<td>定制</td>
+						<td>${listRecord.定制!}</td>
+					</tr>
+				
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			
+	 </div>
+    </div>
+   
+	 <script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+	  var picicodeStart='${picicodeStart!}',picicodeEnd = '${picicodeEnd!}';
+	  $(document).ready(function(){
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+		function searchcode(){
+			picicodeStart =$.trim($('#picicodeStart').val());
+			picicodeEnd = $.trim($('#picicodeEnd').val());
+			
+			if($.trim(picicodeStart)!=''){
+				picicodeStart = picicodeStart.replace(/(^\s*)|(\s*$)/g,'');
+				reg = /^[0-9]{1,8}$/;
+				if(!reg.test(picicodeStart)){
+					layer.tips('请输入正确格式','#picicodeStart', {tips: [1, '#34495E']});return;
+				}
+			}
+			if($.trim(picicodeEnd)!=''){
+				picicodeEnd = picicodeEnd.replace(/(^\s*)|(\s*$)/g,'');
+				reg = /^[0-9]{1,8}$/;
+				if(!reg.test(picicodeEnd)){
+					layer.tips('请输入正确格式','#picicodeEnd', {tips: [1, '#34495E']});return;
+				}
+			}
+			location.replace('/manage/iframe/report/RepSendOrder?pageno=1&picicodeStart='+picicodeStart+'&picicodeEnd='+picicodeEnd);		
+		}
+	 </script>
+		
+</body>
+</html>

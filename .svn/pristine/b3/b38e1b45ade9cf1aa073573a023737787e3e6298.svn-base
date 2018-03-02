@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+		<title>生活美学</title>
+		<script type="text/javascript">
+			$().ready(function(){
+				var swiper = new Swiper('.swiper-container', {
+			        pagination: '.swiper-pagination',
+			        paginationClickable: true,
+			        spaceBetween: 10,
+			    });
+			});
+	    </script>
+	    <!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	</head>
+	<body>
+		<div class="swiper-container">
+	        <div class="swiper-wrapper">
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/010.png" /></div>
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/011.png" /></div>
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/012.png" /></div>
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/013.png" /></div>
+	        </div>
+	        <div class="swiper-pagination"></div>
+	    </div>
+		<div class="container">
+			<div class="esthetics_type">
+				<a class="esthetics_type_1_b" href="/esthetics">生活美学</a>
+				<a class="esthetics_type_2_a">投稿赚花票</a>
+			</div>
+			<div class="esthetics_notice">
+				<p>生活美学是一种用心体会到的品质，是一种你觉得舒服快乐的生活方式，是被一分一秒所赋予的情怀。对食物兴味盎然，对外表用心经营，对文化悉心品味，对鲜花认真养护，就是生活美学最好的表现形式。</p>
+				<p>由花美美发起的生活美学社是一个发掘美、分享美、表达美、沉思美的原创作品平台，希望未来有更多的伙伴加入我们一起行动，记录 、观察和分享生活中的点滴美意。</p>
+				<p>插花是作为生活美学中最为直接的表现方式之一，通过插花感受自然以及生命的变化，在创作美丽的作品和欣赏的不仅提高自己的审美，也同时提高自身的精神世界修养。</p>
+				<p>花美美关注热爱生活之青年人的内心世界，在忙碌、拥挤、焦虑之外，通过插花，让自己生活慢下来，同时写下自己的插花心得，生活美学社编辑部欢迎每位热心爱好生活美学的小伙伴积极投稿。</p>
+				<label>投稿须知：</label>
+				<span>1.每篇文章至少1000字，内容原创，包含对生活美学的思考感悟，文体不限，图文并茂优先选用。</span>
+				<span>2.截稿时间：每周五下午18:00。</span>
+				<span>3.投稿邮箱：<i style="font: 15px/22px 'Microsoft Yahei';color: #E96388;">flowermm2016@163.com</i>。</span>
+				<label>生活美学社将为你提供：</label>
+				<span>1.每周评比两篇优秀原创文章，两位作者将分别获得一束混花和一束双品鲜花，花束随机。</span>
+				<span>2.您的文章一经采用，将发布在我们生活美学平台上。</span>
+				<span>3.生活美学社编辑部将第一时间与你联系，你的文章也有可能集结成册，后续出版。</span>
+				<span>4.你将自动成为生活美学社社友，可以定期免费参加线下活动的分享。</span>
+			</div>
+		</div>
+	</body>
+</html>

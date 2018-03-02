@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	<meta charset="utf-8" />
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	
+	<link rel="stylesheet" type="text/css" href="/resource/flower/css/pintuanDetail.css" />
+	<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+	<script src="/resource/flower/js/progress.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="/resource/flower/js/qrcode.js"></script>
+    <script src="/resource/flower/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+
+	<title>闺蜜团！</title>
+	</head>
+	
+	<style type="text/css">
+			#progress-area{
+				width: 80%;
+				background: #ffd4dd;
+				height: 20px;
+				text-align: center;
+			}
+		
+			#progress-bar{
+				height: 20px;
+				background: #fa5478;
+				float: left;
+				
+			}
+			#progress-bar{
+				font-size: 12px;
+				font-family: "微软雅黑";
+				color: #FFFFFF;
+				height: 20px;
+				line-height: 20px;
+			}
+    		
+    		.group_show span{
+    			/* border:1px red solid; */
+    			font-size:12px;
+    			font-family:"微软雅黑";
+    		}
+    	
+    		.tt{
+    			background:#ababab;
+    			padding: 2px 4px;
+    			border-radius:2px;
+    			color:white;
+    			font-weight:300;
+    		/* 	width:2vm;
+    			display:inline-block; */
+    			margin:5px;
+    		}
+    	
+	</style>
+	
+	<body>
+	
+		<!-- 二维码弹出层   -->
+		<#if isshow != 0 >
+		<script type="text/javascript">
+		var image = new Image();
+		var open = layer.open({
+			   type: 1,
+			   skin: "", 
+			   area: ["300px", "320px"],
+			   closeBtn: 1, 
+			   shadeClose: true, 
+			   title:false,
+			   content: 
+				    /* '<div class="shareImg">'
+				   	+' <div id="qrcode" ></div>'
+					+' <img id="imgbj" src="/resource/flower/image/pintuan/csbgimg.jpg" style="display: none;"/>'
+					+' <div id="qrimghide" style="display: none;"></div>' */
+					/* +' <div class="layfoot"><span>长按图片发送给好友  用鲜花传递爱</span></div>'  */
+					/* +' <button onclick="closeOpen()">点击关闭</button> ' */
+					/* + '</div>' */
+					'   <div id="qrimghide" style="display: none;"></div>'
+					+'  <img id="imgbj" src="${BgUrl!}" style="display: none;"/>'
+					+'	<div id="qrcode" ></div>'
+					+'	<div class="layfoot">长按图片发送给好友 一起来拼团吧</div>'
+					
+					+'	<script type="text/javascript">'
+					+'	var imgcode;'
+					+'	$(document).ready(function(){ '
+					+'		var qrcode = new QRCode(document.getElementById("qrimghide"), {'
+					+'			width: 200,'
+					+'		 	height: 200'
+					+'		  });'
+					+'	    var img = qrcode.makeCode("${url!}");'
+					+'	    imgcode=$("#qrimghide img")[0];'
+					+'		}); '
+						
+					+'	function func( ){ '
+					+'	    var c = document.createElement("canvas");'
+					+'	 	var ct = c.getContext("2d");'
+					+'		c.width = 600;'
+					+'		c.height = 600;'
+					+'		ct.rect(0, 0, c.width, c.height);'
+					+'		ct.fillStyle = "transparent"; '
+						 	
+					+'	 	ct.font = "14px Arial white";'
+					+'		ct.textAlign = "center";'
+					+'		ct.fontFamily = "微软雅黑";'
+					+' 		ct.fill();'
+					+'		var bgimg =document.getElementById("imgbj");'
+					+'	 	ct.drawImage(bgimg, 0, 0, 600, 600);'
+						 	
+					+'			setTimeout(() => {'
+					+'			ct.drawImage($("#qrimghide img")[0], 420, 420, 150, 150); '
+					+'			image.src = c.toDataURL("image/png");'
+					+'			image.width = 300;'
+					+'			image.height = 300;'
+					+'			$("#qrcode").html(image);'
+					+'		}, 50);'
+					+'	 } '
+					+'	 window.onload=func;'
+					+'<\/script>  '
+				}) 
+				
+				
+				
+				function closeOpen(){
+					layer.close(open)
+				}
+		        
+		        function openlayer(){
+		        	layer.open({
+		 			   type: 1,
+					   skin: "", 
+					   area: ["300px", "320px"],
+					   closeBtn: 1, 
+					   shadeClose: true, 
+					   title:false,
+					   content: 
+							'   <div id="qrimghide" style="display: none;"></div>'
+							+'  <img id="imgbj" src="${BgUrl!}" style="display: none;"/>'
+							+'	<div id="qrcode" ></div>'
+							+'	<div class="layfoot">长按图片发送给好友一起来拼团吧</div>'
+							+'	<script type="text/javascript">'
+							+'			$("#qrcode").html(image);'
+							+'   <\/script>  '
+						})
+		        }
+					
+				</script>
+		
+		</#if>
+		
+		<div class="" style="align-content: center;">
+			<!-- 完成进度 -->
+			<div class="" style="background: white;margin-bottom: 3px;">
+			<#if needCount != 0 >
+			<img src="/resource/flower/image/pintuan/pin_type2.png" style="width:100%;"/>
+			<#else>
+			<img src="/resource/flower/image/pintuan/pin_type3.png" style="width:100%;"/>
+			</#if>
+			</div>
+			
+			<!-- 商品 -->
+			<div class="group_goods">
+				<div class="group_goods_left" style="margin-left: 5px;">
+					<img class="group_img" src="${pintuan.imgurl!}"  />
+				</div>
+				<div class="group_goods_right">
+					<label class="group_title">${pintuan.name!}</label><br />
+					<label class="group_describe">${pintuan.describe!}</label><br/>
+					
+					<!-- <fieldset  align="center" style="height:20px;">
+						<legend style="font-size:12px">&nbsp;原价&nbsp;</legend>
+						<span style="font-size:12px"><del>￥${pintuan.price!}</del></span> 
+					</fieldset>
+					<fieldset style="border-color: red;height:20px;" align="center" >
+						<legend style="font-size:12px">&nbsp;现价&nbsp;</legend>
+						<span style="font-size:12px">￥${pintuan.price!}</span> 
+					</fieldset> -->
+					
+					<span class="span1" style="width:25%;display:inline-block;">原价</span> <span><del>&yen; ${pintuan.yprice!}/次</del></span><br/>
+					<span class="span1" style="width:25%;display:inline-block;color:#fc5e75">团购价</span> <span style="color:#fc5e75">&yen; ${pintuan.ptPrice!}/次</span>
+					
+				</div>
+			</div>
+	 		
+			<div class="group_show" >
+			
+			<span>
+				<#if needCount != 0 >
+			 	离成团结束还差 <span style="background:#fc5e75;color:white;">&nbsp;${needCount!}&nbsp;</span>人
+			 	<#else>
+			 	已成团
+			 	</#if>
+			</span>
+			<br/>
+			
+			<!-- 已成团就不显示进度条和倒计时 -->
+			<#if needCount != 0 && pintuan.state!=4 >
+			    <div id="progress-area" style="margin:5px auto;">
+				  <div id="progress-bar" style="width: ${cent!};">
+					<span>${cent!}</span>
+				  </div>
+			    </div>
+		   
+			   	<div class="countdown">
+			   	
+			   	<#if diff ?? && diff gt 0>
+			   	
+			   	<span>
+				  
+				    <!-- 
+				    <span id='daya'></span>天
+				    <span id='hoursa'></span>小时
+				    <span id='minua'></span>分
+				    <span id='secoa'></span>秒 -->
+				      剩<span id="time"></span>自动结束
+				 </span>
+				 
+				 
+				 
+				<!-- 倒计时 JS -->
+				<script type="text/javascript">
+					    var a=${diff!};         //以毫秒为单位
+					    function fomtime()
+					    {
+					        a = a-1000;
+					        var msg = MillisecondToDate(a);
+					        document.getElementById('time').innerHTML = msg
+					        setTimeout("fomtime()",1000)
+					    }
+					    
+					    function MillisecondToDate(msd) {
+					        var time = parseFloat(msd) / 1000;
+					        if (null != time && "" != time) {
+					            if (time > 60 && time < 60 * 60) {
+					                time = "<span class='tt'>"+ parseInt(time / 60.0) + "</span>:" + "<span class='tt'>"+  parseInt((parseFloat(time / 60.0) -
+					                    parseInt(time / 60.0)) * 60) + "</span>";
+					            }
+					            else if (time >= 60 * 60) {
+					                time = "<span class='tt'>"+ parseInt(time / 3600.0) + "</span>:" + "<span class='tt'>"+ parseInt((parseFloat(time / 3600.0) -
+					                    parseInt(time / 3600.0)) * 60) + "</span>:" + "<span class='tt'>"+
+					                    parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+					                    parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "</span>";
+					            }
+					            else {
+					                time = "<span class='tt'>"+ parseInt(time) + "</span>";
+					            }
+					        }
+					        return time;
+					    }
+					    
+					    fomtime(); 
+					</script> 
+					
+				 
+				 <#else>
+				 
+				 	<span>该团已超时，拼团结束</span>
+				 
+				 </#if>
+				   
+				</div>
+			</#if>
+				
+				
+				<div>
+				
+			    <#if pro_state=0>	
+				<!-- 只允许新用户 参团-->
+				<#if allownew == 1>
+					<!-- 团未满，不在团内    新用户-->
+					 <#if needCount != 0 && pintuan.state!=4 && isin==false && (diff ?? && diff gt 0) && isbuy=0>
+					    <button class="groupbtn" onclick="newgroup()">开启新团</button>
+					    <button class="groupbtn" onclick="joinGroup()">立即参团</button>
+					 <!-- 团未满，不在团内   老用户-->
+					 <#elseif needCount != 0 && pintuan.state!=4 && isin==false && (diff ?? && diff gt 0) && isbuy!=0>
+					    <button class="groupbtn2" onclick="newgroup()">开启新团</button>
+					    
+					   <!-- 团已满 -->
+					 <!-- 团未满，在团内 -->
+					 <#elseif needCount != 0 && pintuan.state!=4 && isin==true && (diff ?? && diff gt 0)>
+					    <button class="groupbtn2" onclick="newgroup()">开启新团</button>
+					    <button class="groupbtn2" onclick="openlayer()">邀请好友</button>
+					   <!-- 团已满 -->
+					 <#elseif needCount == 0 >
+					    <button class="groupbtn" onclick="newgroup()">开启新团</button>
+					    <button class="groupbtn" onclick="toGrouplist()">去凑团</button>
+					 </#if>
+				
+				<#else>
+					<!-- 团未满，不在团内 -->
+					 <#if needCount != 0 && pintuan.state!=4 && isin==false && (diff ?? && diff gt 0)>
+					    <button class="groupbtn" onclick="newgroup()">开启新团</button>
+					    <button class="groupbtn" onclick="joinGroup()">立即参团</button>
+					 <!-- 团未满，在团内 -->
+					 <#elseif needCount != 0 && pintuan.state!=4 && isin==true && (diff ?? && diff gt 0)>
+					    <button class="groupbtn2" onclick="newgroup()">开启新团</button>
+					    <button class="groupbtn2" onclick="toGrouplist()">去凑团</button>
+					    <button class="groupbtn2" onclick="openlayer()">邀请好友</button>
+					   <!-- 团已满 -->
+					 <#elseif needCount == 0 >
+					    <button class="groupbtn" onclick="newgroup()">开启新团</button>
+					    <button class="groupbtn" onclick="toGrouplist()">去凑团</button>
+					 </#if>
+				 
+				 </#if>
+				
+				 </#if>
+				 
+			    </div>
+		   
+		   	<script type="text/javascript">
+		   		
+		   		function newgroup(){
+		   			window.location.href = '/account/groupIndex/'+ ${id} ; 
+		   		}
+		   		function toGrouplist(){
+		   			$.ajax({
+						url: '/account/isHasTuan',
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success: function(data){
+							if(data==true){
+								window.location.href = '/account/getGrouplist/'+${id} ; 
+							}else{
+								alert("抱歉,没有未成团的团");
+							}
+						}
+					});
+		   			
+		   		}
+		   			
+		   		function joinGroup(){
+		   			var dmlj = '${dmlj!''}';
+		   			  var pageii = layer.open({
+					  type: 1,
+					  offset: 'b',
+					  title:false,
+					  skin:"addclass",
+					  closeBtn : 0,
+					  shadeClose :true,
+					  content: '  <div  style="padding:5px;">'
+								+'	<div id="nn" style="display: flex;border-bottom:1px #ccc solid ;padding-bottom: 5px;">'
+								+'		<div style="width: 20%;" >'
+								+'			<img src="${pintuan.imgurl!}" style="width: 100%"/>'
+								+'		</div>'
+								+'		<div class="pro_2" style="width: 75%;margin-left:3%;">'
+								+'			<span style="font-family: 幼圆;">${pintuan.name!}</span><br />'
+								+'			<span id="price_now" data-price="${pintuan.price!}" style="color: #fa547a;">￥ ${pintuan.price!} </span>'
+								+'		</div>'
+								+'	</div>'
+								+'	<div style="clear: both;">'
+								+'		<span style="height: 46px;line-height:46px;font-size: 14px;font-family: 幼圆;">订阅次数</span><br />'
+								+'		<div class="subscription" style="clear: both;">'
+								+'			<span id="num1" data-id="1" data-index="${ptTime!}">体验${ptTime!}次</span>'
+								/* +'			<span data-id="2" data-index="4">4次</span>'
+								+'			<span data-id="3" data-index="12">12次</span>'
+								+'			<span data-id="4" data-index="24">24次</span>' */
+								+'		</div>'
+								+'		<button onclick="tobuy()" class="nextbtn">下一步</button>'
+								+'	</div>'
+								+'</div>',
+					 
+					}); 
+		   			$("#num1").addClass("giveselect");
+		   			countMoney();//统计金额
+		   			
+		   		//  订阅 次数
+					$('.subscription span').click(function(){
+							$('.giveselect').removeClass('giveselect');
+							$(this).addClass('giveselect');//设置样式 
+							countMoney();//统计金额
+						})
+					
+					
+					//金额统计(通用函数)：每次点击按钮之后都重新统计一遍
+					function countMoney(){
+						
+						$('#yhprice').remove();//把【原价】显示的文字清除掉
+						var yhMoney=0;//优惠金额
+						var sfMoney=0;//实付金额
+						var sum=0;//总价
+						
+						if($('.subscription span').hasClass('giveselect')){
+							sum01=$('#price_now').data('price')*$('.subscription .giveselect').data("index");
+							// alert(sum01)
+							var gindex = $('.subscription .giveselect'). data("index");//当前点击的按钮，订阅次数
+							// alert(gindex)
+							
+							var i;//选择了第几个按钮
+							if(gindex == 1){
+								i = 0;
+							}else if(gindex == 4){
+								i = 1;
+							}else if(gindex == 12){
+								i = 2;
+							}else if(gindex == 24){
+								i = 3;
+							}
+							
+							if(dmlj!=''){
+								yhMoney = dmlj.split('_')[i] * 1;//双品优惠金额
+							}
+						} 
+
+						sum=sum01;//计算总金额
+						sfMoney=sum-yhMoney;//计算  实付金额=总金额-优惠金额
+						
+						$('#price_now').text(sfMoney.toFixed(2));//显示实付金额
+						
+						if(yhMoney > 0){
+							$('.pro_2').append('<span id="yhprice">(原价:&yen;' + sum.toFixed(2) + ')</span>');//显示优惠金额
+					    }
+					}
+		   		}
+		   		
+		   	</script>
+		   
+		</div>
+			
+			<form action="/service/buy" method="get" style="display: none;">
+			<input type="hidden" name="type" value="8">
+			<input type="hidden" name="pid" value="${pintuan.id!}">
+			<input type="hidden" name="cycle">
+			<input type="hidden" name="vase">
+			<input type="hidden" name="add">
+			<input type="hidden" name="ptNo" value="${ptNo!}">
+			<input type="hidden" name="jsAid" value="${jsAid!}">
+			</form>
+			
+			<!-- 提交表单 -->
+			<script type="text/javascript">
+				function tobuy(){
+		            // 订阅次数
+					var cycle = $('.subscription .giveselect').data("index");
+		            
+					if(cycle == null){
+						layer.open({
+						    content: '请选择订阅次数',
+						    skin: 'msg',
+						    time: 2 //2秒后自动关闭
+						});
+						return;
+					}
+						
+					$('input[name="cycle"]').val(cycle);
+		      		$('form').submit();
+			
+				}
+			</script>
+			
+			
+			<div class="group_record" >
+			<label style="color:#ababab;font-family:'幼圆';font-size:14px;padding:3px;border-bottom:1px #eee solid;display:block;">参团记录</label>
+				<#if pinlist?? >
+				<#list pinlist as pin>
+				<div class="group_record_list" >
+					<div style="width:8%;"><img src="${pin.headimg!}" style="width:100%;"/></div>
+					<span>${pin.nick!}<br>${pin.ctime!}</span>
+					<#if pin_index == 0>
+					<img src="/resource/flower/image/pintuan/tuanzhang.png" style="width:26px;height:14.5px"/>
+					</#if>
+				</div>
+				</#list>
+				</#if>
+			</div>
+			
+			
+		</div>
+		
+		
+		
+	</body>
+</html>

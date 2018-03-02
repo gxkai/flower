@@ -1,0 +1,313 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.zhoubian{display: none;}
+			.none{display: none;}
+		</style>
+		<title>订单管理 - 订单信息修改- 订单详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+			    <div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>订单编号：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" readonly="readonly" style="background-color:#E0E0E0"  value="${order.ordercode!}" id="ordercode" name="ordercode" maxlength="17">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>订单状态：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<span class="select-box l wid" style="margin: 1px 2px 10px 1px; width: 90px;" >
+						 <select class="select"  id="state" name="state" size="1"  style="width: 80px" >
+							 <option value="1" <#if order.state==1>selected</#if>>服务中</option>
+							 <option value="2" <#if order.state==2>selected</#if>>待评价</option>
+						 </select>
+					</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>收件人：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text"  value="${order.name!}" id="receiver" name="receiver" maxlength="17">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>收件人电话：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text"  value="${order.tel!}" id="tel" name="tel" maxlength="17">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>区域：</label>
+					<div class="formControls" style="width: 75%;float: right;">
+					        <span class="select-box l wid" style="margin: 1px 2px 10px 15px; width: 330px;">
+						  	<select class="select" id="prov" name="prov" size="1" onchange="searchprovince(this)" style="width: 80px">
+						    	<option value="a" >--选择省--</option>
+						    	<option value="${prov.id}" selected="selected"  >${prov.name}</option>
+						  	</select>
+						  	<select class="select" id="city" name="city" size="1" onchange="searchcity(this)" style="width: 100px">
+						    	<option value="a" >--选择市--</option>
+						    	<option value="${city.id}" selected="selected" >${city.name}</option>
+						  	</select>
+						  	<select class="select" id="county"  name="county" size="1" style="width: 110px">
+						    	<option value="a" >--选择区县--</option>
+						    	<option value="${county.id}" selected="selected">${county.name}</option>
+						  	</select>
+						  	</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>地区：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" class="input-text" id="address" name="address" value="${address!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>祝福语言：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text"  value="${order.zhufu!}" id="zhufu" name="zhufu" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>送达时间：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+					<span class="select-box l wid" style="margin: 1px 2px 10px 1px; width: 120px;" >
+						 <select class="select"  id="reach" name="reach" size="1"  style="width: 110px" >
+				    	       <option value="1" <#if order.reach==1>selected</#if>>周一送</option>
+				    	       <option value="2" <#if order.reach==2>selected</#if>>周六送</option>
+				    	       <option value="3" <#if order.reach==3>selected</#if>>指定日期送</option>
+						 </select>
+					</span>
+					</div>
+				</div>
+				<div class="row cl" >
+				    <#if picodelist?? && picodelist?size gt 0>
+					<label style="margin: 100px 0px 1000px 43px;" ><span class="c-red">*</span>发货批号：</label>
+					<div style="margin: -20px 2000px 140px 0px;" >
+					<#list picodelist as picode>
+					<input type="text" class="input-text"  value="${picode.piCode!}" id="${picode.id!}" name="${picode.id!}" maxlength="17" style="margin: 0px 200px 5px 150px; width: 330px;">
+					</#list>
+					</div>
+					</#if>
+				</div>
+				<div class="row cl" style="margin-top: -120px;" >
+					<span class="c-red" style="margin-left: 150px; ">注:指定日期送请确认时间无误</span>
+						
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+		var areadata = new Array();
+		arealist = ${arealist!};
+		picodelist = ${picodelist_!};
+		orderlist= ${order_!};
+		//变更前f_order,f_picode
+		var picodelist_old = JSON.stringify(picodelist);
+		var orderlist_old = JSON.stringify(orderlist);
+		var provs_data=[],citys_data=[],dists_data=[];
+		var picode_data = [];
+		for (var i = 0; i < picodelist.length; i++) {
+			picode_data.push(picodelist[i].piCode);
+		}
+		var piid_data = [];
+		for (var i = 0; i < picodelist.length; i++) {
+			piid_data.push(picodelist[i].id);
+		}
+		for(var i=0;i<arealist.length;i++){
+			if(arealist[i]['pid'] == 0){
+				// 省级
+				var prov = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString()};
+				provs_data.push(prov);
+			}else{
+				if(arealist[i]['ppid']==0 && arealist[i]['pid']!=0){
+					// 市级
+					var city = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+					citys_data.push(city);
+				}else{
+					// 区县
+					var county = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+					dists_data.push(county);
+				}
+			}
+		}
+		
+		$(document).ready(function(){
+			reach=$("#reach").val();
+			prov = $('#prov').find('option:selected').val();
+			city = $('#city').find('option:selected').val();
+			county = $('#county').find('option:selected').val();
+			if(prov == 'a'){
+				for(var i=0;i<provs_data.length;i++){
+					var prov_name = provs_data[i]['text'];
+					var prov_id = provs_data[i]['value'];
+					$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+				}
+			}else{
+				for(var i=0;i<provs_data.length;i++){
+					var prov_name = provs_data[i]['text'];
+					var prov_id = provs_data[i]['value'];
+					if(prov!=prov_id){
+						$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+					}
+				}
+				for(var j=0;j<citys_data.length;j++){
+					if(prov == citys_data[j]['pid']){
+						var city_name = citys_data[j]['text'];
+						var city_id = citys_data[j]['value'];
+						if(city!=city_id){
+							$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+						}
+					}
+				}
+				for(var z=0;z<dists_data.length;z++){
+					if(city == dists_data[z]['pid']){
+						var dist_name = dists_data[z]['text'];
+						var dist_id = dists_data[z]['value'];
+						if(county!=dist_id){
+							$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+						}
+					}
+				}
+			}
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+			function _save(){
+				//变更后收件人,电话,祝福,订单批号,发货地址
+				state = $.trim($("#state").val());
+				receiver = $.trim($('#receiver').val());
+				tel=$.trim($('#tel').val());
+				zhufu=$("#zhufu").val();
+				ordercode = $.trim($("#ordercode").val());
+				reach = $.trim($("#reach").val());
+				prov = $.trim($("#prov").find("option:selected").text());
+				city = $.trim($("#city").find("option:selected").text());
+				county = $.trim($("#county").find("option:selected").text());
+				address = $("#address").val();
+				addr = prov+"-"+city+"-"+county+"-"+address;
+				var obj = {};
+				var array = [];
+				
+				for (var i = 0; i < piid_data.length; i++) {			
+					var date =$("#"+piid_data[i]).val();
+					if(date != "" && date != null){
+					var year = date.substr(0,4);
+					var month = date.substr(4,2);
+					var day = date.substr(6,2);
+			        var date_= year+"/"+month+"/"+day;
+			        var d = new Date(date_);
+			        var b = d.getDay();
+			        if (reach == 1 && b !==1) {
+			        	layer.tips('请确认输入的日期是周一', "#"+piid_data[i], {tips: [1, '#34495E']});return;
+					}else if (reach == 2 && b !==6) {
+						layer.tips('请确认输入的日期是周六', "#"+piid_data[i], {tips: [1, '#34495E']});return;
+					}
+					}
+					array.push($("#"+piid_data[i]).val());
+					obj[i]=$("#"+piid_data[i]).val();
+					reg = /^[0-9]{8}$/;
+					if(!reg.test(obj[i])){
+						layer.tips('请输入8位发货批号', "#"+piid_data[i], {tips: [1, '#34495E']});return;
+					}
+				}
+				
+				//变更后批号对象
+				var picode_data=JSON.stringify(obj);
+				for(var i=0;i<array.length;i++){
+				var p = Number(array[i]);
+				var q = Number(array[i+1]);
+				if (p>q){
+					layer.tips('批号需顺序输入', "#"+piid_data[i], {tips: [1, '#34495E']});return;
+				return false;
+			    }
+				}
+				//检查订单批号是否有重复
+				var nary = array.sort();
+				for(var i=0;i<array.length;i++){
+					if (nary[i]==nary[i+1]){
+						layer.tips('批号重复', "#"+piid_data[i], {tips: [1, '#34495E']});return;
+					return false;
+				    }
+				}
+				var reg;
+				if($.trim(tel)!=''){
+					reg = /^[0-9]{11}$/;
+					if(!reg.test(tel)){
+						layer.tips('请输入11位手机号', '#tel', {tips: [1, '#34495E']});return;
+					}
+				}
+				var lock = true;	
+				if(lock){
+					lock = false;
+					var load = layer.load();
+					$.post('/manage/iframe/order/saveorderlist', {'state':state, 'receiver':receiver,'tel':tel,'picode_data':picode_data,'zhufu':zhufu,'reach':reach,'ordercode':ordercode,'addr':addr,'orderlist_old':orderlist_old,'picodelist_old':picodelist_old}, function(data){
+						layer.close(load);
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+			function searchprovince(_obj){
+				prov = $(_obj).find('option:selected').val();
+				$('#city').find("option:not(:first)").remove();
+				$('#county').find("option:not(:first)").remove();
+				for(var j=0;j<citys_data.length;j++){
+					if(prov == citys_data[j]['pid']){
+						var city_name = citys_data[j]['text'];
+						var city_id = citys_data[j]['value'];
+						$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+					}
+				}
+				
+			}
+			function searchcity(_obj){
+				city = $(_obj).find('option:selected').val();
+				$('#county').find("option:not(:first)").remove();
+				for(var z=0;z<dists_data.length;z++){
+					if(city == dists_data[z]['pid']){
+						var dist_name = dists_data[z]['text'];
+						var dist_id = dists_data[z]['value'];
+						$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

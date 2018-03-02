@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+    	    /*  $('#hide_div').hide(); */ 
+         }
+        </script>
+		
+		<title>我的红包</title>
+		<style type="text/css">
+			body{
+				background-color: #F5F5F5;
+			}
+			.fri_all{
+				width: 100%;
+    			height: 40px;
+    			line-height: 40px;
+    			background-color: white;
+			}
+			.fri_all a:NTH-CHILD(1){
+				width: 50%;
+				float: left;
+				/* margin-left: 20%; */
+				text-align: center;
+				font-size: 16px;
+				/* color: #f36b93; */
+			}
+			.fri_all a:NTH-CHILD(2){
+				width: 50%;
+				float: left;
+				text-align: center;
+				font-size: 16px;
+			}
+		
+			/* 红包列表 */
+			.weui-cells {
+     			margin: 15px;
+     		    background-color: transparent; 
+     		    font-size:14px;
+			}
+			.weui-cells:after {
+    			border-bottom: 0px solid #d9d9d9;
+			}
+			.weui-cell {
+     			background-color: transparent;
+     			background-image: url('/resource/flower/image/red_cell_gb.png');
+     		    background-size: cover; 
+     			margin-bottom: 10px; 
+     			padding-bottom: 10px;
+     			height: 100%;
+     			font-famliy:"微软雅黑"
+			}
+			.weui-cell__hd{
+				margin:10px;
+				
+			}
+			.weui-cell__hd p{
+			 	margin-left:5px;
+			} 
+			.weui-cell__hd img{
+           	    width: 60px;
+           		margin-right:5px;
+           		display:block;
+      		}
+      		.weui-cell__bd p{
+          		font-size: 10px;
+     		 }
+     		.label_top label{
+     			margin-left:5px;
+     		}
+     		 
+     		/* .exchange {
+     		 	background-color: #f36b93;
+    			color: white;
+    			height: 35px;
+    			text-align: center;
+   	 			line-height: 35px;
+    			margin-top: 15px;
+    			margin-bottom:15px;
+    			font-size: 14px;
+    			padding-left: 5px;
+    			padding-right: 5px; 
+    			float:right;
+    			
+     		 } */
+     		 .details{
+     		 	background: #f76687;
+      			color: white;
+      			border: none;
+      			padding:5px;
+      			float:right;
+     		 }
+     		 
+     		 .sendRedPacket {
+     		 	text-align: center;
+     		 	margin-top: 30px;
+     		 	margin-bottom: 30PX;
+     		 }
+     		 .sendRedPacket span{
+     		 	background-color: #f36b93;
+     		 	color: white;
+     		 	font-weight:bold;
+     		 	padding-left: 100px;
+    			padding-right: 100px;
+    			
+    			padding-top: 12px;
+    			padding-bottom: 12px;
+    			
+    			border-radius: 25px;
+     		 }
+     		 .placeholder {
+     		 	color: #f36b93;
+    			text-align: center;
+    			margin-top: 150px;
+    			margin-bottom: 200px;
+    			font-size: 12px;
+     		 }
+     		 
+     		 .redpacket_goods{
+     		 	width:100%;
+     		 	font-family:"微软雅黑";
+     		 }
+     		 
+     		 .hide_div{
+     		 	display:none;
+     		 }
+		</style>
+
+	</head>
+<body>
+	<div class="container">
+		
+		<div class="fri_all">
+			<a onclick="location.replace('/account/myRedPackets/1')" style="<#if pageno==1>font-weight: bolder;color: #f36b93;border-bottom: 2px solid #f36b93;</#if>">我发的红包</a>
+			<a onclick="location.replace('/account/myRedPackets/2')" style="<#if pageno==2>font-weight: bolder;color: #f36b93;border-bottom: 2px solid #f36b93;</#if>">我收到的红包</a>
+		</div>
+
+		<div class="weui-cells">
+        	<!-- 我发出的红包 -->
+        	<#if pageno==1>
+        	
+        		<#if redPacketList?size gt 0>
+        		
+        			<#list redPacketList as redPacket>
+        			
+            			<a class="weui-cell weui-cell_access" style="background:white">
+            				<div class="redpacket_goods">
+	            				<div class="label_top">
+	            				<label>${redPacket.ctime}</label>
+	            				<hr style="border:none;border-top:1px #ccc solid;">
+	            				</div>
+	            				
+	                			<div class="weui-cell__hd">
+	                			<#if redPacket.type == 1 >
+		                			<img src="/resource/flower/image/icon/guimi.jpg" alt="" style="float:left">
+		                			<p>${redPacket.msg!}</p>
+		                    		<p>送一个人</p>
+	                			<#else>
+		                			<img src="/resource/flower/image/icon/pinshouqi.jpg" alt="" style="float:left">
+		                			<p>${redPacket.msg!}</p>
+		                    		<p>送多个人</p>
+	                			</#if>
+	                			</div>
+                				<button class="details" onclick="window.location.href='/service/seachRedpacketDetails/${redPacket.id!}'">领取详情</button> 
+                			</div>	
+            			</a>
+            			
+            		</#list>
+            	<#else>
+            	
+            		<div class="placeholder">您还没发过红包哦！
+            		</div>
+            		
+            	</#if>
+            <!-- 我收到的红包 -->
+        	<#else>
+	        		 <#if redPacketList?size gt 0>
+	        		 <div id="show_div"> <!-- 显示未兑换的 -->
+	        		 	<#list redPacketList as redPacket>
+	        		 	   <#if  redPacket.isopen == 1>
+		            			<a class="weui-cell weui-cell_access">
+		                			<div class="weui-cell__hd">
+		                			<img src="${redPacket.imgurl!}" alt="">
+		                			</div>
+		                			<div class="weui-cell__bd">
+		                				<p style="font-size: 15px;font-weight: bolder;">${redPacket.name!}</p>
+		                    			<p>来自<span style="color: #f36b93;">${redPacket.nick!}</span>的红包</p>
+		                    			<p>${redPacket.msg!}</p>
+		                    			<!-- <p>有效期至：${redPacket.time!"红包7天自动过期哦"}</p> -->
+		                			</div>
+		                			<#if  redPacket.isopen == 1>
+		                				<span class="details" onclick="location.replace('/service/redPacketExchange/${redPacket.id!}');">立即兑换</span>
+		                			<#elseif redPacket.isopen == 4>
+		                				<span class="details" style="background-color: gray;">已兑换</span>
+		                			</#if>                  
+		            			</a>
+	            			</#if>
+	            			
+	            		</#list>
+	            		</div>
+	            		
+	            		<div id="hide_div" hidden>
+	        		 	<#list redPacketList as redPacket>
+	        		 	   <#if  redPacket.isopen == 4>
+		            			<a class="weui-cell weui-cell_access">
+		                			<div class="weui-cell__hd">
+		                			<img src="${redPacket.imgurl!}" alt="">
+		                			</div>
+		                			<div class="weui-cell__bd">
+		                				<p style="font-size: 15px;font-weight: bolder;">${redPacket.name!}</p>
+		                    			<p>来自<span style="color: #f36b93;">${redPacket.nick!}</span>的红包</p>
+		                    			<p>${redPacket.msg!}</p>
+		                    			
+		                			</div>
+		                
+		                			<#if  redPacket.isopen == 1>
+		                				<span class="details" onclick="location.replace('/service/redPacketExchange/${redPacket.id!}');">立即兑换</span>
+		                			<#elseif redPacket.isopen == 4>
+		                				<span class="details" style="background-color: gray;">已兑换</span>
+		                			</#if>                  
+		            			</a>
+	            			</#if>
+	            			
+	            		</#list>
+	            		</div>
+	            		
+	            		<div style="margin-top:5px">
+	            		<center><span onclick="show_all()" >点击查看所有红包</span></center>
+	            		</div>
+	            		
+	            		<script type="text/javascript">
+				          function show_all(){
+				        	$('#hide_div').show()
+				          }
+				        </script>
+	            		
+	            	
+            	<#else>
+            	
+            		<div class="placeholder">您还没收到红包哦！
+            		</div>
+            		
+            	</#if>
+        	</#if>
+        	
+            
+            <!-- 发红包 -->
+
+             <div class="sendRedPacket" >
+
+                <span onclick="location.replace('/service/sendRedPackets');" class="sendRedPacket_1">发红包</span>
+
+            </div>  
+
+            
+        </div>
+      	
+	</div>
+</body>
+</html>

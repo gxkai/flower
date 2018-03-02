@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>抽奖管理 - 奖池列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>抽奖管理 <span class="c-gray en">&gt;</span>奖池列表				<span style="color: red;">切记:新增奖品请点击添加奖品,而不是编辑其他奖品</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+				<div class="cl pd-5 bg-1 bk-gray">
+				<span class="l"><a href="javascript:;" onclick="add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>添加奖品</a></span>
+				<span class="select-box l ml-10" style="width: 180px">
+					  	<select class="select" size="1"  id="state" onchange="search()">
+					    	<option value="10" <#if state==10>selected</#if>>--选择状态--</option>
+					    	<option value="0" <#if state==0>selected</#if>>暂停</option>
+					    	<option value="1" <#if state==1>selected</#if>>启用</option>
+					  	</select>
+				</span>
+				<span class="select-box l ml-10" style="width: 180px">
+					  	<select class="select" size="1"  id="type" onchange="search()">
+					    	<option value="0" <#if type==0>selected</#if>>--选择类型--</option>
+					    	<option value="1" <#if type==1>selected</#if>>大转盘抽奖</option>
+					    	<option value="2" <#if type==2>selected</#if>>双11抽奖</option>
+					    	<option value="3" <#if type==3>selected</#if>>12星座翻牌</option>
+					    	<option value="4" <#if type==4>selected</#if>>小目标奖品</option>
+					    	<option value="5" <#if type==5>selected</#if>>见证红包</option>
+					  	</select>
+				</span>
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+	
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					   <th width="80">操作</th>
+						<th width="50">Id号</th>
+						<th width="160">奖品名称</th>
+						<th width="80">奖品图片</th>
+						<th width="200">中奖信息</th>
+						<th width="80">库存</th>
+						<th width="100">区间最小</th>
+						<th width="100">区间最大</th>
+						<th width="100">中奖区间</th>
+						<th width="80">奖品来源</th>
+						<th width="80">奖品内容</th>
+						<th width="100">金额</th>
+						<th width="100">所需见证分数</th>
+						<th width="100">类型</th> 
+						<th width="80">状态</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<#if prizeList?? && prizeList?size gt 0>
+					<#list prizeList as li>
+					<tr class="text-c">
+					    <td class="td-manage red">
+							<a title="编辑" onclick="_edit(${li.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+						</td>
+						<td>${li.id!}</td>
+						<td>${li.pName!}</td>
+						<td><img src="${li.pImgurl!}" width="30"/></td>
+						<td>${li.pMsg!}</td>
+						<td>${li.pNum!}</td>
+						<td>${li.pAreaS!}</td>
+						<td>${li.pAreaE!}</td>
+						<td>${li.pArea!}</td>
+						<td>${li.origin!}</td>
+						<td>${li.contentId!}</td>
+						<td>${li.money!0.00}</td>
+						<td>${li.wScore!}</td>
+						<td>${li.type!}</td>
+						<td>${li.state!}</td>
+						
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+		
+		var state='${state!}',type='${type!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/luckDraw/managePrizeList?pageno='+e.curr+'&state='+state+'&type='+type);
+				            
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			
+		 function search(){
+			 state=$('#state').find('option:selected').val();
+			 type=$('#type').find('option:selected').val();
+			 location.replace('/manage/iframe/luckDraw/managePrizeList?pageno=1'+'&state='+state+'&type='+type);
+		 }
+			 
+		 function add(){
+			 parent.open_window('添加奖品','/luckDraw/prizeDetail', 500, 400);
+		 }
+		 
+		 function _edit(id){
+				parent.open_window('编辑奖品','/luckDraw/prizeDetail/'+id, 500, 400);
+			}
+		 
+			
+		</script> 
+	</body>
+</html>

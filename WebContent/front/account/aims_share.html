@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+		
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+		<script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
+		
+		<!-- <script type="text/javascript" src="/resource/flower/js/qrcode.js"></script> -->
+		
+		
+		<title>分享</title>
+		<style type="text/css">
+			body{
+				padding: 0;	
+				margin: 0;
+				height: 100%;
+				background: url(http://ozdzt401n.bkt.clouddn.com/aims_comment_universal_bg.png)  no-repeat center center fixed;
+			    -webkit-background-size: cover;
+			  	-moz-background-size: cover;
+			  	-o-background-size: cover;
+			  	background-size: cover;
+			}
+			.share_content{
+				text-align: center;
+			}
+			.share_content img{
+				width: 60%;
+				margin-top: 5%;
+			}
+			.aim_txt{
+				font-family: "微软雅黑";
+				font-size: 1.2em;
+				color: #911e32;
+				font-weight: 600;
+			}
+			#imgOne{
+			width:100%;
+			}
+			
+			/*当屏幕尺寸小于350px时，应用下面的CSS样式*/
+			@media screen and (max-width: 350px) { 
+				.weui-dialog__hd{
+				   display:none;
+				}
+				.weui-dialog__bd{
+					padding:0 !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div class="share_content">
+		
+			<img src="http://ozdzt401n.bkt.clouddn.com/aim_share_title.png"/>
+			<img src="http://ozdzt401n.bkt.clouddn.com/aim_share_2018.png"/><br />
+			<span class="aim_txt">${contentStr!}</span><br />
+			<!-- <img style="width: 30%;" src="http://ozdzt401n.bkt.clouddn.com/aim_share_q.png"/>-->
+			<!--二维码图片暂时隐藏-->
+			<img id="show_qrcode" style="width: 30%;margin-top: 20px;"/><br />
+			<!--二维码图片-->
+			<div id="qrimghide" style="display: none;"></div>
+			<!-- 背景图片 -->
+			<img id="imgbj" src="/resource/flower/image/aims_share_bgimg_1.jpg" hidden="hidden"/>
+			<!-- <div id="qrcode" ></div>  -->
+			<img src="http://ozdzt401n.bkt.clouddn.com/aim_share_tip.png" style="width: 30%;margin-top: 0;"/>
+			<br />
+			<img src="http://ozdzt401n.bkt.clouddn.com/yaoqingjianzheng.png" onclick="show_dialog1()" style="width: 50%"/>
+		</div>
+		<script type="text/javascript">
+			var url = '${url!"http://flowermm.com.cn/"}'
+			
+			var image = new Image();
+			var imgcode;
+			$(document).ready(function(){ 
+					var qrcode = $('#qrimghide').qrcode(url);   
+					imgcode=qrcode.find('canvas').get(0);
+					var canvas=qrcode.find('canvas').get(0); 
+					 $('#show_qrcode').attr('src',canvas.toDataURL('image/jpg')) 
+			}); 
+			var who = '${nick!}' + "的新年小目标"
+			var contentStr = '${contentStr!}'
+			function func(){ 
+				var c = document.createElement("canvas");
+				var ct = c.getContext("2d");
+				c.width = 512;
+				c.height = 683;
+				ct.rect(0, 0, c.width, c.height);
+				
+				var bgimg =document.getElementById("imgbj");
+				ct.drawImage(bgimg, 0, 0, 512, 683);
+				ct.drawImage(imgcode, 120, 500, 130, 130); 
+				
+				ct.font="40px Arial";
+				ct.textAlign = "center";
+				ct.fontFamily = "微软雅黑";
+				ct.fillText(who,256,170);
+				
+				ct.font="20px Arial";
+				ct.textAlign = "left";
+				ct.fontFamily = "微软雅黑";
+				ct.fillText("长按识别二维码",260,520);
+				
+				ct.font="20px Arial";
+				ct.textAlign = "left";
+				ct.fontFamily = "微软雅黑";
+				ct.fillText("为Ta的目标的小目标做见证",260,570);
+				
+				ct.font="20px Arial";
+				ct.textAlign = "left";
+				ct.fontFamily = "微软雅黑";
+				ct.fillText("神秘惊喜等你来领",260,620);
+				
+				ct.font="25px Arial";
+				ct.fillStyle = '#911e32';
+				ct.textAlign = "center";
+				ct.fontFamily = "微软雅黑";
+				ct.fillText(contentStr.replace("</br>"," "),256,230);
+				
+				setTimeout(() => {
+					image.src = c.toDataURL("image/png");
+					image.width = 256;
+					image.height = 341.5;
+					$("#share_img").html(image);
+				}, 50);
+			} 
+			window.onload=func;
+			
+			function show_dialog1(){
+				$('#dialog1').show()
+			}
+		</script>
+		<div id="dialog1" style="display: none;">
+	    <div class="weui-mask"></div>
+	    <div class="weui-dialog">
+	        <div class="weui-dialog__hd"><strong class="weui-dialog__title">长按图片分享至朋友圈</strong></div>
+	        <div class="weui-dialog__bd"><div id="share_img"></div></div>
+	        <div class="weui-dialog__ft">
+	            <a onclick="$('#dialog1').hide()" class="weui-dialog__btn weui-dialog__btn_default">关闭</a>
+	        </div>
+	    </div>
+		</div>
+	</body>
+</html>

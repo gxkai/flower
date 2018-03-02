@@ -1,0 +1,24 @@
+#测试数据库配置
+  jdbcUrl = jdbc:mysql://121.43.190.13:3306/homedb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+# jdbcUrl = jdbc:mysql://121.43.190.13:3306/homedb2?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+# 外网地址
+# jdbcUrl = jdbc:mysql://rm-k1hrtji3q71wivt01o.mysql.rds.aliyuncs.com:3306/homedb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+
+  user = user001
+  password = Mdm55253780
+#	user = user001
+#	password = Gz1234567899!
+
+host = http://hmm.d2dcloud.cn
+# host = https://hmm.flowermm.cn
+imgpath = D:/upload/flower/image/
+
+token = weixin
+encryptMessage = false
+
+#门对门果园测试服务号的配置
+appId = wx2e3ba08228a63904
+appSecret = 083f7c0ef5a88b6f6b38c23ef554baa4
+encodingAesKey = lA4rWoCyiuLhV40BwDB3V6Wjoez0CUpag0ofWdElEFs
+mchId = 1244237602
+key = 42e77b63637ab381e8be5f8318cc28ax

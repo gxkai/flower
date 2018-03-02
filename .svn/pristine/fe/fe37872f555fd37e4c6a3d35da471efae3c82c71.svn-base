@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/swiper/css/swiper.min.css" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+			
+		<style type="text/css">
+		.weui-grid:before {
+			border-right: 0px solid #d9d9d9; 
+		}
+		.weui-grid:after {
+     		border-bottom: 0px solid #d9d9d9; 
+		}
+		.cell_wz_2 {
+			display: none;
+		}
+		/* .cell_footer_2 img{
+			width: 80px;
+		} */
+		
+		.cell_footer{
+			width: 100%;
+			text-align: center;
+			padding-top: 24px;
+			display: table;
+			font-weight:300;
+			margin-bottom:5px;
+		}
+		.cell_footer span{
+			font-size: 12px;
+		}
+		.cell_footer_2 img{
+			width: 50px;
+		}
+		
+		</style>
+		
+		
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+  <script type='text/javascript' src='https://assets.growingio.com/sdk/wx/vds-wx-plugin.js'></script>
+       
+       
+		<script type="text/javascript">
+		$().ready(function(){
+			var swiper = new Swiper('.swiper-container', {
+		        pagination: '.swiper-pagination',
+		        paginationClickable: true,
+		        spaceBetween: 10,
+		        speed: 2000,
+		        autoplayDisableOnInteraction : false,
+			    autoplay: 3000
+		    });
+			});
+		</script>
+		
+		<title>花美美</title>
+		
+		
+		
+	<style type="text/css">
+    .bg{
+		position:absolute;
+		background-color:hsla(0,0%,0%,0.6); /*将背景设置为不透明度为0.5的黑色*/
+		top:0;
+		left:0;
+	     }
+	.box{ /*盒模型，可以认为是一个容器，其有内容、边框、填充等属性*/
+		position:absolute;
+		/* background-color:Red; */
+		top:130px;
+		left:150px;
+		z-index:99; /*元素的堆叠指数，数值越高，越位于上方，仅能在position:absolute在起效果*/
+		
+		/* border-radius:4px; /*用于定义模型的圆角边框*/
+		/* padding:5px;
+		background-color:#fff;
+		line-height:20px;
+		font-size:12px;
+		color:#666;
+		font-weight:bold; */ 
+	   }
+	.box a{
+		display:block;
+		position:absolute;
+		z-index:100;
+		top:-11px;
+		left:240px;
+		border-radius:13px;
+		border:2px solid #e4e4e4;
+		background-color:#bbb;
+		line-height:18px;
+		width:18px;
+		text-align:center;
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:14px;
+		color:#FFF;
+		text-decoration:none;
+	}
+	.box img{
+		width:250px;
+		height:320px;
+		
+	}
+	
+	
+	
+	body{
+		margin: 0 auto;
+		padding: 0;
+		max-width: 763px;
+	}
+	.good_title{
+		text-align: center;
+		font-family: "微软雅黑";
+		padding-top: 0.5em;
+		padding-bottom: 0.5em;
+	}
+	.good_title span{
+		display: block;
+	}
+	
+	.good_title_1 span{
+		display: block;
+		text-align: center;
+	}
+	.good_title .g_title{
+		font-size: 1.2em;
+		letter-spacing:3px;
+	}
+	.good_title .g_info{
+		font-size: 0.8em;
+		letter-spacing:5px
+	}
+	.good_price{
+		text-align: center;
+		font-family: "微软雅黑";
+		margin-top:0.2em;
+	}
+	.good_price span{
+		display: block;
+	}
+	.good_price .g_price{
+		font-size: 0.8em;
+		letter-spacing:2px
+	}
+	
+	.good_div .good_title_1{
+		width: 90%;
+		margin: 0 auto;
+		border-bottom: 0.1px #eee solid;
+	}
+	.good_title_1 .g_title{
+		font-size: 1.2em;
+		letter-spacing:3px;
+	}
+	.good_title_1 .g_info{
+		font-size: 0.8em;
+		letter-spacing:2px
+	}
+	
+	.good_show {
+		width: 95%;
+		margin: 0 auto;
+		
+		display: flex;
+		flex-flow: row wrap;
+  		align-content: flex-start;
+	}
+	.good_ss{
+		box-sizing: border-box;
+		flex: 0 0 44%;
+		/*border: 1px solid red;*/
+		margin:0 0.5em;
+	}
+	.good_ss span{
+		display: block;
+		text-align: center;
+		font-family: "微软雅黑";
+	}
+	.good_ss .g_title{
+		font-size: 0.6em;
+	}
+	.good_ss .g_info{
+		font-size: 0.4em;
+	}
+	
+	
+	.weui-grid{
+		width: 25%;
+	}
+	
+</style>
+    
+    <script type="text/javascript">
+    var isfans='${isfans!}';
+    window.onload = function (){
+    	if(isfans==3 || isfans==1){
+    		var scrollTop = $("body").scrollTop();
+        	$("body").css({
+        	    'overflow':'hidden',
+        	    'position': 'fixed',
+        	    'top': scrollTop*-1
+        	});
+
+            var w = window.innerWidth; //窗口文档显示区的宽度
+            var h = window.innerHeight;
+            
+            var bgdiv = document.createElement("div");
+            bgdiv.style.width = document.body.scrollWidth + "px";
+            bgdiv.style.height =document.body.scrollHeight + "px";
+            bgdiv.className = "bg";
+            bgdiv.id = "bg";
+            document.body.appendChild(bgdiv);
+
+            //创建图片预览层
+            var box = document.createElement("div");
+            box.id = "floatbox";
+            box.className = "box";
+            box.innerHTML = "<a href='javascript:closebox()'>&times</a>";
+            box.innerHTML += "<img src='/resource/flower/image/indexwindow.jpg'/>";
+            //图片预览居中
+            box.style.left = (w - 250) / 2 + "px";
+            box.style.top = (h - 320) / 2 + "px";
+            document.body.appendChild(box);
+    	}
+    	
+    }
+    //关闭图片预览
+    function closebox() {
+    	/*取消后设置回来*/
+    	$("body").css({
+    	    'overflow':'auto',
+    	    'position': 'static',
+    	    'top': 'auto'
+    	});     
+    	var bg = document.getElementById("bg");
+        bg.parentNode.removeChild(bg);
+        var box = document.getElementById("floatbox");
+        box.parentNode.removeChild(box);
+    }
+</script>
+		
+	</head>
+	<body>
+	
+		<div class="swiper-container">
+	        <div class="swiper-wrapper">
+	         <#if rotation ??>
+	         <#list rotation as rot >
+	        	<img class="swiper-slide" src="${rot.imgurl!}" id="flo_${rot.id}" data-url ="${rot.goods_url}"/></a>
+				<!-- <img class="swiper-slide" src="${rotation.imgurl1!}" id="flo_2"/>
+				<img class="swiper-slide" src="${rotation.imgurl2!}" id="flo_3"/> -->
+			</#list>
+			</#if>
+	        </div>
+	        <div class="swiper-pagination"></div>
+	    </div>
+
+		 <!-- 轮换图链接 -->
+		<script type="text/javascript">
+			$(function(){
+				$('[id^="flo_"]').click(function(){
+					/* window.open($(this).data("url")) */
+					window.location.href=$(this).data("url")
+				})
+			})
+		
+		</script>
+
+		<div class="container">
+		    <!-- Head -->
+<!-- 		    <div style="height: 10px; background: #EEE;"></div>
+ -->			<!-- <div class="cell_1">
+				<img src="/resource/flower/image/upload/001.png" />
+			</div> -->
+			 
+			<div class="weui-grids">   
+			
+				 <a href="/product/201" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_dz.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">定制花</p>
+				</a> 	
+				
+				
+				<a href="/all_dy" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_dingyue.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">订阅</p>
+				</a>	
+				
+				<!-- 单双交替 -->
+				<a href="/product/203" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_dsjt.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">小别</p>
+				</a>
+				
+				<a href="/product/3" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_lp.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">礼品花</p>
+				</a> 
+				
+				<a href="/szProduct" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_shanAndzhu.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">闪购/主题</p>
+				</a>	
+				
+				<a href="/product/11" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_meigui.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">玫瑰套餐</p>
+				</a>
+				
+				<a href="/account/invitefri" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_daiyan.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">赚花籽</p>
+				</a> 
+				
+				<!-- <a href="/account/redpackageAndRedcard" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_huali.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">花礼</p>
+				</a> -->
+				
+				<a href="/around" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_hbhw.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">花边好物</p>
+				</a> 
+				
+				<!-- <a href="/" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_pingtuan.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">拼团</p>
+				</a>  -->
+				
+				<!-- <a href="/account/center" class="weui-grid">
+            		<div class="weui-grid__icon">
+                		<img src="/resource/flower/image/upload/icon_hyzx.png" alt="">
+            		</div>
+            		<p class="weui-grid__label">会员中心</p>
+				</a> 
+				 -->
+				
+    		</div>
+			
+			<div style="height: 10px; background: #EEE;"></div>
+		<!-- 	
+			<#if goodslist??>
+			<#list goodslist as goods>
+			<div class="cell_wz">
+				<span class="cell_wz_1"> — —  ◇  ${goods.name!}  ◇  —  — </span>
+				<span class="cell_wz_2">Flowers of gift</span>
+			</div>
+			<div class="cell_2">
+				<img src="${goods.imgurl!}" />
+				<div class="cell_2_1">
+					<span class="price">&yen;${goods.price?string('0.00')}</span>
+					<span class="desc">${goods.goods_describe!"商品描述"}</span>
+				</div>
+				<div class="cell_2_2">
+					<a href="${goods.goods_url!}">去购买</a>
+				</div>
+			</div>
+			</#list>
+			</#if>
+	 -->
+			<div  style="margin-top:1em">
+				<!-- 主页商品表维护 -->
+				<#if goodslist?? && (goodslist?size > 0) >
+					<#list goodslist as goods>
+						<div class="good_div">
+							<div class="good_title">
+								<span class="g_title">${goods.name!}</span>
+								<span style="font-weight: 600;">——</span>
+								<span class="g_info">${goods.goods_describe!"商品描述"}</span>
+							</div>
+							<div class="good_price">
+								<span class="g_price">${goods.price?string('0.00')} 元起</span>
+								<span style="font-size: 1px;">▼</span>
+							</div>
+							
+							<img src="${goods.imgurl!}" style="width:100%;margin-top: 0.8em;" onclick="window.location.href='${goods.goods_url}';"/>
+						</div>
+					</#list>
+	 			<#else>
+				</#if>
+			</div>
+			
+			
+			<!--闪购/主题-->
+			<div class="good_div" style="margin-top:1em">
+				<div class="good_title_1">
+					<span class="g_title">闪购/主题</span>
+					<span style="font-weight: 600;">——</span>
+					<span class="g_info">限时新品</span>
+					<span style="font-size: 1px;">▽</span>
+				</div>
+				
+				<div class="good_show">
+					
+					<#if shanlist?? && (shanlist?size > 0) >
+					<#list shanlist as shan>
+							<div class="good_ss">
+								<img src="${shan.imgurl!}" style="width:100%;margin-top: 1em;" onclick="window.location.href='/festivalProduct/104';"/>
+								<span class="g_title">${shan.name!}</span>
+								<span style="">—</span>
+								<span class="g_info">&yen; ${shan.price!}元</span>
+							</div>
+						</#list>
+		 			<#else>
+					</#if>
+					
+					<#if zhulist?? && (zhulist?size > 0) >
+					<#list zhulist as zhu>
+							<div class="good_ss">
+								<img src="${zhu.imgurl!}" style="width:100%;margin-top: 1em;" onclick="window.location.href='/festivalProduct/105';"/>
+								<span class="g_title">${zhu.name!}</span>
+								<span style="">—</span>
+								<span class="g_info">&yen; ${zhu.price!}元</span>
+							</div>
+						</#list>
+		 			<#else>
+					</#if>
+					
+				</div>
+			</div>
+	
+	
+		<!--花边好物-->
+		<div class="good_div"  style="margin-top:1em">
+			<div class="good_title_1">
+				<span class="g_title">花边好物</span>
+				<span style="font-weight: 600;">——</span>
+				<span class="g_info">限时新品</span>
+				<span style="font-size: 1px;">▼</span>
+			</div>
+			
+			<div class="good_show">
+				<#if huabianlist?? && (huabianlist?size > 0) >
+					<#list huabianlist as hua>
+						<div class="good_ss">
+							<img src="${hua.imgurl!}" style="width:100%;margin-top: 1em;" onclick="window.location.href='/aroundinfo/${hua.id}';"/>
+							<span class="g_title">${hua.name!}</span>
+							<span style="">—</span>
+							<!-- <span class="g_info">&yen;39.9元</span> -->
+						</div>
+					</#list>
+	 			<#else>
+				</#if>
+			</div>
+			
+		</div>
+			
+		<!-- 页脚 -->
+		<div class="cell_footer">
+			<span onclick="location.replace(location.href);">首页 </span>|
+			<span onclick="location.replace('/account/center')">会员中心 </span>|
+			<span onclick="location.replace('/question')">常见问题</span>
+			<!-- <div class="cell_footer_2">
+				<img src="/resource/flower/image/logo.png">		
+			</div> -->
+			<!-- <span>—  用鲜花传递爱  —</span> -->
+		</div>
+		</div>
+	</body>
+</html>

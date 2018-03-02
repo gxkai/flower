@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.logistics.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer_mobile/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<script type="text/javascript">
+          window.onload = function (){
+        	  $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<title>我的物流</title>
+	</head>
+	<body style="background-color: #EEE;">
+		<div class="container">
+			<#if orderlist?? && (orderlist?size > 0)>
+			<#list orderlist as order>
+			<div class="logistics">
+				<div class="ls_1">
+					<span><i>物流编号:</i><i2 class="workcode">${order.workCode}<i2></span>
+					<span><#if order.orderstatuscode=="46">已签收<#else>配送中</#if></span>
+				</div>
+				<div class="ls_2">
+					<div class="ls_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="ls_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							<span><#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else>不购买</#if>;&nbsp;
+							<#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else>不购买</#if>;&nbsp;
+							</#if>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</span>
+						</p>
+					</div>
+				</div>
+				<div class="ls_3">
+					<span onclick="Ship_comfirm('${order.workCode}')">确认收货</span>
+					<span onclick="open_query_mylogistics('${order.workCode}')">查看物流</span>
+				</div>
+			</div>
+			</#list>
+			<#else>
+              <span style="position: absolute;width: 100%;text-align: center;padding-top: 60px;">您当前没有物流信息</span>
+			</#if>
+			<!-- 查看物流 -->
+			<div class="query_logistics"></div>
+		</div>
+	</body>
+</html>

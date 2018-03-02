@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.account.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/flower/js/jquery.raty.js"></script> 
+		<title>发表评价</title>
+	</head>
+	<body>
+		<div class="container" style="padding: 0">
+			 <div class="evaluate">
+			 	<p>订单编号:</p>
+			 	<p>${order.ordercode}(NO.${order.ofcycle})</p>
+			 </div>
+			 <div class="pingfen">
+		 	    <div class="clearfix">
+			    	<span class="f-l f-18 va-m">订单评星：</span>
+			    	<div id="star-1" class="star-bar size-M f-l va-m" style="padding: 4px 0;"></div>
+			    </div>
+			 </div>
+			 <div class="evaluate_x">
+				 <img src="${order.imgurl}" width="80">
+				 <textarea id="eva" placeholder="亲! 提出你宝贵的评价哦~"></textarea>
+			     <input name="ordercode" type="hidden" value="${order.ordercode}"/>
+<!-- 			     <input name="msg" type="hidden" value="${order.state}"/>
+ -->			     <input name="lognumber" type="hidden" value="${order.lognumber}"/>
+			 </div>
+			 <div class="evaluate_y">
+				 <span class="tj" onclick="evaluate_tj(this)" data-lock="0">提交评价</span>
+			</div>
+			
+			<div>
+				<img src="/image/pingjia_down.jpg" style="width:100%"/>
+			</div>
+			
+		</div>
+		<script type="text/javascript">
+			    $(function(){
+			    	$("#star-1").raty({
+			    		hints: ['1','2', '3', '4', '5'],//自定义分数
+			    		starOff: 'send_b.png',//默认灰色星星
+			    		starOn: 'send_c.png',//黄色星星
+			    		path: '/resource/flower/image/',//可以是相对路径
+			    		number: 5,//星星数量，要和hints数组对应
+			    		showHalf: true,
+			    		targetKeep : true,
+			    		click: function (score, evt) {//点击事件
+			    			$("#star-1").val(score);
+			    		}
+			    	});
+			    });
+			    function evaluate_tj(_obj){ 
+			    	var ordercode = $('input[name="ordercode"]').val();
+					var msg = $('input[name="msg"]').val();
+			    	var star = $("#star-1").val();
+					var eva = $("#eva").val();
+					var lognumber = $('input[name="lognumber"]').val();	
+			/* 		if($.trim(msg) == 3){
+						layer.msg('此订单已评论', {time:1000});
+					}else{  */
+						if($.trim(star) == ''){
+							layer.tips('请打星', '#star-1', {tips: [1, '#34495E']});return;
+						}else if($.trim(star)=='null' || $.trim(star)=='NULL'){
+							layer.tips('请打星', '#star-1', {tips: [1, '#34495E']});return;
+						}
+						if($.trim(eva) == ''){
+							layer.tips('请至少写一句评论', '#eva', {tips: [1, '#34495E']});return;
+						}else if($.trim(eva)=='null' || $.trim(eva)=='NULL'){
+							layer.tips('请至少写一句评论', '#eva', {tips: [1, '#34495E']});return;
+						};
+						$(_obj).data('lock', 1);
+						var load = layer.load();
+						$.post('/service/saveEvaluate', {'star':star,'eva':eva,'ordercode':ordercode,'lognumber':lognumber}, function(data){
+							layer.close(load);
+							$(_obj).data('lock', 0);
+							if(data){
+								layer.msg('成功评价，送上2颗花籽', {time:2000});
+								parent.location.replace("/service/myorder/1-2");
+							}else{
+								layer.msg('此单已评论');
+							}
+						});
+					}
+			   /*  } */
+		</script>
+	</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>会员管理 - 会员列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <span class="c-gray en">&gt;</span> 会员列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+			<span class="select-box l" style="width: 140px">
+			  	<select class="select" size="1" onchange="searchstate(this)">
+			    	<option value="9" <#if state==9>selected</#if>>--选择用户状态--</option>
+			    	<option value="0" <#if state==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;正常</option>
+			    	<option value="1" <#if state==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;冻结</option>
+			  	</select>
+			</span>
+			<span class="select-box l ml-10" style="width: 140px">
+			  	<select class="select" size="1" onchange="searchisbuy(this)">
+			    	<option value="9" <#if isbuy==9>selected</#if>>--选择用户类型--</option>
+			    	<option value="0" <#if isbuy==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无单用户</option>
+			    	<option value="1" <#if isbuy==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首单用户</option>
+			    	<option value="2" <#if isbuy==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多单用户</option>
+			  	</select>
+			</span>
+			<span class="select-box l ml-10" style="width: 140px">
+			  	<select class="select" size="1" onchange="searchisgive(this)">
+			    	<option value="9" <#if isgive==9>selected</#if>>--选择是否赠送--</option>
+			    	<option value="0" <#if isgive==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;未赠送</option>
+			    	<option value="1" <#if isgive==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已赠送</option>
+			  	</select>
+			</span>
+			<span class="select-box l ml-10" style="width: 140px">
+			  	<select class="select" size="1" onchange="searchgroup(this)">
+			    	<option value="9999" selected>--选择分组--</option>
+			    	<#if glist?size gt 0>
+			    	<#list glist as gson>
+				    	<option value="${gson.id}" <#if gid==gson.id>selected</#if>>${gson.name}</option>
+			    	</#list>
+			    	</#if>
+			  	</select>
+			</span>
+			<span class="select-box l ml-10" style="width: 140px">
+			  	<select class="select" size="1" onchange="searchisfans(this)">
+			    	<option value="10" <#if isfans==0>selected</#if>>--选择关注情况--</option>
+			    	<option value="0" <#if isfans==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已关注</option>
+			    	<option value="1" <#if isfans==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取消关注</option>
+			  	</select>
+			</span>
+			<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow}</strong> 条</span> 
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray">
+			<span class="l" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入电话查询" value="${code!}" id="code" maxlength="11">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入会员ID查询" value="${aid!}" id="aid" maxlength="11">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入会员昵称查询" value="${nick!}" id="nick" maxlength="11">
+			</span>
+			<input class="l btn btn-primary ml-10" type="submit" value="查找" onclick="searchnumber()">	
+			<span class="l ml-10">
+				<input type="text" placeholder="开始时间" value="${time_a!}" class="input-text Wdate" id="datemin" name="time_a" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'datemax\')||\'{%y}-%M-%d\'}'})">
+			</span>
+			<span class="l ml-10">
+				<input type="text" placeholder="结束时间" value="${time_b!}" class="input-text Wdate" id="datemax" name="time_b" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'#F{\'{%y}-%M-%d\'}' })">
+			</span>
+			<input class="btn btn-primary ml-10 f-l" type="submit" value="导出" onclick="_export()">
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray">
+			  <span class="ml-10 f-l" style="font: 14px/30px 'Microsoft Yahei'; font-weight: bolder;">单点推送花票:</span>
+			  <span class="select-box l ml-10" style="width: 160px">
+			  	<select class="select" size="1" name="caname" onchange="pushcash(this)">
+			    	<#if cashlist?size gt 0>
+			    	<#list cashlist as cash>
+				    	<option value="${cash.id}" <#if cashid==cash.id>selected</#if>>${cash.name}</option>
+			    	</#list>
+			    	</#if>
+			  	</select>
+			  </span>	
+			  <span class="ml-10 f-l" style="font: 14px/30px 'Microsoft Yahei'; font-weight: bolder;">单点补发花籽:</span>
+			  <span class="l ml-10"><input type="number" min="1" max="15" onkeypress="return (/[1-15]/.test(String.fromCharCode(event.keyCode)))" class="input-text" id="vSeedsCount" name="seedscount" ></span>
+			  <span class="l ml-10"><input type="text" class="input-text" placeholder="输入补发花籽的原因" value="" id="remarks" maxlength="200"></span>
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					    <th width="60">送花籽</th>
+						<th width="60">序列</th>
+						<th width="60">会员ID</th>
+						<th width="100">会员分组</th>
+						<th width="100">钱包总额</th>
+						<th width="80">提现记录</th>
+						<th width="80">头像</th>
+						<th width="100">会员昵称</th>
+						<th width="100">电话</th>
+						<th width="100">带颜人昵称</th>						
+						<th width="100">带颜人ID</th>
+						<th width="100">带颜人电话</th>
+						<th width="100">用户类型</th>
+						<th width="60">赠送</th>
+						<th width="80">用户状态</th>
+						<th width="80">是否关注</th>
+						<th width="120">创建日期</th>
+						<th width="80">等级</th>
+						<th width="120">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if accountlist?? && accountlist?size gt 0>
+					<#list accountlist as account>
+					<tr class="text-c">
+					    <td><a title="客服送花籽" onclick="_giveSeeds(${account.id})" style="text-decoration:none" class="f-16 ml-10 f-l"><i class="Hui-iconfont">&#xe603;</i></a></td>
+						<td>${account_index+1}</td>
+						<td>${account.id}</td>
+						<td>${account.groupname!'未分组'}</td>
+						<td>${account.wallet!}</td>
+						<td class="td-manage red">
+							<a title="提现记录" onclick="_withdrawCash(${account.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe665;</i></a>
+						</td>
+						<td><img src="${account.headimg!}" width="30"/></td>
+						<td>${account.nick!}</td>
+						<td>${account.tel!}</td>
+						<td>${account.tjnick!}</td>
+						<td>${account.tjid!}</td>
+						<td>${account.tjtel!}</td>
+						<td><#if account.isbuy==0>无单用户<#elseif account.isbuy==1>首单用户<#else>多单用户</#if></td>
+						<td><#if account.isgive==0><span class="c-orange">未赠送</span><#else><span class="c-red">已赠送</span></#if></td>
+						<td><#if account.state==0><span class="c-success">正常</span><#else><span class="c-warning">冻结</span></#if></td>
+						<td><#if account.isfans==0><span class="c-green">已关注</span><#else><span class="c-red">取消关注</span></#if></td>
+						<td>${account.ctime}</td>
+						<td>${account.grade}</td>
+						<td class="td-manage">
+							<#if account.state==0>
+							<a title="冻结" onclick="_freeze(${account.id}, 1)" style="text-decoration:none" class="f-16 mr-10 f-l"><i class="Hui-iconfont">&#xe631;</i></a>
+							<#else>
+							<a title="启用" onclick="_freeze(${account.id}, 0)" style="text-decoration:none" class="f-16 mr-10 f-l"><i class="Hui-iconfont">&#xe6e1;</i></a>
+							</#if>
+							<#if account.isgive==0>
+							<a title="赠送" onclick="_give(${account.id})" style="text-decoration:none" class="f-16 f-l"><i class="Hui-iconfont">&#xe608;</i></a>
+							<#else>
+							<a title="赠送" style="text-decoration:none" class="f-16 f-l"><i class="Hui-iconfont">&#xe601;</i></a>
+							</#if>
+							<a title="分组" onclick="_group(${account.id},${account.gid})" style="text-decoration:none" class="f-16 ml-10 f-l"><i class="Hui-iconfont">&#xe61d;</i></a>
+							<a title="送花票" onclick="_giveflo(${account.id})" style="text-decoration:none" class="f-16 ml-10 f-l"><i class="Hui-iconfont">&#xe603;</i></a>
+							<a title="代颜详情" onclick="_see(${account.id})" style="text-decoration:none" class="f-16 ml-10 f-l"><i class="Hui-iconfont">&#xe667;</i></a>	
+						</td>
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="12" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+		<script type="text/javascript">
+			var state='${state!}',isbuy='${isbuy!}',isgive='${isgive!}',code='${code!}',groupid='${gid!}',time_a='${time_a!}',time_b='${time_b!}',aid='${aid!}',nick='${nick!}',isfans='&{isfans!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/member/account?pageno='+e.curr+'&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _freeze(id, state){
+				var msgStr = state==0?'确定启用此用户？':'确定冻结此用户？';
+				parent.actconfirm(msgStr, function(){
+					$.post('/manage/iframe/member/freezeAccount/'+id+'-'+state, function(data){
+						if(data){
+							layer.msg('操作成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('操作失败', {time: 1000});
+						}
+					});
+				});
+			}
+			function _give(id){
+				parent.actconfirm('确定设为已赠送？', function(){
+					$.post('/manage/iframe/member/setGive/'+id, function(data){
+						if(data){
+							layer.msg('操作成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('操作失败', {time: 1000});
+						}
+					});
+				});
+			}
+			function _giveflo(id){
+				var cashname = '<span style="color: red;font-weight: bold;">'+$('select[name="caname"] option:selected').text()+'</span>';
+				var themeId = $('select[name="caname"] option:selected').val();
+				parent.actconfirm('确定推送花票 '+cashname+' 给此用户？', function(){
+					$.post('http://'+window.location.host+'/weixin/pushcashexact/'+id+'-'+themeId, function(data){
+						if(data.result){
+							layer.msg(data.msg, {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg(data.msg, {time: 2000});
+						}
+					});
+				});
+			}
+			//客服补发花籽
+			function _giveSeeds(id){
+				var seeds=$('#vSeedsCount').val();
+				var remarks=encodeURI($.trim($('#remarks').val()));
+				
+				if(remarks==null || remarks==""){
+					layer.msg("请认真填写补发花籽的原因", {time: 2000});
+					return;
+				}
+				if(seeds==null||seeds==0){
+					layer.msg("请填写花籽数量", {time: 2000});
+					return;
+				}
+				if(seeds>15){
+					layer.msg("每次最多送15粒花籽", {time: 2000});
+					return;
+				}
+				
+				parent.actconfirm('确定发送 '+seeds+'花籽 给此用户？', function(){
+					
+					$.post('http://'+window.location.host+'/manage/iframe/member/sendseeds_custom/'+id+'-'+seeds+'-'+remarks, function(data){
+						if(data.result){
+							layer.msg(data.msg, {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg(data.msg, {time: 2000});
+						}
+					});
+				});
+			}
+			function _group(id,gid){
+				parent.open_window('设置分组','/member/setgroup/'+id+'-'+gid, 540, 380);
+			}
+			function searchstate(_state){
+				state = $(_state).find('option:selected').val();
+				location.replace('/manage/iframe/member/account?pageno=1&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+			}
+			function searchisbuy(_isbuy){
+				isbuy = $(_isbuy).find('option:selected').val();
+				location.replace('/manage/iframe/member/account?pageno=1&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+			}
+			function searchisgive(_isgive){
+				isgive = $(_isgive).find('option:selected').val();
+				location.replace('/manage/iframe/member/account?pageno=1&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+			}
+			function searchgroup(_groupid){
+				groupid = $(_groupid).find('option:selected').val();
+				location.replace('/manage/iframe/member/account?pageno=1&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+			}
+			function searchisfans(_isfans){
+				isfans = $(_isfans).find('option:selected').val();
+				location.replace('/manage/iframe/member/account?pageno=1&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+			}
+			function pushcash(_cashid){
+				cashid = $(_cashid).find('option:selected').val();
+				$.post('/manage/iframe/member/pushcash/',{'cashid': cashid}, function(data){
+					if(data.result){
+						layer.msg('当前推送的花票主题为：'+data.theme, {time: 2000});
+					}
+				});
+			}
+			function _export(){
+				var time_a = $('#datemin').val();
+				var time_b = $('#datemax').val();
+				if($.trim(time_a)==''){
+					layer.tips('请填写开始时间', '#datemin', {tips: [1, '#34495E']});return;
+				}else if($.trim(time_a)=='null' || $.trim(time_a)=='NULL'){
+					layer.tips('不能为NULL或者null', '#datemin', {tips: [1, '#34495E']});return;
+				}
+				if($.trim(time_b)==''){
+					layer.tips('请填写结束时间', '#datemax', {tips: [1, '#34495E']});return;
+				}else if($.trim(time_b)=='null' || $.trim(time_b)=='NULL'){
+					layer.tips('不能为NULL或者null', '#datemax', {tips: [1, '#34495E']});return;
+				}
+ 				window.open('/manage/iframe/member/exportinfo?time_a='+time_a+'&time_b='+time_b, '_blank');
+			}
+			function searchnumber(){
+				code=$('#code').val();
+				aid=$('#aid').val();
+				nick=$('#nick').val();
+				var time_a = $('#datemin').val();
+				var time_b = $('#datemax').val();
+				var reg = /^[0-9]{11}$/;
+				if($.trim(code)!=''){
+					if(!reg.test(code)){
+						layer.tips('请输入11位手机号', '#code', {tips: [1, '#34495E']});return;
+					}
+				}
+				var reg1 = /^[0-9]*$/;
+				if($.trim(aid)!=''){
+					if(!reg1.test(aid)){
+						layer.tips('请输入正确格式的会员ID', '#aid', {tips: [1, '#34495E']});return;
+					}
+				}				
+				location.replace('/manage/iframe/member/account?pageno=1&state='+state+'&isbuy='+isbuy+'&isgive='+isgive+'&code='+code+'&groupid='+groupid+'&time_a='+time_a+'&time_b='+time_b+'&aid='+aid+'&nick='+nick);
+			}
+			
+			function _see(id){
+				parent.open_window('查看带颜详情','/member/daiyan_detail/'+id, 1000, 540);
+				parent.open_window('查看订单详情','/order/orderinfo/'+ordercode, 1000, 540);
+			}
+			function _withdrawCash(id){
+					parent.open_window('提现记录','/bbs/withdrawCash?aid='+id, 850, 400);
+			}
+		</script> 
+	</body>
+</html>

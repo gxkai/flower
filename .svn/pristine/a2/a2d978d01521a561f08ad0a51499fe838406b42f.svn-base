@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<style type="text/css">
+			body{
+				background-color: #EEE;
+			}
+			.p_0{
+				height: 60px;
+				font: 14px/60px 'Microsoft Yahei';
+				padding: 0 18px;
+				background-color: #FFF;
+				text-align: center;
+			}
+			.p_0 span:nth-child(1){
+				margin-left: 30px;
+			}
+			.p_0 span:nth-child(2){
+				float: right;
+			}
+			.p_1{
+				width: 100%;
+				box-sizing: border-box;
+				float: left;
+				height: 60px;
+				font: 14px/60px 'Microsoft Yahei';
+				padding: 0 18px;
+				display: block;
+				text-align: center;
+			}
+			.p_2{
+				width: 100%;
+				box-sizing: border-box;
+				float: left;
+				height: 183px;
+				font: 14px/60px 'Microsoft Yahei';
+				background-color: #FFF;
+				border: 1px solid #DED9D9;
+				display: block;
+			}
+			.p_1_1{
+				width: calc(100% - 36px);
+				height: 61px;
+				float: left;
+				padding: 0 18px;
+				border-bottom: 1px solid #DED9D9;
+			}
+			.p_1_2{
+				width: 100%;
+				height: 60px;
+				float: left;
+				box-sizing: border-box;
+				border-bottom: 1px solid #DED9D9;
+			}
+			.p_1_2 span:nth-child(1){
+				width: 50px;
+				float: left;
+			}
+			.p_1_2 span:nth-child(2){
+				width: calc(100% - 55px);
+				float: left;
+				padding-left: 5px;
+			}
+			.p_1_3 {
+				width: 100%;
+				height: 60px;
+				float: left;
+				box-sizing: border-box;
+			}
+			.p_1_3 span:nth-child(1){
+				width: 50px;
+				float: left;
+			}
+			.p_1_3 span:nth-child(2){
+				width: calc(100% - 55px);
+				float: left;
+				padding-left: 5px;
+			}
+			.p_3{
+				width: calc(100% - 36px);
+				font: 14px/30px 'Microsoft Yahei';
+				color: #e96388;
+				float: left;
+				padding: 10px 18px;
+			}
+		</style>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript">
+			function _back(){
+				location.replace('/service/chOrderreach?ordercode='+ $('#ordercode').val() + '&id=' + $('#addrid').val());
+			}
+			function _satchoose(){
+				var ordercode = $('#ordercode').val();
+				var reach = $('#reach').val();
+				var sat = $('#sat').val();
+				if(reach==1){
+					if (window.confirm("确认更改为周六送吗?")) {
+						$.post('/service/saveReachChange/', {'reach': 2,'ordercode': ordercode, 'sy_code': sat}, function(data){
+							if(data){
+								$('.p_1_2 span i').css('color', '#00bcd4');
+								$('.p_1_3 span i').css('color', '#fff');
+								layer.msg('更改成功', {time: 2000}, function(){
+									location.replace('/service/chOrderreach?ordercode='+ $('#ordercode').val() + '&id=' + $('#addrid').val());
+								});
+							}else{
+								layer.msg('更改失败', {time: 2000});
+							}
+						});
+					}
+				}
+			}
+			function _monchoose(){
+				var ordercode = $('#ordercode').val();
+				var reach = $('#reach').val();
+				var mon = $('#mon').val();
+				if(reach==2){
+					if (window.confirm("确认更改为周一送吗?")) {
+						$.post('/service/saveReachChange/', {'reach': 1,'ordercode': ordercode, 'sy_code': mon}, function(data){
+							if(data){
+								$('.p_1_3 span i').css('color', '#00bcd4');
+								$('.p_1_2 span i').css('color', '#fff');
+								layer.msg('更改成功', {time: 2000}, function(){
+									location.replace('/service/chOrderreach?ordercode='+ $('#ordercode').val() + '&id=' + $('#addrid').val());
+								});
+							}else{
+								layer.msg('更改失败', {time: 2000});
+							}
+						});
+					}
+				}
+			}
+		</script>
+		<title>修改配送信息/顺延</title>
+	</head>
+	<body>
+		<input type="hidden" id="ordercode" value="${ordercode!}" >
+		<input type="hidden" id="addrid" value="${addrid!}" >
+		<input type="hidden" id="reach" value="${reach!}" >
+		<input type="hidden" id="sat" value="${sat!}" >
+		<input type="hidden" id="mon" value="${mon!}" >
+		<div class="container">
+			<div class="p_0"><span>送达时间</span><span class="f-30"><i class="Hui-iconfont" onclick="_back()">&#xe6a6;</i></span></div>
+			<div class="p_1"><i class="Hui-iconfont f-30" style="color: #e96388">&#xe6e0;</i>从第${pnum}次配送开始生效</div>
+			<div class="p_2">
+				<div class="p_1_1">送达时间</div>
+				<div class="p_1_2" onclick="_satchoose()"><span><i class="Hui-iconfont f-r f-20" style="<#if reach==2>color: #00bcd4<#else>color: #fff</#if>">&#xe6a7;</i></span><span>周六(${sat})</span></div>
+				<div class="p_1_3" onclick="_monchoose()"><span><i class="Hui-iconfont f-r f-20" style="<#if reach==1>color: #00bcd4<#else>color: #fff</#if>">&#xe6a7;</i></span><span>周一(${mon})</span></div>
+			</div>
+			<div class="p_3">收货日前2日18:00以后不能修改本次送达时间。</div>
+		</div>
+	</body>
+</html>

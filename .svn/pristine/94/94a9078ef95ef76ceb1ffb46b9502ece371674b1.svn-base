@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+		<title>我的奖品</title>
+		<style>
+			body{
+				font-family:"微软雅黑";
+				background:url(/image/luck_myRecord.jpg) no-repeat;
+				background-size: 100% 100%;
+			}
+			.showluck{
+			width:100%;
+			}
+			.luckinfo{
+			 width:98%;
+			 margin:0 auto;
+			 display: flex;
+  			 justify-content: space-between;
+  			 border-bottom:1px #ccc solid;
+  			 padding:5px 0px;
+			}
+		</style>
+		
+	</head>
+	<body>
+	
+		<div class="showluck">
+		<span class="luckinfo">${user.nick!}</span>
+		<#if lucklist??>
+		
+			<#list lucklist as luck>
+				<span class="luckinfo" style="font-weight:300;font-size:14px"><span>${luck.luckTime!}</span> <span>获得 ${luck.pname!}</span> </span>
+			</#list>
+		
+		<#else >
+		<label>暂无奖品</label>
+		</#if>
+		<div>
+		
+		
+		
+	</body>
+</html>

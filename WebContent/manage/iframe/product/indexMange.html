@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>商品管理 - 主页管理</title>
+		</head>
+		<style type="text/css">
+			.page-container label{
+				font-weight:900;
+			}
+		</style>
+		
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 主页管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+		<!-- 轮播图修改  -->
+		<label>主页轮换图</label> 
+		<span class="r" style="line-height:31px;">共有数据：<strong>1</strong> 条</span> 
+		</div> 
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th>标题名称</th>
+						<th>图片地址1</th>
+						<th>链接地址(谨慎修改)</th>
+						<th>商品描述</th>
+						<th width="60">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if rotation?? >
+					<#list rotation as rot>
+					<tr class="text-c">
+						<td>${rot_index + 1}</td>
+						<td>${rot.name!}</td>
+						<td>${rot.imgurl!}</td>
+						<td>${rot.goods_url!}</td>
+						<td>${rot.goods_describe!}</td>
+						<td class="td-manage">
+							<a title="查看" onclick="seeRotation(${rot.id!})" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe665;</i></a>
+						</td> 
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="3" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		
+		<div class="page-container">
+		<label>主页产品管理</label> 
+		<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> 
+		</div> 
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th>标题名称</th>
+						<th>图片地址</th>
+						<th>价格</th>
+						<th>商品链接</th>
+						<th>商品描述</th>
+						<th>是否显示</th>
+						<th>显示权重(数字越大显示越靠前)</th>
+						<th width="60">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if showlist?? >
+					<#list showlist as goods>
+					<tr class="text-c">
+						<td>${goods.id!}</td>
+						<td>${goods.name!}</td>
+						<td>${goods.imgurl!}</td>
+						<td>${goods.price!}</td>
+						<td>${goods.goods_url!}</td>
+						<td>${goods.goods_describe!}</td>
+						<td>${goods.isshow!}</td>
+						<td>${goods.sort!}</td>
+						
+						<td class="td-manage">
+							<a title="添加" onclick="add()" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe600;</i></a>  
+							<a title="查看" onclick="_see('${goods.id}')" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe665;</i></a>
+						</td> 
+						
+					</tr>
+						
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="3" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/dateTime.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/admin.flower.js"></script>
+		
+		<script type="text/javascript">
+			 function _see(id){
+			  parent.open_window('首页商品信息查询', '/product/seeIndexGoods/'+id, 650, 450);  
+			}
+			function seeRotation(id){
+				  parent.open_window('首页商品信息查询', '/product/seeRotation/'+id, 650, 450);  
+				} 
+			 function add(){
+				  parent.open_window('添加商品', '/product/indexGoodsAdd.html', 650, 450);  
+			} 
+		</script>
+
+ 
+</body>
+</html>

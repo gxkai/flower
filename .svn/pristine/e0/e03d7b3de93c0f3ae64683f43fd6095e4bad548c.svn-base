@@ -1,0 +1,567 @@
+html,body{
+	margin: 0;
+	padding: 0;
+}
+a,button,input,textarea{-webkit-tap-highlight-color: rgba(255, 255, 255, 0);}
+.container{
+	width: 100%;
+	max-width: 768px;
+	margin: 0 auto;
+	display: table;
+	font-family: Microsoft Yahei;
+	padding: 0;
+}
+@font-face { 
+font-family: 'impact'; 
+src: url('/resource/flower/impact.ttf') format('truetype');
+} 
+
+/************绑定手机号************/
+.binding{
+	width: 100%;
+	height: 60px;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	margin: 0;
+}
+.binding_title{
+	width: 100%;
+	height: 30px;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	margin: 0;
+	margin-top:10px;
+}
+.binding_title span span{
+	color:#888888;
+}
+.binding_tel{
+	-webkit-appearance: none;
+    width: 100%;
+    height: 40px;
+    float: left;
+    border: 1px solid #A1A4A9;
+    color: #A1A4A9;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    font: 15px/26px 'Microsoft Yahei';
+    border-radius: 4px;
+    outline: none;
+}
+.binding_msm{
+	-webkit-appearance: none;
+    width: calc(100% - 140px);
+    height: 40px;
+    float: left;
+    border: 1px solid #A1A4A9;
+    color: #A1A4A9;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    font: 15px/26px 'Microsoft Yahei';
+    border-radius: 4px;
+    outline: none;
+}
+.binding_send{
+	width: 120px;
+    height: 40px;
+    float: right;
+    border-radius: 4px;
+    background-color: #799CA6;
+    color: white;
+    font: 15px/40px 'Microsoft Yahei';
+    text-align: center;
+}
+.binding_send_lock{
+	width: 120px;
+    height: 40px;
+    float: right;
+    border-radius: 4px;
+    background-color: #F5F3F3;
+    color: #A1A4A9;
+    font: 15px/40px 'Microsoft Yahei';
+    text-align: center;
+}
+.binding_over{
+	width: 100%;
+    height: 46px;
+    float: left;
+    line-height: 46px;
+    text-align: center;
+    background-color: #E96388;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+}
+
+/************意见反馈************/
+.feedback{
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	margin: 0;
+}
+.feedback_title{
+	-webkit-appearance: none;
+    width: 100%;
+    height: 40px;
+    float: left;
+    border: 1px solid #A1A4A9;
+    color: #A1A4A9;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    font: 15px/26px 'Microsoft Yahei';
+    border-radius: 4px;
+    outline: none;
+}
+.feedback_info{
+	-webkit-appearance: none;
+    width: 100%;
+    height: 120px;
+    float: left;
+    resize: none;
+    border: 1px solid #A1A4A9;
+    color: #A1A4A9;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    font: 15px/26px 'Microsoft Yahei';
+    border-radius: 4px;
+    outline: none;
+}
+.feedback_submit{
+	width: 100%;
+    height: 46px;
+    float: left;
+    line-height: 46px;
+    text-align: center;
+    background-color: #799CA6;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+}
+
+/************我的花票************/
+.mycash_menu {
+    width: 100%;
+    height: 40px;
+    float: left;
+    background-color: white;
+}
+.mycash_menu a {
+    width: 25%;
+    height: 40px;
+    float: left;
+    font-size: 14px;
+    color: #48505B;
+    padding-left: 6%;
+}
+.mycash_menu a span{
+	height: 40px;
+	display: table;
+	margin: 0 auto;
+	line-height: 38px;
+	box-sizing: border-box;
+	border-bottom: 2px solid #FFF;
+}
+.mc_menu_select{
+	color: #E96388!important;
+	border-bottom: 2px solid #799CA6!important;
+}
+.mycash_show{
+	width: 100%;
+	float: left;
+	background-color: white;
+	box-sizing: border-box;
+	padding: 0 15px 30px;
+}
+[class^='mycash_menu_']{
+	display: none;
+}
+.give_for{
+	width: 100%;
+    height: 46px;
+    float: left;
+    line-height: 46px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #E96388;
+    margin: 10px 0 10px;
+    border-radius: 4px;
+    color: white;
+}
+.cashfor{
+	height: 40px;
+	padding: 0 15px;
+    font: 16px/40px 'Microsoft Yahei';
+}
+.mycash_menu_5 label{
+	width: 100%;
+	float: left;
+	margin: 10px 0 5px;
+    font-size: 16px;
+    line-height: 20px;
+    color: #48505B;
+}
+.mycash_menu_5 span{
+	width: 100%;
+    float: left;
+    margin: 0;
+    font-size: 15px;
+    line-height: 22px;
+    color: #797E85;
+}
+.cashlist{
+	width: 100%;
+	height: 90px;
+	float: left;
+	margin: 10px 0 0;
+}
+.cashlist_a{
+	width: 130px;
+	height: 100%;
+	float: left;
+	background-size: auto 100%;
+	box-sizing: border-box;
+	padding: 9px;
+}
+.cashlist_a .a_1{
+	width: 100%;
+	height: 42px;
+	float: left;
+	line-height: 30px;
+	font-size: 12px;
+	color: white;
+}
+.cashlist_a .a_1 .a_1_l{
+	width: 58%;
+	height: 42px;
+	float: left;
+	line-height: 42px;
+	text-align: center;
+	font-family: impact;
+}
+.a_1_l span:nth-child(1){
+	font-size: 32px;
+}
+.a_1_l span:nth-child(2){
+	font-size: 12px;
+}
+.cashlist_a .a_1 .a_1_r{
+	width: 42%;
+	height: 42px;
+	float: left;
+}
+.cashlist_a .a_1 .a_1_r i:nth-child(1){
+	width: 100%;
+	height: 18px;
+	float: left;
+	font: 14px/18px 'Microsoft Yahei';
+	text-align: center;
+}
+.cashlist_a .a_1 .a_1_r i:nth-child(2){
+	width: 100%;
+	height: 24px;
+	float: left;
+	font: 16px/24px 'Microsoft Yahei';
+	text-align: center;
+}
+.cashlist_a .a_2{
+	width: 100%;
+	height: 15px;
+	float: left;
+	line-height: 12px;
+	font-size: 12px;
+	color: white;
+ 	border-bottom: 1px dashed white;
+ 	text-align: center;
+}
+.cashlist_a .a_3{
+	width: 100%;
+	height: 14px;
+	float: left;
+	line-height: 12px;
+	font-size: 5px;
+	color: white;
+	border-top: 1px dashed white;
+	text-align: center;
+	padding-top:0px solid #000;  
+}
+.cashlist_b{
+	width: calc(100% - 220px);
+	height: 100%;
+	float: left;
+	background-size: auto 100%;
+	box-sizing: border-box;
+	padding: 9px 0;
+}
+.cashlist_b span{
+	width: 100%;
+	height: 24px;
+	float: left;
+	font-size: 12px;
+	color: white;
+	line-height: 24px;
+	text-align: center;
+}
+.cashlist_c{
+	width: 90px;
+	height: 100%;
+	float: left;
+	background-size: auto 100%;
+	background-position: right center;
+}
+.cashlist_c a{
+	width: 90px;
+	height: 90px;
+	display: block;
+	padding: 28px;
+	text-align: center;
+	font-size: 13px;
+	line-height: 17px;
+	color: white;
+	margin: 0 auto;
+	box-sizing: border-box;
+	background-image: url('/resource/flower/image/022.png');
+	background-size: 60px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.cashlist_1_a{
+	background-image: url('/resource/flower/image/019_1.png');
+}
+.cashlist_1_b{
+	background-image: url('/resource/flower/image/019_2.png');
+}
+.cashlist_1_c{
+	background-image: url('/resource/flower/image/019_3.png');
+}
+.cashlist_2_a{
+	background-image: url('/resource/flower/image/020_1.png');
+}
+.cashlist_2_b{
+	background-image: url('/resource/flower/image/020_2.png');
+}
+.cashlist_2_c{
+	background-image: url('/resource/flower/image/020_3.png');
+}
+.cashlist_3_a{
+	background-image: url('/resource/flower/image/021_1.png');
+}
+.cashlist_3_b{
+	background-image: url('/resource/flower/image/021_2.png');
+}
+.cashlist_3_c{
+	background-image: url('/resource/flower/image/021_3.png');
+}
+.no_cash{
+	font: 14px/60px 'Microsoft Yahei';
+	text-align: center;
+	color: #888;
+}
+/************我的种植花束************/
+.flowerseed_1{
+	width: 100%;
+	float: left;
+	position: relative;
+}
+.flowerseed_1 img{
+	width: 100%;
+	height: 120px;
+	float: left;
+}
+.flowerseed_1_a{
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	top: calc(50% - 40px);
+	left: 20px;
+}
+.flowerseed_1_a img{
+	width: 80px;
+	height: 80px;
+	float: left;
+	border-radius: 40px;
+}
+.flowerseed_1_b{
+	width: calc(100% - 140px);
+	height: 80px;
+	position: absolute;
+	top: calc(50% - 20px);
+	right: 20px;
+}
+.flowerseed_1_b p{
+	width: 100%;
+	float: left;
+	margin: 0;
+}
+.fs_nick{
+	height: 22px;
+	font-size: 16px;
+	line-height: 18px;
+	color: #48505B;
+}
+.fs_seed{
+	height: 22px;
+	font-size: 13px;
+	line-height: 22px;
+	color: #48505B;
+}
+.fs_seed span{
+	float: left;
+}
+.fs_seed span img{
+	width: 14px;
+	height: 14px;
+	float: left;
+	margin: 4px 0;
+}
+.fs_progressbar{
+	height: 12px;
+	box-sizing: border-box;
+	border: 1px solid white;
+	border-radius: 3px;
+	overflow: hidden;
+	margin-top: 10px!important;
+	position: relative;
+}
+.fs_progressbar .jingdu_a{height: 10px;position: absolute;top: 0;left: 0;background: #FFF;z-index: 800;}
+.fs_progressbar .jingdu_b{height: 10px;position: absolute;top: 0;left: 0;background: #E96388; z-index: 900;}
+.fs_info{
+	height: 18px;
+	line-height: 18px;
+	font-size: 12px;
+	color: #797E85;
+	margin-top: 2px!important;
+}
+.flowerseed_2{
+	width: 100%;
+	height: 40px;
+	float: left;
+	background-color: #EEE;
+	color: #A1A4A9;
+	margin: 0;
+	box-sizing: border-box;
+	padding: 0 15px;
+	line-height: 40px;
+}
+.flowerseed_3{
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+	padding: 0 15px 20px;
+}
+.flowerseed_3 label{
+	width: 100%;
+	float: left;
+	margin: 10px 0 5px;
+    font-size: 16px;
+    line-height: 20px;
+    color: #48505B;
+}
+.flowerseed_3 span{
+	width: 100%;
+	float: left;
+    margin: 0;
+    font-size: 15px;
+    line-height: 22px;
+    color: #797E85;
+}
+/************评价订单************/
+.evaluate{
+	width: 100%; 
+	height: 40px;
+	float: left;
+	box-sizing: border-box;
+	padding: 7px 15px;
+	border-bottom: 1px solid #EEE;
+	margin: 0;
+}
+.evaluate p:nth-child(1){
+	float: left;
+    margin: 0;
+    outline: none;
+    padding: 0;
+    color: #48505B; 
+	font: 14px/26px 'Microsoft Yahei';
+	font-weight: bolder;
+}
+.evaluate p:nth-child(2){
+	float: left;
+    margin: 0;
+    font: 14px/26px 'Microsoft Yahei';
+    outline: none;
+    padding: 0;
+    color: #48505B;
+}
+.tj{
+    width: 100%;
+    height: 46px;
+    float: left;
+    line-height: 46px;
+    text-align: center;
+    background-color: #E96388;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+}
+.pingfen{
+	width: 100%; 
+	float: left;
+	box-sizing: border-box;
+	padding: 0 15px;
+}
+.pingfen .clearfix{
+	width: 100%;
+	height: 30px;
+	float: left;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #EEE;
+}
+.evaluate_x{
+	width: 100%; 
+	height: 101px;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	border-bottom: 1px solid #EEE;
+}
+.evaluate_x textarea{
+	width: calc(100% - 110px); 
+	height: 72px;
+	-webkit-appearance: none;
+	float: right;
+    margin: 0;
+    font: 15px/26px 'Microsoft Yahei';
+    border-radius: 4px;
+    outline: none;
+    resize: none;
+    border: 1px solid #A1A4A9;
+    color: #A1A4A9;
+    padding: 3px 6px;
+}
+.evaluate_y{
+	width: 100%; 
+	float: left;
+	box-sizing: border-box;
+	/* 2017-09-19 glacier */
+	padding: 20px 15px 10px;
+}
+ .star-bar{
+    font-size:0; 
+    line-height:0;
+}
+ .star-bar .star{
+ 	display:inline-block;
+ 	text-align:center;
+}
+ .size-M img{ 
+ 	width:20px;
+ 	height:20px;
+}
+ .size-S img{
+ 	width:16px;
+ 	height:16px;
+}

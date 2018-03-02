@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<title>我的地址</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<style type="text/css">
+			.tensize{width: 100%;height: 26px;float: left;background-color: #FFFDE4;color: #48505B;margin-bottom: 15px;font: 13px/26px 'Microsoft Yahei';box-sizing: border-box;padding: 0 15px;}
+		</style>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<script type="text/javascript">
+			// 设为默认地址
+			function setDefault(id){
+				$.post('/account/setDefault', {'id':id}, function(data){
+					if(data){
+						location.replace('/account/address');
+					}else{
+						layer.msg('设置失败', {time:2000});
+					}
+				});
+			}
+			// 编辑地址
+			function editAddress(id){
+				location.href='/account/getAddress?id=' + id;
+			}
+			// 删除地址
+			function delAddress(id){
+				layer.confirm('确认要删除吗？',function(index){
+					$.post('/account/delAddress', {'id':id}, function(data){
+						if(data){
+							location.replace('/account/address');
+						}else{
+							layer.msg('删除失败', {time:2000});
+						}
+					});
+				});
+			}
+		</script>
+	</head>
+	<body style="background-color: #EEE;">
+		<div class="container">
+			<span class="tensize">提示：最多可录入10条收货信息</span>
+			<#list addresslist as address>
+			<div class="address_list">
+				<p class="address_1"><span>${address.name}&#12288;${address.tel}</span></p>
+				<p class="address_2"><span>${address.addr}</span></p>
+				<p class="address_3">
+					<#if address.state==0>
+					<span onclick="setDefault(${address.id})"><i class="address_choose"><img src="/resource/flower/image/icon/013.png" /></i>设为默认</span>
+					<#else>
+					<span class="address_selected"><i class="address_choose"><img src="/resource/flower/image/icon/012.png" /></i>设为默认</span>
+					</#if>
+					<span onclick="delAddress(${address.id})"><i class="address_icon"><img src="/resource/flower/image/icon/014.png" /></i>删除</span>
+					<span onclick="editAddress(${address.id})"><i class="address_icon"><img src="/resource/flower/image/icon/015.png" /></i>编辑</span>
+				</p>
+			</div>
+			</#list>
+			<#if addresslist?size lt 10>
+			<div class="address_action">
+				<a class="addadress" href="/account/addAddress">新增地址</a>
+			</div>
+			</#if>
+		</div>
+	</body>
+</html>

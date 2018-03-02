@@ -1,0 +1,25 @@
+#测试数据库配置
+jdbcUrl=jdbc:mysql://116.62.66.227:3306/homedb?autoReconnect=true&rewriteBatchedStatements=TRUE&zeroDateTimeBehavior=convertToNull
+user=root
+password = 123456
+
+
+
+host = http://huameimei.d2dcloud.cn
+imgpath = D:/upload/flower/image/
+
+token = weixin
+encryptMessage = false
+
+
+#e合作社测试服务号的配置
+appId = wxc9f48061a1aee1b6
+appSecret = 729aa571018985c214dcbfdfc6a28bad
+encodingAesKey = LkliFC5cIB55GdNMNYggSNagaTXlVsyhdF1xeSLVOkV
+
+mchId = 1297352301
+key = 42e77b63637ab381e8be5f8318cc28ax
+
+
+webAppId=wx18aff9e74d343acb
+webAppSecret=58cd63a1a114c6c71869edfe836dee8e

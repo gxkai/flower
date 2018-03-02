@@ -1,0 +1,160 @@
+@CHARSET "UTF-8";
+/*  */
+html, body {
+	max-width:720px;
+	margin:0 auto;
+	font-size: 14px;
+}
+
+.buy_zhouqi_b {
+	width: 100%;
+	float: left;
+	margin: 10px 0;
+}
+
+.buy_zhouqi_b span {
+	width: 74px;
+	height: 32px;
+	float: left;
+	margin-right: 20px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.buy_zhouqi_b_c {
+	background-color: #E96388;
+	border-color: #E96388 !important;
+	color: white !important;
+}
+
+.buy_use_b {
+	width: 100%;
+	float: left;
+	margin: 10px 0;
+}
+
+.buy_use_b span {
+	width: 74px;
+	height: 32px;
+	float: left;
+	margin-right: 20px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.buy_use_b_c {
+	background-color: #E96388;
+	border-color: #E96388 !important;
+	color: white !important;
+}
+
+.buy_style_b {
+	width: 100%;
+	float: left;
+	margin: 10px 0;
+}
+
+.buy_style_b span {
+	width: 74px;
+	height: 32px;
+	float: left;
+	margin-right: 20px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.buy_style_b_c {
+	background-color: #E96388;
+	border-color: #E96388 !important;
+	color: white !important;
+}
+
+.weui_switch {
+	-webkit-appearance: none;
+	appearance: none;
+	position: relative;
+	width: 42px;
+	height: 22px;
+	border: 1px solid #DFDFDF;
+	outline: 0;
+	border-radius: 16px;
+	box-sizing: border-box;
+	background: #DFDFDF;
+}
+
+.weui_switch:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 40px;
+	height: 20px;
+	border-radius: 15px;
+	background-color: #FDFDFD;
+	-webkit-transition: -webkit-transform .3s;
+	transition: -webkit-transform .3s;
+	transition: transform .3s;
+	transition: transform .3s, -webkit-transform .3s;
+}
+
+.weui_switch:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	border-radius: 15px;
+	background-color: #FFFFFF;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+	-webkit-transition: -webkit-transform .3s;
+	transition: -webkit-transform .3s;
+	transition: transform .3s;
+	transition: transform .3s, -webkit-transform .3s;
+}
+
+.weui_icon_warn:before {
+	height: 60%;
+	font-size: 15px;
+	color: #E96388;
+}
+
+.weui_dialog {
+	border-radius: 10px;
+	width: 75%;
+}
+
+.weui_dialog_title {
+	color: #f36b93;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+
+.buy_6_a{
+	width: 45%;
+    height: 46px;
+    float: left;
+
+    text-decoration: none;
+}
+.buy_6_b{
+	width: 45%;
+    height: 46px;
+    float: right;
+
+    text-decoration: none;
+}
+

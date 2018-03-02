@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		
+		<title>红包</title>
+		<style type="text/css">
+		body{
+			background-color: black;
+		}
+		.page_b {
+			background-color: #F64847;
+    		width: 70%;
+    		margin-left: 15%;
+    		margin-top: 100px;
+    		border-radius: 10px;
+    		color: #FBF1B3;
+		}
+		.page_b_1{
+			text-align: center;
+		}
+		.page_b_1_0 img{
+			width: 100%;
+		}
+		.page_b_1_1{
+			text-align: center;
+			position: relative;
+    		top: -25px;
+		}
+		.page_b_1_1 img{
+			width: 50px;
+    		height: 50px;
+    		border-radius: 25px;
+		}
+		.page_b_1 span{
+			display: block;
+		}
+		.page_b_1 span:NTH-CHILD(3){
+			font-size: 12px;
+		}
+		.page_b_1 span:NTH-CHILD(4){
+			font-size: 12px;
+		}
+		.page_b_1 span:NTH-CHILD(5){
+			font-size: 17px;
+    		padding-top: 15px;
+    		padding-bottom: 15px;
+		}
+		.page_b_2 {
+			text-align: center;
+			margin-top: 20px;
+		}
+		.page_b_2_1 {
+			width: 55px;
+			margin-bottom: 20px;
+		}
+		.page_b_2_2 {
+			display: block;
+			font-size: 15px;
+		}
+		.page_b_2_3 {
+			display: block;
+    		font-size: 15px;
+    		margin-top: 50px;
+    		width: 50%;
+    		margin-left: 25%;
+    		padding-bottom: 5px;
+		}
+		</style>
+
+	</head>
+<body>
+	
+	<!-- 红包已经被领完！ -->
+	<div class="container">
+		<div class="page_b">
+			<div class="page_b_1">
+			
+				<div class="page_b_1_0">
+					<img alt="" src="/resource/flower/image/redPacket_2.png">
+				</div>
+				
+				<div class="page_b_1_1">
+					<img alt="" src="${headimg!}">
+				</div>
+				
+				<!-- <span>${nick!}</span>
+				<span>发了一个红包</span> -->
+				<span>${msg!}</span>
+				<input type="hidden" name="redpacketcode" value="${redpacketcode!}">
+			</div>
+			
+			<div class="page_b_2">
+			  <#if state==1 || state==2>
+				<#if num gt 0 >
+					<img onclick="grabRedEnvelope()" class="page_b_2_1" src="/resource/flower/image/redPacket_open.png"></img>
+				<#else>
+					<span class="page_b_2_2">红包已领完</span>
+					<span onclick="grabRedEnvelope()" class="page_b_2_3" >查看领取详情</span>
+				</#if>
+			  <#elseif state=0>
+			        <span class="page_b_2_2">红包未付款</span>
+			  <#else>
+			        <span class="page_b_2_2">超过7天未领取，已退款</span>
+			  </#if>      
+			</div>	
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function grabRedEnvelope() {
+			var redpacketcode = $('input[name="redpacketcode"]').val();
+			location.replace('/service/grabRedEnvelope/'+redpacketcode);
+		}
+	</script>
+	
+</body>
+</html>

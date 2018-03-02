@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.account.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.css" />
+		<script type="text/javascript" src="/resource/weui/example/zepto.min.js"></script>
+		<script type="text/javascript" src="/resource/weui/example/router.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<style type="text/css">
+			.cash_share{
+				width: 100%;
+				float: left;
+				color: #A1A4A9;
+				box-sizing: border-box;
+				outline: none;
+			}
+			.cash_share_lable{
+				width: 100%;
+				padding: 5px 0;
+				position: relative;
+			    display: flex;
+			    align-items: center;
+			    float: left;
+			}
+		</style>
+		<title>我的花票</title>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<script type="text/javascript">
+			$().ready(function(){
+				$('.mycash_menu_1').show();
+				$('.mycash_menu a').click(function(){
+					
+					var cl = [];
+					var cl_str;
+					fris = document.getElementsByName("f_f");
+					for(i=0;i<fris.length;i++){
+						if(fris[i].checked){
+							cl.push(fris[i].id);
+						}
+					}
+					if(cl.length==0) {
+						var i = $(this).data('index');
+						$('.mc_menu_select').removeClass('mc_menu_select');
+						$(this).find('span').addClass('mc_menu_select');
+						$('.menu_ccc').hide();
+						$('.mycash_menu_'+i).show();
+					}else {
+						layer.msg('您选择的花票还未转增哦！', {time: 2000});
+					}
+					
+				});
+			});
+			function giveconfirm(){
+				
+				$('.menu_ccc').hide();
+				$('.mycash_menu_4').slideDown("slow");
+				
+				var cl = [];
+				var cl_str;
+				fris = document.getElementsByName("f_f");
+				/* alert(fris); */
+				for(i=0;i<fris.length;i++){
+					if(fris[i].checked){
+						cl.push(fris[i].id);
+					}
+				}
+				/* alert(cl); */
+				if(cl.length > 0){
+					if(window.confirm('确定分享给好友'+cl.length+'张花票？')){
+						location.replace('/account/sharecash/'+cl);
+					}
+				}else{
+					layer.msg('请选择要分享的花票', {time: 2000});
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<input type="hidden" id="fl" value="">
+			<div class="mycash_menu">
+				<a data-index="1"><span class="mc_menu_select">未使用</span></a>
+				<a data-index="2"><span>已使用</span></a>
+				<a data-index="3"><span>已过期</span></a>
+				<a data-index="4" style="display: none;"><span>花票分享</span></a>
+				<a data-index="5" style="display: none;"><span>使用规则</span></a>
+			</div>
+			<p style="width: 100%;height: 15px;float: left;background-color: #EEE;margin: 0;"></p>
+			<div class="mycash_show">
+				<div class="mycash_menu_1 menu_ccc">
+					<#if mycash['list1']?size gt 0>
+					
+					<a class="give_for" onclick="giveconfirm()">转赠</a>
+					
+					<#list mycash['list1'] as cash>
+					<div class="cashlist">
+						<div class="cashlist_a cashlist_1_a">
+							<a class="a_1">
+								<span class="a_1_l">
+									<span>${cash.money?string('0.00')?substring(0,cash.money?string('0.00')?length-3)}</span><!-- .
+									<span>${cash.money?string('0.00')?substring(cash.money?string('0.00')?length-2)}</span> -->
+								</span>
+								<span class="a_1_r">
+									<i>花美美</i>
+									<i>花票</i>
+								</span>
+							</a>
+							<#if cash.cid==26>
+							    <a class="a_3">适用产品：${cash.name!}</a>
+							    <a class="a_2">限首单,单笔满${cash.benefit}元可用</a>
+							 <#else>
+							     <a class="a_3">适用产品：${cash.name!}</a>
+							     <a class="a_2">单笔满${cash.benefit}元可用</a>
+							 </#if>   
+						</div>
+						<div class="cashlist_b cashlist_1_b">
+							<span>有效日期</span>
+							<span>${cash.time_a}</span>
+							<span>-${cash.time_b}</span>
+						</div>
+						<div class="cashlist_c cashlist_1_c">
+							<!-- <a>立即使用</a> -->
+							<a style="padding: 35px 20px;">未使用</a>
+						</div>
+					</div>
+					</#list>
+					<#else>
+					<div class="no_cash">当前没有未使用的花票</div>
+					</#if>
+				</div>
+				<div class="mycash_menu_2 menu_ccc">
+					<#if mycash['list2']?size gt 0>
+					<#list mycash['list2'] as cash>
+					<div class="cashlist">
+						<div class="cashlist_a cashlist_2_a">
+							<a class="a_1">
+								<span class="a_1_l">
+									<span>${cash.money?string('0.00')?substring(0,cash.money?string('0.00')?length-3)}</span><!-- .
+									<span>${cash.money?string('0.00')?substring(cash.money?string('0.00')?length-2)}</span> -->
+								</span>
+								<span class="a_1_r">
+									<i>花美美</i>
+									<i>花票</i>
+								</span>
+							</a>
+							<a class="a_3">适用产品：${cash.name!}</a>							
+							<a class="a_2">单笔满${cash.benefit}元可用</a>
+						</div>
+						<div class="cashlist_b cashlist_2_b">
+							<span>有效日期</span>
+							<span>${cash.time_a}</span>
+							<span>-${cash.time_b}</span>
+						</div>
+						<div class="cashlist_c cashlist_2_c">
+							<a style="padding: 35px 20px;">已使用</a>
+						</div>
+					</div>
+					</#list>
+					<#else>
+					<div class="no_cash">当前没有已使用的花票</div>
+					</#if>
+				</div>
+				<div class="mycash_menu_3 menu_ccc">
+					<#if mycash['list3']?size gt 0>
+					<#list mycash['list3'] as cash>
+					<div class="cashlist">
+						<div class="cashlist_a cashlist_3_a">
+							<a class="a_1">
+								<span class="a_1_l">
+									<span>${cash.money?string('0.00')?substring(0,cash.money?string('0.00')?length-3)}</span><!-- .
+									<span>${cash.money?string('0.00')?substring(cash.money?string('0.00')?length-2)}</span> -->
+								</span>
+								<span class="a_1_r">
+									<i>花美美</i>
+									<i>花票</i>
+								</span>
+							</a>
+							<a class="a_3">适用产品：${cash.name!}</a>														
+							<a class="a_2">单笔满${cash.benefit}元可用</a>
+						</div>
+						<div class="cashlist_b cashlist_3_b">
+							<span>有效日期</span>
+							<span>${cash.time_a}</span>
+							<span>-${cash.time_b}</span>
+						</div>
+						<div class="cashlist_c cashlist_3_c">
+							<a style="padding: 36px 20px;">已过期</a>
+						</div>
+					</div>
+					</#list>
+					<#else>
+					<div class="no_cash">当前没有已过期的花票</div>
+					</#if>
+				</div>
+				<div class="mycash_menu_4 menu_ccc">
+					<div class="cash_share weui_cells_checkbox">
+					<#if mycash['list4']?size gt 0>
+					<a class="give_for" onclick="giveconfirm()">转赠</a>
+					<#list mycash['list4'] as cash>
+					<label class="cash_share_lable weui_check_label" for="${cash.id}">
+			            <div class="weui_cell_hd">
+			                <input type="checkbox" class="weui_check" name="f_f" id="${cash.id}">
+			                <i class="weui_icon_checked"></i>
+			            </div>
+			            <div class="weui_cell_bd weui_cell_primary">
+							<div class="cashlist">
+								<input type="hidden" id="${cash.id}">
+								<div class="cashlist_a cashlist_1_a">
+									<a class="a_1">
+										<span class="a_1_l">
+											<span>${cash.money?string('0.00')?substring(0,cash.money?string('0.00')?length-3)}</span><!-- .
+											<span>${cash.money?string('0.00')?substring(cash.money?string('0.00')?length-2)}</span> -->
+										</span>
+										<span class="a_1_r">
+											<i>花美美</i>
+											<i>花票</i>
+										</span>
+									</a>
+							        <a class="a_3">适用产品：${cash.name!}</a>																
+									<a class="a_2">单笔满${cash.benefit}元可用</a>
+								</div>
+								<div class="cashlist_b cashlist_1_b">
+									<span>有效日期</span>
+									<span>${cash.time_a}</span>
+									<span>-${cash.time_b}</span>
+								</div>
+								<div class="cashlist_c cashlist_1_c">
+									<!-- <a>立即使用</a> -->
+									<a style="padding: 35px 20px;">未使用</a>
+								</div>
+							</div>
+			            </div>
+			        </label>
+			        </#list>
+		        	<#else>
+					<div class="no_cash">当前没有可分享的花票</div>
+					</#if>
+			        </div>
+				</div>
+				<div class="mycash_menu_5 menu_ccc">
+					<label>如何获得花票</label>
+					<span>1.分享有礼：邀请好友并成功下单可获得 5 元花票。</span>
+					<span>2.下单成功后自动产生面额随机的花票，花票可分享至好友。</span>
+					<span>3.回馈新老用户会发送花票优惠码至用户的微信公众号中或以微信推送形式通知。</span>
+					<span>4.后台可新建一个红包，限定红包个数并且不等额发放，收到的红包即花票。</span>
+					<span>5.线下活动，用户可根据领回的花票，获取花码，输入即可消费。</span>
+					<label>花票使用规则</label>
+					<span>1.后台可设置花票可领取人的权限（如绑定手机号的会员、普通用户）、每人领取张数、生效时间、过期时间、到期提醒（如到期前两天提醒一次）、可使用商品范围（全部、指定）、使用说明。</span>
+					<span>2.满 40 可使用 5 元花票，满 60 可使用 10 元花票，满100 可使用 20 元花票……，单次购买仅能使用一张花票。</span>
+					<span>3.使用花码不可退，不找零。</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

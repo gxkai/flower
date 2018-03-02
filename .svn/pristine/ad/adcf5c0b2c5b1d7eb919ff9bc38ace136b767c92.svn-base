@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css"> 
+		 .file {
+				    position: relative;
+				    display: inline-block;
+				    background: #D0EEFF;
+				    border: 1px solid #99D3F5;
+				    border-radius: 4px;
+				    padding: 4px 12px;
+				    overflow: hidden;
+				    color: #1E88C7;
+				    text-decoration: none;
+				    text-indent: 0;
+				    line-height: 20px;
+				}
+				.file input {
+				    position: absolute;
+				    font-size: 100px;
+				    right: 0;
+				    top: 0;
+				    opacity: 0;
+				}
+				.file:hover {
+				    background: #AADFFD;
+				    border-color: #78C3F3;
+				    color: #004974;
+				    text-decoration: none;
+				}
+		</style>
+		<title>会员管理 - 发送客服消息</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <span class="c-gray en">&gt;</span> 发送客服消息<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+				<span class="select-box l" style="width:auto;">
+					  	<select class="select" id="isMb" name="isMb" onchange="isMb()" >
+								       <option value="0" selected="selected">客服消息</option>
+								       <option value="1" >模版消息</option>
+						</select>
+				</span>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray select1" style="margin-top: 4px;">
+				<span class="l" style="width: 100px">
+					<input type="text" class="input-text" placeholder="开始ID"  id="id_start" name="id_start" >
+				</span>
+				<span class="l ml-10" style="width: 100px">
+					<input type="text" class="input-text" placeholder="结束ID"  id="id_end" name="id_end" >
+				</span>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray select2" style="margin-top: 4px;display: none;">	
+			    <span id="id_selected" style="color: red;">注：发送模版消息请先绘制表f_account_selected</span>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray" style="margin-top: 4px;">
+			<span class="l" style="width: 250px">
+				<input type="text" class="input-text" placeholder="输入内容"  id="content" name="content" >
+			</span>
+			<span class="l ml-10 select1" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入链接名称"  id="name" name="name" >
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入链接地址"  id="link" name="link" >
+			</span>
+			<span class="select-box l" style="width: 180px">
+				  	<select class="select" id="slink" name="slink"  onchange="change()"  style="width: 170px">
+						    	<option value="" >--选择已有链接地址--</option>
+						    	<#list list as list>
+							       <option value="${list.url!}" >${list.name!}  ${list.url!}</option>
+							     </#list>
+					</select>
+			</span>
+			<span class="l" style="width: 300px;position: absolute;margin-left: 10px;margin-top:10px  font-size: 10px;color: red;">
+                                           注：当需要添加链接时输入链接名称和链接地址
+			</span>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray select1" style="margin-top: 4px;" >			
+				<a href="javascript:;" class="file">选择图片
+					<input  type="file" class="change" name="uploadfile" id="uploadfile" accept="image/*" onchange="photoCheck(this)">
+				</a>
+				<img src="" id="imgShow" style="width:100px;height:100px"></img>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray" style="margin-top: 4px;">
+			<span class="l" style="width: 170px">
+				<input type="text" class="input-text" placeholder="单个测试输入会员ID"  id="id" name="id" >
+			</span>
+			<span class="l" style="width: 170px">
+			<input class="l btn btn-primary ml-10" type="submit" value="单个测试" onclick="return false;" id="uploadtest">	
+			</span>
+			<span class="l" style="width: 170px;margin-left: -80px;">
+			<input class="l btn btn-primary ml-10" type="submit" value="群发" onclick="return false;" id="uploadSendAll">	
+			</span>
+			<span class="l" id="loadpicS" style="width: 300px;margin-left: -80px;margin-top: 1px;position: absolute;">
+            
+			</span>
+			<span class="l" id="loadpicF" style="width: 300px;margin-left: 80px;margin-top: 1px;position: absolute;">
+            
+			</span>
+			</div>
+			<span class="l" style="width: 170px;margin-left: 180px;margin-top: 10px;">
+			<input class="l btn btn-primary ml-10" type="submit" value="终止请求" onclick="abort()" style="background-color: red;">	
+			</span>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery-form.js"></script>		
+        <script type="text/javascript" src="/resource/flower/js/ajaxfileupload.js"></script> 
+        <script type="text/javascript" src="/resource/flower/js/jquery.filestyle.js"></script>         
+        <script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>		
+		
+		<script type="text/javascript">
+		function isMb() {
+			var isMb = $("#isMb").find("option:selected").val();
+			if (Number(isMb)==0) {
+				$(".select1").css("display","block");
+				$(".select2").css("display","none");
+			}else {
+				$(".select2").css("display","block");
+				$(".select1").css("display","none");
+			}
+		}
+		function abort() {
+			parent.actconfirm('确定终止群发？', function(){	
+			 $.post('/manage/iframe/member/setSession/');
+			 });
+		}
+		function photoCheck(obj){
+			　  var ff = $("#uploadfile").val();
+			　　　//获取文件的路径
+			  if(ff == null || ff == ""){
+			    return;
+			  }
+			  photo_flag = true;
+			  var fSize = 50.9 * 1024;//设置图像的大小为50kb，这里你可以自己设置
+			  var fileType;
+			  var fileSize;
+			  var filePath;
+			　　　if (obj.files) { 
+			　　　// obj.files 是chrome，firefox等浏览器的对戏那个，如果是ie的话他的值就是false
+			    var reader = new FileReader();
+			//这个FileReader在稍后会进行较详细的描述，要注意的是只有 Firefox 3.6+ 和 Chrome 6.0+ 实现了 FileReader 接口。
+			    var thisFile = obj.files[0];//获取文件的对像
+			    var isFirefox=navigator.userAgent.indexOf("Firefox"); 
+			　　//注意这个是判断当前用户使用的浏览器是哪一种，如果返回的值是大于0的话,那么表示浏览器是当前浏览器，例如isFirefox>0上诉的就是firefox
+			   
+			    fileType = thisFile.type;
+			//获取文件的类型，一般来说，如果类型是image/jpeg,.jpg,.gif等等图片格式的话就是合理的
+			    fileSize=thisFile.size;//获取当前上传的文件的大小
+			    fileSize = isFirefox > 0 ? thisFile.size : thisFile.fileSize; 
+			//如果是firefox,调用
+			    reader.readAsDataURL(thisFile);
+			    // readAsDataURL：该方法将文件读取为一段以 data: 开头的字符串，这段字符串的实质就是 Data URI，Data URI是一种将小文件直接嵌入文档的方案。这里的小文件通常是指图像与 html 等格式的文件
+			    reader.onloadend = function(event) {
+			　　//文件读取成功完成时触发
+			       
+			      var imgObj = new Image();
+			      imgObj.src = event.target.result; // 图像的路径      
+			　　            imgObj.onload = function(event) {
+			   // 图片加载完毕后
+			        filePath = this.src;
+			         
+			        if(photo_flag){
+			          $("#imgShow").attr("src", filePath);
+			//设置图片为当前上传的图片路径
+			        } else {
+			          $("#imgShow").attr("src", "default.jpg");
+			//否则设置默认的图片
+			        }
+			      }
+			    } 
+			　　　} else { //如果是ie
+			　　　   obj.select();
+			    var path = document.selection.createRange().text;
+			//ie下返回上传时选定的文件路径
+			 
+			    var img = new Image(); 
+			    img.src = path; 		     
+			    var fileType = path.substring(path.length-4,path.length); 
+			    if(img.readyState == "complete") {
+			//图片加载完毕,获取图片的大小
+			      fileSize = img.fileSize;
+			    } else {
+			      img.onreadystatechange=function(){
+			         if(img.readyState=='complete'){
+			//当图片load完毕
+			           fileSize = img.fileSize;
+			        }
+			       }
+			    }
+			    if (path) {
+			      filePath = path;
+			    }
+			  }
+			/*   //图片格式的判断
+			　　　if(fileType != ".jpg" && fileType != ".JPG" && fileType != "image/jpeg"){ 
+			　　　    photo_flag = false;
+			    $("#imgShow").attr("src", "default.jpg");
+			    return;
+			  } */
+			  /* if(fileSize > fSize){
+			    alert("图片太大了！");
+			    photo_flag = false;
+			    $("#imgShow").attr("src", "default.jpg");
+			    return;
+			  } */
+			  if(photo_flag){
+			    $("#imgShow").attr("src", filePath);
+			  } else {
+			    $("#imgShow").attr("src", "default.jpg");
+			  }
+			}
+		function createXHR(){
+            var xhr = null;
+            if(window.XMLHttpRequest){
+                xhr = new XMLHttpRequest();
+            }else if(window.ActiveXObject){
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            return xhr;
+        }
+		 $('#uploadtest').click(function() {
+			    var content = encodeURI(encodeURI($("#content").val()));
+		    	var name =  encodeURI(encodeURI($("#name").val()));
+		    	var link = $("#link").val();			    	
+		    	var uploadfile= $("#uploadfile").val();
+		    	var isMb = $("#isMb").find("option:selected").val();
+		    	if (content==""&&uploadfile=="") {
+		    		layer.tips('内容,图片不能都为空', '#content', {tips: [1, '#34495E']});	return;
+				}
+		    	if (link==""&&name!="") {
+		    		layer.tips('链接地址不能为空', '#link', {tips: [1, '#34495E']});	return;
+				}
+		    	if (uploadfile!="") {
+		    		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(uploadfile)){
+						 layer.msg('图片类型必须是.gif,jpeg,jpg,png中的一种',{time : 2000});return;	 
+					 }
+				} 
+		    	var id = $("#id").val();
+		    	if (id=="") {
+		    		layer.tips('请输入会员ID', '#id', {tips: [1, '#34495E']});	return;
+				}
+		    	reg = /^[0-9_]{1,11}$/;
+		    	if(!reg.test(id)){
+					layer.tips('会员ID为1到11位数字', '#id', {tips: [1, '#34495E']});	return;
+				}
+		    	var load = layer.load();
+		    	 var xhr = createXHR();   
+		    	 xhr.onload = function(data) {  
+		             if (xhr.status == 200) {
+		            	 layer.close(load);
+		            	 var obj = eval('('+xhr.responseText+')')
+		            	 layer.msg(obj.msg,{time : 2000});
+		             }   
+		           };
+			       xhr.open("POST", '/manage/iframe/member/KfTest2?name='+name+'&link='+link+'&content='+content+'&id='+id+'&isMb='+isMb, true);
+			       var uploadfile = document.getElementById("uploadfile").files[0]; // js 获取文件对象
+	               var form = new FormData(); // FormData 对象
+	               form.append("uploadfile", uploadfile); // 文件对象
+			       xhr.send(form); 
+		 })
+		    function change() {
+				$("#link").val($("#slink").val());
+			}
+		    $("#uploadSendAll").click(function() {
+		    	var content = encodeURI(encodeURI($("#content").val()));
+		    	var name =  encodeURI(encodeURI($("#name").val()));
+		    	var link = $("#link").val();			    	
+		    	var uploadfile= $("#uploadfile").val();
+		    	if (content==""&&uploadfile=="") {
+		    		layer.msg('内容,图片不能都为空', {time:2000});	return;
+				}
+		    	if (link==""&&name!="") {
+		    		layer.tips('链接地址不能为空', '#link', {tips: [1, '#34495E']});	return;
+				}
+		    	if (uploadfile!="") {
+		    		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(uploadfile)){
+						 layer.msg('图片类型必须是.gif,jpeg,jpg,png中的一种',{time : 2000});return;	 
+					 }
+				} 	
+		    	parent.actconfirm('是否已经测试成功？确定群发？', function(){	
+			    	 $.post('/manage/iframe/member/kftextcookie/', function(data){
+			    		 if (data) {
+			    			 uploadSendTextAll(link,content,name);
+			    		 }else {
+			    			layer.alert("今天已经有人点击过了,请明天再来吧!", {icon:5});return;
+						}
+			    	 })
+				});
+			})
+			
+		    function uploadSendTextAll(link,content,name) {
+		    	var count = "";
+		    	var id_start = $("#id_start").val();
+		    	var id_end = $("#id_end").val();
+		    	var isMb = $("#isMb").find("option:selected").val();
+		    	$.post('/manage/iframe/member/GetMemberCount?id_start='+id_start+'&id_end='+id_end+'&isMb='+isMb, function(data){
+		    		 count = data;
+	                 var t = document.getElementById("loadpicS");
+	                 var f = document.getElementById("loadpicF");
+	                 t.innerHTML = "loading...";
+	                 var xhr = createXHR(); 
+	                 var oldSize=0;
+	                 var success="0";
+                	 var successP="";
+                	 var fail = "0";
+                	 var failP="";
+	                 xhr.onreadystatechange = function(){
+	                     if(xhr.readyState == 3||xhr.readyState == 4){
+	                    	 var result = xhr.responseText.substring(oldSize);
+	                    	 oldSize = xhr.responseText.length;
+	                    	 var obj = eval("(" + result + ")");
+	                    	 var failP = obj.failP;
+	                    	 var successP = obj.successP;
+		                     if (typeof(failP)!="undefined") {
+		                    	   f.innerHTML ="失败:"+ failP + "/"+count;
+			                       fail=failP;
+							   }else {
+								   f.innerHTML ="失败:"+ fail + "/"+count;
+							   }
+		                     if (typeof(successP)!= "undefined") {
+		                    	   t.innerHTML ="成功:"+ successP + "/"+count;
+		                    	   success=successP;
+							   }else {
+								   t.innerHTML = "成功:"+success + "/"+count;
+							   }	
+	                     }
+	                     if(xhr.readyState == 4){        	 
+	                         // 请求执行完毕
+	                         f.innerHTML = "";
+	                         t.innerHTML = "总计"+count+"条,成功"+ success+"条,失败"+fail+"条";return;
+	                     }
+	                 }
+	                 xhr.open('post','/manage/iframe/member/KfSendAll2?name='+name+'&link='+link+'&content='+content+'&id_start='+id_start+'&id_end='+id_end+'&isMb='+isMb);
+	                 var uploadfile = document.getElementById("uploadfile").files[0]; // js 获取文件对象
+	                 var form = new FormData(); // FormData 对象
+	                 form.append("uploadfile", uploadfile); // 文件对象
+	                 xhr.send(form);
+			    })
+			}
+		</script> 
+	</body>
+</html>

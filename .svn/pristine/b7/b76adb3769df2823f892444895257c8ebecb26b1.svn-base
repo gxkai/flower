@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="UTF-8">
+		<title>玩法详情</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<script src="js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			body{
+				margin: 0px ;
+				padding: 0px;
+			}
+			.container{
+				border-top: 8px solid #f6f6f6 ;
+			}
+			.content_top{
+				background: white;
+				font-size: 14px;
+				font-family: "微软雅黑";
+				padding: 5px 10px;
+			}
+			.content_top span{
+				line-height: 1.8 ;
+			}
+			.img_describe{
+			}
+			.img_describe .title{
+				font-size: 14px;
+				font-family: "微软雅黑";
+				padding: 10px 10px;
+				display: block;
+				background: #f6f6f6;
+			}
+			
+			.span_btn{
+				width: 90%;
+				height: 40px;
+				float: left;
+				text-align: center;
+				box-sizing: border-box;
+				padding: 4px 3px;
+				background: #fe5478;
+				color: white;
+				line-height: 30px;
+				font-size: 13px;
+				overflow: hidden; 
+				text-overflow:ellipsis;
+				border-radius: 5px;
+				margin-bottom:10px;
+				
+			}
+			#span_btn{
+			  display: flex;
+			  justify-content: center;
+			  align-items: center;
+			}
+		</style>
+		
+		
+	</head>
+	<body>
+		
+		<div class="container">
+			
+			<div class="content">
+				<!-- <div class="content_top">
+					<span class="title">1. 红包兑换区域</span><br />
+					<span class="info">仅限以下服务中地区兑换：江浙沪全境、安徽合肥、超出服务范围请谨慎选择红包。</span><br />
+					<span class="title">2. 红包未领取怎么办</span><br />
+					<span class="info">未领取的红包，将在七日后自动退款</span>
+				</div> -->
+			
+				<div class="img_describe">
+					<!-- <span class="title">发红包流程</span> -->
+					<img src="/image/redpackage_playinfo.jpg" style="width: 100%;"/>
+					<div id="span_btn">
+						<span class="span_btn" onclick="back()">返回</span>
+						<script type="text/javascript">
+							function back(){
+								history.go(-1)
+							}
+						</script>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		
+	</body>
+</html>

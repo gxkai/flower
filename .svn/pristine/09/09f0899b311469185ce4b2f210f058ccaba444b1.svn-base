@@ -1,0 +1,203 @@
+package com.util;
+
+import java.util.TimerTask;
+
+import com.jfinal.kit.PropKit;
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.weixin.sdk.api.ApiConfig;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.CustomServiceApi;
+import com.jfinal.weixin.sdk.api.CustomServiceApi.Articles;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 纪念日即将到来提醒,提前7天通知
+ * @author SHICHUNXIANG
+ *
+ */
+public class TimerSendMsgJiNianRi extends TimerTask {
+
+	@Override
+	public void run() {
+		String str = "select count(*) 'count' from f_control where date_format(NOW(),'%Y-%m-%d')=date_format(cOpTime,'%Y-%m-%d') and cType='TimerSendMsgJiNianRi'";
+		Long count=Db.queryLong(str);
+		if(count>0){
+			return;//每天只执行一次
+		}
+		int hour=new Date().getHours();
+		if(hour>=8 && hour<=12){
+			// 绑定 apiConfig 到线程之上
+			ApiConfig ac = new ApiConfig();
+			// 配置微信 API 相关常量
+			ac.setToken(PropKit.get("token"));
+			ac.setAppId(PropKit.get("appId"));
+			ac.setAppSecret(PropKit.get("appSecret"));
+			ac.setEncryptMessage(PropKit.getBoolean("encryptMessage", false));
+			ac.setEncodingAesKey(PropKit.get("encodingAesKey", "setting it in config file"));
+			// 发送模板消息
+			ApiConfigKit.setThreadLocalApiConfig(ac);
+			
+			try {
+				sendMsg();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				sendCustomMsg();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		TimerLog.AddLog("TimerSendMsgJiNianRi");
+		
+	}
+	
+	/**
+	 * 发送手机短信
+	 * @throws ParseException 
+	 */
+	public void sendMsg() throws ParseException{
+		SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+        Date date = new Date();
+		String sdf = new SimpleDateFormat("yyyy年MM月dd日").format(date);
+        
+        Calendar sevenday = Calendar.getInstance();
+        sevenday.setTime(chineseDateFormat.parse(sdf));
+        sevenday.add(Calendar.DAY_OF_MONTH, 7);// 今天+7天 
+        Lunar sdate = new Lunar(sevenday);
+        
+        List<Record> listAll = Db.find("SELECT format from f_memory GROUP BY format");
+        for (Record record:listAll) {
+        	List<Record> list=new ArrayList<>();
+			if (record.getInt("format")==1) {
+				list=Db.find("select case a.format WHEN 1 then '公历' WHEN 2 then '农历' end 'format',"
+						+ "case a.type WHEN 1 then '父亲生日' WHEN 2 then '母亲生日' WHEN 3 then '爱人生日' WHEN 4 then '结婚纪念日' end 'type',"
+						+ "a.aid,a.date,b.openid,CONCAT(YEAR(now()),'年',a.date) 'date_a' from f_memory a "
+						+ "left join f_account b on a.aid=b.id "
+						+ "where format=1 and date_format(DATE_ADD(NOW(),INTERVAL 7 day),'%Y年%c月%e日')=CONCAT(YEAR(now()),'年',date)"
+						+ "or date_format(DATE_ADD(NOW(),INTERVAL 7 day),'%Y年%c月%e日')=CONCAT(YEAR(now())+1,'年',date) ");							
+			}
+			else if (record.getInt("format")==2) {
+				String sql = String.format("select case a.format WHEN 1 then '公历' WHEN 2 then '农历' end 'format',"
+						+ "case a.type WHEN 1 then '父亲生日' WHEN 2 then '母亲生日' WHEN 3 then '爱人生日' WHEN 4 then '结婚纪念日' end 'type',"
+						+ "a.aid,a.date,b.openid,CONCAT(YEAR(now()),'年',a.date) 'date_a' from f_memory a "
+						+"left join f_account b on a.aid=b.id "
+						+"where format=2 and CONCAT(YEAR(now()),'年',date)='%s' "
+						+"or CONCAT(YEAR(now())+1,'年',date)='%s' "
+						+ "or CONCAT(YEAR(now())-1,'年',date)='%s' ", sdate,sdate,sdate);
+				list = Db.find(sql);
+			}			
+			for (Record newRecord : list) {
+				if(StrKit.notBlank(newRecord.getStr("tel"))){
+					String content=String.format("工作再忙，友谊与爱不可辜负，%s%s是您%s。来花美美提前锁定您的礼物就可以安心工作了。", 
+							newRecord.getStr("format"),newRecord.getStr("date"),newRecord.getStr("type"));
+					try {
+						int flag=SendMsgUtil.sendMsg(newRecord.getStr("tel"), content);
+						if(flag==1){       
+	                       Record f_warnlog=new Record();
+	                       f_warnlog.set("nCode", newRecord.getStr("time_b"));
+	                       f_warnlog.set("nType", "hptx_msg");
+	                       f_warnlog.set("nTime", new Date());
+	                       f_warnlog.set("nContent", "message");
+	                       f_warnlog.set("nRemark", "success");
+	                       f_warnlog.set("nAid", newRecord.getInt("aid"));
+	                       Db.save("f_warnlog", f_warnlog);
+						}else{
+							Record f_warnlog=new Record();
+		                       f_warnlog.set("nCode", newRecord.getStr("time_b"));
+		                       f_warnlog.set("nType", "hptx_msg");
+		                       f_warnlog.set("nTime", new Date());
+		                       f_warnlog.set("nContent", "message");
+		                       f_warnlog.set("nRemark", "fail");
+		                       f_warnlog.set("nAid", newRecord.getInt("aid"));
+		                       Db.save("f_warnlog", f_warnlog);
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 发送客服消息
+	 * @throws ParseException 
+	 */
+	public void sendCustomMsg() throws ParseException{
+		SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+        Date date = new Date();
+		String sdf = new SimpleDateFormat("yyyy年MM月dd日").format(date);
+        
+        Calendar sevenday = Calendar.getInstance();
+        sevenday.setTime(chineseDateFormat.parse(sdf));
+        sevenday.add(Calendar.DAY_OF_MONTH, 7);// 今天+7天 
+        Lunar sdate = new Lunar(sevenday);
+        System.out.println(sdate);
+        
+        List<Record> listAll = Db.find("SELECT format from f_memory GROUP BY format");
+        for (Record record:listAll) {
+        	List<Record> list=new ArrayList<>();
+			if (record.getInt("format")==1) {
+				list=Db.find("select case a.format WHEN 1 then '公历' WHEN 2 then '农历' end 'format',"
+						+ "case a.type WHEN 1 then '父亲生日' WHEN 2 then '母亲生日' WHEN 3 then '爱人生日' WHEN 4 then '结婚纪念日' end 'type',"
+						+ "a.aid,a.date,b.openid,CONCAT(YEAR(now()),'年',a.date) 'date_a' from f_memory a "
+						+ "left join f_account b on a.aid=b.id "
+						+ "where format=1 and date_format(DATE_ADD(NOW(),INTERVAL 7 day),'%Y年%c月%e日')=CONCAT(YEAR(now()),'年',date)"
+						+ "or date_format(DATE_ADD(NOW(),INTERVAL 7 day),'%Y年%c月%e日')=CONCAT(YEAR(now())+1,'年',date) ");							
+			}
+			else if (record.getInt("format")==2) {
+				String sql = String.format("select case a.format WHEN 1 then '公历' WHEN 2 then '农历' end 'format',"
+						+ "case a.type WHEN 1 then '父亲生日' WHEN 2 then '母亲生日' WHEN 3 then '爱人生日' WHEN 4 then '结婚纪念日' end 'type',"
+						+ "a.aid,a.date,b.openid,CONCAT(YEAR(now()),'年',a.date) 'date_a' from f_memory a "
+						+"left join f_account b on a.aid=b.id "
+						+"where format=2 and CONCAT(YEAR(now()),'年',date)='%s' "
+						+"or CONCAT(YEAR(now())+1,'年',date)='%s' "
+						+ "or CONCAT(YEAR(now())-1,'年',date)='%s' ", sdate,sdate,sdate);
+				list = Db.find(sql);
+			}	
+			for (Record newRecord : list) {
+				Articles article = new Articles();
+		 		article.setTitle("纪念日即将到来提醒");
+		 		article.setDescription(String.format("工作再忙，友谊与爱不可辜负，%s%s是您%s。来花美美提前锁定您的礼物就可以安心工作了。", 
+		 				newRecord.getStr("format"),newRecord.getStr("date"),newRecord.getStr("type")));
+		 		article.setUrl(Constant.getHost + "/index");
+		 		//article.setPicurl(Constant.getHost + "/image/hp.jpg");
+		 		List<Articles> listArt = new ArrayList<>();
+		 		listArt.add(article);
+		 		ApiResult ar = CustomServiceApi.sendNews(newRecord.getStr("openid"), listArt);
+		 		if(ar.getInt("errcode") == 0){
+		 			Record f_warnlog=new Record();
+	                f_warnlog.set("nCode", newRecord.getStr("date_a"));
+	                f_warnlog.set("nType", "hptx_customMsg");
+	                f_warnlog.set("nTime", new Date());
+	                f_warnlog.set("nContent", "customMessage");
+	                f_warnlog.set("nRemark", "success");
+	                f_warnlog.set("nAid", newRecord.getInt("aid"));
+	                Db.save("f_warnlog", f_warnlog);
+		 		}else{
+		 			Record f_warnlog=new Record();
+	                f_warnlog.set("nCode", newRecord.getStr("date_a"));
+	                f_warnlog.set("nType", "hptx_customMsg");
+	                f_warnlog.set("nTime", new Date());
+	                f_warnlog.set("nContent", "customMessage");
+	                f_warnlog.set("nRemark", "fail"+ar.getErrorMsg());
+	                f_warnlog.set("nAid", newRecord.getInt("aid"));
+	                Db.save("f_warnlog", f_warnlog);
+		 		}		
+			}
+		}
+	}
+}

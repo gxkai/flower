@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/blessing.css"/>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/qrcode.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<title>传递爱</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	</head>
+	<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+	<style type="text/css">
+		.header{
+			width:100%;
+		}
+		.header img{
+			width:100%;
+		}
+		
+		.q_footer_span{
+			display:block;
+			width:100%;
+			background:#eb6876;
+			text-align:center;
+			padding:3px 4px;
+			color:white;
+			font-size:12px; 
+		}
+		
+		
+	</style>
+	<body>
+		<div class="container">
+			
+			<!--header-->
+			<div class="header">
+				<img src="http://ozdzt401n.bkt.clouddn.com/blessing_1.jpg"/>
+			</div>
+			
+			<div class="title_div" >
+				<img src="/resource/flower/image/icon/blessing/blessling_dingyue.png" style="width: 15px;"/>
+				<span style="margin-left: 5px;">
+					订阅花
+				</span>
+			</div>
+			
+			<!--content-->
+			<div class="content">
+				<#list dingyuelist as dingyue>
+					<div class="good_div" onclick="redcard(${dingyue.id!})">
+						<img src="${dingyue.imgurl03!}"/>
+						<span>${dingyue.name!}</span>
+					</div>
+				</#list>
+			</div>
+			
+			<div class="title_div" >
+				<img src="/resource/flower/image/icon/blessing/blessling_lipin.png" style="width: 15px;"/>
+				<span style="margin-left: 5px;">
+					礼品花
+				</span>
+			</div>
+			
+			<!--content-->
+			<div class="content">
+				<#list lipinlist as lipin>
+					<div class="good_div" onclick="redcard(${lipin.id!})">
+						<img src="${lipin.imgurl03!}"/>
+						<span>${lipin.name!}</span>
+					</div>
+				</#list>
+			</div>
+			
+			
+			
+			<form action="/service/nextblessing" method="post">
+				<input name="id" hidden>
+			</form> 
+			<script type="text/javascript">
+				
+				function redcard(id){
+					console.log(id)
+					$('input[name=id]').val(id);
+					$('form').submit(); 
+					
+				}
+			
+			</script>
+			
+		</div>
+		
+	  <#if isshow == 1 && isshow ??>
+	  <script type="text/javascript">
+		var image = new Image();
+		
+		var open = layer.open({
+			   type: 1,
+			   skin: "", 
+			   area: ["320px", "220px"],
+			   closeBtn: 0, 
+			   shadeClose: true, 
+			   title:false,
+			   content: 
+					'   <div style="background:#eee"><div id="qrimghide" style="display: none;"></div>'
+					+'  <img id="imgbj" src="${cardUrl!}" style="display: none;"/>'
+					+'	<div id="qrcode" ></div>'
+					+'	<span class="q_footer_span">长按图片发送给好友  &nbsp; ></span></div>'
+					
+					+'	<script type="text/javascript">'
+					+'	var imgcode;'
+					+'	$(document).ready(function(){ '
+					+'		var qrcode = new QRCode(document.getElementById("qrimghide"), {'
+					+'			width: 200,'
+					+'		 	height: 200'
+					+'		  });'
+					+'	    var img = qrcode.makeCode("${url!}");'
+					+'	    imgcode=$("#qrimghide img")[0];'
+					+'		}); '
+						
+					+'	function func( ){ '
+					+'	    var c = document.createElement("canvas");'
+					+'	 	var ct = c.getContext("2d");'
+					+'		c.width = 320*2;'
+					+'		c.height = 190*2;'
+					+'		ct.rect(0, 0, c.width, c.height);'
+					+'		ct.fillStyle = "transparent"; '
+					
+					+'	 	ct.font = "14px Arial white";'
+					+'		ct.textAlign = "center";'
+					+'		ct.fontFamily = "微软雅黑";'
+					
+					+' 		ct.fill();'
+					+'		var bgimg =document.getElementById("imgbj");'
+					+'	 	ct.drawImage(bgimg, 0, 0, 320*2, 200*2);'
+						 	
+					+'			setTimeout(() => {'
+					+'			ct.drawImage($("#qrimghide img")[0], 493, 250, 100, 100); '
+					+'			image.src = c.toDataURL("image/png");'
+					+'			image.width = 320;'
+					+'			image.height = 190;'
+					+'			$("#qrcode").html(image);'
+					+'		}, 50);'
+					+'	 } '
+					+'	 window.onload=func;'
+					+'<\/script>  '
+				}) 
+					
+				</script>
+				
+		</#if>	
+		
+	</body>
+</html>

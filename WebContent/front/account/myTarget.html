@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<title>我的目标</title>
+	</head>
+	<style type="text/css">
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			background: url(/resource/flower/image/targetbg.jpg) no-repeat;
+			background-size: cover;
+			/*max-width: 768px;*/
+			margin: auto;
+			height: 100%;
+		}
+		.target_top .p1{
+			color: #d85a5c;
+			margin-top: 26%;
+			text-align: center;
+			font-size: 5.5vw;
+		}
+		.target_top .p2{
+			color: #ab4250;
+			margin-top: 11%;
+			text-align: center;
+			font-size: 5vw;
+			text-shadow: 1px 0px;
+    		font-weight: 100;
+		}
+		.p2 img{
+			width:10%;
+			vertical-align: middle;
+		}
+		.btn_rule{
+			position: absolute;
+		    right: 0;
+		    top: 39%;
+		    width: 9%;
+		    z-index: 9;
+		}
+		img{
+			max-width: 100%;
+		}
+		.target_tree{
+			margin-top: 4%;
+			position: relative;
+		}
+		.gray {
+		    background-image: url(/resource/flower/image/target_a.png);
+		    background-size: cover;
+		    background-repeat: no-repeat;
+		    width: 100%;
+		    padding-top: 81.95%;
+		    position: absolute;
+		}
+		.color {
+		    background-image: url(/resource/flower/image/target_b.png);
+		    background-size: cover;
+		    background-repeat: no-repeat;
+		    padding-top: 81.95%;		    
+		}
+		
+		.no{
+			text-align: center;
+    		padding-top: 30%;
+		}
+		.dt{
+			text-align: center;
+		    width: 62%;
+		    margin: auto;
+		    background-color: #ee5268;
+		    border-radius: 40px;
+		    padding: 6px 0px;
+		    color: #fff;
+		    margin-top: 4%;
+		    font-size: 3.8vw;
+		}
+		.dt .tt{
+			padding:0 2px;
+			font-family: -webkit-pictograph; 
+		}
+		.gray_bg {
+		    width: 100%;
+		    min-height: 100%;
+		    background-color: rgba(0, 0, 0, 0.7);
+		    position: fixed;
+		    left: 0;
+		    top: 0;
+		}
+		.rule-page .wrap {
+			width:260px;
+			border: 1px solid #d7d7d7;
+			position:fixed;
+			left:50%;
+			top:50%;
+			transform:translate(-50%,-50%);
+			-webkit-transform:translate(-50%,-50%);
+			background:#fff;
+			border-radius:3px;
+			z-index:1000;
+			box-shadow: 1px 5px 20px rgba(0, 0, 0, 0.07);
+			padding: 18px 30px 30px;
+			color: #d23e57;
+		}
+		.rule-page .wrap .close{
+			position:absolute;
+			right:0px;
+			top:0px;
+			width:30px;
+			height:30px;
+			cursor:pointer; 
+			opacity: initial;
+		}
+		.rule-page .wrap .close:hover{
+			filter:alpha(opacity=70); -moz-opacity:0.7; -khtml-opacity: 0.7; opacity: 0.7;
+		}
+		.rulebox ol{
+			margin: 10px 0px 10px 10px;
+		}
+		.rulebox li{
+			margin-bottom: 5px;
+			font-size: 0.9em;
+		}
+	</style>
+	<body>
+		<div class="gray_bg" style="display: none;"></div>
+		<#if rd ??>
+		<div class="container">
+			<div class="target_top">
+				<p class="p1">${rd.contentStr!}</p>
+				<p class="p2"><img src="/resource/flower/image/yinzi.png" class=""/><span>已见证人数：</span> <span class="num"></span></p>
+			</div>
+			
+			<#if diff ?? && diff gt 0>
+			   	<div class="dt">
+				      倒计时：<span id="time"></span>
+				 </div>
+			 <#else>
+			 	<div class="dt">
+				 	<span>该目标见证已结束</span>
+			 	</div>
+			 </#if>
+			
+			<div class="btn_rule">
+				<img src="/resource/flower/image/rule_btn.png" class=""/>
+			</div>
+			<div class="target_tree">
+			    <div class="gray">
+		        </div>
+		        <div class="color">
+		        </div>
+		        
+			</div>
+		</div>
+		
+		<section class="rule-page" style="display: none;">
+	        <div class="wrap">
+	            <img src="/resource/flower/image/close.png" alt="" class="close">
+		        <div class="rulebox">
+		        	<h3 style="text-align: center;">活动锦囊</h3>
+	        		<ol>
+	        			<li>选定1个小目标，邀请好友为你见证点亮许愿树</li>
+	        			<li>每个人只能见证一次，不能为自己见证，见证领取现金红包</li>
+	        			<li>见证人新用户人气值>老用户</li>
+	        			<li>邀请5位新用户或15位老用户为你点亮许愿树，即可获39-15元花票，点亮越多奖品越丰厚</li>
+	        			<li>若见证人失联（取关），则人气值下降 </li>
+	        			<li>每人只取完全点亮的最高一片树叶为奖品</li>
+	        			<li>每人仅限24小时内完成任务，完成后发放奖品 </li>
+	        		</ol>
+				    <p>本活动最终解释权归花美美</p>
+		        </div>
+	        </div>
+      	</section>
+		
+		<script type="text/javascript">
+			$(function(){
+				var num=${rd.wNumNew}+${rd.wNumOld};
+				$(".target_top .p2 .num").html(num);
+				
+				$(".btn_rule").click(function() {
+		    		$(".gray_bg,.rule-page").show();
+			   	}); 
+			   	$(".rule-page .close").click(function() {
+			        $(".gray_bg,.rule-page").hide();
+			   	});
+				
+				  var score=${rd.wScore};
+				  var pt;
+				  if (score>=9500) {
+					score=9500;
+				}
+				   if(score<=15){
+				   	pt=  65+ (81.95-65)*(15-score)/15
+				   }else if(score>15&&score<=50){
+				   	pt=  53+ (65-53)*(50-score)/(50-15)
+				   }else if(score>50&&score<=80){
+				   	pt=  42+ (53-42)*(80-score)/(80-50)
+				   }else if(score>80&&score<=240){
+				   	pt=  29+ (42-29)*(240-score)/(240-80)
+				   }else if(score>240&&score<=750){
+				   	pt=  16+ (29-16)*(750-score)/(750-240)
+				   }else{
+				   	pt= (16-1)*(10000-score)/(10000-750)
+				   }
+				   var length=81.95;
+				   LongAdd();
+				   function LongAdd(){
+					      timer=setInterval(function(){
+					        if(length<=pt){
+					          clearInterval(timer);
+					        }else{
+					          length=length-0.01;	
+					          $(".gray").css("padding-top",length+"%");
+					        }
+					      },1)
+					    }
+				  
+			})
+		</script>
+		
+		<!-- 倒计时 JS -->
+		<script type="text/javascript">
+			    var a=${diff!};         //以毫秒为单位
+			    function fomtime()
+			    {
+			        a = a-1000;
+			        var msg = MillisecondToDate(a);
+			        document.getElementById('time').innerHTML = msg
+			        setTimeout("fomtime()",1000)
+			    }
+			    
+			    function MillisecondToDate(msd) {
+			        var time = parseFloat(msd) / 1000;
+			        if (null != time && "" != time) {
+			            if (time > 60 && time < 60 * 60) {
+			                time = "<span class='tt'>"+ parseInt(time / 60.0) + "</span>:" + "<span class='tt'>"+  parseInt((parseFloat(time / 60.0) -
+			                    parseInt(time / 60.0)) * 60) + "</span>";
+			            }
+			            else if (time >= 60 * 60) {
+			                time = "<span class='tt'>"+ parseInt(time / 3600.0) + "</span>时" + "<span class='tt'>"+ parseInt((parseFloat(time / 3600.0) -
+			                    parseInt(time / 3600.0)) * 60) + "</span>分" + "<span class='tt'>"+
+			                    parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+			                    parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "</span>秒";
+			            }
+			            else {
+			                time = "<span class='tt'>"+ parseInt(time) + "</span>";
+			            }
+			        }
+			        return time;
+			    }
+			    
+			    fomtime(); 
+			</script> 
+		
+		<#else>
+		
+		<div class="no">
+		  <p>你还没有选择目标，<a href="/account/aims_index">去看看</a>！</p>
+		</div>
+		<script>
+			$(function(){
+			   	if($("body div").hasClass("no")){
+					$("body").css("background","#f1f1f1");
+				}
+			})
+		</script>
+		</#if>
+		
+	</body>
+</html>

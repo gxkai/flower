@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+  <meta charset="utf-8"> 
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="format-detection" content="telephone=no" />	
+  <title>我的公益</title>
+  <style type="text/css">
+  *{
+    margin: 0;
+    padding: 0;
+   }
+   /************display:box完美居中****************/
+   .footer1,.footer2{ 
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    
+    display: -moz-box;
+    -moz-box-align: center;
+    -moz-box-pack: center;
+    
+    display: -o-box;
+    -o-box-align: center;
+    -o-box-pack: center;
+    
+    display: -ms-box;
+    -ms-box-align: center;
+    -ms-box-pack: center;
+    
+    display: box;
+    box-align: center;
+    box-pack: center;}
+   </style>
+   <script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+   <script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+   <script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+   </script>
+</head>
+<body style="background-color:#f1f1f1 ">
+   <header style="background-color: white;font-size: 3vw;padding: 2vw;">
+   <img alt="我的头像" src="${headimg!}" width="15%" style="border-radius: 50%;margin-left: 2vw;">
+   <div >
+   <img alt="" src="/resource/flower/image/myfund/6.png" width="4%" style="display:inline; margin-left: 2vw;vertical-align: middle;">
+   <p style="margin-left: 1vw;display: inline;">亲爱的&nbsp;<strong style="color:#FF8800;">${nick!}</strong></p>
+   <p style="padding-left: 2vw;margin-top: 1vw;">欢迎您携手花美美一起献爱心，爱是人间最美的花朵</p>
+   </div>
+   
+    <br/>
+   </header>
+     <!-- 多个div同行可以用float+inline并保证div宽度相加是100vw即可-->
+    <div class="first" style="height: 15vw;background-color: white;margin-top: 1px;">
+            <div style="width: 49.8vw;height: 15vw;float: left;">
+            <p style="font-size: 3vw;color:red;text-align: center;margin-top: 2vw;">累计金额(元)</p>
+            <p style="font-size: 3vw;font-weight:800;text-align: center;margin-top: 1vw;">${allfund!}</p>
+            </div>
+            <div style="width: 49.8vw;height: 15vw;float: right; ">
+            <p style="font-size: 3vw;color:red;text-align: center;margin-top: 2vw;">献爱心次数</p>
+            <p style="font-size: 3vw;font-weight:800;text-align: center;margin-top: 1vw;">${count!0}</p>
+            </div>
+            <div style=" float:left; display:inline-block;height:12vw;width:0.4vw;background-color:#DDDDDD;margin-top: 2vw;">       
+            </div>
+    </div>
+    <div class="second" >
+    <#if fundlist?? && fundlist?size gt 0>
+      <#list fundlist as list>
+         <div style="background-color: white;height: 20vw;">
+            <div style="width: 25vw;height: 20vw;float: left;">
+             <img alt="" src="${list.imgurl!}" style="width:15vw;margin-left: 5vw;margin-top: 2vw;" >
+            </div>
+            <div style="width: 30vw;height: 20vw;float: right;">
+            <p style="font-size: 3.5vw;margin-top: 7vw;"><strong>成功捐助:</strong><span style="color: #FF44AA ">&nbsp;&yen;${list.fund!}</span></p>
+            </div>
+            <div style=" float:left; display:inline-block;height:20vw;width:45vw;">
+            <p style="font-size: 3vw;margin-top: 5vw;">${list.name!}</p>
+            <p style="font-size: 3vw;margin-top: 1vw;">付款金额:&nbsp;<span style="color: #FF44AA ">&yen;${list.price!}</span></p>
+            </div>
+            <div style="height: 1px;background-color: #DDDDDD"></div>
+         </div>
+      </#list>
+      <#else>
+        <img alt="" src="/resource/flower/image/myfund/4.png" width="10%" style="margin-top:10vw;margin-left: 45vw;">
+	    <p style="font-size: 3vw;color:#969696;text-align: center;margin-top: 6vw;">您还未开启爱心行动，马上献一份爱心吧！</p>
+	    <img alt="" src="/resource/flower/image/myfund/3.png" width="20%" style="margin-left: 40vw;margin-top: 5vw;" onclick="location.href='/index'">
+   </#if>
+  
+ 
+    <footer style="position: fixed;bottom: 0;background-color: #00FFFF;width: 100vw;font-size: 10px;" >
+    <div onclick="location.href='/account/introduce'" style="height: 20px" class="footer1">
+    <img alt="" src="/resource/flower/image/myfund/2.png" width="20px" style="display: inline;vertical-align:middle;">花美美公益 X
+    <img alt="" src="/resource/flower/image/myfund/5.png" width="20px" style="display: inline;vertical-align:middle;">云南省青少年发展基金会
+    </div>
+    <div style="font-size: 0.7em;" class="footer2" style="height:20px; text-align: center;">了解更多花美美公益活动,可访问<a href="http://www.flowermm.cn" >http://www.flowermm.cn</a> </div>
+    </footer>   
+   
+
+</body>
+</html>

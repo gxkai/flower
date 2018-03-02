@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/swiper/css/swiper.min.css" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer_mobile/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<!-- 分享功能需要引用weixinjs -->
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+		<title>商品详情</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+  <script type='text/javascript' src='https://assets.growingio.com/sdk/wx/vds-wx-plugin.js'></script>
+		<script type="text/javascript">
+	        var pid = '${flower.id!}';
+			var dmlj = '${dmlj!''}';	// 双品多买立减
+			var activitylist = ${activitylist};	// 购满优惠活动
+			
+			//金额统计(通用函数)：每次点击按钮之后都重新统计一遍
+			function countMoney(){
+				$('#yhprice').remove();//把【原价】显示的文字清除掉
+				var sum=0;
+				var yhMoney=0;//优惠金额
+				var sfMoney=0;//实付金额
+				
+				//第一组按钮金额(主品)
+				var sum01=0;
+				
+				if($('.pro_type span').hasClass('giveselect')){
+					sum01=$('#price_now').data('price')*$('.pro_type .giveselect'). data("index");
+					var gindex = $('.pro_type .giveselect'). data("index");//当前点击的按钮，订阅次数
+					var i;//选择了第几个按钮
+					if(gindex == 1 || gindex == 2){
+						i = 0;
+					}else if(gindex == 4){
+						i = 1;
+					}else if(gindex == 12){
+						i = 2;
+					}else if(gindex == 24){
+						i = 3;
+					}else if(gindex == 48){
+						i = 4;
+					}
+				/* 	if(pid == 1){
+						if(dmlj!=''){
+							yhMoney = dmlj.split('_')[i] * 1;//双品优惠金额
+						}
+					}else{
+						if(dmlj2!=''){
+							yhMoney = dmlj2.split('_')[i] * 1;//多品优惠金额
+						}
+					}  */
+					
+					if(dmlj!=''){
+						yhMoney = dmlj.split('_')[i] * 1;//优惠金额
+					}
+
+				} 
+				//第二组按钮金额（副品：花瓶）
+				var sum02=0;
+				if($('.pro_type_vase span').hasClass('vaseselect_1')){
+					sum02= $('.pro_type_vase .vaseselect_1').data("price");
+				}
+				//第三组按钮的金额(加购商品)
+				var sum03=0;
+				$(".addselect_1").each(function(){
+					sum03 += $(this).data('price');
+             	});
+				
+				//第4组 首单无需购花瓶（可能不再用了，没仔细看代码，先放着）
+				var sum04=0;
+				if($('.checkclass').data('isbuy') == 0){
+					sum04 = $('.vaseselect').parent('span').data('price');
+					
+				}
+				sum=sum01+sum02+sum03+sum04;//计算总金额
+				sfMoney=sum-yhMoney;//计算  实付金额=总金额-优惠金额
+				$('#price_now').text(sfMoney.toFixed(2));//显示实付金额
+				if(yhMoney > 0){
+					$('.pro_2').append('<span id="yhprice">(原价:&yen;' + sum.toFixed(2) + ')</span>');//显示优惠金额
+			    }
+			} 
+			
+			
+			
+			$().ready(function(){
+				//默认选中第一个按钮
+				$('#fistButton').addClass('giveselect');//设置样式
+				countMoney();//统计金额
+				
+				var swiper = new Swiper('.swiper-container', {
+			        pagination: '.swiper-pagination',
+			        paginationClickable: true,
+			        spaceBetween: 10,
+			        speed: 2000,
+			        autoplayDisableOnInteraction : false,
+				    autoplay: 3000
+			    });
+				vaseinit('vaselist', 'vaseselect');
+				upordown('f_u_d');
+				wxconfig(window.location);
+				wx.ready(function(){
+					/* 分享到朋友圈  */
+					wx.onMenuShareTimeline({
+						title: '${flower.shareTitle!}',
+					    desc: '${flower.shareDes!}', // 分享描述
+						link: 'http://'+window.location.host+window.location.pathname,
+						imgUrl: 'http://'+window.location.host+'${flower.imgurl1}'
+					});
+					/* 分享给好友  */
+					wx.onMenuShareAppMessage({
+					    title: '${flower.shareTitle!}', // 分享标题
+					    desc: '${flower.shareDes!}', // 分享描述
+					    link: 'http://'+window.location.host+window.location.pathname, // 分享链接
+					    imgUrl: 'http://'+window.location.host+'${flower.imgurl1}', // 分享图标
+					    type: 'link', // 分享类型,music、video或link，不填默认为link
+					    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					    success: function () {
+					        // 用户确认分享后执行的回调函数
+					    },
+					    cancel: function () {
+					        // 用户取消分享后执行的回调函数
+					    }
+					});
+				});
+				$('.pro_class a').click(function(){
+					$('.pro_class a').removeClass('checkclass');
+					$(this).addClass('checkclass');
+					customcycle(0);
+					if($(this).data('isbuy')==0){
+						$('.pro_5').show();
+					}else{
+						$('.pro_5').hide();
+					}
+				});
+				//  订阅 次数
+				$('.pro_type span').click(function(){
+					$('.giveselect').removeClass('giveselect');
+					$(this).addClass('giveselect');//设置样式
+					countMoney();//统计金额
+				});
+				//花瓶
+				$('.pro_type_vase span').click(function(){
+					
+					var gindex = $('.pro_type .giveselect').data("index");
+				
+					if(gindex != null){
+						if($(this).hasClass('gray')){
+							return;
+						}else{
+							if($(this).hasClass('vaseselect_1')){
+								$(this).removeClass('vaseselect_1');
+							}else{
+			 					$('.vaseselect_1').removeClass('vaseselect_1');
+								$(this).addClass('vaseselect_1');
+							}
+						}
+						countMoney();//统计金额
+					}else{
+						if($(this).hasClass('gray')){
+							return;
+						}else{
+							if($(this).hasClass('vaseselect_1')){
+								$(this).removeClass('vaseselect_1');
+							}else{
+			 					$('.vaseselect_1').removeClass('vaseselect_1');
+								$(this).addClass('vaseselect_1');
+							}
+						}
+						
+					}
+				});
+			});
+			
+			function selectcycle(_obj){
+				$('#cycle').val($(_obj).val());
+			}
+			function customcycle(num){
+				var lineW = $('.pro_4_1_a').width();
+				var priceArr = [1,2,4,6,12,26,52];
+				var i = $('.pro_4_2_2').data('index');
+				i += num
+				if(i>=0 && i<=6){
+					$('.pro_4_2_2').text(priceArr[i]);
+					$('.pro_4_2_2').data('index', i);
+					$('#slider').css("left",((lineW/7)*(i+1))-(lineW/14 + 6));
+					var yhprice = 0;
+					/* if(pid == 1){
+						if(dmlj!=''){
+							yhprice = dmlj.split('_')[i] * 1;
+						}
+					}else{
+						if(dmlj2!=''){
+							yhprice = dmlj2.split('_')[i] * 1;
+						}
+					} */
+					
+					if(dmlj!=''){
+						yhprice = dmlj.split('_')[i] * 1;
+					}
+					
+					
+					$('#yhprice').remove();
+					var total_price = $('#price_now').data('price')*priceArr[i];
+					var yuanjia = total_price;
+					if($('.checkclass').data('isbuy') == 0){
+						var vaseprice = $('.vaseselect').parent('span').data('price');
+						total_price += vaseprice;
+						yuanjia = total_price;
+					}
+					total_price -= yhprice;
+					if(activitylist.length > 0){
+						for(var ai=0;ai<activitylist.length;ai++){
+							if(total_price >= activitylist[0]['money']){
+								yhprice += activitylist[0]['benefit'];
+								total_price -= activitylist[0]['benefit'];
+								break;
+							}
+						}
+					}
+					$('#price_now').text(total_price.toFixed(2));
+					if(yhprice > 0){
+						$('.pro_2').append('<span id="yhprice">(原价:&yen;' + yuanjia.toFixed(2) + ')</span>');
+					}
+				}
+			}
+		</script>
+		
+		<style type="text/css">
+			.vase_1{
+			    float: left;
+			    box-sizing: border-box;
+			    padding-left: 10px;
+			    font-size: 17px;
+			    line-height: 30px;
+			    color: #48505B;
+			   /*  padding-bottom: 10px; */
+			}
+			.vase_2{
+			    font-size: 14px;
+				line-height: 30px;
+				float: left;
+				margin-left: 12px;
+				color: #A1A4A9;
+			}
+			.gray{
+				background-color: #CCC;
+				color: #666 !important;
+			}
+			
+			/* 加购 部分  */
+			.add {
+				float: left;
+				padding: 0 10px;
+			}
+			.add_t {
+    			font-size: 17px;
+    			color: #48505B;
+    			/* padding-bottom: 10px; */
+    			display: block;
+			}
+			.add_list span:nth-child(1){
+				padding-top: 5px;
+    			padding-left: 5px;
+				font-size: 13px;
+				color: #666;
+			}
+			.add_list span:nth-child(2){
+				padding-top: 5px;
+				color: #f36b93;
+				font-size: 13px;
+			}
+			.add_list span:nth-child(3){
+				display: table;
+    			padding: 8px;
+    			text-align: center;
+    			border-radius: 4px;
+    			font-size: 14px;
+    			border: 1px solid #ccc;
+    			color: #666;
+			}
+			.addselect_1{
+				background-color: #E96388;
+				color: white!important;
+				/* border: 0!important; */
+			}
+		</style>
+	
+	</head>
+	<body>
+        <div class="swiper-container">
+	        <div class="swiper-wrapper">
+	        	<img class="swiper-slide" src="${flower.imgurl1}" id="flo_1"/>
+				<img class="swiper-slide" src="${flower.imgurl2}" id="flo_2"/>
+				<img class="swiper-slide" src="${flower.imgurl3}" id="flo_3"/>
+	        </div>
+	        <div class="swiper-pagination"></div>
+	    </div>
+	    
+		<div class="container pb-60">
+			<div class="pro_1">
+				<div class="pro_1_1">
+					<span>${flower.name!}</span>
+					<span>${flower.describe!}</span>
+				</div>
+				<div class="pro_1_2" style="display: none;">分享</div>
+			</div>
+			<div class="pro_2">
+				<span>&yen;</span>
+				<span id="price_now" data-price="${flower.price}">
+				<#if flower.id==1>39.9~799.9<#elseif flower.id==2>59.9~1189.9<#else>${flower.price?string('0.00')}</#if>
+				</span>
+			</div>
+			
+			<!-- 订阅次数 -->
+			<div class="segment_times">
+				<div class="pro_3">
+					<span>订阅次数</span><span style="display: none;">(多加一次，价格立减)</span>
+				</div>
+				
+				<!-- 订阅次数 -->
+				<#if ptid==11>
+				   <div class="pro_type" style="float:none;margin-left:3px;">
+
+					 <span id="fistButton" data-id="2" data-index="4" style="width:70px;margin-left:3px;">4次</span>
+					 <span data-id="3" data-index="12" style="width:70px;margin-left:3px;">12次</span>
+					 <span data-id="4" data-index="24" style="width:70px;margin-left:3px;">24次</span>
+
+				   </div>
+				<#else>
+				   <div class="pro_type" style="float:none;margin-left:3px;">
+					  <span id="fistButton" data-id="1" data-index="1" style="width:70px;">体验1次</span>
+					  <span data-id="2" data-index="4" style="width:70px;margin-left:3px;">4次</span>
+					  <span data-id="3" data-index="12" style="width:70px;margin-left:3px;">12次</span>
+					  <span data-id="4" data-index="24" style="width:70px;margin-left:3px;">24次</span>
+					  <span data-id="5" data-index="48" style="width:70px;margin-left:3px;">48次</span>
+				    </div>
+				</#if>
+			
+				<div class="pro_4" style="display: none;">
+					<div class="pro_4_1">
+						<div class="pro_4_1_a"><img src="/resource/flower/image/icon/017.png" id="slider"></div>
+						<div class="pro_4_1_b">
+				        	<span><i></i>1</span>
+				        	<span><i></i>2</span>
+				        	<span><i></i>4</span>
+				        	<span><i></i>6</span>
+				        	<span><i></i>12</span>
+				        	<span><i></i>26</span>
+				        	<span><i></i>52</span>
+			        	</div>
+					</div>
+					<div class="pro_4_2">
+						<span class="pro_4_2_1" onclick="customcycle(-1)">&minus;</span>
+						<span class="pro_4_2_2" data-index="0">1</span>
+						<span class="pro_4_2_1" onclick="customcycle(1)">+</span>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<!-- 花瓶-->
+			<div class="segment_vase">
+			
+				<span class="vase_1">加购花瓶</span> <#if isbuy==0><span class="vase_2">(首单送花瓶，无需购买)</span></#if>
+				<div class="pro_type_vase">
+					<#list vaselist as vase>
+						<#if vase.state == 2>
+						<span data-vase="${vase.id!}" data-state="${vase.state!}" data-price="${vase.price!}" class="gray">${vase.name}</span>
+						<#else>
+						<span data-vase="${vase.id!}" data-state="${vase.state!}" data-price="${vase.price!}">${vase.name}</span>
+						</#if>				
+					</#list>
+				</div>
+				
+				<div class="pro_class" style="display: none;">
+					<span>加购花瓶</span><#if isbuy==0><span>(首单送花瓶，无需加购)</span></#if>
+					<p><a data-isbuy="0">购买</a><a class="checkclass" data-isbuy="1">不购买</a></p>
+				</div>
+				
+				<div class="pro_5" style="display: none;">
+					<span>请选择一款您喜欢的花瓶</span>
+					<#list vaselist as vase>
+					<span class="vaselist" data-vase="${vase.id!}" data-price="${vase.price!}">
+						<img src="${vase.imgurl!}" />
+						<span style="font-size: 13px;font-weight: bolder;color: #E96388;">&yen;${vase.price?string('0.00')}</span>
+					</span>
+					</#list>
+				</div>
+				
+			</div>
+			
+			
+			<!-- 加购-->
+			<#if addlist?size gt 0>
+			<div class="add">
+				<span class="add_t">随套餐优惠换购</span>
+				
+				<#list addlist as add>
+					<div class="add_list">
+						<span>${add.name!}：</span><span>${add.describe2!}</span>
+						<span data-add="${add.id!}" data-state="${add.state!}" data-price="${add.price!}" id="additem_${add.id!}">${add.describe!}</span>
+					</div>
+				</#list>
+				<input type="hidden" name="sumPrice" value = '0'>
+			</div>
+			</#if>
+			
+			<!-- F1 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/1F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo1!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F2 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/2F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo2!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F3 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/3F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo3!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F4 -->
+			<div class="pro_f" style="display: none;">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/4F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo4!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F5 -->
+			<!-- <div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/5F.png" class="pro_floor"/>
+					<span class="f_desc">养护建议</span>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo5!}" width="100%"/>
+				</div>
+			</div> -->
+			<div class="gobuy">
+				<a href="/index"></a>
+				<#if isred == 0>
+				<a onclick="gobuy()">立即购买</a>
+				<#else>
+				<a onclick="history.go(-1)">返回红包</a>
+				</#if>
+			</div>
+			
+			
+		</div>
+		<form action="/service/buy" method="get" style="display: none;">
+			<input type="hidden" name="type" value="1">
+			<input type="hidden" name="pid" value="${flower.id!}">
+			<input type="hidden" name="cycle">
+			<input type="hidden" name="vase">
+			<input type="hidden" name="add">
+		</form>
+		<script type="text/javascript">
+		
+			//加购商品 选择
+	   		$('[id^="additem_"]').click(function(event){	
+				var gindex = $('.pro_type .giveselect').data("index");//订阅次数
+				
+				if(gindex != null){ // 是否选择 订阅次数
+					
+					if($(this).hasClass('addselect_1')){		
+						$(this).removeClass('addselect_1');								
+					}else{		
+						$(this).addClass('addselect_1');	
+					}
+					countMoney();//统计金额
+			}else{
+					// 处理 没选择 订阅次数 
+				layer.open({
+					    content: '请选择订阅次数哦！',
+					    skin: 'msg',
+					    time: 2 //2秒后自动关闭
+				});
+					return;
+			 }
+		  }); 
+			
+			function gobuy(){
+                // 订阅次数
+				var cycle = $('.pro_type .giveselect').data("index");
+				if(cycle == null){
+					layer.open({
+					    content: '请选择订阅次数',
+					    skin: 'msg',
+					    time: 2 //2秒后自动关闭
+					});
+					return;
+				}
+				$('input[name="cycle"]').val(cycle);
+				
+				// 花瓶
+				if($('.pro_type_vase>span').hasClass('vaseselect_1')){
+					var vase = $('.pro_type_vase .vaseselect_1').data("vase");
+					$('input[name="vase"]').val(vase);
+				}else{
+					$('input[name="vase"]').val('');
+				}
+				
+				// 加购 商品
+				var adds = "";
+				$(".addselect_1").each(function(){
+					if(adds == ""){
+						adds = adds + $(this).data("add");
+					}else {
+						adds = adds + "-" + $(this).data("add");
+					}
+             	});
+				console.log(adds);
+				$('input[name="add"]').val(adds);
+				
+				$('form').submit();
+			}
+		</script>
+	</body>
+</html>

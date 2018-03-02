@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<script type="text/javascript" src="/resource/layer_mobile/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/snowfall.jquery.min.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+
+<style type="text/css">
+	/* 服务菜单小按钮  */
+	.menu_icon{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.menu_icon img{
+		width: 30px;
+		height: 30px;
+	}
+	.span_icon{
+		width:33.33%;
+		display: flex; 
+	    flex-direction: column;
+	    justify-content: space-between;
+	    align-items: center;
+	    padding-top:5px;
+	}
+	.weui-badge {
+		/* border:1px red solid; */
+		/* padding: .15em .4em; */
+		min-width: 8px;
+		border-radius: 18px;
+		background-color: #FFFFFF;
+		color: #ababab;
+		line-height: 1.2;
+		text-align: center;
+		font-size: 15px;
+		vertical-align: middle; 
+		position: relative;
+		left: 2em;
+	    top: -5em; 
+	}
+	
+	.weui-badge_dot {
+		padding: .4em;
+		min-width: 0;
+	}
+	.grade {
+	    color: white;
+	    background-color: #f36b93;
+	    width: 22px;
+	    height: 22px;
+	    position: absolute;
+	    left: +4.5em;
+	    bottom: +0.1em;
+	    border-radius: 8px;
+	    text-align: center;
+	    font-size: 11px;
+	    line-height: 25px;
+	}
+	.cell_footer_2 img{
+		width: 60px;
+	}
+</style>
+<style type="text/css">
+    .bg{
+		position:absolute;
+		background-color:hsla(0,0%,50%,0.5); /*将背景设置为不透明度为0.5的黑色*/
+		top:0;
+		left:0;
+	     }
+	.box{ /*盒模型，可以认为是一个容器，其有内容、边框、填充等属性*/
+		position:absolute;
+		background-color:Red;
+		top:130px;
+		left:150px;
+		z-index:99; /*元素的堆叠指数，数值越高，越位于上方，仅能在position:absolute在起效果*/
+		border-radius:4px; /*用于定义模型的圆角边框*/
+		padding:5px;
+		background-color:#fff;
+		line-height:20px;
+		font-size:12px;
+		color:#666;
+		font-weight:bold;
+	   }
+	.box a{
+		display:block;
+		position:absolute;
+		z-index:100;
+		top:-11px;
+		left:216px;
+		border-radius:13px;
+		border:2px solid #e4e4e4;
+		background-color:#bbb;
+		line-height:18px;
+		width:18px;
+		text-align:center;
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:14px;
+		color:#FFF;
+		text-decoration:none;
+	}
+	.box img{
+		width:220px;
+		height:320px;
+	}
+	
+</style>
+
+<script type="text/javascript">
+    var img='${img!}';
+    $(function(){
+    	$(document).snowfall('clear');
+        $(document).snowfall({
+            image: '/resource/flower/image/sign18/redpacket.png',
+            flakeCount:30,
+            minSize: 5,
+            maxSize: 22
+        });
+    }) 
+    window.onload =setTimeout( function (){
+    	var child=$.cookie('${img!}');
+    	/* alert(child); */
+    	if(child==null){
+    		
+    		if(img!=''){
+    			$.cookie('${img!}', 'y'); 
+        		//body设置为fixed之后会飘到顶部，所以要动态计算当前用户所在高度
+            	//相当于禁用滚动条
+            	var scrollTop = $("body").scrollTop();
+            	$("body").css({
+            	    'overflow':'hidden',
+            	    'position': 'fixed',
+            	    'top': scrollTop*-1
+            	});
+
+                var w = window.innerWidth; //窗口文档显示区的宽度
+                var h = window.innerHeight;
+
+                var bgdiv = document.createElement("div");
+                bgdiv.style.width = document.body.scrollWidth + "px";
+                bgdiv.style.height =document.body.scrollHeight + "px";
+                bgdiv.className = "bg";
+                bgdiv.id = "bg";
+                document.body.appendChild(bgdiv);
+
+                //创建图片预览层
+                var box = document.createElement("div");
+                box.id = "floatbox";
+                box.className = "box";
+                box.innerHTML = "<a href='javascript:closebox()'>&times</a>";
+                box.innerHTML += "<img src=" + img+ " />";
+                //图片预览居中
+                box.style.left = (w - 220) / 2 + "px";
+                box.style.top = (h - 320) / 2 + "px";
+                document.body.appendChild(box);
+            } 
+    	}
+    	/* $.cookie('isChild', 'n',{path: "/account/center"}); */ 
+    	/* alert($.cookie('isChild')); */
+    	
+    	
+    	wxconfig(window.location);
+    	wx.ready(function(){
+			
+    		/* 分享到朋友圈  */
+			wx.onMenuShareTimeline({
+				title: '花美美', // 分享标题
+			    desc: '用鲜花传递爱', // 分享描述
+			    link: 'http://' +window.location.host+window.location.pathname, // 分享链接
+			    imgUrl: 'http://' + window.location.host+'${img2!}' , // 分享图标
+			    type: 'link', // 分享类型,music、video或link，不填默认为link
+			    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			    success: function () {
+			        //用户确认分享后执行的回调函数
+			        //判断是否是第18位分享的，如果是，则赠送18粒花籽，弹出提示框，否则什么也不做
+			        
+			        $.post('/account/sendSeeds18',function(data){
+			        	if(data){
+			        		alert('duang ! 今天太幸运了，成为了第18位签到大侠，被18粒花籽砸中！');
+			        	}
+			        });
+			    },
+			    cancel: function () {
+			        // 用户取消分享后执行的回调函数
+			    }
+			});
+    		
+			/* 分享给好友  */
+			wx.onMenuShareAppMessage({
+			    title: '花美美', // 分享标题
+			    desc: '用鲜花传递爱', // 分享描述
+			    link: 'http://' +window.location.host+window.location.pathname, // 分享链接
+			    imgUrl: 'http://' + window.location.host+'${img2!}' , // 分享图标
+			    type: 'link', // 分享类型,music、video或link，不填默认为link
+			    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			    success: function () {
+			        //用户确认分享后执行的回调函数
+			        //判断是否是第18位分享的，如果是，则赠送18粒花籽，弹出提示框，否则什么也不做
+			        
+			        $.post('/account/sendSeeds18',function(data){
+			        	if(data){
+			        		alert('duang ! 今天太幸运了，成为了第18位签到大侠，被18粒花籽砸中！');
+			        	}
+			        });
+			    },
+			    cancel: function () {
+			        // 用户取消分享后执行的回调函数
+			    }
+			});
+		});
+    	
+    },100);
+    //关闭图片预览
+    function closebox() {
+    	/*取消后设置回来*/
+    	$("body").css({
+    	    'overflow':'auto',
+    	    'position': 'static',
+    	    'top': 'auto'
+    	});
+       
+        var bg = document.getElementById("bg");
+        bg.parentNode.removeChild(bg);
+        var box = document.getElementById("floatbox");
+        box.parentNode.removeChild(box);
+    }
+  
+    //点击头像显示 等级规则
+    function showrule() {
+    	var scrollTop = $("body").scrollTop();
+    	$("body").css({
+    	    'overflow':'hidden',
+    	    'position': 'fixed',
+    	    'top': scrollTop*-1
+    	});
+
+        var w = window.innerWidth; //窗口文档显示区的宽度
+        var h = window.innerHeight;
+
+        var bgdiv = document.createElement("div");
+        bgdiv.style.width = document.body.scrollWidth + "px";
+        bgdiv.style.height =document.body.scrollHeight + "px";
+        bgdiv.className = "bg";
+        bgdiv.id = "bg";
+        document.body.appendChild(bgdiv);
+
+        //创建图片预览层
+        var box = document.createElement("div");
+        box.id = "floatbox";
+        box.className = "box";
+        box.innerHTML = "<a href='javascript:closebox()'>&times</a>";
+        box.innerHTML += "<img src='/resource/flower/image/click_head.jpg' />";
+        //图片预览居中
+        box.style.left = (w - 220) / 2 + "px";
+        box.style.top = (h - 320) / 2 + "px";
+        document.body.appendChild(box); 
+        
+    }
+    function refresh() {
+		$.post("/account/resetUserInfo",function(data){
+			if (data) {
+				location.replace("/account/center");
+			}
+		})
+	}
+    
+//     	setTimeout(function() {
+//     		var img2='${img2!}';
+//     		if(img2!=''){
+//     	        $.ajax({ 
+//                    type : "post", 
+//                    url : "/account/signinCount", 
+//                    data : "" , 
+//                    async :false, 
+//                    success : function(data){ 
+//                       data = eval("(" + data + ")"); 
+//                       if(data==1){
+//       					var scrollTop = $("body").scrollTop();
+//       	            	$("body").css({
+//       	            	    'overflow':'hidden',
+//       	            	    'position': 'fixed',
+//       	            	    'top': scrollTop*-1
+//       	            	});
+      	            	
+
+//       	                var w = window.innerWidth; //窗口文档显示区的宽度
+//       	                var h = window.innerHeight;
+
+//       	                var bgdiv = document.createElement("div");
+//       	                bgdiv.style.width = document.body.scrollWidth + "px";
+//       	                bgdiv.style.height =document.body.scrollHeight + "px";
+//       	                bgdiv.className = "bg";
+//       	                bgdiv.id = "bg";
+//       	                document.body.appendChild(bgdiv);
+      	                
+
+//       	                //创建图片预览层
+//       	                var box = document.createElement("div");
+//       	                box.id = "floatbox";
+//       	                box.className = "box";
+//       	                box.innerHTML = "<a href='javascript:closebox()'>&times</a>";
+//       	                box.innerHTML += "<img src=" + img2+ " />";
+//       	                //图片预览居中
+//       	                box.style.left = (w - 220) / 2 + "px";
+//       	                box.style.top = (h - 320) / 2 + "px";
+//       	                document.body.appendChild(box); 
+//       				}
+//                  } 
+//               });
+    	        
+//     		}
+// 		},500); 
+    	//如果【签到弹出】开启
+//    }
+</script>
+
+
+<title>会员中心</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="center_1">
+				<img src="/resource/flower/image/014_2.png" class="center_1_1" />
+				<!-- 送花-头像-签到 -->
+				<div class="center_1_2">
+				
+					<!-- <span>${account.nick!}</span> -->
+					
+					<!-- <a class="center_1_2_l" href="/product/3">
+					<img src="/resource/flower/image/icon/010.png" alt="送花"><span>送花</span></a> -->
+					
+					<a class="center_1_2_l bang" href="/account/luckylist">
+					<img src="/resource/flower/image/icon/020.png" alt="花粉榜"/><span>幸运榜</span></a>
+					
+					<a class="center_1_2_c" onclick="showrule()">
+					   <img src="${account.headimg!}" style="border-radius:40px;"/>
+					   <span class="grade">Lv${account.grade!}</span> 
+					</a>
+					
+					<#if sign==0>
+					<a class="center_1_2_r" onclick="signin(this);" data-lock="0"><img src="/resource/flower/image/icon/009.png" alt="签到"/><span>签到</span></a>
+					<#else>
+					<a class="center_1_2_r"><img src="/resource/flower/image/icon/016.png" alt="已签到"/><span>已签到</span></a>
+					</#if>
+				</div>
+				<!-- <p style="text-align: center;font-size: 12px;"><a onclick="refresh()">刷新头像</a></p> -->
+				<!-- 待付款 -服务中-已完成 -->
+			<!-- 	<div class="center_1_3">
+			    
+				    <div class="center_a" onclick="location.href='/service/myorder/1'">
+				         <img src="/resource/flower/image/daifukuan.png" alt="待付款"/>
+                         <span class="weui-badge" style="font-size:8px">${ordercount[0]}</span>
+					     <span>待付款</span> 
+				    </div>
+				    
+			     	<div class="center_a" onclick="location.href='/service/myorder/1-1'">
+			     	     <img src="/resource/flower/image/fuwuzhong.png" alt="服务中"/>
+					     <span class="weui-badge" style="font-size:8px">${ordercount[1]}</span>
+					     <span>服务中</span>
+				    </div>
+				    
+				   <div class="center_a" onclick="location.href='/service/myorder/1-3'">
+				         <img src="/resource/flower/image/yiwancheng.png" alt="已完成"/>  
+				    	 <span class="weui-badge" style="font-size:8px">${ordercount[2]}</span>
+				    	 <span>已完成</span>
+				   </div>
+				  
+				</div>  -->
+				
+						 <div class="menu_icon" style="border:1px white solid">
+							<div class="span_icon" onclick="location.href='/service/myorder/1'">
+								<img src="/resource/flower/image/daifukuan.png" alt="待付款"/>
+								<span class="weui-grid__label">待付款</span>
+								<span class="weui-badge" style="font-size:8px;padding:0 !important">${ordercount[0]}</span>
+							</div>
+							
+							<div class="span_icon" onclick="location.href='/service/myorder/1-1'">
+								<img src="/resource/flower/image/fuwuzhong.png" alt="服务中"/>
+								<span class="weui-grid__label">服务中</span>
+								<span class="weui-badge" style="font-size:8px;padding:0 !important">${ordercount[1]}</span>
+							</div>
+							
+							<div class="span_icon" onclick="location.href='/service/myorder/1-3'">
+								<div class="weui-grid__icon"><img src="/resource/flower/image/yiwancheng.png" alt="已完成"/></div>
+								<span class="weui-grid__label">已完成</span>
+								<span class="weui-badge" style="font-size:8px;padding:0 !important">${ordercount[2]}</span>
+							</div>
+						</div> 
+				
+			<div class="weui-grids" style="border:0.5px white solid">
+		  	<a href="/account/myInfo" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_1.png" alt=""></div>
+			   <p class="weui-grid__label">我的资料</p></a>
+		  
+		  	   <a href="/service/myorder" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_2.png" alt=""></div>
+			   <p class="weui-grid__label">我的订单</p></a>
+		  	
+		  	   <!-- <a href="/service/mylogistics" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/002.png" alt=""></div>
+			   <p class="weui-grid__label">我的物流</p></a> -->
+			   
+			   <a href="/account/getUsers" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_3.png" alt=""></div>
+			   <p class="weui-grid__label">谁给我送过花</p></a>
+			   
+			   <a href="/account/seedshoplist" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_4.png" alt=""></div>
+			   <p class="weui-grid__label">花籽兑换</p></a>
+			   
+			   <!-- <a href="/account/blessing" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_13.png" alt=""></div>
+			   <p class="weui-grid__label">线上花卡</p></a>  -->
+			   
+			   <a href="/account/blesscard" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_13.png" alt=""></div>
+			   <p class="weui-grid__label">线上花卡</p></a>
+			   
+			   <a href="/account/mycash" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_7.png" alt=""></div>
+			   <p class="weui-grid__label">我的花票</p></a>
+			   
+			   <a href="/account/myRedPackets" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_6.png" alt=""></div>
+			   <p class="weui-grid__label">我的红包</p></a>
+			   
+			   <a href="/account/address" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_8.png" alt=""></div>
+			   <p class="weui-grid__label">我的地址</p></a>
+			   
+			   <a href="/account/invitefri" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_9.png" alt=""></div>
+			   <p class="weui-grid__label">我要带颜</p></a>
+			   
+			   <a href="/account/getTuanInfo" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_10.png" alt=""></div>
+			   <p class="weui-grid__label">拼团</p></a>
+			   
+			   <a href="/account/receipt_apply" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_11.png" alt=""></div>
+			   <p class="weui-grid__label">申请发票</p></a>   
+			   
+			   
+			   <a href="/service/getPrizeList" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_12.png" alt=""></div>
+			   <p class="weui-grid__label">幸运抽奖</p></a>
+			   
+			   <!-- <a href="/service/luckDraw11" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_14.png" alt=""></div>
+			   <p class="weui-grid__label">双11翻牌</p></a> -->
+			   
+			   <!-- <a href="/account/exchange" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_5.png" alt=""></div>
+			   <p class="weui-grid__label">鲜花卡兑换</p></a> -->
+			   
+			   <a href="/account/myfund" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/myfund/2.png" alt=""></div>
+			   <p class="weui-grid__label">我的公益</p></a>
+			   
+			   <a href="/account/memory" class="weui-grid js_grid">
+			   <div class="weui-grid__icon"><img src="/resource/flower/image/icon/center_15.png" alt=""></div>
+			   <p class="weui-grid__label">纪念日</p></a> 
+			   
+			</div>
+			</div>
+			
+			<!-- foot -->
+			<div class="cell_footer">
+				<span onclick="location.replace(location.href);">首页</span>|
+				<span onclick="location.replace('/account/center')">会员中心</span>|
+				<span onclick="location.replace('/question')">常见问题</span>
+				<div class="cell_footer_2">
+					<img src="/resource/flower/image/logo.png">		
+				</div>
+				<span>— 用鲜花传递爱 —</span>
+			</div>
+			
+		</div>
+		
+	</body>
+</html>

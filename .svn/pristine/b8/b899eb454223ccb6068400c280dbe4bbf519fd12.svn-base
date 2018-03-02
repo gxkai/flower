@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/dateUtil.js"></script>
+		<title>购买</title>
+		<script type="text/javascript">
+			$().ready(function(){
+				$('#firsttime').text(getFristTakeDate(1));
+				$('.buy_1_b span').click(function(){
+					$('.buy_1_b span').removeClass('buy_1_b_c');
+					$(this).addClass('buy_1_b_c');
+					$('#firsttime').text(getFristTakeDate($(this).data('time')));
+				});
+				/* $('.cashchoose').click(function(){
+					$('.cashname').text($(this).text());
+					$('.cashname').data('cash', $(this).data('id'));
+					var totalprice = $('.buy_5_i').data('price') - $(this).data('price');
+					$('.buy_5_i').text('￥' + totalprice.toFixed(2));
+					cashshoworhide($('#cashlist').get(0),'buy_4_b');
+				}); */
+			});
+			function addAddress(){
+				location.href = "/account/addAddress" + window.location.search;
+			}
+			function chooseAddress(){
+				if(window.location.search.indexOf('&addr') == -1){
+					location.href = "/service/chooseaddress" + window.location.search + "&addr=" + $('#address').val();
+				}else{
+					location.href = "/service/chooseaddress" + window.location.search;
+				}
+			}
+		</script>
+	
+	
+		<style type="text/css">
+		.sub,.add{
+			border:1px #ccc solid;
+			width:25px;
+			text-align:center;
+			border-radius:3px;
+		}
+		
+		</style>
+	
+	</head>
+	<body>
+		<div class="container">
+			<!-- 地址（旧） -->
+			<!-- <div class="buy_address">
+				<p onclick="<#if address??>chooseAddress()<#else>addAddress()</#if>">
+					<#if address??>
+					<span class="dfaddress">${address.name!}&#12288;${address.tel!}</span>
+					<span class="dfaddress">${address.addr!}</span>
+					<input type="hidden" id="address" value="${address.id}" >
+					<#else>
+					<span class="noaddress">请填写收货地址</span>
+					</#if>
+				</p>
+				<p><img src="/resource/flower/image/icon/left.png" style="height: 20px;float: right;margin-top: 10px;"/></p>
+			</div> -->
+			<div class="buy_1">
+				<span class="buy_1_a">预计发货时间：</span>
+				<p class="buy_1_b">
+					
+					<#if Timetype??>
+						<#if Timetype == 1>
+							<span id="mon" class="buy_1_b_c" data-time="1">周一送</span>
+							<span id="tue" data-time="2">周六送</span>
+						<#elseif Timetype == 2>
+							<#if hDate?? >
+							<span class="buy_1_b_c" data-time="3" data-now="${hDate!}">${hDate!}</span>
+							</#if>
+						<#elseif (Timetype == 3)>
+							<#if hDatelist?? && (hDatelist?size > 0) >
+								<#list hDatelist as week>
+								<!-- data-time 对应 周几 -->
+									<#if week_index == 0>
+									<span id="mon_${week_index!}" class="buy_1_b_c" data-time="3" data-now="${week?substring(0,4)!}${week?substring(4,6)!}${week?substring(6,8)!}" 
+									data-week='${week?substring(0,4)!}年${week?substring(4,6)!}月${week?substring(6,8)!}日'>${week?substring(4,6)!}月${week?substring(6,8)!}日</span>
+									<#else>
+									<span id="mon_${week_index!}" data-time="3" data-now="${week?substring(0,4)!}${week?substring(4,6)!}${week?substring(6,8)!}" 
+									data-week='${week?substring(0,4)!}年${week?substring(4,6)!}月${week?substring(6,8)!}日'>${week?substring(4,6)!}月${week?substring(6,8)!}日</span>
+									</#if>
+								</#list>
+							</#if>
+						</#if>
+					</#if>
+					
+				</p> 
+				<#if Timetype == 1>
+				<span class="buy_1_c"><i class="weui_icon_warn"></i>首次送达时间<span id="firsttime"></span></span>
+				</#if>
+			<!-- 	<span class="buy_1_c" style="font-size:14px"> </span> -->
+			</div>
+			<div class="buy_2">
+				<div class="buy_2_a">
+					<img src="${product.imgurl!}" width="80"/>
+					<p class="buy_2_a_1">
+						<span>${product.name!}</span>
+						<span >${product.describe!}</span>
+					</p>
+				</div>
+			</div>
+			
+			<!-- 地址 -->
+			<div class="buy_address">
+				<!-- <p onclick="<#if address??>chooseAddress()<#else>addAddress()</#if>"> -->
+				
+				<img class="buy-icon" src="/resource/flower/image/icon/addr.png" /><span style="color="#48505B">配送地址：（点击地址可以编辑）</span>
+				
+				<#if address??>
+				<div class="border-top-1px" onclick="chooseAddress()">
+				<#else>
+				<div class="border-top-1px" onclick="addAddress()">
+				</#if>
+				<p >
+					<#if address??>
+					<span class="dfaddress">${address.name}&#12288;${address.tel}</span>
+					<span class="dfaddress">${address.addr}</span>
+					<input type="hidden" id="address" value="${address.id}" >
+					<#else>
+					<input type="hidden" id="address" >
+					<span class="noaddress">还没有收货地址？点击这里填写收货地址！</span>
+					</#if>
+				</p>
+				<p><img src="/resource/flower/image/icon/editor_icon.png" style="height: 20px;float: right;margin-top: 10px;"/></p>
+				</div>
+			</div>
+			
+		<#if product.ptid!=10>
+			<div class="buy_3">
+				
+				<div  style="display: flex;justify-content: flex-end;align-items: center;">
+				 <span style="color:#48505B">购买数量：</span>
+				 <span class="sub">-</span><span id="num" data-num="1" style="width:25px;text-align:center;">1</span><span class="add">+</span>
+				</div>
+				
+				<p>
+					<span id="price_total" style="color: #E96388;">&yen; ${price?string('0.00')}</span>
+					<span>商品总额：</span>
+				</p>
+				<p>
+					<span>￥0.00</span>
+					<span>优惠总额：</span>
+				</p>
+			</div>
+		</#if>	
+			
+			<script type="text/javascript">
+				$('.sub').click(function(){
+					var num = $('#num').data('num');
+					if(num>1){
+						num = num-1;
+						$('#num').data('num',num);
+						$('#num').html(num)
+					}
+					Calculation();
+				})
+			
+				$('.add').click(function(){
+					var num = $('#num').data('num');
+					
+					
+					//计算数量
+					num = num+1;
+					$('#num').data('num',num);
+					$('#num').html(num)
+					
+					Calculation();
+				})
+				
+				//计算价格
+				function Calculation(){
+					
+					//总价 = 花瓶个数  * 花瓶价格
+					var num = $('#num').data('num');
+					var price = '${price!}';
+					
+					price =  (num * price).toFixed(2);
+					
+					if(price <= 0){
+						price = 0.01
+					}
+					
+					//商品总额
+					$('#price_total').html("&yen; " + price)
+					
+					//付款金额
+					$('.buy_5_i').html("&yen; " + price)
+					$('.buy_5_i').data('price',price)
+					
+				}
+				
+				
+			</script>
+			
+			<div class="buy_5">
+				<span>付款金额：<i class="buy_5_i"  data-price="${totalprice}">&yen;${totalprice?string('0.00')}</i></span>
+			</div>
+			<div class="buy_6">
+				<span class="buy_6_a" onclick="ljzf()">立即支付</span>
+				<span class="buy_6_b" onclick="location.replace('/')">取消订单</span>
+			</div>
+			
+			<div class="additional" hidden="YES">
+            <!-- 周期 -->
+			<div class="buy_1">
+				<span class="buy_1_a">送花周期：</span>
+				<p class="buy_zhouqi_b">
+					<span id="one" class="buy_zhouqi_b_c" data-time="0">一周一送</span>
+					<span id="two" data-time="2">两周一送</span>
+					<span id="three" data-time="4">一月一送</span>
+				</p>
+			</div>
+		
+			<!-- 用途 -->
+			<!-- <div class="buy_1">
+				<span class="buy_1_a">用途：</span>
+				<p class="buy_use_b">
+					<span id="one" class="buy_use_b_c" data-time="0">居家自用</span>
+					<span id="two" data-time="2">办公室用</span>
+					<span id="three" data-time="3">礼物</span>
+				</p>
+				
+			</div> -->
+			
+			<!-- 格调 -->
+			<div class="buy_1">
+				<span class="buy_1_a">格调：</span>
+				<p class="buy_style_b">
+					<span id="one" class="buy_style_b_c" data-time="0">淡雅</span>
+					<span id="two" data-time="2">亮丽</span>
+					<span id="two" data-time="3">随机</span>
+				</p>
+				
+			</div>
+		 </div>	
+			 <!-- 地址 -->
+		 
+		</div>
+		<form action="/service/createorder" method="post" style="display: none;">
+			<input type="hidden" name="type" value="${type}">
+			<input type="hidden" name="pid" value="${product.id}">
+			<input type="hidden" name="address">
+			
+			<input type="hidden" name="cycle" value="1">
+			<input type="hidden" name="yh" value="0">
+			<input type="hidden" name="num" value="0">
+			
+			<!-- 送达时间 -->
+			<input type="hidden" name="reach" value="3">
+			<input type="hidden" name="jr_picode">
+			
+			<!-- 周期--用途--格调 -->
+			<input type="hidden" name="zhouqi">
+			<input type="hidden" name="use" value="0">
+			<input type="hidden" name="style">
+			<input type="hidden" name="adds" value="${adds!'-'}">
+		</form>
+		<script type="text/javascript">
+		
+			var Timetype = '${Timetype!}';
+			//console.log("Timetype: " + Timetype);
+			
+			function ljzf(){
+				if($('#address').size()==0 || $('#address').val()=="" ){
+					layer.msg('请录入收货人地址信息', {time: 2000});return;
+				}
+				// 周期
+				$('input[name="zhouqi"]').val($('.buy_zhouqi_b_c').data('time'));
+				// 用途
+				/* $('input[name="use"]').val($('.buy_use_b_c').data('time')); */
+				// 格调
+				$('input[name="style"]').val($('.buy_style_b_c').data('time'));
+				// 花瓶个数
+				$('input[name="num"]').val($('#num').data('num'));
+				// 收货地址
+				$('input[name="address"]').val($('#address').val());
+				// 送达时间
+				/* $('input[name="reach"]').val($('.buy_1_b_c').data('time')); */
+				
+				if(Timetype == '1' ){
+					//周一周六
+					$('input[name="reach"]').val($('.buy_1_b_c').data('time')); 
+					//console.log("reach value: " + $('.buy_1_b_c').data('time'));
+				}else if(Timetype == '2'){
+					// t+1 
+					$('input[name="reach"]').val($('.buy_1_b_c').data('time')); 
+					$('input[name="jr_picode"]').val($('.buy_1_b_c').data('now'));
+					//console.log("reach value: " + $('.buy_1_b_c').data('time'));
+					//console.log("jr_picode value: " +$('.buy_1_b_c').data('now'));
+				}else if(Timetype == '3'){
+					// 指定日期
+					$('input[name="reach"]').val($('.buy_1_b_c').data('time')); 
+					$('input[name="jr_picode"]').val($('.buy_1_b_c').data('now'));
+					//console.log("reach value: " + Timetype);
+					//console.log("jr_picode value: " +$('.buy_1_b_c').data('now'));
+				}
+				if(${ptid}==0){
+					$.ajax({
+						url: '/service/isAllowBuy/'+${aid}, 
+						data: $('form').serialize(),
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success: function(data){
+							if(data){
+								$('form').submit();
+							}else{
+								alert("代颜满10人可以购买该商品，快发送【我要花剪】到花美美参加活动吧");
+							}
+						}
+					});	
+				}else{
+					$('form').submit();
+				}
+				
+				
+			}
+		</script>
+	</body>
+</html>

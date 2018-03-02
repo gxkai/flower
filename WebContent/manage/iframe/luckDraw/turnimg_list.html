@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>抽奖管理 - 翻牌图片列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>抽奖管理 <span class="c-gray en">&gt;</span>翻牌图片列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+				<div class="cl pd-5 bg-1 bk-gray">
+				<span class="l"><a href="javascript:;" onclick="add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>添加</a></span>
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+	
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					   <th width="80">操作</th>
+						<th width="80">活动主题</th>
+						<th width="80">活动日期</th>
+						<th width="80">刮刮乐大背景图</th>
+						<th width="80">启动金图片</th>
+						<th width="80">翻牌小图片1</th>
+						<th width="80">翻牌小图片2</th>
+						<th width="80">翻牌小图片3</th>
+						<th width="80">翻牌小图片4</th>
+						<th width="80">翻牌小图片5</th>
+						<th width="80">翻牌小图片6</th>
+						<th width="80">翻牌小图片7</th>
+						<th width="80">翻牌小图片8</th>
+						<th width="80">翻牌小图片9</th>
+						<th width="80">翻牌小图片10</th>
+						<th width="80">翻牌小图片11</th>
+						<th width="80">翻牌小图片12</th>
+						<th width="80">翻牌大背景图</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if turnimgList?? && turnimgList?size gt 0>
+					<#list turnimgList as li>
+					<tr class="text-c">
+					    <td class="td-manage red">
+							<a title="编辑" onclick="_edit(${li.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+						</td>
+						<td>${li.activeTitle!}</td>
+						<td>${li.activeDate!}</td>
+						<td><img src="${li.img01!}" width="30"/></td>
+						<td><img src="${li.img02!}" width="30"/></td>
+						<td><img src="${li.img03!}" width="30"/></td>
+						<td><img src="${li.img04!}" width="30"/></td>
+						<td><img src="${li.img05!}" width="30"/></td>
+						<td><img src="${li.img06!}" width="30"/></td>
+						<td><img src="${li.img07!}" width="30"/></td>
+						<td><img src="${li.img08!}" width="30"/></td>
+						<td><img src="${li.img09!}" width="30"/></td>
+						<td><img src="${li.img10!}" width="30"/></td>
+						<td><img src="${li.img11!}" width="30"/></td>
+						<td><img src="${li.img12!}" width="30"/></td>
+						<td><img src="${li.img13!}" width="30"/></td>
+						<td><img src="${li.img14!}" width="30"/></td>
+						<td><img src="${li.img15!}" width="30"/></td>
+						
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+		
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/luckDraw/managePrizeList?pageno='+e.curr);
+				            
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			
+			 
+		 function add(){
+			 parent.open_window('添加','/luckDraw/turnimgDetail', 500, 400);
+		 }
+		 
+		 function _edit(id){
+				parent.open_window('编辑','/luckDraw/turnimgDetail/'+id, 500, 400);
+			}
+		 
+			
+		</script> 
+	</body>
+</html>

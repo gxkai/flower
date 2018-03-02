@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>订单管理 - 退款申请 - 退款详情</title>
+	</head>
+	<body>
+		<div class="page-container">
+			<div class="row cl">
+				<label class="col-xs-6 col-sm-6">订单编号：${order.ordercode}</label>
+				<label class="col-xs-6 col-sm-6">下单时间：${order.ctime}</label>
+			</div>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">收货人姓名：${order.name}</label>
+				<label class="col-xs-3 col-sm-3">收货人电话：${order.tel}</label>
+				<label class="col-xs-6 col-sm-6">收货人地址：${order.addr}</label>
+			</div>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">订购商品</label></div>
+			<#list detaillist as detail>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">商品名称：${detail.name}</label>
+				<label class="col-xs-3 col-sm-3">价格：&yen;${detail.price?string('0.00')}</label>
+				<#if detail.type==1>
+				<label class="col-xs-3 col-sm-3">数量：${order.cycle!}</label>
+				<#else>
+				<label class="col-xs-3 col-sm-3">数量：1</label>
+				</#if>
+			</div>
+			</#list>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">总金额：&yen;${order.price?string('0.00')}</label>
+				<label class="col-xs-3 col-sm-3">优惠金额：&yen;${order.yhje?string('0.00')}</label>
+				<label class="col-xs-6 col-sm-6">优惠方式：${order.yhfs!'无'}</label>
+			</div>
+			<div class="line mt-5 mb-5"></div>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">申请日期：${refund.time_a}</label>
+				<label class="col-xs-3 col-sm-3">退款金额：&yen;${(refund.money!0)?string('0.00')}</label>
+				<label class="col-xs-3 col-sm-3">状态：<#if refund.state==0>待处理<#elseif refund.state==1>已处理<#else>已撤销</#if></label>
+			</div>
+			<div class="row cl lh-30">
+				<label class="col-xs-12 col-sm-12">退款理由：${refund.remark_a}</label>
+			</div>
+			<#if refund.state==0 ||  refund.state==3>
+			<div class="row cl lh-30">
+				<label class="col-xs-6 col-sm-6">
+					<span class="l" style="width: 200px">
+						<input type="text" class="input-text" placeholder="退款金额(应退金额&yen;${order.cprice!0.00})" id="refundcash">
+					</span>
+					<input type="button" class="btn btn-primary ml-10" value="确定" onclick="refund()"/>
+				</label>
+			</div>
+			</#if>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			var ordercode = '${order.ordercode}';allprice = '${order.price}';
+			function refund(){
+				var cash = $('#refundcash').val();
+				if(cash * 1 > allprice * 1){
+					layer.msg('退款金额不能大于付款金额',{time: 2000});return;
+				}
+				if(!isNaN(cash)){
+					$.post('/manage/iframe/order/refundaction', {'ordercode':ordercode,'cash':cash}, function(data){
+						if(data){
+							layer.msg('处理成功', {time:1000}, function(){
+								//parent.refresh_iframe();
+								layer_close();
+							//	location.replace(location.href);
+							});
+						}else{
+							layer.msg('处理失败', {time:2000});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

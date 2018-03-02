@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/dateUtil.js"></script>
+		<script type="text/javascript" src="/resource/weui/example/zepto.min.js"></script>
+		<script type="text/javascript" src="/resource/weui/example/router.min.js"></script>
+		<title>购买</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+  <script type='text/javascript' src='https://assets.growingio.com/sdk/wx/vds-wx-plugin.js'></script>
+		<script type="text/javascript">
+			$().ready(function(){
+				cy = getCookie('cycle');
+				
+				//默认选择第一个
+				cy = 1;
+				if(cy == '' || cy == null){
+					$('#firsttime').text(getFristTakeDate(1));
+				}else{
+					$('#firsttime').text(getFristTakeDate(cy));
+					if(cy == 1){
+						/* 送达时间  */
+						$('.buy_1_b span').removeClass('buy_1_b_c');
+						$('#mon').addClass('buy_1_b_c');					
+					}else{
+						$('.buy_1_b span').removeClass('buy_1_b_c');
+						$('#tue').addClass('buy_1_b_c');
+					}
+				}
+			    if($("#button1").val()=="on") {
+					 $(".buy_2_b_flower").hide();
+					 $(".card_choose").hide();
+				} 
+
+			    <#if maxcash??>
+				var cashid = '${maxcash.id!}';
+				<#else>
+			   	var cashid = 0;
+			   	</#if>
+				
+				if(cashid){
+
+				    <#if maxcash??>
+				    var money = '${maxcash.money!}'
+					<#else>
+				    var money = 0
+				   	</#if>
+					
+					
+					$('.cashname').data('cash', cashid);
+				 	$('.cashname').data('price', money);
+ 					var totalprice = $('.buy_5_i').data('price') - money;
+ 					if(totalprice*1<=0.01){
+						totalprice = 0.01;
+					}
+					$('.buy_5_i').text('￥' + totalprice.toFixed(2));
+					 addprice() 
+				}
+				
+				$('.buy_1_b span').click(function(){
+					$('.buy_1_b span').removeClass('buy_1_b_c');
+					$(this).addClass('buy_1_b_c');
+					$('#firsttime').text(getFristTakeDate($(this).data('time')));
+				});
+				
+				/* 周期   */
+				var cycle = $('input[name="cycle"]').val();
+				$('.buy_zhouqi_b span').click(function(){
+					if(cycle != 1){
+						$('.buy_zhouqi_b span').removeClass('buy_zhouqi_b_c');
+						$(this).addClass('buy_zhouqi_b_c');
+					} else {
+						layer.msg('您只订购了一次哦！', {time: 2000});return;
+					}
+				
+				});
+				/* 用途   */
+				$('.buy_use_b span').click(function(){
+					$('.buy_use_b span').removeClass('buy_use_b_c');
+					$(this).addClass('buy_use_b_c');
+				
+				});
+				/* 格调  */
+				$('.buy_style_b span').click(function(){
+					$('.buy_style_b span').removeClass('buy_style_b_c');
+					$(this).addClass('buy_style_b_c');
+	
+				});
+				
+				/* 祝福卡开关  */
+				$("#button1").bind("click", function () {
+
+                   if($("#button1").val()=="on"){
+                	   
+                	   $("#button1").val("off");               	   
+                       $(".buy_2_b_flower").show();
+                       $(".card_choose").show();
+                   }else{          
+                	   
+                       $("#button1").val("on");
+                       $(".buy_2_b_flower").hide();
+                       $(".card_choose").hide();
+                   }
+
+               });
+				
+				/* 送花人开关  */
+				$("#button2").bind("click", function () {
+
+                   if($("#button2").val()=="on"){
+                	   
+                	   $("#button2").val("off");
+                	   
+                	   $('.sh_name:text').attr('placeholder','请填写您的称呼');
+                   }else{          
+                	   
+                       $("#button2").val("on");
+                       
+                       $('.sh_name:text').attr('placeholder','匿名');
+                   }
+
+               });
+				
+				/* 加购花瓶   */
+				$("#addVase").bind("click", function () {
+					$("input[name='vase']").val(6);
+					$('form').submit();
+               });
+				
+				$('.cashchoose').click(function(){
+					$('.cashname').text($(this).children('span').eq(0).text());
+					$('.cashname').data('cash', $(this).data('id'));
+					$('.cashname').data('price', $(this).data('price')); 
+					var totalprice = $('.buy_5_i').data('price') - $(this).data('price');
+					if(totalprice*1<=0.01){
+						totalprice = 0.01;
+					}
+					$('.buy_5_i').text('￥' + totalprice.toFixed(2));
+					cashshoworhide($('#cashlist').get(0),'buy_4_b');
+					//重新计算一下价格
+					addprice()   
+					
+				});
+				
+				upordown('f_u_d');
+				
+				$('#zhufu').val(getCookie('zhufu'));
+				$('#songhua').val(getCookie('songhua'));
+				var jihui = getCookie('jihuis').split(',');
+				var checkboxes = document.getElementsByName("jihuiflower");
+				for(i=0; i<checkboxes.length; i++){
+					for(j=0; j<jihui.length; j++){
+						if(checkboxes[i].id == jihui[j]){
+							checkboxes[i].checked = true;break
+						}
+					}
+				}
+			});
+			function addAddress(){
+				location.href = "/account/addAddress" + window.location.search;
+			}
+			function chooseAddress(){
+				cycle = $('.buy_1_b_c').data('time');
+				zhufu = $('#zhufu').val();
+				songhua = $('#songhua').val();
+				setCookie('cycle', cycle, 5/60/24);
+				if(zhufu != null){
+					setCookie('zhufu', zhufu, 5/60/24);
+				}
+				if(songhua != null){
+					setCookie('songhua', songhua, 5/60/24);
+				}
+				checkboxes = document.getElementsByName("jihuiflower");
+				if(checkboxes.length > 0){
+					str_1 = [];
+				    for(i=0;i<checkboxes.length;i++){
+				        if(checkboxes[i].checked){
+				        	str_1.push(checkboxes[i].id);
+				        }
+				    }
+				    setCookie('jihuis', str_1, 5/60/24);
+				}
+				
+				if(window.location.search.indexOf('&addr') == -1){
+					location.href = "/service/chooseaddress" + window.location.search + "&addr=" + $('#address').val();
+				}else{
+					location.href = "/service/chooseaddress" + window.location.search;
+				}
+			}
+			
+			
+			//创建cookie保存页面
+			function setCookie(name, value, iDay){
+			    var oDate=new Date();
+			    oDate.setDate(oDate.getDate()+iDay);
+			    document.cookie=name+'='+encodeURIComponent(value)+';expires='+oDate;
+			}
+			
+			function getCookie(name){
+			    var arr=document.cookie.split('; ');
+			    var i=0;
+			    for(i=0;i<arr.length;i++)
+			    {
+			        //arr2->['username', 'abc']
+			        var arr2=arr[i].split('=');
+			         
+			        if(arr2[0]==name)
+			        {  
+			            var getC = decodeURIComponent(arr2[1]);
+			            return getC;
+			        }
+			    }
+			    return '';
+			}
+			 
+			function removeCookie(name){
+			    setCookie(name, '', -1);
+			}
+			
+		</script>
+
+<style type="text/css">
+html, body {
+	font-size: 14px;
+}
+
+.buy_zhouqi_b {
+	width: 100%;
+	float: left;
+	margin: 10px 0;
+}
+
+.buy_zhouqi_b span {
+	width: 74px;
+	height: 32px;
+	float: left;
+	margin-right: 20px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.buy_zhouqi_b_c {
+	background-color: #E96388;
+	border-color: #E96388 !important;
+	color: white !important;
+}
+
+.buy_use_b {
+	width: 100%;
+	float: left;
+	margin: 10px 0;
+}
+
+.buy_use_b span {
+	width: 74px;
+	height: 32px;
+	float: left;
+	margin-right: 20px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.buy_use_b_c {
+	background-color: #E96388;
+	border-color: #E96388 !important;
+	color: white !important;
+}
+
+.buy_style_b {
+	width: 100%;
+	float: left;
+	margin: 10px 0;
+}
+
+.buy_style_b span {
+	width: 74px;
+	height: 32px;
+	float: left;
+	margin-right: 20px;
+	line-height: 32px;
+	text-align: center;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.buy_style_b_c {
+	background-color: #E96388;
+	border-color: #E96388 !important;
+	color: white !important;
+}
+
+.weui_switch {
+	-webkit-appearance: none;
+	appearance: none;
+	position: relative;
+	width: 42px;
+	height: 22px;
+	border: 1px solid #DFDFDF;
+	outline: 0;
+	border-radius: 16px;
+	box-sizing: border-box;
+	background: #DFDFDF;
+}
+
+.weui_switch:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 40px;
+	height: 20px;
+	border-radius: 15px;
+	background-color: #FDFDFD;
+	-webkit-transition: -webkit-transform .3s;
+	transition: -webkit-transform .3s;
+	transition: transform .3s;
+	transition: transform .3s, -webkit-transform .3s;
+}
+
+.weui_switch:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	border-radius: 15px;
+	background-color: #FFFFFF;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+	-webkit-transition: -webkit-transform .3s;
+	transition: -webkit-transform .3s;
+	transition: transform .3s;
+	transition: transform .3s, -webkit-transform .3s;
+}
+
+.weui_icon_warn:before {
+	height: 60%;
+	font-size: 15px;
+	color: #E96388;
+}
+
+.weui_dialog {
+	border-radius: 10px;
+	width: 75%;
+}
+
+.weui_dialog_title {
+	color: #f36b93;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+
+
+.cashcode{
+	-webkit-appearance: none;
+	width: 100%;
+	height: 46px;
+	float: left;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	box-sizing: border-box;
+	padding: 7px 10px;
+	font: 15px/26px 'Microsoft Yahei';
+	border-radius: 4px;
+	outline: none;
+	}
+.cashbtn{
+	width: 80px;
+    height: 46px;
+    float: right;
+    line-height: 46px;
+    text-align: center;
+    background-color: #E96388;
+    margin: 10px 0 10px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+	border:none;
+	outline:none;
+}
+
+.ishide{
+	display:block;
+}
+
+.f_u_d img{
+	width:20px;
+	height:20px;
+	margin-top:5px;
+}
+
+.pro_f_1{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card_choose{
+	font-size: 12px;
+	color: #7b7a7a;
+}
+.card{
+	width: 30%;
+	width: -moz-calc(33% - (5px + 1px)*2);
+    width: -webkit-calc(33% - (5px + 1px)*2);
+    width: calc(33.7% - (5px + 1px)*2);
+	float: left;
+	box-sizing: border-box;
+	background-color: #fff;
+	border: 1px solid #d9d9d9;
+	text-align: center;
+	border-radius: 5px;
+	margin: 5px;	
+}
+.card img{
+	border-radius: 5px;
+	padding: 1px;
+	vertical-align: middle;
+	width: 95%;
+    width: -moz-calc(100% - (1px + 1px)*2);
+    width: -webkit-calc(100% - (1px + 1px)*2);
+    width: calc(100% - (1px + 1px)*2);
+}
+.card.on{
+	border: 1px solid #1ac418;
+}
+
+
+</style>
+
+</head>
+	<body>
+		<div class="container">
+			<!-- <div class="buy_address">
+				<p onclick="<#if address??>chooseAddress()<#else>addAddress()</#if>">
+					<#if address??>
+					<span class="dfaddress">${address.name!}&#12288;${address.tel!}</span>
+					<span class="dfaddress">${address.addr!}</span>
+					<input type="hidden" id="address" value="${address.id}" >
+					<#else>
+					<span class="noaddress">请填写收货地址</span>
+					</#if>
+				</p>
+				<p><img src="/resource/flower/image/icon/left.png" style="height: 20px;float: right;margin-top: 10px;"/></p>
+			</div> -->
+			
+			<!-- 送达时间 -->
+			<!-- <#if holiday??>
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/shijian.png" />送达时间：</span>
+				<p class="buy_1_b">
+					<span id="mon" class="buy_1_b_c" data-time="1">${holiweek!}</span>
+				</p>
+				<span class="buy_1_c">送达时间<span>${holiday!}</span></span>
+			</div>
+			<#else>
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/shijian.png" />送达时间：</span>
+				<p class="buy_1_b">
+					<span id="mon" class="buy_1_b_c" data-time="1">周一送</span>
+					<span id="tue" data-time="2">周六送</span> 
+				</p>
+			</div>
+			</#if> -->
+			
+			<div class="buy_1">
+				<span class="buy_1_a">预计发货时间：</span>
+				<p class="buy_1_b">
+					
+					<#if Timetype??>
+						<#if Timetype == 1>
+							<span id="mon" class="buy_1_b_c" data-time="1">周一送</span>
+							<span id="tue" data-time="2">周六送</span>
+							
+						<#elseif Timetype == 2>
+							<#if hDate?? >
+							<span id="mon" class="buy_1_b_c" data-time="3" data-now="${hDate!}">${hDate!}</span>
+							</#if>
+						<#elseif (Timetype == 3)>
+							<#if hDatelist?? && (hDatelist?size > 0) >
+								<#list hDatelist as week>
+								<!-- data-time 对应 周几 -->
+									<#if week_index == 0>
+									<span id="mon" class="buy_1_b_c" data-time="3" data-now="${week?substring(0,4)!}${week?substring(4,6)!}${week?substring(6,8)!}" 
+									data-week='${week?substring(0,4)!}年${week?substring(4,6)!}月${week?substring(6,8)!}日'>${week?substring(4,6)!}月${week?substring(6,8)!}日</span>
+									<#else>
+									<span id="tue" data-time="3" data-now="${week?substring(0,4)!}${week?substring(4,6)!}${week?substring(6,8)!}" 
+									data-week='${week?substring(0,4)!}年${week?substring(4,6)!}月${week?substring(6,8)!}日'>${week?substring(4,6)!}月${week?substring(6,8)!}日</span>
+									</#if>
+								</#list>
+							</#if>
+						</#if>
+					</#if>
+					
+				</p> 
+				<#if Timetype == 1>
+				<span class="buy_1_c"><i class="weui_icon_warn"></i>首次送达时间<span id="firsttime"></span></span>
+				</#if>
+				</div>
+				<!-- 	<span class="buy_1_c" style="font-size:14px"> </span> -->
+			</div>
+			
+			
+	<!-- 多品 双品 增加   --周期-用途-格调 -->
+	<#if type == 1>
+	      
+			<!-- 周期 -->
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/zhouqi.png" />送花周期：</span>
+				<p class="buy_zhouqi_b">
+				    
+				    <#if product.ptid==11>
+				        <span id="two"  class="buy_zhouqi_b_c"  data-time="1">一周一送</span>
+				    <#else>
+					   <span id="one" class="buy_zhouqi_b_c" data-time="1">一周一送</span>
+					   <span id="two" data-time="2">两周一送</span>
+					   <span id="three" data-time="4">一月一送</span>
+					</#if>
+				</p>
+			</div>
+		
+			<!-- 用途 -->
+			<!-- <div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/addr.png" />用途：</span>
+				<p class="buy_use_b">
+					<span id="one" class="buy_use_b_c" data-time="1">自用</span>
+					<span id="two" data-time="3">礼物</span>
+					<span id="three" data-time="3">礼物</span>
+					<input type="hidden" name="tip_vase" value="${tip_vase!'0'}">
+				</p>
+				
+			</div> -->
+			
+			<!-- 格调 -->
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/gediao.png" />格调：</span>
+				<p class="buy_style_b">
+				    <span id="three" class="buy_style_b_c" data-time="3">随机</span>
+					<span id="one" data-time="1">淡雅</span>
+					<span id="two" data-time="2">亮丽</span>
+				</p>
+				
+			</div>
+   <#elseif type == 6 >
+   			 <!-- 周期 -->
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/zhouqi.png" />送花周期：</span>
+				<p class="buy_zhouqi_b">
+					<span id="one" class="buy_zhouqi_b_c" data-time="1">一周一送</span>
+					<span id="two" data-time="2">两周一送</span>
+					<span id="three" data-time="4">一月一送</span>
+				</p>
+				
+			</div>
+		
+			<!-- 用途 -->
+			<!-- <div class="buy_1" hidden="YES">
+				<span class="buy_1_a">用途：</span>
+				<p class="buy_use_b">
+					<span id="one" class="buy_use_b_c" data-time="0">居家自用</span>
+					<span id="two" data-time="2">办公室用</span>
+					<span id="three" data-time="3">礼物</span>
+				</p>
+				
+			</div> -->
+			
+			<!-- 格调 -->
+			<div class="buy_1" hidden="YES">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/gediao.png" />格调：</span>
+				<p class="buy_style_b">
+				    <span id="three" class="buy_style_b_c" data-time="3">随机</span>
+					<span id="one" data-time="1">淡雅</span>
+					<span id="two" data-time="2">亮丽</span>
+				</p>
+			</div>
+   <#else>
+        <div class="additional" hidden="YES">
+            <!-- 周期 -->
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/zhouqi.png" />送花周期：</span>
+				<p class="buy_zhouqi_b">
+					<span id="one" class="buy_zhouqi_b_c" data-time="1">一周一送</span>
+					<span id="two" data-time="2">两周一送</span>
+					<span id="three" data-time="4">一月一送</span>
+				</p>
+			</div>
+		
+			<!-- 用途 -->
+			<!-- <div class="buy_1">
+				<span class="buy_1_a">用途：</span>
+				<p class="buy_use_b">
+					<span id="one" class="buy_use_b_c" data-time="0">居家自用</span>
+					<span id="two" data-time="2">办公室用</span>
+					<span id="three" data-time="3">礼物</span>
+				</p>
+			</div> -->
+			
+			<!-- 格调 -->
+			<div class="buy_1">
+				<span class="buy_1_a"><img class="buy-icon" src="/resource/flower/image/icon/gediao.png" />格调：</span>
+				<p class="buy_style_b">
+				    <span id="three" class="buy_style_b_c" data-time="3">随机</span>
+					<span id="one" data-time="1">淡雅</span>
+					<span id="two" data-time="2">亮丽</span>
+				</p>
+			</div>
+			
+		 </div>	
+   </#if>
+   	
+   			<!-- 地址 -->
+   			<div class="buy_address">
+				<!-- <p onclick="<#if address??>chooseAddress()<#else>addAddress()</#if>"> -->
+				
+				<img class="buy-icon" src="/resource/flower/image/icon/addr.png" /><span style="color="#48505B">配送地址：（点击地址可以编辑）</span>
+				<#if address??>
+				<div class="border-top-1px" onclick="chooseAddress()">
+				<#else>
+				<div class="border-top-1px" onclick="addAddress()">
+				</#if>
+				<p >
+					<#if address??>
+					<span class="dfaddress">${address.name}&#12288;${address.tel}</span>
+					<span class="dfaddress">${address.addr}</span>
+					<input type="hidden" id="address" value="${address.id}" >
+					<#else>
+					<input type="hidden" id="address">
+					<span class="noaddress">还没有收货地址？点击这里填写收货地址！</span>
+					</#if>
+				</p>
+				<p><img src="/resource/flower/image/icon/editor_icon.png" style="height: 20px;float: right;margin-top: 10px;"/></p>
+				</div>
+			</div>
+   	
+			<div class="buy_2">
+				<div class="buy_2_a">
+					<img src="${product.imgurl!}" width="80"/>
+					<p class="buy_2_a_1">
+						<span>${product.name!}</span>
+						<span>订阅次数:${cycle!}次;&nbsp;花瓶:<#if vase??>购买<#else><#if isbuy==0 && isfirst ==1 >首单赠送<#else>不购买</#if></#if>;</span>
+					</p>
+		   	  	</div>
+			
+				<div class="buy_2_b">
+				    <!-- 祝福卡 -->
+				    <span>电子祝福卡 (免费)<input style="float: right;" class="weui_switch"  id="button1" type="checkbox"> </span>				     
+					<div class="card_choose">
+					    <p style="padding: 5px;"><img src="/resource/flower/image/cardmian.png" style="height: 22px;vertical-align: middle;margin-right: 3px;"><span>选择卡面</span></p>
+					    <#if cardlist?? && (cardlist?size > 0)>
+						<#list cardlist as card>
+					    <div class="card" data-type="${card.id!}">
+					    	<img src="${card.imgurl01!}">
+					    	<p>${card.code_name!}</p>
+					    </div>
+						</#list>
+						<#else>
+						<p>无选择卡面</p>
+						</#if>
+					</div>
+					<div class="buy_2_b_flower">
+						<textarea rows="" cols="" placeholder="请填写与祝福相关的内容（请勿使用表情符）" id="zhufu" maxlength="40"></textarea>
+						<div class="buy_2_b_flower_2">
+							<span >送花人:</span>
+							<!-- <p style="background-color: red;" class="buy_2_b_xx"> -->
+								<input type="text" class="sh_name" placeholder="匿名" id="songhua"/>
+							<!-- </p>  -->
+							<input style="float:right;" class="weui_switch"  id="button2" type="checkbox">
+						</div>
+					</div>
+					
+					<#if isbuy==0>
+					<input type="hidden" class="buy_2_input" placeholder="填写邀请人手机送花瓶(限首次下单)" id="recommend" maxlength="11"/>
+					</#if>
+					
+					<!-- 忌讳的花   -->
+					<#if jihuis?size gt 0 && product.ptid==1>
+					<label class="buy_2_check">请选择忌讳的花类（最多选1种）：</label>
+					<div class="buy_2_jihui weui_cells_checkbox">
+					<#list jihuis as jihui>
+					<label class="buy_2_jihui_lable weui_check_label" for="${jihui.id}">
+			            <div class="weui_cell_hd">
+			                <input type="checkbox" class="weui_check" name="jihuiflower" id="${jihui.id}" onclick="countChoices(this)">
+			                <i class="weui_icon_checked"></i>
+			            </div>
+			            <div class="weui_cell_bd weui_cell_primary">
+			                <p>${jihui.name}</p>
+			            </div>
+			        </label>
+			        </#list>
+			        </div>
+					</#if>
+					
+					<!-- 忌讳的色系 -->
+					<#if jhclos?size gt 0 && product.ptid==1>
+					<label class="buy_2_check">请选择忌讳色系（最多选1种）：</label>
+					<div class="buy_2_jihui weui_cells_checkbox">
+					<#list jhclos as color>
+					<label class="buy_2_jihui_lable weui_check_label" for="c_${color.id}">
+			            <div class="weui_cell_hd">
+			                <input type="checkbox" class="weui_check" name="jihuicolor" id="c_${color.id}" onclick="countChoicecolors(this)">
+			                <i class="weui_icon_checked"></i>
+			            </div>
+			            <div class="weui_cell_bd weui_cell_primary">
+			                <p>${color.name}</p>
+			            </div>
+			        </label>
+			        </#list>
+			        </div>
+					</#if>
+					
+				</div>
+			</div>
+			
+			<!-- 是否使用花票 -->
+			<#if cashlist?size gt 0>
+			<div class="buy_4">
+				<p class="buy_4_a">
+					<span>花票</span>
+					<span onclick="cashshoworhide(this,'buy_4_b')" id="cashlist">
+					<i class="cashname" data-cash="" data-price=""><#if maxcash??>花票：&yen;${maxcash.money?string('0.00')}元<#else>不使用花票</#if></i>
+					<img src="/resource/flower/image/icon/down.png" /></span>
+				</p>
+				<div class="buy_4_b" data-state="1">
+				<#list cashlist as cash>
+					<p data-id="${cash.id}" data-price="${cash.money}" class="cashchoose">
+						<span>花票：&yen;${cash.money?string('0.00')}元</span>
+						<span>失效日期：${cash.time_b}</span>
+					</p>
+				</#list>
+					<p data-id="" data-price="0" class="cashchoose"><span>不使用花票</span></p>
+				</div>
+			</div>
+			</#if>
+			
+			<!-- 是否使用优惠码 -->
+			<div id="isuse_code" style="padding: 10px 15px;">
+				<div class="pro_f_1">
+					<span class="buy_1_a" style="width:50%">点击使用优惠码：</span> 
+					<!-- <img src="/resource/flower/image/3F.png" class="pro_floor"/> -->
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+				</div>
+			</div>
+			
+			<script type="text/javascript">
+				$('.f_u_d').click(function(){
+					if($('.youhui').hasClass("ishide")){
+						$('.youhui').removeClass("ishide");
+					}else{
+						$('.youhui').addClass("ishide");
+					}
+				})
+			</script>
+			
+			<div class="youhui" >
+				
+				<table>
+				   <tr> 
+				      <td style="width:40%;text-align: center;">
+				        <input placeholder="输入优惠码"  type="text" name="cashcode" id="cashcode" class="cashcode"/>
+				      </td>
+				      <td style="width:30%; text-align: center;">
+				         <span style="font-family:'微软雅黑';">优惠金额:</span>
+				         <span style="color:#e96388">&yen;</span>
+				         <span id="code" data-id="" data-price="" style="color:#e96388">0</span>
+				      </td>
+				      <td  style="width:30%;text-align: center;"> <button onclick="checkcode()" class="cashbtn">确认使用</button></td>
+				   </tr>
+				</table>
+			</div>
+			
+			<!-- 商品金额 -->
+			<div class="buy_3" style="border-bottom:5px solid #EEE; ">
+				<p>
+					<span id="price" style="color: #E96388;">&yen;${price?string('0.00')}</span>
+					<span>商品总额：</span>
+				</p>
+				<p>
+					<span id="yhprice">&yen;${yh?string('0.00')}</span>
+					<span>优惠总额： </span>
+				</p>
+			</div>
+			
+			
+			<script type="text/javascript">
+				function checkcode(){
+					
+					 $.ajax({
+		            	url: '/service/cashIsValid',
+						data: { "price":${price!},"cashcode":$('#cashcode').val()},
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success: function(data){
+							if(data.id != null){
+								$('#cashcode').attr("readonly","readonly")
+								
+								// 保存兑换金额和兑换id
+								$('#code').data('price',data.money);
+								$('#code').data('id',data.id);
+								
+								//显示兑换金额
+								$('#code').html($('#code').data('price'))
+								
+								addprice()				
+							}else{
+								layer.msg('已经使用或不存在', {time: 2000});return;
+							}
+						}
+					}); 
+				}
+				
+				
+				 /*每次操作之后计算价格*/
+				function  addprice(){
+					 
+					// 商品总额
+					var total_price = ${price!}
+					
+					//优惠总额
+					var offer_price = 0
+					//付款金额
+					var pay_price = $('#pay_price').data('price') 
+					
+					//花票金额
+					var ticket_price = $('.cashname').data('price')
+					
+					//兑换金额
+					var ex_price = $('#code').data('price')
+					
+					//多买立减
+					var yh = $('#yh').val();
+					
+					//优惠总额 = 花票金额 + 兑换金额 + 多买立减
+					offer_price = accAdd(ticket_price,ex_price) 
+					offer_price = accAdd(offer_price,yh)
+					
+					//付款金额  = 商品总额 - 优惠总额
+					pay_price = accSub(total_price,offer_price)
+					
+					//给页面赋值显示
+					
+					//花票显示 
+					// $('.cashname').html( "花票：&yen;" + ticket_price + "元");
+					
+					// $('.cashname').html( "1111111");
+					
+					if(pay_price <= 0){
+						pay_price = 0.01
+					}
+					
+					// 付款金额
+					$('#pay_price').html(pay_price)
+					// 优惠总额
+					$('#yhprice').html("&yen;"+offer_price)			
+					
+					//给后台参数赋值
+					
+					// 付款金额
+					$('#pay_price').data(pay_price)
+				} 
+				
+			</script>
+			
+			<div class="buy_5">
+				<span>付款金额：
+				  <i id="pay_price" class="buy_5_i" data-price="${totalprice}">&yen;
+				    <#if totalprice lt 1 || product.isptFree==1>0.01
+				    <#else>${totalprice?string('0.00')}
+				    </#if>
+				  </i>
+				</span>
+			</div>
+			
+			<div class="buy_6">
+				<span class="buy_6_a" onclick="ljzf()">立即支付</span>
+				<span class="buy_6_b" onclick="location.replace('/')">取消订单</span>
+			</div>
+
+		<!-- 订购花瓶对话框  -->
+		<div class="js_dialog" id="iosDialog1" style="display: none;">
+			<div class="weui_dialog_confirm">
+				<div class="weui_mask"></div>
+				<div class="weui_dialog">
+					<div class="weui_dialog_hd">
+						<strong class="weui_dialog_title">友情提示</strong>
+					</div>
+					<div class="weui_dialog_bd" style="text-align: center;">作为礼物  &nbsp;您是否需要加29.9元购买一个<span style="color: #0bb20c;">雪山玉瓷花瓶</span> 呢？</div>
+					<div class="weui_dialog_ft">
+						<a id="addVase" class="weui_btn_dialog primary ">加购花瓶</a> 
+						<a href="javascript: $('form').submit();" class="weui_btn_dialog default">不用了</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+		
+		<form action="/service/createorder" method="post" style="display: none;">
+		
+			<input type="hidden" name="ptNo" value="${ptNo}">
+			<input type="hidden" name="jsAid" value="${jsAid}">
+			<input type="hidden" name="type" value="${type}">
+			<input type="hidden" name="pid" value="${product.id}">
+			<input type="hidden" name="vase" value="${vase!}">
+			<input type="hidden" name="address">
+			<input type="hidden" name="szdx" value="${szdx!}">
+			
+			<input type="hidden" name="reach" value="3">
+			<input type="hidden" name="jr_picode">
+			
+			<!-- 周期--用途--格调 -->
+			<input type="hidden" name="zhouqi">
+			<input type="hidden" name="use" value="0">
+			<input type="hidden" name="style">
+			<!-- 定制鲜花 花材id -->
+			<input type="hidden" name="fpid" value="${fpid!}">
+			
+			<input type="hidden" name="cycle" value="${cycle}">
+			<input type="hidden" name="picId">
+			<input type="hidden" name="zhufu">
+			<input type="hidden" name="songhua">
+			<input type="hidden" name="jh_list" >
+			<input type="hidden" name="jhcolor_list">
+			<input type="hidden" name="recommend">
+			<!-- 花票 1 -->
+			<input type="hidden" name="cash">
+			<!-- 花票 2 -->
+			<input type="hidden" name="cash2">
+			
+			<input type="hidden" name="activity">
+			<input type="hidden" id="yh" name="yh" value="${yh}">
+			
+			<!-- 加购商品 -->
+			<input type="hidden" name="adds" value="${adds!'-'}">
+		</form>
+		<script type="text/javascript">
+			var c = 0;
+			var isbuy=${isbuy};
+			function countChoices(obj){
+				 checkboxes = document.getElementsByName("jihuiflower");
+			     str_1 = [];
+			     for(i=0;i<checkboxes.length;i++){
+			         if(checkboxes[i].checked){
+			         	str_1.push(checkboxes[i].id);
+			         }
+			     }
+				 obj.checked?c++:c--; 
+			     c=str_1.length;
+				 if(c > 1){
+					obj.checked=false;
+					layer.msg('您最多只能选择1种忌讳的花类', {time: 2000});
+					c--;
+				 }
+			}
+			function countChoicecolors(obj){
+				 checkboxes_c = document.getElementsByName("jihuicolor");
+			     str_2 = [];
+			     for(i=0;i<checkboxes_c.length;i++){
+			         if(checkboxes_c[i].checked){
+			        	 str_2.push(checkboxes_c[i].id);
+			         }
+			     }
+				 obj.checked?c++:c--; 
+			     c=str_2.length;
+				 if(c > 1){
+					obj.checked=false;
+					layer.msg('您最多只能选择1种忌讳颜色', {time: 2000});
+					c--;
+				 }
+			}
+			//默认选择忌讳
+			$(document).ready(function(){
+			    //默认忌讳的色系
+				checkboxes1 = document.getElementsByName("jihuicolor");
+				<#list jhcolor as jhc>
+				var jhcolorid="${jhc}";
+				for(i=0;i<checkboxes1.length;i++){
+			         if(checkboxes1[i].id=="c_"+jhcolorid){
+			        	 checkboxes1[i].checked=true;
+			         }
+			     }
+			    </#list>
+			    
+			  //默认忌讳的花类
+				checkboxes2 = document.getElementsByName("jihuiflower");
+				<#list jhflower as jhf>
+				var jhflowerid="${jhf}";
+				for(i=0;i<checkboxes2.length;i++){
+			         if(checkboxes2[i].id==jhflowerid){
+			        	 checkboxes2[i].checked=true;
+			         }
+			     }
+			    </#list>
+			});
+			
+			$(".card").click(function () {
+				$(this).addClass('on').siblings('.card').removeClass('on');	
+	        });
+			
+			var Timetype = '${Timetype!}';
+			//console.log("Timetype: " + Timetype);
+			
+			function ljzf(){
+				removeCookie('zhufu');
+				removeCookie('songhua');
+				removeCookie('jihuis');
+				removeCookie('cycle');
+				
+				
+				if($('#address').val() == null || $('#address').val() == ""){
+					layer.msg('请录入收货人地址信息', {time: 2000});
+					window.scrollTo(0,0);
+					return;
+				}
+				// 收货地址
+				$('input[name="address"]').val($('#address').val());
+				// 送达时间
+				/* $('input[name="reach"]').val($('.buy_1_b_c').data('time')); */
+				
+				if(Timetype == '1' ){
+					//周一周六
+					$('input[name="reach"]').val($('.buy_1_b_c').data('time')); 
+				}else if(Timetype == '2'){
+					// t+1 
+					$('input[name="reach"]').val($('.buy_1_b_c').data('time')); 
+					$('input[name="jr_picode"]').val($('.buy_1_b_c').data('now'));
+				}else if(Timetype == '3'){
+					// 指定日期
+					$('input[name="reach"]').val($('.buy_1_b_c').data('time')); 
+					$('input[name="jr_picode"]').val($('.buy_1_b_c').data('now'));
+				}
+				
+				// 周期
+				$('input[name="zhouqi"]').val($('.buy_zhouqi_b_c').data('time'));
+				// 用途
+				/* $('input[name="use"]').val($('.buy_use_b_c').data('time')); */
+				// 格调
+				$('input[name="style"]').val($('.buy_style_b_c').data('time'));
+				
+				var picId = $(".card_choose").find('.on').attr('data-type');
+				// 卡面
+				$('input[name="picId"]').val(picId);
+				// 祝福卡
+				$('input[name="zhufu"]').val($('#zhufu').val());
+				// 送花人
+				$('input[name="songhua"]').val($('#songhua').val());
+				
+				// 花票
+				$('input[name="cash"]').val($('.cashname').data('cash')) 
+				$('input[name="cash2"]').val($('#code').data('id'));
+				// 忌讳的花
+				<#if jihuis?size gt 0>
+					checkboxes = document.getElementsByName("jihuiflower");
+				    str_1 = [];
+				    for(i=0;i<checkboxes.length;i++){
+				        if(checkboxes[i].checked){
+				        	str_1.push(checkboxes[i].id);
+				        }
+				    }
+					if(str_1.length > 1){
+						layer.msg('您最多只能选择1种忌讳的花类', {time: 2000});return;
+					}
+					$('input[name="jh_list"]').val(str_1);
+				</#if>
+				// 忌讳色系
+				<#if jhclos?size gt 0>
+					checkboxes_c = document.getElementsByName("jihuicolor");
+				    str_2 = [];
+				    for(i=0;i<checkboxes_c.length;i++){
+				        if(checkboxes_c[i].checked){
+				        	str_2.push(checkboxes_c[i].id.substring(2));
+				        }
+				    }
+					if(str_2.length > 1){
+						layer.msg('您最多只能选择1种忌讳色系', {time: 2000});return;
+					}
+					$('input[name="jhcolor_list"]').val(str_2);
+				</#if>
+				// 邀请人手机号
+				$('input[name="recommend"]').val($('#recommend').val());
+				<#if cashlist?size gt 0>
+				
+				</#if>
+				<#if activity??>
+				// 活动
+				$('input[name="activity"]').val($('#activity').data('id'));
+				</#if>
+				
+				var vase = $('input[name="vase"]').val();
+				var type = $('input[name="type"]').val();
+				var use = $('input[name="use"]').val();
+				var tip_vase = $('input[name="tip_vase"]').val();
+				
+				if(!vase && type == 1 && use == 3 && isbuy!=0 ) {	
+					document.getElementById('iosDialog1').style.display = 'block';
+					return;					
+				}
+				
+				 $('form').submit(); 
+			}
+		</script>
+	</body>
+</html>

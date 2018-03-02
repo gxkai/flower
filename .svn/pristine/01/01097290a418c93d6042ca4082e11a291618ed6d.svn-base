@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<title>申请发票</title>
+		<style type="text/css">
+			.receipt_level{
+				text-align: center;
+				font-size: 18px;
+				padding: 20px;
+			}
+			.receipt_tips{
+				padding:20px 34px;
+			}
+			.receipt_tips li{
+				margin: 10px 0px;
+			    font-size: 15px;
+			    color: #615f5f;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="receipt_level">
+				<p>可开发票额度</p>
+				<p><span class="allmoney" style="color: #fd4d6c;font-weight: bold;font-size: 33px;">${receipt.allMoney!0}</span>元</p>
+			</div>
+			<div class="weui-cells">
+	            <!-- 按订单开票 -->
+				<a href="/account/receipt_byorder" class="weui-cell weui-cell_access">
+					<div class="weui-cell__bd">
+						<p>按订单开票</p>
+					</div>
+					<div class="weui-cell__ft" id="showSex" style="font-size: 15px;"></div>
+				</a>
+				<!-- 按全额开票 -->
+				<div class="weui-cell weui-cell_access" id="all">
+					<div class="weui-cell__bd">
+						<p>按全额开票</p>
+					</div>
+					<div class="weui-cell__ft" id="showSex" style="font-size: 15px;"></div>
+				</div>
+				<!-- 开票记录 -->
+				<a href="/account/receipt_record" style="" class="weui-cell weui-cell_access">
+					<div class="weui-cell__bd">
+						<p>开票记录</p>
+					</div>
+					<div class="weui-cell__ft" id="showSex" style="font-size: 15px;"></div>
+				</a>
+			</div>
+			<div class="receipt_tips">
+				<ul>
+					<li>
+						最高可开票金额仅按实际支付金额费用，不包含任何优惠券，代金券，体验券等优惠活动费用。
+					</li>
+					<li>
+						单张发票金额不能低于50元。
+					</li>
+					<li>
+						开票金额大于或等于300元可为您免费邮寄。
+					</li>
+					<li>
+						我们将会发票申请后的15个工作日内处理。
+					</li>
+					<li>
+						一个订单只能开具发票一次，如果“发票丢失”或者“提供抬头错误”需要补发票的，我们将会收取相应的费用。
+					</li>
+					<li>
+						注意：发票有特殊要求请联系人工客服。
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+	<script type="text/javascript">
+		$(function(){
+			$("#all").click(function () {
+	        	var allmoney=(parseFloat(${receipt.allMoney!0})*100).toFixed(0);
+	        	var ordernum=${receipt.ordernum};
+	        	var orderList="${receipt.orderList!0}";
+	        	window.location.href ='/account/receipt_info/'+allmoney+'-'+ordernum+'-'+orderList;	        	
+	        });
+		});
+	</script>
+</html>

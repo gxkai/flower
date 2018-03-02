@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/LArea.css">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/LArea3.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<title>我要领花</title>
+		<style type="text/css">
+			.msg_notice{width: 100%;height: 100%;position: fixed;background-color: rgba(70, 70, 70, 0.5);top: 0;}
+			.notice_model{width: calc(100% - 40px);position: absolute;left: 20px;top: 50px;background-color: #FFF;}
+			.model_1{width: 100%;height: 40px;float: left;margin: 0;box-sizing: border-box;padding: 8px 10px;border-bottom: 1px solid #EEE;font: 14px/24px 'Microsoft Yahei';background-color: #F8F8F8;color: #48505B;}
+			.model_2{width: 100%;float: left;margin: 0;box-sizing: border-box;padding: 14px 20px;font: 14px/22px 'Microsoft Yahei';color: #333;}
+			.model_2 input{-webkit-appearance: none;width: 100%;height: 36px;float: left;border: 1px solid #8EB8B6;padding: 5px 10px;outline: none;box-sizing: border-box;border-radius: 4px;color: #8EB8B6;font: 14px/26px 'Microsoft Yahei';}
+			.model_3{width: 100%;float: left;margin: 0;box-sizing: border-box;padding: 8px 10px;font: 14px/22px 'Microsoft Yahei';}
+			.model_3 input{-webkit-appearance: none;float: right;font: 14px/22px 'Microsoft Yahei';border: 0;box-sizing: border-box;border-radius: 3px;padding: 4px 10px;color: #fff;background-color: #2e8ded;outline: none;}
+			.addr{-webkit-appearance: none;width: 100%;height: 40px;margin-bottom: 15px;}
+			.addr p{width: 100%;float: left;margin: 0;overflow: hidden;}
+			.addr p input{-webkit-appearance: none;width: 100%;height: 40px;float: right;border: 1px solid #8EB8B6;outline: none;border-radius: 4px;margin-bottom: 15px;color: #A1A4A9;font: 14px/30px 'Microsoft Yahei';box-sizing: border-box;padding: 5px 10px;}
+		</style>
+		<script type="text/javascript">
+			var areadata = new Array();
+			var queryString = '${queryString!}';
+			$().ready(function(){
+				areadata = ${areajson};
+				selectArea('address', 'addrvalue', areadata);
+			});
+			function validCode(){
+				var ordercode = $('input[name="ordercode"]').val();
+				var code = $('#code').val();
+				if($.trim(code)==''){
+					layer.msg('请输入提取码');return;
+				}
+				$.post('/receive_code_valid', {'ordercode':ordercode, 'code':code}, function(data){
+					if(data){
+						$('input[name="code"]').val(code);
+						$('.msg_notice').hide();
+					}else{
+						layer.msg('验证失败');
+					}
+				});
+			}
+			function receiveOrder(){
+				var name = $('input[name="name"]').val();
+				var tel = $('input[name="tel"]').val();
+				var area = $('#addrvalue').val();
+				var addr = $('input[name="addr"]').val();
+				if($.trim(name)==''){
+					layer.msg('请录入领取人姓名', {time:2000});return;
+				}
+				if($.trim(tel)==''){
+					layer.msg('请录入领取人电话', {time:2000});return;
+				}
+				if($.trim(area)==''){
+					layer.msg('请选择所在地区', {time:2000});return;
+				}
+				if($.trim(addr)==''){
+					layer.msg('请录入领取人地址', {time:2000});return;
+				}
+				var load = layer.load();
+				$.ajax({
+					url: '/getorderreceive',
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						layer.close(load);
+						layer.msg(data.msg, {time:1500}, function(){
+							if(data.result){
+								location.replace('/');	
+							}
+						});
+					}
+				});
+			}
+		</script>
+	</head>
+	<body style="background-color: #ddeff0;">
+		<div class="container">
+			<div class="receive_order_1">
+				<img src="/resource/flower/image/024.png" width="100%"/>
+			</div>
+			<div class="receive_order_2">
+				<a class="receive_order_2_1"><img src="${account.headimg!}" width="100%"/></a>
+				<a class="receive_order_2_2">${account.nick}</a>
+				<a class="receive_order_2_2">花儿代表我的心</a>
+			</div>
+			<div class="receive_order_3">
+				<p class="receive_success">恭喜，领取成功</p>
+				<form>
+					<input class="ro3_input" type="text" name="name" placeholder="领取人姓名" oninput="if(value.length>11)value=value.slice(0,11)">
+					<input class="ro3_input" type="number" name="tel" placeholder="领取人电话" oninput="if(value.length>11)value=value.slice(0,11)">
+					<div class="addr">
+						<p>
+							<input type="text" id="address" readonly="readonly" placeholder="选择省份&#12288;选择城市&#12288;选择区县"/>
+							<input type="hidden" name="area" id="addrvalue"/>
+						</p>
+					</div>
+					<div class="addr">
+						<p><input type="text" name="addr" placeholder="街道门牌信息" maxlength="60"/></p>
+					</div>
+					<input type="hidden" name="ordercode" value="${ordercode!}">
+					<input type="hidden" name="code">
+				</form>
+				<input type="button" value="领&nbsp;取" onclick="receiveOrder()">
+			</div>
+		</div>
+		<div class="msg_notice">
+			<div class="notice_model">
+				<p class="model_1">输入提取码</p>
+				<p class="model_2">
+					<input type="number" oninput="if(value.length>4)value=value.slice(0,4)" id="code">
+				</p>
+				<p class="model_3">
+					<input type="button" value="确定" onclick="validCode()">
+				</p>
+			</div>
+		</div>
+	</body>
+</html>

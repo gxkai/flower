@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.select-box, .select-box.size-M{padding: 1px 5px;}
+			.test{width:180px;height:120px; left:485px;bottom:260px;  border:5px solid #beceeb; position:relative;opacity: 0.9;background-color: #CCFFFF;}
+			.test span{width:0; height:0; font-size:0; overflow:hidden; position:absolute;}
+			.test span.bot{
+			    border-width:20px; 
+			    border-style:solid dashed dashed; 
+			    border-color:#beceeb transparent transparent; 
+			    left:80px; 
+			    bottom:-40px;
+			}
+			.test span.top{
+			    border-width:20px; 
+			    border-style:solid dashed dashed; 
+			    border-color:#CCFFFF transparent transparent; 
+			    left:80px; 
+			    bottom:-33px;
+			} 
+		</style>
+		<title>物流管理 - 物流列表 - 物流详情</title>
+	</head>
+	<body>
+		<div class="page-container">
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">批次：${orderinfo.code}</label>
+				<label class="col-xs-3 col-sm-3">订单编号：${orderinfo.ordercode}</label>
+				<input type="hidden" name="orderid" value="${orderinfo.id}">
+				<label class="col-xs-6 col-sm-6">物流编号：${orderinfo.number}</label>
+			</div>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">收货人姓名：${orderinfo.name}</label>
+				<label class="col-xs-3 col-sm-3">收货人电话：${orderinfo.tel}</label>
+				<label class="col-xs-6 col-sm-6">收货人地址：${orderinfo.address}</label>
+			</div>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">订购商品</label></div>
+			<div class="row cl lh-30">
+				<label class="col-xs-12 col-sm-12">${dgsp!'无'}</label>
+			</div>
+			<#if ptid==1>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">忌讳的花</label></div>
+			<div class="row cl lh-30">
+				<label class="col-xs-6 col-sm-6">花类：${jihuis!'无'}</label>
+				<label class="col-xs-6 col-sm-6">色系：${jhcolors!'无'}</label>
+			</div>
+			</#if>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">派单历史</label></div>
+			<#if picilist?size gt 0>
+				<#list picilist as pici>
+				<div class="row cl lh-30">
+					<label class="col-xs-3 col-sm-3">批次：${pici.code}</label>
+					<label class="col-xs-3 col-sm-3">物流：${pici.number}</label>
+					<label class="col-xs-6 col-sm-6">产品名称：${pici.fname!}</label>
+				</div>
+				</#list>
+			<#else>
+				<div class="row cl lh-30">
+					<label class="col-xs-3 col-sm-3">暂无记录</label>
+				</div>
+			</#if>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">派单产品</label></div>
+			<#list prolist as pro>
+			<div class="row cl lh-30">
+			<#if pro.type==0>
+				<label class="col-xs-3 col-sm-3">类型：花束</label>
+				<#if orderinfo.state == 1>
+				<label class="col-xs-3 col-sm-3" style="box-sizing: border-box;">
+						<span style="float: left;">产品名称：</span>
+						<span class="select-box" style="width: 140px;float: right;height: 30px;">
+						  	<select class="select" size="1" onchange="changepro(this)">
+						    	<option value="10" selected>${pro.fname}</option>
+								<#if cps?size gt 0>
+						    	<#list cps as cp>
+						    		<#if cp.fname?? && pro.fname!=cp.fname>
+						    		<option value="${cp.id}">${cp.fname!'无'}</option>
+						    		</#if>
+						  		</#list>
+						  		</#if>
+							</select>
+						</span>
+				</label>
+				<#else>
+				<label class="col-xs-3 col-sm-3">产品名称：${pro.fname}</label>
+				</#if>
+				<input type="button" value="查看近4次发货产品类型" class="col-xs-3 col-sm-3" style="width: 150px;height: 30px;padding-top:0px; padding-bottom:0;padding-left: 10px;"  onclick="popBox()" id="pop">
+				<label class="col-xs-3 col-sm-3">分类：<#if order_jt.type==1>订阅<#elseif order_jt.type==2>送花<#elseif order_jt.type==3>周边<#elseif order_jt.type==4>兑换<#elseif order_jt.type==5>节日<#elseif order_jt.type==6>定制<#else>未知类型</#if></label>
+			<#elseif pro.type==1>
+				<label class="col-xs-3 col-sm-3">类型：周边</label>
+				<label class="col-xs-3 col-sm-3">产品名称：${pro.name}</label>
+				<label class="col-xs-3 col-sm-3">描述：${pro.describe}</label>
+			<#else>
+				<label class="col-xs-3 col-sm-3">类型：首单赠品</label>
+				<label class="col-xs-3 col-sm-3">产品名称：${pro.name}</label>
+				<label class="col-xs-3 col-sm-3">描述：${pro.describe}</label>
+			</#if>
+			</div>
+			</#list>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">门对门物流轨迹</label></div>
+			<#if logilist?? && logilist?size gt 0>
+			<#list logilist as logistic>
+			<div class="row cl lh-26">
+				<label class="col-xs-6 col-sm-4">到达时间：${logistic.OpDateTime}</label>
+				<label class="col-xs-6 col-sm-8"><#if logistic.OrderStatusCode=='46'>物流状态：已签收<#else>到达地址：${logistic.OpDescription}</#if></label>
+			</div>
+			</#list>
+			<#else>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">暂无记录</label>
+			</div>
+			</#if>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">京东物流轨迹</label></div>			
+			<#if jdlogilist?? && jdlogilist?size gt 0 >
+			<#list jdlogilist as jdlogistic>
+            <div class="row cl lh-26">
+				<label class="col-xs-6 col-sm-4">到达时间：${jdlogistic.opeTime!}</label>
+				<label class="col-xs-6 col-sm-8">到达地址：${jdlogistic.opeRemark!}</label>
+			</div>
+			</#list>
+			<#else>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">暂无记录</label>
+			</div>
+			</#if>
+		</div>
+		<div id="popBox" style="display: none;" class="test" >
+		   <span class="bot"></span>
+		    <span class="top"></span>
+		   <#if list4?? && list4?size gt 0>
+		    <#list list4 as list4>
+		    <div style="font-size: 10px;">
+				${list4_index+1!}: ${list4.wlname!}
+			</div>	
+			</#list>
+			<#else >
+			<div style="font-size: 10px;">
+				暂无记录
+			</div>	
+			</#if>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				 $(document).bind('click', function(e) {    
+			          var e = e || window.event; //浏览器兼容性     
+			          var elem = e.target || e.srcElement;
+			          if( $("#popBox").css("display")!="none"){ 
+				          while (elem) { //循环判断至跟节点，防止点击的是div子元素     
+				              if (elem.id && (elem.id == 'popBox' || elem.id == 'pop')) {    
+				                  return;    
+				              }    
+				              elem = elem.parentNode;    
+				          }    
+				          $('#popBox').css('display', 'none'); //点击的不是div或其子元素
+			          }
+			      });   
+			    $("body").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6
+				});
+			});
+			function changepro(_id){
+				pid = $(_id).find('option:selected').val();
+				orderid = $('input[name="orderid"]').val();
+				$.post('/manage/iframe/logistics/changepro/', {'pid':pid,'orderid':orderid}, function(data){
+					if(data.result){
+						parent.refresh_iframe();
+						layer.msg('更改产品成功',{time: 2000});return;
+					}else{
+						layer.msg('更改产品失败',{time: 2000});return;
+					}
+				});
+			}
+			function popBox() {
+				document.getElementById('popBox').style.display='block';
+			}
+			 function closeBox(){
+				 document.getElementById('popBox').style.display='none';
+			    }
+		</script>
+	</body>
+</html>

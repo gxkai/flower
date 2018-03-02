@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>开始配单</title>
+		<style type="text/css">
+			.progress{width:400px;height:40px;margin: 0 auto;overflow:hidden;}
+			.single-title{width: 400px;height: 30px;font-size: 14px;line-height: 30px;text-align: center;display: block;}
+			.progress-bar{width:100%;height:10px;background-color:#efefef;border-radius:6px;overflow: hidden;}
+			.sr-only{height:10px;display:inline-block; background-color:#58b957;}
+		</style>
+	</head>
+	<body>
+		<article class="page-container"></article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			var totalnum;
+	        var wsuri = "ws://" + window.location.host + "/ws/getsingle_ZB/${key}-${type}";
+	       // alert(wsuri);
+	        var ws = null;  
+	        
+            if ('WebSocket' in window){
+            	ws = new WebSocket(wsuri);
+            } else if ('MozWebSocket' in window) {
+            	alert("cuo1");
+            	ws = new MozWebSocket(wsuri);
+            	
+            } else {
+            	console.error("not support WebSocket!");
+            	alert("cuo2");
+            }
+
+            ws.onmessage = function(evt) {
+            	var singlews = JSON.parse(evt.data);
+            	if(singlews.code == 0){
+            		setTimeout('layer_close()', 3000);
+            		$('.page-container').append(singlews.msg);
+            	}else if(singlews.code == 1){
+            		totalnum = singlews.msg;
+            		$('.page-container').append('<div class="progress"><span class="single-title">配单进度</span><div class="progress-bar"><span class="sr-only" style="width:0%"></span></div></div>');
+            	}else if(singlews.code == 2){
+            		var index = singlews.msg;
+            		var percent = (index/totalnum).toFixed(2)*100;
+            		$('.sr-only').css('width', percent+'%');
+            	}else if(singlews.code == 3){
+            		$('.single-title').text('完成');
+            		parent.refresh_iframe();
+            		setTimeout('layer_close()', 1000);
+            	}else if(singlews.code == 4){
+            		setTimeout('layer_close()', 3000);
+            		$('.page-container').empty().append(singlews.msg);
+            	}
+            };
+  
+            ws.onclose = function(evt) {
+                console.info(evt);
+            };
+  
+            ws.onopen = function(evt) {
+            	ws.send('${key}-${type}');
+            };
+	    </script>
+	</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>文章管理 - 生活美学 - 文章详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<input type="hidden" name="id" value="${id}">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">会员分组：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box">
+						  	<select class="select" size="1">
+						    	<option value="" selected>--选择会员分组--</option>
+						    	<#list groupList as group>
+						    	<option value="${group.id}">${group.name}</option>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"></label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="c-999">注：不选将推送至全部用户</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" class="btn btn-primary btn-block" onclick="_push()" value="推送">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			function _push(){
+				var id = $('input[name="id"]').val();
+				var gid = $('select option:selected').val();
+				$.post('/weixin/pushcash',{'id':id,'gid':gid},function(data){
+					if(data.result){
+						parent.refresh_iframe();
+						layer.msg(data.msg,{time:1000},function(){
+							layer_close();
+						});
+					}else{
+						layer.msg(data.msg,{time:2000});
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

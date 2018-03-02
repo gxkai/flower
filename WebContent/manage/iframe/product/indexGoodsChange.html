@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+	<title>商品管理 - 主页管理</title>
+</head>
+<body>
+
+  <form class="form form-horizontal">
+  
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>标题名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v1" name="title" value="${goods.name!}">
+					</div>
+				</div>
+			
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">图片地址：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text"  id="v2" name="imgurl" value="${goods.imgurl!''}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${goods.imgurl!}')">&#xe695;</i> 
+					</div>
+				</div>
+				
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>价格：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v3" name="price" value="${goods.price!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>商品描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v4" name="describe" value="${goods.goods_describe!}">
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>是否显示：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v5" name="isshow" value="${goods.isshow!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>显示权重：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v6" name="sort" value="${goods.sort!}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>购买地址：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v7" name="url" value="${goods.goods_url!}">
+					</div>
+				</div>
+  
+  				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+			
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/admin.flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/dateTime.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		
+		
+  <script type="text/javascript">
+	$().ready(function(){
+		$('.input-file').on('change', function(){
+			var $proImg = $(this).siblings(".pro-imgsrc");
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var base64 = e.target.result;
+				$proImg.val(base64);
+			};
+			reader.readAsDataURL(this.files[0]);
+			this.files = [];
+		});
+		$("html").niceScroll({
+			cursorcolor:"#333",
+			cursoropacitymin: 0.6,
+			cursoropacitymax:0.6,
+			demode: false
+		});
+	});
+  
+ 	function save(){
+		var title = $('#v1').val();
+		var imgurl = $('#v2').val();
+		var price = $('#v3').val();
+		var describe = $('#v4').val();
+		var isshow = $('#v5').val();
+		var sort = $('#v6').val();
+		var url = $('#v7').val();
+		
+		 if(title == ''){
+		    	layer.tips('标题名称不能为空', '#v1', {tips: [1, '#34495E']});return;
+		    }
+		 if(imgurl == ''){
+		    	layer.tips('图片地址不能为空', '#v2', {tips: [1, '#34495E']});return;
+		    }
+		 if(price == ''){
+		    	layer.tips('价格不能为空', '#v3', {tips: [1, '#34495E']});return;
+		    }
+		 if(describe == ''){
+		    	layer.tips('商品描述不能为空', '#v4', {tips: [1, '#34495E']});return;
+		    }
+		 if(isshow == ''){
+		    	layer.tips('该项不能为空', '#v5', {tips: [1, '#34495E']});return;
+		    }
+		 if(sort == ''){
+		    	layer.tips('该项不能为空', '#v6', {tips: [1, '#34495E']});return;
+		    }
+		 if(url == ''){
+		    	layer.tips('商品链接', '#v7', {tips: [1, '#34495E']});return;
+		    }
+		 
+		var lock = true;
+		if(lock){
+			lock = false;
+			var load = layer.load();
+			$.post('/manage/iframe/product/changeIndexGoods/'+${goods.id}, $('form').serialize(), function(data){
+				layer.close(load);
+				if(data.result){
+				 	parent.refresh_iframe(); 
+					layer.msg('保存成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('保存失败', {time: 1000}, function(){
+						lock = true;
+					});
+				}
+			});
+		} 
+	} 
+  
+  
+  </script>
+  
+</body>
+</html>

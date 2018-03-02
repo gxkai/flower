@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/LArea.css">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/LArea3.js"></script>
+		<title>发票信息</title>
+		<style type="text/css">
+		.xqtitle {
+		    width: 100%;
+		    height: 50px;
+		    float: left;
+		    background-color: #e8e7e7;
+		}
+		.xqtitle span{
+			line-height: 50px;
+		    padding-left: 10px;
+		    font-size: 15px;
+		    color: #8e8d8d;
+		}
+		.receipt_detail_1{
+			width: 100%;
+		    height: 60px;
+		    float: left;
+		    border-bottom: 1px solid #EEE;
+		}
+		.receipt_detail_1 span{
+			width: 100px;
+		    height: 100%;
+		    float: left;
+		    line-height: 60px;
+		    box-sizing: border-box;
+		    color: #48505B;
+		    padding-left: 15px;
+		}
+		.receipt_detail_1 p {
+		    width: calc(100% - 100px);
+		    height: 60px;
+		    float: left;
+		    margin: 0;
+		    overflow: hidden;
+		}
+		.receipt_detail_1 p input {
+		    -webkit-appearance: none;
+		    width: 100%;
+		    height: 60px;
+		    float: right;
+		    border: none;
+		    outline: none;
+		    color: #48505B;
+		    font: 15px/30px 'Microsoft Yahei';
+		    box-sizing: border-box;
+		    padding: 15px 15px 15px 0;
+		    -webkit-appearance: none;
+		    outline: medium;
+		}
+		.money{
+			width: 100%;
+		    float: left;
+		    margin-top: 10px;
+		}
+		.fixheight{
+			width:100%;
+			height:130px;
+			background:none;
+			clear: both;
+		}
+		.bottom_out{
+			width:100%;
+			background:#f9f9f9;
+			position:fixed;
+			bottom:0;
+			left:0;
+			border-top:1px solid #F5F5F5;
+		}
+		.submit_btn{
+			width: 100%;
+			float: left;
+			box-sizing: border-box;
+			padding: 0 15px;
+			margin-bottom: 10px;
+		}
+		.submit_btn span{
+			width: 100%;
+			height: 46px;
+			float: left;
+			line-height: 46px;
+			text-align: center;
+			background-color: #E96388;
+			border-radius: 4px;
+			color: white;
+			text-decoration: none;
+		}
+		</style>
+		
+		
+		
+	</head>
+	<body>
+		<div class="container">
+		<#if allMoney gt 50>
+			<div class="xqtitle">
+				<span>发票详情</span>
+			</div>
+			<div class="receipt_detail_1">
+				<span>公司抬头</span><p><input type="text" id="company" name="company" placeholder="输入准确的抬头名称" maxlength="20"/></p>
+			</div>
+			<div class="receipt_detail_1">
+				<span>税号</span><p><input type="text" id="code" name="code" placeholder="输入税号或社会信用代码" maxlength="20"/></p>
+			</div>
+			<div class="receipt_detail_1">
+				<span>发票内容</span><p><input type="text" id="content" name="content" placeholder="鲜花订阅服务费" maxlength="12"/></p>
+			</div>
+			<div class="receipt_detail_1">
+				<span>发票金额</span><span style="color: #d84c51;">￥${allMoney}</span>
+			</div>
+			<div class="xqtitle">
+				<span>收件信息</span>
+			</div>
+			<div class="receipt_detail_1">
+				<span>收件人</span><p><input type="text" id="name" name="name" placeholder="收件人姓名" maxlength="20"/></p>
+			</div>
+			<div class="receipt_detail_1">
+				<span>联系电话</span><p><input type="tel" id="tel" name="tel" placeholder="收件人手机号或固话" maxlength="12"/></p>
+			</div>
+			<div class="receipt_detail_1">
+				<span>所在地区</span>
+				<p>
+					<input  type="text" id="address" readonly="readonly" placeholder="选择省份&#12288;选择城市&#12288;选择区县"/>
+					<input type="hidden" id="area"/>
+				</p>
+			</div>
+			<div class="receipt_detail_1">
+				<span>详细地址</span><p><input type="text" id="addr" name="addr" placeholder="街道门牌信息" maxlength="60"/></p>
+			</div>
+			<div class="fixheight"></div>
+			<div class="bottom_out">
+				<p class="money" style="text-align: center;"><#if allMoney gte 300>已选择${allMoney}元,免邮<#else>已选择${allMoney!}元,邮费10.00元</#if></p>		
+				<div class="submit_btn">
+				<!-- 点击提交， 将根据id赋值给 form -->
+					<span onclick="saveReceipt()">提交</span>
+				</div>
+			</div>
+			
+			<form action="/service/post_pay" method="post" style="display: none;">
+				<input type="hidden" name="company"/>
+				<input type="hidden" name="code"/>
+				<input type="hidden" name="content"/>
+				<input type="hidden" name="money" value="${allMoney}">
+				<input type="hidden" name="name"/>
+				<input type="hidden" name="tel"/>
+				<input type="hidden" name="area"/>
+				<input type="hidden" name="addr"/>
+				<input type="hidden" name="postage"/>
+				<input type="hidden" name="ordernum" value="${ordernum}"/>
+				<input type="hidden" name="orderList" value="${orderList}"/>
+			</form>
+		<#else>
+			<p style="text-align: center;margin-top: 20px;">您当前开票额度低于50元，无法申请开票！</p>
+		</#if>
+		</div>	
+		
+		<script type="text/javascript">
+		var areadata = new Array();
+		var queryString = '${queryString!}';
+		$().ready(function(){
+			areadata = ${areajson};
+			selectArea('address', 'area', areadata);
+		});
+		
+		//请求参数格式化，方便读取
+		function getQueryString(name) {
+		    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+		    var r = queryString.match(reg);
+		    if (r != null) {
+		        return unescape(r[2]);
+		    }
+		    return null;
+		}
+		
+		//保存发票信息
+		function saveReceipt(){
+			var company = $('#company').val();
+			var code = $('#code').val();
+			if ($('#content').val()==null){
+				var content = $('#content').val();
+			}else{
+				var content = "鲜花订阅服务费";
+			}
+			var name = $('#name').val();
+			var tel = $('#tel').val();
+			var area = $('#address').val().split(",").join(" ");
+			
+			var addr = $('#addr').val();
+			var money='${allMoney}';
+			if (money>300){
+				var postage=0;
+			}else{
+				var postage=10;
+			}
+			
+			$('input[name="company"]').val(company);
+			$('input[name="code"]').val(code);
+			$('input[name="content"]').val(content);
+			$('input[name="name"]').val(name);
+			$('input[name="tel"]').val(tel);
+			$('input[name="area"]').val(area);
+			$('input[name="addr"]').val(addr);
+			$('input[name="money"]').val(money);
+			$('input[name="postage"]').val(postage);
+			
+			if($.trim(company)==''){
+				layer.msg('请输入公司抬头', {time:2000});return;
+			}
+			if($.trim(code)==''){
+				layer.msg('请输入税号或社会信用代码', {time:2000});return;
+			}
+			if($.trim(name)==''){
+				layer.msg('请输入收件人姓名', {time:2000});return;
+			}
+			var reggh = /^0[\d]{10,11}$/;
+			var regsj = /^1(3|4|5|7|8)\d{9}$/;
+			if($.trim(tel)==''){
+				layer.msg('请输入收件人手机号或固话', {time:2000});return;
+			}
+			if(!reggh.test(tel) && !regsj.test(tel)){
+				layer.msg('手机号或固话格式错误', {time:2000});return;
+			}
+			if($.trim(area)==''){
+				layer.msg('请选择所在地区', {time:2000});return;
+			}else{
+				var c = " "; // 要计算的字符
+				var regex = new RegExp(c, 'g'); // 使用g表示整个字符串都要匹配
+				var result = area.match(regex);
+				var count = !result ? 0 : result.length;
+				if(count<2){
+					layer.msg('所选区域必须包含【省市区】三级地址', {time:2000});return;
+				}
+			}
+			if($.trim(addr)==''){
+				layer.msg('请录入详细地址', {time:2000});return;
+			} 
+			
+			
+			if(money>=300){
+				if (window.confirm(
+						"公司抬头："+company+"\n"
+						+"税号："+code+"\n"
+						+"收件人："+name+" "+tel+"\n"
+						+"所在地区："+area+"\n"
+						+"详细地址:"+addr+"\n"
+						+"邮递费用:"+"免邮")) {
+					 var load = layer.load();
+						$.ajax({
+							url: '/account/saveReceipt',
+							data: $('form').serialize(),
+							type: 'post',
+							dataType: 'json',
+							cache: false,
+							success: function(data){
+								layer.close(load);
+								if(data){
+									layer.msg('提交成功', {time: 2000});
+									window.location.href ='/account/receipt_record';
+								}else{
+									layer.msg('提交失败，请重新提交', {time: 2000});
+								}
+							}
+						});
+				} else {
+					window.close();
+				}
+			}
+			else{
+				if (window.confirm(
+						"公司抬头："+company+"\n"
+						+"税号："+code+"\n"
+						+"收件人："+name+" "+tel+"\n"
+						+"所在地区："+area+"\n"
+						+"详细地址:"+addr+"\n"
+						+"邮递费用:"+"顺丰快递10元")) {
+					
+						$('form').submit();
+						
+				} else {
+					window.close();
+				}
+			}
+			
+		} 
+		
+	</script>
+	
+	</body>
+</html>

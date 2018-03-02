@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>推广管理 - 兑换卡列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>推广管理 <span class="c-gray en">&gt;</span>兑换卡列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+				<div class="cl pd-5 bg-1 bk-gray">
+				<span class="l">
+					<span class="select-box l ml-10" style="width: 180px" id="wl">
+					  	<select class="select" size="1"  id="vCno" onchange="search()" >
+					    	<option value="1" <#if cNo==1>selected</#if>>--选择兑换卡种类--</option>
+							<#if cardtypelist?? && cardtypelist?size gt 0>
+					    	 <#list cardtypelist as cardtype>
+					    	      <option value="${cardtype.cNo}"  <#if cNo==cardtype.cNo>selected</#if>>${cardtype.cName}:${cardtype.name}/${cardtype.cCycle}/${cardtype.cHasVase}/${cardtype.cMoney}</option>
+					    	   </#list> 
+					    	<#else>
+					    	  <option value="1" <#if cNo=='1'>selected</#if> >无</option>
+							</#if>
+					  	</select>
+					</span>
+				</span>
+				<span class="select-box l ml-10" style="width: 180px">
+					  	<select class="select" size="1"  id="isSuccess" onchange="search()">
+					    	<option value="10" <#if isSuccess==10>selected</#if>>--选择是否兑换成功--</option>
+					    	<option value="0" <#if isSuccess==0>selected</#if>>N</option>
+					    	<option value="1" <#if isSuccess==1>selected</#if>>Y</option>
+					  	</select>
+				</span>
+				<span class="l ml-10" style="width: 170px">
+						<input type="text" class="input-text" placeholder="输入卡号查询" value="${cId!}" id="cId" maxlength="10">
+				</span>
+				<span class="l ml-10">
+                <input type="text" placeholder="制卡日期" class="input-text Wdate" id="cMakeTime" name="cMakeTime" value="${cMakeTime!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+                </span>
+				<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="search()">
+				<a onclick="_export()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe644;</i> 导出兑换卡</a>
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+	
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="50">序列</th>
+						<th width="80">卡号</th>
+						<th width="85">兑换码</th>
+						<th width="80">卡名</th>
+						<th width="40">卡面值</th>
+						<th width="60">商品名称</th>
+						<th width="60">订阅次数</th>
+						<th width="60">是否含花瓶</th>
+						<th width="80">是否兑换成功</th>
+						<th width="80">兑换人昵称</th>
+						<th width="130">兑换时间</th>
+						<th width="130">订单号</th>
+						<th width="80">制作人</th>
+						<th width="130">制作时间</th>
+						<th width="80">截止日期</th>
+						<th width="80">购买人</th>
+						<th width="130">购买时间</th>
+						<th width="80">销售人</th>
+						<th width="130">销售时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if cardlist?? && cardlist?size gt 0>
+					<#list cardlist as cardinfo>
+					<tr class="text-c">
+						<td>${cardinfo_index+1}</td>
+						<td>${cardinfo.cId}</td>
+						<td>${cardinfo.cPwd!}</td>
+						<td>${cardinfo.cName!}</td>
+						<td>${cardinfo.cMoney}</td>
+						<td>${cardinfo.name!}</td>
+						<td>${cardinfo.cCycle}</td>
+						<td>${cardinfo.cHasVase}</td>
+						<td>${cardinfo.cIsSuccess}</td>
+						<td>${cardinfo.nick!}</td>
+						<td>${cardinfo.cExcTime!}</td>
+						<td>${cardinfo.cExcOrderId!}</td>
+						<td>${cardinfo.cMaker}</td>
+						<td>${cardinfo.cMakeTime}</td>
+						<td>${cardinfo.cEffDate}</td>
+						<td>${cardinfo.cPurchaser!}</td>
+						<td>${cardinfo.cPurTime!}</td>
+						<td>${cardinfo.cSeller!}</td>
+						<td>${cardinfo.cSellTime!}</td>
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 		
+		<script type="text/javascript">
+		
+		var cNo='${cNo!}',isSuccess='${isSuccess!}',cId='${cId!}',cMakeTime = '${cMakeTime!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/card/querycard?pageno='+e.curr+'&cNo='+cNo+'&isSuccess='+isSuccess+'&cId='+cId+'&cMakeTime='+cMakeTime);
+				            
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			
+			
+			
+		 function _export(){
+			 console.log(cMakeTime);
+				window.open('/manage/iframe/card/exportcard?cNo='+cNo+'&isSuccess='+isSuccess+'&cId='+cId+'&cMakeTime='+cMakeTime, '_blank'); 
+			} 
+		 function search(){
+			 cNo=$('#vCno').find('option:selected').val();
+			 isSuccess=$('#isSuccess').find('option:selected').val();
+			 cId=$('#cId').val();
+			 cMakeTime=$('#cMakeTime').val();
+			 if($.trim(cId)!=''){
+				 cId = cId.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[0-9]{1,10}$/;;
+					if(!reg.test(cId)){
+						layer.tips('请输入正确格式','#cId', {tips: [1, '#34495E']});return;
+					}
+				}
+			 location.replace('/manage/iframe/card/querycard?pageno=1'+'&cNo='+cNo+'&isSuccess='+isSuccess+'&cId='+cId+'&cMakeTime='+cMakeTime);
+		 }
+			
+		</script> 
+	</body>
+</html>

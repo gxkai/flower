@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery-qrcode-0.14.0.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<title>${yqhy!}</title>
+		<style type="text/css">
+			/*我的二维码 */
+			.inv_1{width: 100%;height: 270px;float: left;overflow: hidden;text-align: center;}
+			#qrimghide{display: none;}
+			.inv_ditui_1{width: 100%; float: left;box-sizing: border-box;padding: 10px;}
+			.inv_ditui_1 span{width: 100%; float: left;font:15px/22px 'Microsoft Yahei';color: rgba(233, 30, 99, 0.88);}
+			.inv_ditui_2{width: 100%; float: left;box-sizing: border-box;padding: 10px 10px 30px;}
+			.inv_ditui_2 span{width: 100%; float: left;font-size:15px;font-family: 'Microsoft Yahei';}
+		</style>
+		<script type="text/javascript">
+	        $(function(){
+				wxconfig(window.location);
+				wx.ready(function(){
+					wx.onMenuShareTimeline({
+						title: '遇见你，生活美美',
+						link: window.location.host,
+						imgUrl: 'http://'+window.location.host+'/resource/flower/image/logo.png'
+					});
+					wx.onMenuShareAppMessage({
+					    title: '遇见你，生活美美', // 分享标题
+					    desc: window.location.host, // 分享描述
+					    link: window.location.host, // 分享链接
+					    imgUrl: 'http://'+window.location.host+'/resource/flower/image/logo.png', // 分享图标
+					    type: 'link', // 分享类型,music、video或link，不填默认为link
+					    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					    success: function () {
+					        // 用户确认分享后执行的回调函数
+					    },
+					    cancel: function () {
+					        // 用户取消分享后执行的回调函数
+					    }
+					});
+				});
+	        });
+	        function imgload(imgobj){
+	        	var options = {
+	                render: "image",
+	                ecLevel: 'H',//识别度
+	                fill: '#000',//二维码颜色
+	                background: '#FFF',//背景颜色
+	                quiet: 1,//边距
+	                width: 200,//宽度
+	                height: 200,
+	                text: $('#qrurl').val(),//二维码内容
+	                //中间logo start
+	                mode: 4,
+	                mSize: 28 * 0.01,
+	                mPosX: 50 * 0.01,
+	                mPosY: 50 * 0.01,
+	                image: imgobj,//logo图片
+	                //中间logo end
+	                label: 'jQuery.qrcode',
+	                fontname: 'Ubuntu',
+	                fontcolor: '#ff9818',
+	            };
+	            $('#qrimghide').qrcode(options);
+	        	var c = document.createElement('canvas');
+			    var ct = c.getContext('2d');
+			    c.width = 375;
+			    c.height = 270;
+			    ct.rect(0, 0, c.width, c.height);
+			    ct.fillStyle = 'transparent';	//画布填充颜色
+			    ct.fill();
+			    var bgimg = new Image();
+			    bgimg.src = '/resource/flower/image/invite.jpg';
+			    bgimg.onload = function(){
+	            	ct.drawImage(bgimg, 0, 0, 375, 270);
+					ct.drawImage($('#qrimghide img')[0], 118.5, 90, 138, 138);
+					 var image = new Image();
+					 image.src = c.toDataURL("image/png");
+					 $('#qrcode').html(image);
+	            }
+	        }
+    	</script>
+	</head>
+<body>
+	<div class="container">
+		<input type="hidden" id="qrurl" value="${qrurl!}">
+		<img src="<#if headimg??>data:image/png;base64,${headimg!}<#else>/resource/flower/image/logo.png</#if>" style="display: none;" onload="imgload(this)">
+		<div class="inv_1" id="qrcode"></div>
+		<div id="qrimghide"></div>
+		<div class="inv_ditui_1">
+			<span>花美美（FlowerMM）,一家专做鲜花订阅服务的移动互联网公司。</span>
+		</div>
+		<div class="inv_ditui_2">
+			<span>花美美倡导“遇见你，生活美美”的生活理念。女人爱花爱美更爱花美美！每周有鲜花陪伴，生活美美。收到爱人的花，生活美美；给爱的人送花，生活美美。花美美团队为用户提供双品花和多品花订阅，每周一送到办公室，每周六送到家里。为家人、为恋人、为朋友、为客户、给自己传递生活美美。赠人玫瑰，手留余香，动动手指，传递美！</span>
+		</div>
+	</div>
+</body>
+</html>

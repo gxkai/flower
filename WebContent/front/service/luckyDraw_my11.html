@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="UTF-8">
+<title>我的奖金</title>
+<style type="text/css">
+*{
+    margin: 0;
+    padding: 0;
+}
+body {
+	background-image: url("/resource/flower/image/guagua/backimg2.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+header img{
+    width: 20vw;
+    margin-left: 80vw;
+}
+article{
+    margin-top: 5vw;
+}
+.box{
+    margin-top:3vw;
+    width: 80vw;
+    height: 20vw;
+    margin-left:10vw;
+    background-color: blue;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.box img{
+     width: 20vw;
+     height: 20vw;
+     float: left;
+}
+.box .b{
+     width: 60vw;
+     height:20vw;
+     float: right;
+     background-color: white;
+}
+</style>
+<script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+
+</head>
+<body>
+<header>
+</header>
+<article>
+<#if lucklist?? && lucklist?size gt 0>
+<#list lucklist as list>
+<div class="box" onclick="window.location.href='/service/getTurnDetail11/${list.id}';">
+<img alt="" src="${list.img02!}">
+<div class="b">
+<div style="float: left;">
+<p style="margin-left: 5vw;margin-top: 4vw;font-size: 4vw;color: red;font-weight: 900;">${list.moneyUpdate!0.00}元</p>
+<p style="margin-left: 5vw;margin-top: 2vw;font-size: 3vw;color: red;">现金花票</p>
+</div>
+<p style="float: right;margin-top: 8vw;margin-right: 2vw;font-size: 2.5vw;">${list.luckTime!}</p>
+</div>
+</div>
+</#list>
+<#else>
+<span style="position: absolute;width: 100%;text-align: center;padding-top: 5vw;font-size: 5vw;">没有您的奖励金</span>
+</#if>
+</article>
+</body>
+</html>

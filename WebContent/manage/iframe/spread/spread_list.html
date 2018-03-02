@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>推广管理 - 地推人员</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 推广管理 <span class="c-gray en">&gt;</span> 地推人员<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加地推人员</a></span> 
+			
+			<span class="select-box l ml-10" style="width: 140px">
+			  	<select class="select" size="1" onchange="searchstate(this)">
+			    	<option value="9" <#if state==9>selected</#if>>--选择员工状态--</option>
+			    	<option value="0" <#if state==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;在职</option>
+			    	<option value="1" <#if state==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;离职</option>
+			  	</select>
+			</span>
+			
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入工号查询" value="${number!}" id="number">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入姓名查询" value="${name!}" id="name">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入电话查询" value="${tel!}" id="tel" maxlength="13">
+			</span>
+			
+			<span class="l ml-10">
+				<input type="text" placeholder="推广开始时间" value="${time_a!}" class="input-text Wdate" id="datemin" name="time_a" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'datemax\')||\'{%y}-%M-%d\'}'})">
+			</span>
+			<span class="l ml-10">
+				<input type="text" placeholder="推广结束时间" value="${time_b!}" class="input-text Wdate" id="datemax" name="time_b" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'#F{\'{%y}-%M-%d\'}' })">
+			</span>
+			<input class="l btn btn-primary ml-10" type="submit" value="查询" onclick="searchditui()">	
+			
+			<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> </div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th width="60">员工号</th>
+						<th width="80">姓名</th>
+						<th width="100">电话</th>
+						<th width="80">性别</th>
+						<th>地址</th>
+						<th width="60">推广用户量</th>
+						<th width="60">推广订单量</th>
+					<!-- 	<th width="60">花票主题</th> -->
+						<th width="60">状态</th>
+						<th width="80">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if spreadlist?? && spreadlist?size gt 0>
+					<#list spreadlist as spread>
+					<tr class="text-c">
+						<td>${spread_index+1}</td>
+						<td>${spread.number}</td>
+						<td>${spread.name}</td>
+						<td>${spread.tel}</td>
+						<td><#if spread.sex==0>男<#else>女</#if></td>
+						<td>${spread.addr}</td>
+						<td>${spread.tgmem!0}</td>
+						<td>${spread.tgnum!0}</td>
+					<!-- 	<td>${spread.cashtheme!}</td> -->
+						<td><#if spread.state==0><span class="c-green">在职</span><#else><span class="c-red">离职</span></#if></td>
+						<td class="td-manage">
+							<a title="编辑" onclick="_edit(${spread.id})" style="text-decoration:none" class="f-16 mr-15 l"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<a title="二维码" onclick="_qrcode(${spread.id})" style="text-decoration:none" class="f-16 l"><i class="Hui-iconfont">&#xe6cb;</i></a>
+							<#if spread.state==0>
+							<a title="冻结" onclick="_freeze(${spread.id}, 1)" style="text-decoration:none" class="f-16 ml-15 l"><i class="Hui-iconfont">&#xe631;</i></a>
+							<#else>
+							<a title="启用" onclick="_freeze(${spread.id}, 0)" style="text-decoration:none" class="f-16 ml-15 l"><i class="Hui-iconfont">&#xe6e1;</i></a>
+							</#if>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="10" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+			var state = '${state!}', number='${number!}', tel='${tel!}', name='${name!}',time_a='${time_a!}',time_b='${time_b!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/spread?pageno='+e.curr+'&state='+state+'&number='+number+'&tel='+tel+'&name='+name+'&time_a='+time_a+'&time_b='+time_b);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _add(){
+				parent.open_window('添加地推人员','/spread/getSpreadperson', 540, 340);
+			}
+			function _edit(id){
+				parent.open_window('编辑地推人员','/spread/getSpreadperson/'+id, 540, 340);
+			}
+			function searchstate(_state) {
+				state = $(_state).find('option:selected').val();
+				location.replace('/manage/iframe/spread?pageno=1&state='+state+'&number='+number+'&tel='+tel+'&name='+name+'&time_a='+time_a+'&time_b='+time_b);
+			}
+			
+			function searchditui() {
+				number = $('#number').val();
+				tel = $('#tel').val();
+				name = encodeURI($('#name').val());
+				var time_a = $('#datemin').val();
+				var time_b = $('#datemax').val();
+				
+				if($.trim(tel)!=''){
+					reg = /^[0-9]{1,13}$/;
+					if(!reg.test(tel)){
+						layer.tips('请输入正确格式', '#tel', {tips: [1, '#34495E']});return;
+					}
+				}
+				if($.trim(name)!=''){
+					var reg1 = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+					if(!reg1.test($('#name').val())){
+						layer.tips('不能含有特殊字符', '#name', {tips: [1, '#34495E']});return;
+					}
+				}
+				
+				location.replace('/manage/iframe/spread?pageno=1&state='+state+'&number='+number+'&tel='+tel+'&name='+name+'&time_a='+time_a+'&time_b='+time_b);
+			}
+			function _qrcode(id){
+				parent.open_window('二维码','/spread/spreadQrCord/'+id, 540, 340);
+			}
+			function _freeze(id, state){
+				var msgStr = state==0?'确定此员工在职？':'确定此员工离职？';
+				parent.actconfirm(msgStr, function(){
+					$.post('/manage/iframe/spread/freezeSpread/'+id+'-'+state, function(data){
+						if(data){
+							layer.msg('操作成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('操作失败', {time: 1000});
+						}
+					});
+				});
+			}
+		</script> 
+	</body>
+</html>

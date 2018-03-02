@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery-qrcode-0.14.0.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<title>${yqhy!}</title>
+		<style type="text/css">
+			/*我的二维码 */
+			.fri_all{width:100%;height: 49px;float:left;line-height:49px;z-index:9999;position:fixed;box-sizing:border-box;border-bottom: 1px solid #fff;}
+			.fri_all a{width: calc(50% - 1px);float: left;text-align: center;font-size: 16px;color: white;background-color: #f7b2c4;}
+			.p1{text-align: center;line-height: 30px;padding: 18px 0 0px;font-size: 17px;margin-top: 50px;}
+			.inv_1{margin:0 4vw;padding: 2vw;box-shadow: 0 0 1px #ccc;float: left;overflow: hidden;text-align: center;}
+			.inv_1>img{width: 100%;vertical-align: middle;}
+			#qrimghide{display: none;}
+			
+			.inv_2{width: 100%; float: left;box-sizing: border-box;padding:8px 15px;display: table;}
+			.inv_2 p {font: 14px/30px 'Microsoft Yahei';}
+			.inv_2 span{width: 100%;height: 50px; float: left;font:17px/50px 'Microsoft Yahei';text-align: center;}
+			.inv_2 p i{font:18px/30px 'Microsoft Yahei';color: #E96388;}
+			
+			.inv_ditui_1{width: 100%; float: left;box-sizing: border-box;padding: 10px;}
+			.inv_ditui_1 span{width: 100%; float: left;font:15px/22px 'Microsoft Yahei';color: rgba(233, 30, 99, 0.88);}
+			.inv_ditui_2{width: 100%; float: left;box-sizing: border-box;padding: 10px 10px 30px;}
+			.inv_ditui_2 span{width: 100%; float: left;font-size:15px;font-family: 'Microsoft Yahei';}
+			
+			/*已下单的人 */
+			.or_1{width: 100%;background-color: #F5F5F5; margin-top: 50px;display: table;}
+			.or_1 span:nth-child(odd){width: 20%;height: 80px;float: left;border-bottom: 1px dashed #999;}
+			.or_1 span:nth-child(odd) img{width: 50px;padding: 15px 12.5px;float: left;}
+			.or_1 span:nth-child(even){width: 80%;height: 80px;float: right;font:16px/80px 'Microsoft Yahei';border-bottom: 1px dashed #999;}
+			.or_1 span:nth-child(even) i{float: right;font:16px/80px 'Microsoft Yahei';padding-right: 15px;text-align: right;}
+		</style>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<script type="text/javascript">
+		 	var pageno='${pageno!}',totalpage='${totalpage!}',type='${type}', scancode='${scancode}', dimem='${dimem}';
+	        $(function(){
+				wxconfig(window.location);
+				wx.ready(function(){
+					wx.onMenuShareTimeline({
+						title: '这里的鲜花新鲜，量大',
+						link: window.location.host+'/shareqcode/'+dimem+'-'+scancode,
+						imgUrl: 'http://'+window.location.host+'/resource/flower/image/logo.png'
+					});
+					wx.onMenuShareAppMessage({
+					    title: '这里的鲜花新鲜，量大', // 分享标题
+					    desc: window.location.host+'/shareqcode/'+dimem+'-'+scancode, // 分享描述
+					    link: window.location.host+'/shareqcode/'+dimem+'-'+scancode, // 分享链接
+					    imgUrl: 'http://'+window.location.host+'/resource/flower/image/logo.png', // 分享图标
+					    type: 'link', // 分享类型,music、video或link，不填默认为link
+					    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					    success: function () {
+					        // 用户确认分享后执行的回调函数
+					    },
+					    cancel: function () {
+					        // 用户取消分享后执行的回调函数
+					    }
+					});
+				});
+				if(type == 2){
+					$(window).scroll( function() {
+	 					// 页面的文档高度
+	 				   	var h1 = $(document).height();
+	 				 	// 浏览器的高度
+	 				    var h2 = $(window).height();
+	 				    // 滚动条到顶部的垂直高度
+	 				    var h3 = $(document).scrollTop();
+	 				   	if(h2 + h3 == h1){
+	 				   		if(pageno < totalpage){
+	 				   			var load = layer.load();
+	 				   			if(dimem == 1){
+			 				   		$.get('/account/invitefri/'+(++pageno)+'-'+type, function(data){
+			 				   				var html;
+			 				   				var xd;
+			 				   				$(data).each(function(){
+			 				   				if(this.num==0){
+		 				   						xd = '未订阅';
+		 				   					}else{
+		 				   						xd = '首单时间:'+this.ctime;
+		 				   					}
+		 				   					html ='<span><img src="'+this.headimg+'"></span>'+
+		 							   			  '<span>'+this.nick+'<i>'+xd+'<i></span>';			
+		 				   					$('.or_1').append(html);
+		 				   				});
+		 				   				layer.close(load);
+		 				   			});
+	 				   			}else{
+		 				   			$.get('/spread/'+scancode+'-'+(++pageno)+'-'+type, function(data){
+		 				   				var html;
+		 				   				var xd;
+		 				   				$(data).each(function(){
+			 				   				if(this.num==0){
+		 				   						xd = '未订阅';
+		 				   					}else{
+		 				   					    xd = '首单时间:'+this.ctime;
+		 				   					}
+		 				   					html ='<span><img src="'+this.headimg+'"></span>'+
+		 							   			  '<span>'+this.nick+'<i>'+xd+'<i></span>';	
+		 				   					$('.or_1').append(html);
+		 				   				});
+		 				   				layer.close(load);
+		 				   			});
+	 				   			}
+	 				   		}
+	 				   	}
+	 				});
+				}
+	        });
+	        function fresh(){
+	        	$.get('/account/freshPersonInfo', function(data){
+                        if(data) {
+                        	location.replace(location.href);
+                        }
+		   			});
+	        }
+	        function imgload(imgobj){
+	        	var options = {
+	                render: "image",
+	                ecLevel: 'H',//识别度
+	                fill: '#000',//二维码颜色
+	                background: '#FFF',//背景颜色
+	                quiet: 1,//边距
+	                width: 200,//宽度
+	                height: 200,
+	                text: $('#qrurl').val(),//二维码内容
+	                //中间logo start
+	                mode: 4,
+	                mSize: 28 * 0.01,
+	                mPosX: 50 * 0.01,
+	                mPosY: 50 * 0.01,
+	                image: imgobj,//logo图片
+	                //中间logo end
+	                label: 'jQuery.qrcode',
+	                fontname: 'Ubuntu',
+	                fontcolor: '#ff9818',
+	            };
+	            $('#qrimghide').qrcode(options);
+	        	var c = document.createElement('canvas');
+			    var ct = c.getContext('2d');
+			    c.width = 640;
+			    c.height = 640;
+			    ct.rect(0, 0, c.width, c.height);
+			    ct.fillStyle = 'transparent';	//画布填充颜色
+			    ct.fill();
+			    var bgimg = new Image();
+			    bgimg.src = '/resource/flower/image/invite.jpg';
+			    bgimg.onload = function(){
+	            	ct.drawImage(bgimg, 0, 0, 640, 640);
+					ct.drawImage($('#qrimghide img')[0], 465, 465, 140, 140);
+					 var image = new Image();
+					 image.src = c.toDataURL("image/png");
+					 $('#qrcode').html(image);
+	            }
+	        }
+    	</script>
+	</head>
+<body>
+	<div class="container">
+		<input type="hidden" id="p1" value="${type}"/>
+		<input type="hidden" id="p2" value="${scancode}"/>
+		<div class="fri_all">
+			<#if dimem == 1>
+			<a onclick="location.replace('/account/invitefri/1-1')" style="<#if type==1>font-weight: bolder;border-right:2px solid #E5E5E5;background-color: #e96388</#if>">我的二维码</a>
+			<a onclick="location.replace('/account/invitefri/1-2')" style="<#if type==2>font-weight: bolder;border-left: 2px solid #E5E5E5;background-color: #e96388</#if>">已订阅的人</a>
+			<#else>
+			<a onclick="location.replace('/spread/${scancode}-1-1')" style="<#if type==1>font-weight: bolder;border-right:2px solid #E5E5E5;background-color: #e96388</#if>">我的二维码</a>
+			<a onclick="location.replace('/spread/${scancode}-1-2')" style="<#if type==2>font-weight: bolder;border-left: 2px solid #E5E5E5;background-color: #e96388</#if>">已订阅的人</a>
+			</#if>
+		</div>
+		<#if type==1>
+		<input type="hidden" id="qrurl" value="${qrurl!}">
+		<img src="<#if headimg??>data:image/png;base64,${headimg!}<#else>/resource/flower/image/logo.png</#if>" style="display: none;" onload="imgload(this)">
+		<p class="p1">恭喜您成为花美美带颜人！<br>邀请好友关注得花籽</p>
+		<div class="inv_1" id="qrcode"></div>
+		<div id="qrimghide"></div>
+		<#if dimem == 1>
+		<div class="inv_2">
+			<p>好友扫描您的二维码关注，您即可获得2粒花籽；每3位好友首单购买成功，您将获得1束遇见鲜花的红包（仅限江浙沪、合肥）</p>
+			<p>长按二维码选择“发送给朋友” 或 选择“保存到手机”将图片分享到朋友圈。</p>
+			<p>如您的二维码过期<i class="Hui-iconfont">&#xe67a;</i><i onclick="fresh()">更新</i></p>
+		</div>
+		<#else>
+		<div class="inv_ditui_1">
+			<span>花美美（FlowerMM）,一家专做鲜花订阅服务的移动互联网公司。</span>
+		</div>
+		<div class="inv_ditui_2">
+			<span>花美美倡导“遇见你，生活美美”的生活理念。女人爱花爱美更爱花美美！每周有鲜花陪伴，生活美美。收到爱人的花，生活美美；给爱的人送花，生活美美。花美美团队为用户提供双品花和多品花订阅，每周一送到办公室，每周六送到家里。为家人、为恋人、为朋友、为客户、给自己传递生活美美。赠人玫瑰，手留余香，动动手指，传递美！</span>
+		</div>
+		</#if>
+		<#elseif type==2>
+		<div class="or_1">
+			<#if ormems?size gt 0>
+			<#list ormems as ormem>
+			<span><img src="${ormem.headimg!}"></span>
+			<span>${ormem.nick!}&nbsp;
+			   <i style=" font-size: 12px;"><#if ormem.num==0>未订阅<#else>订阅${ormem.num!}单,首单时间:${ormem.ctime!}</#if>
+			   </i>
+			</span>
+			</#list>
+			<#else>
+			<div class="inv_2" style="text-align: center;">暂无记录</div>
+			</#if>
+		</div>
+		</#if>
+	</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>批次管理 - 产品列表 - 产品详情</title>
+	</head>
+	<body>
+		<div class="page-container skin-minimal">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<tr class="text-c">
+					<th width="80">批次</th>
+					<th>花材</th>
+					<th width="80">预测市价</th>
+					<th width="80">实际市价</th>
+				</tr>
+				<#if flowerMap["flowerlist"]?size gt 0>
+	  			<#list flowerMap["flowerlist"] as flower>
+	  			<tr class="text-c">
+	  				<td>${flowerMap["datecode"]}</td>
+	  				<td>${flower.name!}</td>
+  					<td>
+  						<input type="text" class="input-text size-S" value="${(flower.price1!0)?string('0.00')}" data-id="${flower.fid!}" id="fid1-${flower.fid!}">
+  					</td>
+  					<td>
+  						<input type="text" class="input-text size-S" value="${(flower.price2!0)?string('0.00')}" id="fid2-${flower.fid!}">
+  					</td>
+  				</tr>
+				</#list>
+				<#else>
+				<tr class="text-c">
+  					<td colspan="4">
+  						暂无数据
+  					</td>
+  				</tr>
+				</#if>
+			</table>
+			<input type="button" onClick="_save()" class="btn btn-primary btn-block mt-15" value="保存">
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			var type=${type};
+			$(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			var lock = true;
+			function _save(){
+				var $fid = $('[id^="fid1-"]');
+				var flist  = new Array();
+				for(var i=0;i<$fid.length;i++){
+					var fidxx = $fid.eq(i).get(0);
+					var price = fidxx.value;
+					if($.trim(price)==''){
+						layer.tips('请输入花材价格', '#'+fidxx.id, {tips: [1, '#34495E']});return;
+					}else{
+						var fp = fidxx.id.substr(5)+'-'+price+'-'+$('#fid2-'+fidxx.dataset.id).val();
+						flist.push(fp);
+					}
+				}
+				if(lock){
+					lock = false;
+					var load = layer.load();
+					$.post('/manage/iframe/product/savePrice', {'type':type, 'flist':flist.join(',')}, function(data){
+						layer.close(load);
+						if(data){
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+							parent.refresh_iframe();
+						}else{
+							lock = true;
+							layer.msg('保存失败', {time: 2000});
+						}
+					});
+				}
+			}
+		</script> 
+	</body>
+</html>

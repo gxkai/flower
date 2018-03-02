@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/jquery.autocomplete.css"/>
+		<style type="text/css">
+			.wid{width: 27%;margin-left:5px;}
+			.pd-r{padding-right: 7px;}
+			.selectUrl {  
+			    height: 50px;  
+			    margin-left: 0px;  
+			    outline: none;  
+			    border: 1px solid #999;  
+			    margin-top: 40px;
+			    width:280px;
+			    position:relative;
+			    z-index:1;
+			}
+			.selectCashtheme {  
+			    height: 50px;  
+			    margin-left: 0px;  
+			    outline: none;  
+			    border: 1px solid #999;  
+			    margin-top: 40px;
+			    width:280px;
+			    position:relative;
+			    z-index:1;
+			}    
+			.returnUrl {  
+			    width: 280px;  
+			    top: 9px;  
+			    outline: none;  
+			    border: 0pt;  
+			    position: absolute;  
+			    line-height: 30px;  
+			    left: 8px;  
+			    height: 30px;  
+			    border: 1px solid #999; 
+			    margin-left: 5px; 
+			}
+			.returnCashtheme {  
+			    width: 280px;  
+			    top: 9px;  
+			    outline: none;  
+			    border: 0pt;  
+			    position: absolute;  
+			    line-height: 30px;  
+			    left: 8px;  
+			    height: 30px;  
+			    border: 1px solid #999; 
+			    margin-left: 5px; 
+			}  
+		</style>
+		<title>会员管理 - 自动回复配置 - 自动回复绑定编辑</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if list??>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>绑定内容：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<span >${list.sendText}</span>
+						<input type="hidden" class="input-text" id="sendText" name="sendText" value="${list.sendText!}" readonly="readonly">						
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>绑定类型：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<span ><#if list.type==0 >文本消息<#else>二维码</#if></span>
+						<input type="hidden" class="input-text" id="type" name="type" value="${list.type!}" readonly="readonly">												
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>回复文本消息：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="returnText" name="returnText" value="${list.returnText!}" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>回复链接名称：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="returnUrlname" name="returnUrlname" value="${list.returnUrlname!}" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>回复链接地址：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text returnUrl" id="returnUrl" name="returnUrl" value="${list.returnUrl!}" onfocus="setfocus(this)" oninput="setinput(this);">
+						<select name="selectUrl" id=selectUrl onchange="changeF(this)" size="10" style="display:none;"  class="selectUrl">  
+						            <#list urlList as urlList>
+							            <option value="${urlList.url!}" >${urlList.name!}</option>
+						            </#list>  
+						        </select>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>回复主题花票：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text returnCashtheme" id="returnCashtheme" name="returnCashtheme" value="${list.returnCashtheme!}" onfocus="setfocus2(this)" oninput="setinput2(this);">
+						<select name="selectCashtheme" id=selectCashtheme onchange="changeF2(this)" size="10" style="display:none;"  class="selectCashtheme">  
+						            <#list cashthemeList as theme>
+							            <option value="${theme.name!}" >${theme.name!}</option>
+						            </#list>  
+						        </select>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">展示的图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text"  id="v3" value="${list.returnPicture!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${list.returnPicture!}')">&#xe695;</i>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>活动失效日期：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="text" placeholder="活动失效时间" class="input-text Wdate" value="${list.expdate!}" id="expdate" name="expdate"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width: 180px;"/>
+					</div>
+				</div>
+				 <input type="button" onClick="save()" class="btn btn-primary btn-block mt-15" value="保存">
+				</#if>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.autocomplete.min.js"></script>		
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+		var TempArr=[],TempArrVal=[],TempArr2=[],TempArrVal2=[];//存储option  
+		  $(function(){  
+		      /*先将数据存入数组*/  
+		      $("#selectUrl option").each(function(index, el) {  
+		          TempArr[index] = $(this).text();
+		          TempArrVal[index] = $(this).val(); 
+		      });
+		      $("#selectCashtheme option").each(function(index, el) {  
+		          TempArr2[index] = $(this).text();
+		          TempArrVal2[index] = $(this).val(); 
+		      });
+		      $(document).bind('click', function(e) {    
+		    	  var target = $(e.target); 
+		    	  if(target.closest(".selectUrl").length == 0&&target.closest(".returnUrl").length == 0){ 
+		    		  $('#selectUrl').css('display', 'none');
+		    	  }
+		    	  if(target.closest(".selectCashtheme").length == 0&&target.closest(".returnCashtheme").length == 0){ 
+		    		  $('#selectCashtheme').css('display', 'none');
+		    	  } 
+		      });    
+		  })  
+		    
+		  function changeF(this_) {  
+		      $("#returnUrl").val($(this_).find("option:selected").val());
+		      $("#selectUrl").css({"display":"none"});  
+		  }
+		  function changeF2(this_) {  
+		      $("#returnCashtheme").val($(this_).find("option:selected").val());
+		      $("#selectCashtheme").css({"display":"none"});  
+		  } 
+		  function setfocus(this_){
+			  $("#selectUrl").html("");
+		      $("#selectUrl").css({"display":""});  
+		      for(i=0;i<TempArr.length;i++){  
+		          $("#selectUrl").append("<option value='"+TempArrVal[i]+"'>"+TempArr[i]+"</option>");  
+		      }  
+		  }
+		  function setfocus2(this_){
+			  $("#selectCashtheme").html("");
+		      $("#selectCashtheme").css({"display":""});  
+		      for(i=0;i<TempArr2.length;i++){  
+		          $("#selectCashtheme").append("<option value='"+TempArrVal2[i]+"'>"+TempArr2[i]+"</option>");  
+		      }
+		  }  
+		    
+		  function setinput(this_){  
+		      $("#selectUrl").html(""); 
+		      $("#selectUrl").css({"display":""});
+		      for(i=0;i<TempArr.length;i++){  
+		          //若找到以txt的内容开头的，添option  
+		          if(TempArr[i].substring(0,this_.value.length).indexOf(this_.value)==0){  
+			          $("#selectUrl").append("<option value='"+TempArrVal[i]+"'>"+TempArr[i]+"</option>");  
+		          }  
+		      }
+		      if ($("#selectUrl option").size()==0) {
+		    	  $("#selectUrl").css({"display":"none"});  
+			}
+		  }   
+		      function setinput2(this_){  
+			      $("#selectCashtheme").html(""); 
+			      $("#selectCashtheme").css({"display":""});
+			      for(i=0;i<TempArr2.length;i++){  
+			          //若找到以txt的内容开头的，添option  
+			          if(TempArr2[i].substring(0,this_.value.length).indexOf(this_.value)==0){  
+				          $("#selectCashtheme").append("<option value='"+TempArrVal2[i]+"'>"+TempArr2[i]+"</option>");  
+			          }  
+			      }
+			      if ($("#selectCashtheme option").size()==0) {
+			    	  $("#selectCashtheme").css({"display":"none"});  
+				}
+		  }     
+		$().ready(function(){ 
+			//图片生成新地址
+			$('.input-file').on('change', function(){
+				var $proImg = $(this).siblings(".pro-imgsrc");
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					var base64 = e.target.result;
+					$proImg.val(base64);
+				};
+				reader.readAsDataURL(this.files[0]);
+				this.files = [];
+			});
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+		function save(){
+			var returnCashtheme =$.trim($("#returnCashtheme").val());
+			if (returnCashtheme!="") {
+				var result = $.inArray(returnCashtheme,TempArrVal2);
+				if(result==(-1)){
+					layer.tips('您输入的主题花票还未维护!', '#returnCashtheme', {tips: [1, '#34495E']});return;
+				};
+			}
+			var load = layer.load();
+			$.post('/manage/iframe/member/AutoRespEditSave', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data){
+					//parent.refresh_iframe();
+					layer.msg('保存成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('保存失败', {time: 1000}, function(){
+					});
+				}
+			});
+			
+		}
+		
+			
+		</script>
+	</body>
+</html>

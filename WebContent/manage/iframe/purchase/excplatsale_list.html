@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+		.all:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>采购管理 - 采购列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 采购管理 <span class="c-gray en">&gt;</span> 采购<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 新增平台外销售单</a></span> 
+			<span class="select-box l" style="width: 180px">
+					  	<select class="select" size="1"  id="type" onchange="search()" >
+					    	<option value="10" <#if type==10>selected</#if>>--选择类型--</option>
+					    	<option value="1" <#if type==1>selected</#if>>线下单</option>
+					    	<option value="0" <#if type==0>selected</#if>>市场单</option>
+					    	<option value="2" <#if type==2>selected</#if>>拍摄单</option>
+					  	</select>
+		    </span>	
+		    <span class="select-box l" style="width: 180px">
+					  	<select class="select" size="1"  id="type_detail" onchange="search()" >
+					    	<option value="10" <#if type_detail==10>selected</#if>>--选择细分类型--</option>
+					    	<option value="0" <#if type_detail==0>selected</#if>>按花材销售</option>
+					    	<option value="1" <#if type_detail==1>selected</#if>>按产品销售</option>
+					  	</select>
+		    </span>			
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入批号查询" value="${code!}" id="code">
+			</span>
+			 <span class="l ml-10">
+                   <input type="text" placeholder="开始时间" class="input-text Wdate" id="stime" name="stime" value="${stime!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+             </span>
+             <span class="l ml-10">
+                <input type="text" placeholder="结束时间" class="input-text Wdate" id="etime" name="etime" value="${etime!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+             </span>
+			<input class="l btn btn-primary ml-10" type="submit" value="查询" onclick="search()">	
+			
+			<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> </div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">操作</th>					
+						<th width="60">序列</th>
+						<th width="60">批号</th>
+						<th width="80">地点</th>
+						<th width="80">销售时间</th>						
+						<th width="100">花材名称或产品名称</th>
+						<th width="100">销售数量(枝或单)</th>
+						<th width="60">类型</th>
+						<th width="80">账号</th>
+						<th width="120">维护时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if excplatsalelist?? && excplatsalelist?size gt 0>
+					<#list excplatsalelist as excplatsale>
+					<tr class="text-c">
+					    <td class="td-manage red">
+							<a title="编辑" onclick="_edit('${excplatsale.id!}')" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<a title="删除" onclick="_del('${excplatsale.id!}')" class="f-16" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>						    
+						</td> 
+						<td>${excplatsale_index+1}</td>
+						<td>${excplatsale.code!}</td>
+						<td class = "all">${excplatsale.addr!}</td>
+						<td>${excplatsale.htime!}</td>						
+						<td class = "all">${excplatsale.name!}</td>
+						<td>${excplatsale.num!}</td>
+						<td>${excplatsale.type!}</td>						
+						<td>${excplatsale.username!}</td>
+						<td>${excplatsale.optime!}</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="10" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+			var code = '${code!}', stime='${stime!}',etime='${etime!}',type='${type!}',type_detail='${type_detail!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/purchase/excplatsaleList?pageno='+e.curr+'&code='+code+'&type='+type+'&stime='+stime+'&etime='+etime+'&type_detail='+type_detail);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _add(){
+				parent.open_window('新增平台外销售单','/purchase/excplatsaleAdd', 500, 540);
+			}
+			function _edit(id){
+				parent.open_window('编辑平台外销售单','/purchase/excplatsaleEdit/'+id, 500, 540);
+			}
+			function _del(id) {
+				 parent.actconfirm('确定删除？', function(){
+					 var load = layer.load();
+					 $.post('/manage/iframe/purchase/excplatsaleDel/'+id, function(data){
+							layer.close(load);
+							if(data){
+								parent.refresh_iframe();
+								layer.msg('删除成功', {time: 1000});
+							}else{
+								layer.msg('删除失败', {time: 1000});
+							}
+					 })	
+				 })
+			}
+			function search() {
+				var code =$.trim($("#code").val());
+				var type = $("#type").find("option:selected").val();
+				var type_detail = $("#type_detail").find("option:selected").val();
+				var stime = $.trim($("#stime").val());
+				var etime = $.trim($("#etime").val());
+				location.replace('/manage/iframe/purchase/excplatsaleList?pageno=1&code='+code+'&type='+type+'&stime='+stime+'&etime='+etime+'&type_detail='+type_detail);
+			}
+		</script> 
+	</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/resource/layer/layer.js"></script>
+	<title>用户满意度调查</title>
+	
+	<style type="text/css">
+	.invest_title {
+		color: #f36b93;
+		padding: 15px;
+		float: left;
+	}
+	.invest_title span{
+		color: green;
+		font-size: 14px;
+	}
+	.invest_question {
+		color: green;
+		background-color: #edf1f7;
+	}
+	.invest_form {
+		padding: 15px;
+		float: left;
+	}
+	
+	.invest_answer_text textarea{
+		width: 80%;
+		height: 50%;
+	}
+	.invest_submit {
+		text-align: center;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	.submit {	
+		width: 60%;
+		height: 40px;
+		background-color: #f36b93;
+		color: white;
+		border-radius: 10px;
+		font-size: 16px;
+	}
+	</style>
+	
+</head>
+
+<body>
+
+	<div class="container">
+	
+		<span class="invest_title">
+			花粉们：<br/>
+			<span >&nbsp;&nbsp;&nbsp;&nbsp;您好~感谢您在百忙之中抽空填写这份调查表，调查表很简单，不记名，占用不了您多长时间，卷中所提问的问题无所谓对错，请您根据实际情况填写。谢谢您的合作！</span>
+		</span>
+		<br/>
+	
+		<form class="invest_form">
+	
+			<#if questionList?? && questionList?size gt  0>
+				<#list questionList as qinfo>
+				
+				<#if qinfo_index lt 9>
+					<div class="invest_question">
+		       			<span style="color: #f36b93;">${qinfo.id}. &nbsp;</span>	
+						<span>${qinfo.qContent}</span>
+					</div>
+		
+					<div class="invest_answer">
+						<label><input type="radio" name=${qinfo.id} id="" value="A" />A. 非常满意</label>
+						<label><input type="radio" name=${qinfo.id} id="" value="B" />B. 满意</label>
+						<label><input type="radio" name=${qinfo.id} id="" value="C" />C. 不满意</label>
+					</div>
+					<br/>
+	           	 <#else>
+	          	 		<div class="invest_question">
+		       				<span style="color: #f36b93;">${qinfo.id}. &nbsp;</span>	
+							<span>${qinfo.qContent}</span>
+					    </div>
+					    <div class="invest_answer_text">
+					    	<textarea  placeholder="请填写您的宝贵建议" id="advice" ></textarea>
+					    </div>
+					    
+	           	 </#if>
+	           		
+			 </#list>
+				
+			</#if>
+		
+		</form>	
+		
+		 <div class="invest_submit">
+		 	<button class="submit" onclick="submit()">提交</button>
+		 </div>
+		
+</div>
+
+<script type="text/javascript">
+	function submit() {
+		 var tmp = $('form').serialize()
+		 if (tmp.length<30) {
+			 layer.msg("您还没有填完哦！", {time: 2000});
+		 }else {
+			$.ajax({
+				url: '/survey/saveResult',
+				data: $('form').serialize(),
+				type: 'post',
+				dataType: 'json',
+				cache: false,
+				success: function(data){
+					if(data){
+						layer.msg(data.msg, {time: 2000});
+						return;
+					}else{
+						layer.msg(data.msg, {time: 2000});
+						return;
+					}
+				}
+			});
+		}
+	 // alert(jQuery.type(tmp));
+}
+</script>
+
+</body>
+</html>

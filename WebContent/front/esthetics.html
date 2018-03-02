@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<title>生活美学</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<script type="text/javascript">
+			var pageno=${pageno},totalpage=${totalpage};
+			$().ready(function(){
+				var swiper = new Swiper('.swiper-container', {
+			        pagination: '.swiper-pagination',
+			        paginationClickable: true,
+			        spaceBetween: 10,
+			    });
+				$(window).scroll( function() {
+					// 页面的文档高度
+				   	var h1 = $(document).height();
+				 	// 浏览器的高度
+				    var h2 = $(window).height();
+				    // 滚动条到顶部的垂直高度
+				    var h3 = $(document).scrollTop();
+				   	if(h2 + h3 == h1){
+				   		if(pageno < totalpage){
+				   			var load = layer.load();
+				   			$.get('/esthetics/'+(++pageno), function(data){
+				   				var html;
+				   				$(data).each(function(){
+				   					html = '<div class="esthetics_show" onclick="location.href=\'/esthetics_detail/'+ this.id + '\'">' +
+					   							'<img src="' + this.imgurl + '" class="imgsl" />' +
+												'<div class="esthetics_show_l">' +
+													'<p>' + this.title + '</p>' +
+													'<p>' +
+														'<a class="esthetics_t_r">' +
+															'<span>花美美FlowerMM</span>' +
+															'<span>' + this.ctime + '</span>' +
+														'</a>' +
+													'</p>' +
+												'</div>' +
+											'</div>';			   					
+				   					$('.esthetics_list').append(html);
+				   				});
+				   				layer.close(load);
+				   			});
+				   		}
+				   	}
+				}); 
+			});
+	    </script>
+	</head>
+	<body>
+		<div class="swiper-container">
+	        <div class="swiper-wrapper">
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/010.png" /></div>
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/011.png" /></div>
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/012.png" /></div>
+	            <div class="swiper-slide"><img src="/resource/flower/image/upload/013.png" /></div>
+	        </div>
+	        <div class="swiper-pagination"></div>
+	    </div>
+		<div class="container">
+			<div class="esthetics_type">
+				<a class="esthetics_type_1_a">生活美学</a>
+				<a class="esthetics_type_2_b" href="/esthetics_notice">投稿送花票</a>
+			</div>
+			<div class="esthetics_list">
+				<#list estheticslist as esthetics>
+				<div class="esthetics_show" onclick="location.href='/esthetics_detail/${esthetics.id}'">
+					<img src="${esthetics.imgurl!}" class="imgsl" />
+					<div class="esthetics_show_l">
+						<p>${esthetics.title}</p>
+						<p>
+							<a class="esthetics_t_r">
+								<span>花美美FlowerMM</span>
+								<span>${esthetics.ctime}</span>
+							</a>
+						</p>
+					</div>
+				</div>
+				</#list>
+			</div>
+		</div>
+	</body>
+</html>

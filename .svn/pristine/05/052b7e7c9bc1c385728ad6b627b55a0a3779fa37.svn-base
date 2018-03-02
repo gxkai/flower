@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+	<head>
+     <meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+        <link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/LArea.css">
+		<script type="text/javascript" src="/resource/flower/js/LArea3.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<script type="text/javascript">
+			var areadata = new Array();
+			$().ready(function(){
+				areadata = ${areajson};
+				selectArea('address', 'addrvalue', areadata);
+			});
+			
+			//验证兑换信息
+			function verifyExchange(_obj) {
+				/* layer.msg('test', {time:2000}); */
+				var cardNum = $('.exchange_cardNum').val();
+				var code = $('.exchange_code').val();
+				var name = $('.exchange_name').val();
+				var phone = $('.exchange_phone').val();
+				var area = $('#addrvalue').val();
+			    var addr = $('input[name="addr"]').val();
+			    /* var verifyCode = $('input[name="verifyCode"]').val(); */
+				
+			    $('input[name="cardNum"]').val(cardNum);
+			    $('input[name="code"]').val(code);
+			    $('input[name="name"]').val(name);
+			    $('input[name="phone"]').val(phone);
+			    $('input[name="area"]').val(area);
+			    $('input[name="addr"]').val(addr);
+			    /* $('input[name="verifyCode"]').val(verifyCode); */
+			    
+				if ($(_obj).data('lock') == 0) {
+					
+					if ($.trim(cardNum) == '') {
+						layer.tips('请录入卡号', '.exchange_cardNum', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					} else if ($.trim(code) == 'null' || $.trim(code) == 'NULL') {
+						layer.tips('不能为NULL或者null', '.exchange_cardNum', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					}
+					
+					/* if ($.trim(code) == '') {
+						layer.tips('请输入兑换码', '.exchange_code', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					} else if ($.trim(code) == 'null' || $.trim(code) == 'NULL') {
+						layer.tips('不能为NULL或者null', '.exchange_name', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					} */
+					
+					if ($.trim(name) == '') {
+						layer.tips('请输入收花人名字', '.exchange_name', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					} else if ($.trim(name) == 'null' || $.trim(name) == 'NULL') {
+						layer.tips('不能为NULL或者null', '.exchange_name', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					}
+					
+					var reg = /^1(3|4|5|7|8)\d{9}$/;
+					if ($.trim(phone) == '') {
+						layer.tips('请录入手机号码', '.exchange_phone', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					} else if (!reg.test(phone)) {
+						layer.tips('手机号格式错误', '.exchange_phone', {
+							tips : [ 1, '#34495E' ]
+						});
+						return;
+					}
+					
+					// 提交表单数据
+					$(_obj).data('lock', 1);
+					var load = layer.load();
+					$.ajax({
+						url: '/service/verifyExchange',
+						data: $('form').serialize(),
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success: function(data){
+							layer.close(load);
+							if(data.result){
+								layer.msg(data.message, {time: 2000});
+							    $('form').submit();
+							}else{
+								$(_obj).data('lock', 0);
+								layer.msg(data.message, {time: 2000});return;
+							}
+						}
+					});
+					
+				}
+			}
+			
+		</script>
+		
+<style type="text/css">
+
+/************兑换鲜花************/
+.exchange {
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	margin: 0;
+}
+.exchange_cardNum {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 40px;
+	float: left;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	box-sizing: border-box;
+	padding: 7px 10px;
+	font: 15px/26px 'Microsoft Yahei';
+	border-radius: 4px;
+	outline: none;
+}
+.exchange_code {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 40px;
+	float: left;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	box-sizing: border-box;
+	padding: 7px 10px;
+	font: 15px/26px 'Microsoft Yahei';
+	border-radius: 4px;
+	outline: none;
+}
+
+.exchange_name {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 40px;
+	float: left;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	box-sizing: border-box;
+	padding: 7px 10px;
+	font: 15px/26px 'Microsoft Yahei';
+	border-radius: 4px;
+	outline: none;
+}
+
+.exchange_phone {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 40px;
+	float: left;
+	border: 1px solid #A1A4A9;
+	color: #A1A4A9;
+	box-sizing: border-box;
+	padding: 7px 10px;
+	font: 15px/26px 'Microsoft Yahei';
+	border-radius: 4px;
+	outline: none;
+}
+.exchange_submit {
+	width: 100%;
+	height: 46px;
+	float: left;
+	line-height: 46px;
+	text-align: center;
+	background-color: #f36b93;
+	border-radius: 4px;
+	color: white;
+	text-decoration: none;
+}
+
+.exchange_verifyCode{
+	width: 100%;
+	height: 60px;
+	float: left;
+	border-bottom: 1px solid #EEE;
+}
+.exchange_verifyCode span{
+	width: 100px;
+	height: 100%;
+	float: left;
+	line-height: 60px;
+	box-sizing: border-box;
+	padding-left: 15px;
+	color: #48505B;
+} 
+ .exchange_verifyCode input{
+	width: 100px;
+    height: 25px;
+    float:left;
+    margin-top: 15px; 
+}  
+.exchange_verifyCode img{
+    height: 25px;
+    margin-left:20px;
+    margin-top: 18px;
+} 
+.qrcode {
+   width: 100%;
+   height: 100%;
+   text-align:center;
+   background-color: #FFFFFF;
+}
+
+.qrcode img{
+   width: 30%;
+   height: 30%;
+}
+
+</style>
+
+<title>兑换鲜花</title>
+	</head>
+	
+	<body>
+		<div class="container">
+		
+		    <p class="exchange"  >
+			    <span>卡号</span>
+				<input type="tel" value="${cardNum!}" class="exchange_cardNum"  maxlength="40">
+			</p>
+			
+			<p class="exchange">
+			    <span>兑换码</span>
+				<input type="tel" class="exchange_code"  maxlength="40">
+			</p>
+			
+			<p class="exchange">
+			    <span>收花人名字</span>
+				<input type="text" class="exchange_name"  maxlength="20">
+			</p>
+			
+			<p class="exchange">
+			    <span>手机号码</span>
+				<input type="tel" class="exchange_phone"  maxlength="12">
+			</p>
+			
+			<div class="address_add_1">
+				<span>所在地区</span>
+				<p>
+					<input type="text" id="address" readonly="readonly" placeholder="选择省份&#12288;选择城市&#12288;选择区县"/>
+					<input type="hidden" name="area" id="addrvalue"/>
+				</p>
+			</div>
+			<div class="address_add_1">
+				<span>详细地址</span><p><input type="text" name="addr" placeholder="街道门牌信息" maxlength="60"/></p>
+			</div>
+			
+			<!-- <div class="exchange_verifyCode">
+				<span>验证码</span>
+				<input type="text" name="verifyCode"/>
+			    <img src="/account/code" onclick="this.src='/account/code?x='+Math.random()">
+			</div> -->
+			
+			<p class="exchange">
+				<span class="exchange_submit" onclick="verifyExchange(this)" data-lock="0">确认兑换</span>
+			</p>
+			
+			<form action="/service/exchangeInfo" method="post" style="display: none;">
+			    <input type="hidden" name="cardNum" > 
+		        <input type="hidden" name="code" >
+			    <input type="hidden" name="name" >
+		    	<input type="hidden" name="phone">
+			    <input type="hidden" name="area" >
+			    <input type="hidden" name="addr" >
+			    <!-- <input type="hidden" name="verifyCode" > -->
+		    </form>
+		
+		</div>
+	</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>优惠管理 - 活动设置 - 活动详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if activity??>
+				<input type="hidden" name="id" value="${activity.id}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>活动名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v1" name="name" value="${activity.name}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>购满金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="money" value="${activity.money?string('0.00')}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>优惠金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v3" name="benefit" value="${activity.benefit?string('0.00')}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>开始时间：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text Wdate" id="datemin" name="time_a" value="${activity.time_a}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'%y-%M-%d %H:%m:%s',maxDate:'#F{$dp.$D(\'datemax\')||\'{%y+1}-%M-%d %H:%m:%s\'}'})">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>结束时间：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text Wdate" id="datemax" name="time_b" value="${activity.time_b}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d %H:%m:%s\'}'})">
+					</div>
+				</div>
+				<#if activity.id == 1>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>周边赠品：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="give">
+						  	<select class="select" size="1" name="gid">
+						    	<option value="0" selected>--选择赠品--</option>
+						    	<#list ars as ar>
+						    	<#if ar.id==activity.gid>
+						    	<option value="${ar.id}" selected>${ar.name}</option>
+						    	<#else>
+						    	<option value="${ar.id}">${ar.name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				</#if>
+				<#else>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>活动名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v1" name="name">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>购满金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="money" placeholder="0.00">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>优惠金额：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v3" name="benefit" placeholder="0.00">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>开始时间：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text Wdate" id="datemin" name="time_a" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'%y-%M-%d %H:%m:%s',maxDate:'#F{$dp.$D(\'datemax\')||\'{%y+1}-%M-%d %H:%m:%s\'}'})">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>结束时间：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text Wdate" id="datemax" name="time_b" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'datemin\')||\'%y-%M-%d %H:%m:%s\'}'})">
+					</div>
+				</div>
+				</#if>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			function _save(){
+				var name = $('#v1').val();
+				var money = $('#v2').val();
+				var benefit = $('#v3').val();
+				var time_a = $('#datemin').val();
+				var time_b = $('#datemax').val();
+				var reg = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+				
+				if($.trim(name)==''){
+					layer.tips('请填写活动名称', '#v1', {tips: [1, '#34495E']});return;
+				}else if($.trim(name)=='null' || $.trim(name)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v1', {tips: [1, '#34495E']});return;
+				}
+				if($.trim(money)==''){
+					layer.tips('请填写购满金额', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(money)=='null' || $.trim(money)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}
+				reg1 = /^\d{1,8}(\.\d{1,2})?$/;
+				if(!reg1.test(money)){
+					layer.tips('只能输入数字和小数或者金额不能大于一亿', '#v2', {tips: [1, '#34495E']});return;
+				}
+				if($.trim(benefit)==''){
+					layer.tips('请填写优惠金额', '#v3', {tips: [1, '#34495E']});return;
+				}else if($.trim(benefit)=='null' || $.trim(benefit)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v3', {tips: [1, '#34495E']});return;
+				}
+				if(!reg1.test(benefit)){
+					layer.tips('只能输入数字和小数或者金额不能大于一亿', '#v3', {tips: [1, '#34495E']});	return;
+				}
+				if($.trim(time_a)==''){
+					layer.tips('请填写开始时间', '#datemin', {tips: [1, '#34495E']});return;
+				}else if($.trim(time_a)=='null' || $.trim(time_a)=='NULL'){
+					layer.tips('不能为NULL或者null', '#datemin', {tips: [1, '#34495E']});return;
+				}
+				
+				if($.trim(time_b)==''){
+					layer.tips('请填写结束时间', '#datemax', {tips: [1, '#34495E']});return;
+				}else if($.trim(time_b)=='null' || $.trim(time_b)=='NULL'){
+					layer.tips('不能为NULL或者null', '#datemax', {tips: [1, '#34495E']});return;
+				}
+				
+				var ac_id = $('input[name="id"]').val();
+				if(ac_id == 1){
+					var gid = $('select[name="gid"]').val();
+				}
+				
+				var lock = true;
+				if(lock){
+					lock = false;
+					$.post('/manage/iframe/benefit/saveActivity', $('form').serialize(), function(data){
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

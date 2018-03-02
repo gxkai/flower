@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.red{color: red !important;}
+			.blue{color: blue !important;}
+		</style>
+		<title>商品管理 - 商品列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 商品列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a><span style="color: red;">切记:新增商品请点击添加奖品,而不是编辑其他商品</span></nav>
+		
+		
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> 
+			<span class="l"><a href="javascript:;" onclick="_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加商品</a></span>
+		    <span class="select-box l ml-10" style="width: 160px" id="wl">
+			  <select class="select" size="1" id="ptid" onchange="search()">
+			    <option value="0" <#if ptid=="0">selected</#if> >--选择商品名称--</option>
+			    <#if typelist?? && typelist?size gt 0>
+					<#list typelist as ftype>
+					    <option value="${ftype.code_value}"  <#if ptid==ftype.code_value>selected</#if> >${ftype.code_name}</option>
+					</#list>
+				<#else>
+					<option value="0" <#if ptid=="0">selected</#if>>无</option>
+				</#if>
+			  </select>
+			</span>
+			<span class="select-box l ml-10" style="width: 160px" id="wl">
+			  <select class="select" size="1"  id="state" onchange="search()">
+					    	<option value="10" <#if state==10>selected</#if>>--选择状态--</option>
+					    	<option value="0" <#if state==0>selected</#if>>在售</option>
+					    	<option value="1" <#if state==1>selected</#if>>售罄，不显示</option>
+					    	<option value="2" <#if state==2>selected</#if>>售罄，显示</option>
+					  	</select>
+			</span>
+		    <span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> </div>
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					    <th width="30">操作</th>
+						<th width="30">序列</th>
+						<th width="30">Id号</th>
+						<th width="130">商品名称</th>
+						<th width="80">适合对象</th>
+						<th width="40">缩略图</th>
+						<th width="140">分类名称</th>	
+						<th width="50">商品价格</th>
+						<th width="50">拼团价格</th>
+						<th width="40">几人团</th>
+						<th width="50">拼团时限</th>
+						<th width="50">所需花籽</th>
+						<th width="80">是否计入首单</th>
+						<th width="80">是否允许顺延</th>
+						<th>商品描述</th>
+						<th width="40">X坐标</th>
+						<th width="40">Y坐标</th>
+						<th width="140">创建日期</th>
+						<th width="50">商品状态</th>
+						<th width="50">花材等级</th>
+						<th width="140">分享标题</th>
+						<th width="140">分享描述</th>
+						<th width="140">多买立减</th>
+						<th width="140">送达日期类型</th>
+						<th width="140">参团用户限制</th>
+						<th width="140">团长是否免单</th>
+						<th width="140">是否支持退款</th>
+						<th width="140">是否允许机器人参团</th>
+						<th width="140">公益基金百分比</th>
+						<th width="90">体验次数</th>
+						<th width="90">入团介绍人佣金</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+				 <#if flowerprolist?? && flowerprolist?size gt 0>
+				   <#list flowerprolist as flowerpro>
+					<tr class="text-c">
+					    <td class="td-manage">
+							<a title="编辑" onclick="_edit(${flowerpro.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+						</td>
+						<td>${flowerpro_index+1}</td>
+						<td>${flowerpro.id}</td>
+						<td>${flowerpro.code_name}</td>
+						<td><#if flowerpro.type==0>所有<#elseif flowerpro.type==1>首单<#else>多单</#if></td>
+						<td><img src="${flowerpro.imgurl!}" width="30"/></td>
+						<td>${flowerpro.name}</td>
+						<td class="red">&yen;${flowerpro.price?string('0.00')}</td>
+						<td class="blue">&yen;${flowerpro.ptPrice?string('0.00')}</td>
+						<td class="blue">${flowerpro.ptCount!}</td>
+						<td class="blue">${flowerpro.ptHours!}</td>
+						<td class="red">${flowerpro.seeds}</td>
+						<td>${flowerpro.isinfirst}</td>
+						<td>${flowerpro.allowSY}</td>
+						<td>${flowerpro.describe!}</td>
+						<td>${flowerpro.x!}</td>
+						<td>${flowerpro.y!}</td>
+						<td>${flowerpro.ctime!}</td>
+						<td>${flowerpro.isstate!}</td>
+						<td class="red">${flowerpro.fpc}</td>
+						<td>${flowerpro.shareTitle!}</td>
+						<td>${flowerpro.shareDes!}</td>
+						<td>${flowerpro.dmlj!}</td>
+						<td>${flowerpro.reachtype!}</td>
+						<td>${flowerpro.allownew!}</td>
+						<td>${flowerpro.isptFree!}</td>	
+						<td>${flowerpro.allowRefund!}</td>
+						<td>${flowerpro.allowRobotis!}</td>
+						<td>${flowerpro.fundper!}</td>
+						<td>${flowerpro.ptNum}</td>	
+						<td>${flowerpro.jsMoney}</td>			
+					</tr>
+					</#list>
+			    <#else>
+					<tr>
+						<td colspan="8" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+				</#if>
+			 </tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+		    var state='${state!}';
+		    var ptid='${ptid!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				    	
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				        	
+				            location.replace('/manage/iframe/product/flowerpro?pageno='+e.curr+'&ptid='+ptid+'&state='+state);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+		
+		    function search(){
+		    	var state= $('#state option:selected').val();
+		    	var ptid= $('#ptid option:selected').val();
+		    	location.replace('/manage/iframe/product/flowerpro?pageno=1&ptid='+ptid+'&state='+state);
+		    }
+			function _add(){
+				parent.open_window('添加商品','/product/getFlower_pro', 540, 380);
+			}
+			function _edit(id){
+				parent.open_window('编辑商品','/product/getFlower_pro/'+id, 540, 380);
+			}
+			function _del(id){
+				parent.actconfirm('确认要删除吗？', function(){
+					$.post('/manage/iframe/product/delFlower_pro/'+id, function(data){
+						if(data){
+							layer.msg('删除成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('删除失败', {time: 1000});
+						}
+					});
+				});
+			}
+		</script> 
+	</body>
+</html>

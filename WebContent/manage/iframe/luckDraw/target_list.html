@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>抽奖管理 - 新年小目标列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>抽奖管理 <span class="c-gray en">&gt;</span>新年小目标列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+				<div class="cl pd-5 bg-1 bk-gray">
+				<span class="select-box l ml-10" style="width: 180px">
+					  	<select class="select" size="1"  id="isClose" onchange="search()">
+					    	<option value="10" <#if isClose==10>selected</#if>>--选择状态--</option>
+					    	<option value="0" <#if isClose==0>selected</#if>>未关闭</option>
+					    	<option value="1" <#if isClose==1>selected</#if>>关闭</option>
+					  	</select>
+				</span>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入会员ID查询" value="${aid!}" id="aid" maxlength="17">
+				</span>
+				&nbsp;
+				 <input class="btn btn-primary" type='button' value="查询" onclick="search()">
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+	
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					   <th width="80">操作</th>
+						<th width="50">Id号</th>
+						<th width="100">用户ID</th>
+						<th width="160">目标内容</th>
+						<th width="140">定目标时间</th>
+						<th width="100">见证人数新用户</th>
+						<th width="100">见证人数老用户</th>
+						<th width="120">见证分数</th>
+						<th width="100">见证时长</th>
+						<th width="100">是否关闭</th>
+						<th width="100">奖品ID号</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<#if list?? && list?size gt 0>
+					<#list list as li>
+					<tr class="text-c">
+					    <td class="td-manage red">
+							<a title="查看见证详情" onclick="_see(${li.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe665;</i></a>
+						</td>
+						<td>${li.id!}</td>
+						<td>${li.aid!}</td>
+						<td>${li.contentStr!}</td>
+						<td>${li.tgtime!}</td>
+						<td>${li.wNumNew!}</td>
+						<td>${li.wNumOld!}</td>
+						<td>${li.wScore!}</td>
+						<td>${li.wHours!}</td>
+						<td>${li.isClose!}</td>
+						<td>${li.prizeId!}</td>
+						
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+		
+		var isClose='${isClose!}',aid='${aid!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/luckDraw/target?pageno='+e.curr+'&isClose='+isClose+'&aid='+aid);
+				            
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			
+		 function search(){
+			 aid = $.trim($('#aid').val());
+			 isClose=$('#isClose').find('option:selected').val();
+			 location.replace('/manage/iframe/luckDraw/target?pageno=1'+'&isClose='+isClose+'&aid='+aid);
+		 }
+			 
+		 function _see(id) {
+			 parent.open_window('查看见证详情','/luckDraw/targetdetail?id='+id, 1000, 540);
+		}
+		 
+			
+		</script> 
+	</body>
+</html>

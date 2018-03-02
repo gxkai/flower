@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/icheck/icheck.css" />
+<title>奖品维护</title>
+</head>
+<body>
+   <div style=" margin-left: 10px;margin-right: 10px;">
+    <form class="form form-horizontal">
+     <!-- 编辑奖品-->
+     <span>奖品来源(1：非花美美平台 2:花籽 3：花票 4：红包 5：走心的话 )</span>
+     <br>
+     <span>奖品内容(非平台奖品为0；走心的话放【0】；花票放【大转盘抽奖放“花票主题ID”；12星座翻牌放“花票分类ID”】；花籽放【花籽数量】；红包放【红包商品ID】)</span>
+     <#if rd??>
+          <table class="table table-border table-bordered table-hover table-bg table-sort f-l mt-15">
+				<tr style=" display: none">
+					<td>奖品ID号</td>
+					<td><input type="text" class="input-text size-S" id="vId" name="id" value="${rd.id!}"></td>
+				</tr>
+				<tr>
+					<td width="120">奖品名称</td>
+					<td><input type="text" class="input-text size-S" id="vpName" name="pName" value="${rd.pName!}"></td>
+				</tr>
+				<tr>
+  					<td>中奖信息</td>
+  					<td><input type="text" class="input-text size-S" id="vpMsg" name="pMsg" value="${rd.pMsg!}"></td>
+  				</tr>
+  				<tr>
+  				   <td width="120">奖品图标：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="pImgurl" value="${rd.pImgurl!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="pImgurl" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览" style="cursor: pointer;" onclick="parent.showimgage('${rd.pImgurl!}')">&#xe695;</i></td>
+  				</tr>
+  				<tr>
+					<td>库存</td>
+					<td><input type="text" class="input-text size-S" id="vpNum" name="pNum" value="${rd.pNum!}"></td>
+  				</tr>
+  				<tr>
+					<td>中奖区间开始</td>
+					<td><input type="text" class="input-text size-S" id="vpAreaS" name="pAreaS" value="${(rd.pAreaS!0)}"></td>
+  				</tr>
+  				<tr>
+					<td>中奖区间结束</td>
+					<td><input type="text" class="input-text size-S" id="vpAreaE" name="pAreaE" value="${(rd.pAreaE!0)}"></td>
+  				</tr>
+  				<tr>
+					<td>奖品来源</td>
+					<td><input type="text" class="input-text size-S" id="vorigin" name="origin" value="${rd.origin}"></td>
+  				</tr>
+  				<tr>
+					<td>奖品内容</td>
+					<td><input type="text" class="input-text size-S" id="vcontentId" name="contentId" value="${rd.contentId}"></td>
+  				</tr>
+  				<tr>
+					<td width="120">金额：</td>
+					<td><input type="text" class="input-text size-S" id="vmoney" name="money" value="${rd.money!}"></td>
+  				</tr>
+  				<tr>
+					<td width="120">所需见证分数：</td>
+					<td><input type="text" class="input-text size-S" id="vwscore" name="wScore" value="${rd.wScore!}"></td>
+  				</tr>
+  				<tr>
+					<td width="120">类型：</td>
+					<td>	<select class="select" size="1"  id="vtype" name="type">
+					    	<option value="1" <#if rd.type==1>selected</#if>>大转盘抽奖</option>
+					    	<option value="2" <#if rd.type==2>selected</#if>>双11抽奖</option>
+					    	<option value="3" <#if rd.type==3>selected</#if>>12星座翻牌</option>
+					    	<option value="4" <#if rd.type==4>selected</#if>>小目标奖品</option>
+					    	<option value="5" <#if rd.type==5>selected</#if>>见证红包</option>
+					  	</select>
+					</td>
+  				</tr>
+  				<tr>
+					<td width="120">状态：0暂停1启用</td>
+					<td><input type="text" class="input-text size-S" id="vstate" name="state" value="${rd.state!}"></td>
+  				</tr>		
+			</table>
+			<input type="button" onClick="editsave()" class="btn btn-primary btn-block" value="编辑保存">
+       
+  <!-- 添加奖品-->
+   <#else> 
+       <table class="table table-border table-bordered table-hover table-bg table-sort f-l mt-15">
+				<tr>
+					<td width="120">奖品名称</td>
+					<td><input type="text" class="input-text size-S" id="vpName" name="pName" value=""></td>
+				</tr>
+				<tr>
+  					<td>中奖信息</td>
+  					<td><input type="text" class="input-text size-S" id="vpMsg" name="pMsg" value=""></td>
+  				</tr>
+  				<tr> 
+  				 <td width="120">奖品图片：</td>
+  				   <td><span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text" id="pImgurl" value="" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="pImgurl" class="pro-imgsrc">
+						</span>	
+					</td>
+				</tr>		
+  				<tr>
+					<td>库存/权重</td>
+					<td><input type="text" class="input-text size-S" id="vpNum" name="pNum" value="0"></td>
+  				</tr>
+  				<tr>
+					<td>中奖区间开始</td>
+					<td><input type="text" class="input-text size-S" id="vpAreaS" name="pAreaS" value="0"></td>
+  				</tr>
+  				<tr>
+					<td>中奖区间结束</td>
+					<td><input type="text" class="input-text size-S" id="vpAreaE" name="pAreaE" value="0"></td>
+  				</tr>
+  				<tr>
+					<td>奖品来源</td>
+					<td><input type="text" class="input-text size-S" id="vorigin" name="origin" value="1"></td>
+  				</tr>
+  				<tr>
+					<td>奖品内容</td>
+					<td><input type="text" class="input-text size-S" id="vcontentId" name="contentId" value="0"></td>
+  				</tr>
+  				<tr>
+					<td width="120">金额：</td>
+					<td><input type="text" class="input-text size-S" id="vmoney" name="money" value="0"></td>
+  				</tr>
+  				<tr>
+					<td width="120">所需见证分数：</td>
+					<td><input type="text" class="input-text size-S" id="vwscore" name="wScore" value="0"></td>
+  				</tr>
+  				<tr>
+					<td width="120">类型：</td>
+					<td>	<select class="select" size="1"  id="vtype" name="type">
+					    	<option value="1" >大转盘抽奖</option>
+					    	<option value="2" >双11抽奖</option>
+					    	<option value="3" >12星座翻牌</option>
+					    	<option value="4" >小目标奖品</option>
+					    	<option value="5" >见证红包</option>
+					  	</select>
+					</td>
+  				</tr>
+  				<tr>
+					<td width="120">状态：0暂停1启用</td>
+					<td><input type="text" class="input-text size-S" id="vstate" name="state" value="0"></td>
+  				</tr>		
+			</table>
+			<input type="button" onClick="addsave()" class="btn btn-primary btn-block mt-15" value="新增保存">
+     </#if>
+     </form>
+   </div>
+   
+   
+  <script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+  <script type="text/javascript" src="/resource/layer/layer.js"></script>
+  <script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+  <script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+  <script type="text/javascript">
+    //图片生成新地址
+	 $('.input-file').on('change', function(){
+		var $proImg = $(this).siblings(".pro-imgsrc");
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var base64 = e.target.result;
+			$proImg.val(base64);
+		};
+		reader.readAsDataURL(this.files[0]);
+		this.files = [];
+	}); 
+	
+		
+	function addsave() {
+		var vcontentId = $("#vcontentId").val();
+		var vorigin = $("#vorigin").val();
+		if (vcontentId!="0" && vorigin=="1") {
+			layer.alert("非平台产品请设置奖品来源为1,奖品内容为0", {icon:5});return;
+		}
+		var lock = true;
+		if(lock){
+			lock = false;
+			var load = layer.load();
+			$.post('/manage/iframe/luckDraw/SavePrize', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data.result){
+					//parent.refresh_iframe();
+					layer.msg('新增成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('新增失败', {time: 1000}, function(){
+						lock = true;
+					});
+				}
+			});
+		}
+	}
+	function editsave(){
+		var vcontentId = $("#vcontentId").val();
+		var vorigin = $("#vorigin").val();
+		if (vcontentId!="0" && vorigin=="1") {
+			layer.alert("非平台产品请设置奖品来源为1,奖品内容为0", {icon:5});return;
+		}
+		var lock = true;
+		if(lock){
+			lock = false;
+			var load = layer.load();
+			$.post('/manage/iframe/luckDraw/EditPrize', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data.result){
+					//parent.refresh_iframe();
+					layer.msg('编辑成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('编辑失败', {time: 1000}, function(){
+						lock = true;
+					});
+				}
+			});
+		}
+	}
+	
+		
+		
+		
+		
+		 
+		
+	
+	
+  </script>
+   
+          
+
+</body>
+</html>

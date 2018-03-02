@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<title>我的地址</title>
+		<script type="text/javascript">
+			var type = ${type};
+			// 设为默认地址
+			function chooseAddress(id){
+				var search = window.location.search;
+				location.replace('/service/changeorderaddr' + search + '&id=' + id);
+			}
+			// 编辑地址
+			function editAddress(id){
+				var search = window.location.search;
+				location.href='/account/getAddress/' + search + '&id=' + id;
+			}
+		</script>
+	</head>
+	<body style="background-color: #EEE;">
+		<div class="container">
+			<#list addresslist as address>
+			<div class="address_list">
+				<p class="address_1"><span>${address.name}&#12288;${address.tel}</span></p>
+				<p class="address_2"><span>${address.addr}</span></p>
+				<p class="address_3">
+					<#if address.id==addr>
+					<span class="address_selected"><i class="address_choose"><img src="/resource/flower/image/icon/012.png" /></i>选择</span>
+					<#else>
+					<span onclick="chooseAddress(${address.id})"><i class="address_choose"><img src="/resource/flower/image/icon/013.png" /></i>选择</span>
+					</#if>
+					<span onclick="editAddress(${address.id})"><i class="address_icon"><img src="/resource/flower/image/icon/015.png" /></i>编辑</span>
+				</p>
+			</div>
+			</#list>
+		</div>
+	</body>
+</html>

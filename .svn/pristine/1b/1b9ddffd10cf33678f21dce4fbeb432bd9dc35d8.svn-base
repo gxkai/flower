@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>红包管理 - 红包列表 - 红包详情</title>
+	</head>
+	<body>
+	     <div class="page-container">
+	     <div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					    <th width="60">ID</th>
+					    <th width="80">红包编号</th>
+						<th width="85">红包商品名称</th>
+						<th width="60">金额</th>
+						<th width="60">状态</th>
+						<th width="80">拆包人ID</th>
+						<th width="130">拆包时间</th>
+						<th width="80">拆包人昵称</th>
+						<th width="120">兑换订单编号</th>
+						<th width="130">兑换时间</th>
+						<th widht="200">触发红包的单号</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if list?? && list?size gt 0>
+					     <#list list as li>
+					       <tr class="text-c">
+					         <td>${li.id}</td>
+						     <td>${li.rpid}</td>
+						     <td>${li.name}</td>
+						     <td>${li.dmoney}</td>
+						     <td>${li.isopen}</td>
+						     <td>${li.aid!}</td>
+						     <td>${li.gtime!}</td>
+						     <td>${li.nick!}</td>
+						     <td>${li.oid!}</td>
+						     <td>${li.ctime!}</td>
+						     <td>${li.orderlist!}</td>
+					      </tr>
+					    </#list>
+					<#else>
+					    <tr>
+						   <td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					    </tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+	     
+			
+			
+		</div>
+		
+		 
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+		</script>
+	</body>
+</html>

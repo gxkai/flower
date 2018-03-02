@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+		.all:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>服务管理 - 开票列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 服务管理 <span class="c-gray en">&gt;</span> 开票列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+		<div class="cl pd-5 bg-1 bk-gray">				
+			<span class="select-box l" style="width: 130px">
+			  	<select class="select" size="1" onchange="search()" id="state">
+			    	<option value="10" <#if state==10>selected</#if>>--选择状态--</option>
+			    	<option value="2" <#if state==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;待开票</option>
+			    	<option value="3" <#if state==3>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;已开票</option>
+			  	</select>
+			</span>		
+			<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span> 
+	    </div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+					    <th width="60">操作</th>
+						<th width="30">序列</th>
+						<th width="180">公司抬头</th>
+						<th width="170">税号</th>
+						<th width="100">发票内容</th>
+						<th width="80">发票金额</th>
+						<th width="80">姓名</th>
+						<th width="100">联系方式</th>
+						<th width="120">所在城市</th>
+						<th width="140">详细地址</th>
+						<th width="40">订单数</th>
+						<th width="30">邮费</th>
+						<th width="50">发票状态</th>
+						<th width="130">支付码</th>
+						<th width="130">提交时间</th>
+						<th width="60">用户</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if receiptlist?? && receiptlist?size gt 0>
+					<#list receiptlist as receipt>
+					<tr class="text-c">
+					    <td class="td-manage red">
+							<a title="编辑" onclick="_edit('${receipt.id!}')" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<a title="查看详情" onclick="_see('${receipt.id}')" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe665;</i></a>						
+						</td> 
+						<td >${receipt_index+1}</td>
+						<td>${receipt.company!}</td>
+						<td>${receipt.code!}</td>
+						<td>${receipt.content!}</td>
+						<td>${receipt.money!}</td>
+						<td>${receipt.name!}</td>
+						<td>${receipt.tel!}</td>
+						<td class="all">${receipt.area!}</td>
+						<td class="all">${receipt.addr!}</td>
+						<td>${receipt.ordernum!}</td>
+						<td>${receipt.postage!}</td>
+						<td>${receipt.state!}</td>
+						<td>${receipt.fcode!}</td>
+						<td>${receipt.ctime!}</td>
+						<td>${receipt.aid!}</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="10" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+			var state = '${state!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/service/receiptList?pageno='+e.curr+'&state='+state);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function search() {
+				var state = $("#state").find("option:selected").val();
+				location.replace('/manage/iframe/service/receiptList?pageno=1&state='+state);
+			}
+			function _edit(id){
+				parent.open_window('编辑发票状态','/service/receiptEdit/'+id, 500, 300);
+			}
+			function _see(id) {
+				parent.open_window('发票详情','/service/receiptDetail/'+id, 1000, 300);
+			}
+		</script> 
+	</body>
+</html>

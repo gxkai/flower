@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			
+		</style>
+		<title>采购管理 - 采购列表 - 采购单编辑</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if list??>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>拆分至批号：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="splitCode" name="splitCode" value="" >
+						<input type="hidden" class="input-text" id="id" name="id" value="${list.id}" readonly="readonly">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>现有扎数：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="totalNum" name="totalNum" value="${list.totalNum}" readonly="readonly">																
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>拆分扎数：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input type="number" class="input-text" id="splitNum" name="splitNum" value="" >										
+					</div>
+				</div>	   
+				 <input type="button" onClick="save()" class="btn btn-primary btn-block mt-15" value="拆分">
+				</#if>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.autocomplete.min.js"></script>		
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+		var regCode,splitCode,totalNum,splitNum;
+		$(function(){
+			
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+		function save(){
+			if (!checkInput()) {
+				return false;
+			}
+			var difNum = Number(totalNum)-Number(splitNum); 
+			var lock = true;
+			if (lock) {
+				lock = false;
+				$.post('/manage/iframe/purchase/purchaseSaveSplit/', $('form').serialize(), function(data){
+					if(data){
+						layer.msg('拆分成功', {time: 1000}, function(){
+						});
+						$("#totalNum").val(difNum)
+						lock = true;
+					}else{
+						layer.msg('拆分失败', {time: 1000}, function(){
+						});
+						lock = true;
+					}
+				});
+			}
+			
+			
+		}
+		function checkInput() {
+			regCode = /^[0-9]{8}$/;//检查批号
+			splitCode =$.trim($("#splitCode").val());
+		    totalNum = $.trim($("#totalNum").val());
+			splitNum = $.trim($("#splitNum").val());
+			if(!regCode.test(splitCode)){
+				layer.msg('请输入8位批号', {time: 2000});
+				return false;
+			}
+			if (splitNum=="") {
+				layer.msg('拆分扎数不能为空',{time: 2000});
+				return false;
+			}
+			if (Number(splitNum)<=0) {
+				layer.msg('拆分扎数必须大于0',{time: 2000});
+				return false;
+			}
+			if (Number(totalNum)<Number(splitNum)) {
+				layer.msg('拆分扎数不能大于现有扎数',{time: 2000});
+				return false;
+			}
+			return true;
+		}
+		
+			
+		</script>
+	</body>
+</html>

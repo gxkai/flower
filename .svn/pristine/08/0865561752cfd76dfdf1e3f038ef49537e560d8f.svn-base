@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer_mobile/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript" src="/resource/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<title>商品详情</title>
+		<style type="text/css">
+			.pro_1_1 span:nth-child(2){white-space: inherit!important;}
+			.pro_1_1 span:nth-child(2) i{font: 14px/20px 'Microsoft Yahei';width: 100%;height: 43px;float: left;white-space: pre-wrap;word-wrap: break-word;}
+		</style>
+		<script type="text/javascript">
+			$().ready(function(){
+				var swiper = new Swiper('.swiper-container', {
+			        pagination: '.swiper-pagination',
+			        paginationClickable: true,
+			        spaceBetween: 10,
+			        /* 监听swiper滑动结束事件 */
+			        onSlideChangeEnd:function(swiper){
+			            /* alert(swiper.activeIndex+''); */
+			            // swiper.activeIndex 这个就是索引， 从 0 开始！ 可看一共有多少元素！
+			            
+			            $('.giveselect').removeClass('giveselect'); 
+					    $("#protype_" + swiper.activeIndex).addClass('giveselect'); 
+					    /* 商品描述 */
+	 					$('[id^="itinfo_"]').hide();
+	 					$('#itinfo_'+swiper.activeIndex).show();
+	 					/* 发货详情 */
+	 					$('[id^="itinfo2_"]').hide();
+	 					$('#itinfo2_'+swiper.activeIndex).show();
+	 					/* 购花须知 */
+	 					$('[id^="itinfo3_"]').hide();
+	 					$('#itinfo3_'+swiper.activeIndex).show();
+	 					
+						$('[id^="describe_"]').hide();
+					    $('#describe_'+$("#protype_" + swiper.activeIndex).data("id")).show();  
+					    
+					    customcycle(0);
+			         }
+			    });
+				
+				vaseinit('vaselist', 'vaseselect');
+				vaseinit('idoneitylist', 'idoneityselect');
+				upordown('f_u_d');
+				wxconfig(window.location);
+				wx.ready(function(){
+					givetoshow('http://' + window.location.host + '${givelist[0].imgurl}', '${givelist[0].name}', window.location.host);
+				});
+				
+				$('.pro_class a').click(function(){
+					$('.pro_class a').removeClass('checkclass');
+					$(this).addClass('checkclass');
+					if($(this).data('isbuy')==0){
+						$('#pro_vase_style').show();
+					}else{
+						$('#pro_vase_style').hide();
+					}
+					customcycle(0);
+				});
+				
+				$('.pro_type span').click(function(){
+					
+					$('.giveselect').removeClass('giveselect');
+					$(this).addClass('giveselect');
+					
+					var gindex = $(this).data("index");
+					/* 商品描述 */
+ 					$('[id^="itinfo_"]').hide();
+ 					$('#itinfo_'+gindex).show();
+ 					/* 发货详情 */
+ 					$('[id^="itinfo2_"]').hide();
+ 					$('#itinfo2_'+gindex).show();
+ 					/* 够花须知 */
+ 					$('[id^="itinfo3_"]').hide();
+ 					$('#itinfo3_'+gindex).show();
+ 					
+				    givetoshow($('#give-img-'+gindex).get(0).src, $(this).text(), window.location.host); 
+					
+					$('[id^="describe_"]').hide();
+					$('#describe_'+$(this).data("id")).show();
+				
+					swiper.slideTo(gindex, 1000, false);					
+					customcycle(0);
+				});
+				
+				customcycle(0);
+			});
+			
+			function customcycle(num){
+				var total_price = $('.giveselect').data('price');
+				if($('.checkclass').data('isbuy')==0){
+					vaseprice = $('.vaseselect').parent('span').data('price');
+					total_price += vaseprice;
+				}
+				$('#price').text(total_price.toFixed(2));
+			}
+		</script>
+	</head>
+	<body>
+	    <!-- 轮播图 -->
+		<div class="swiper-container">
+	        <div class="swiper-wrapper">
+	        	<#list givelist as give>
+	            <div class="swiper-slide"><img src="${give.imgurl}" id="give-img-${give_index}"/></div>
+	            </#list>
+	        </div>
+	        <div class="swiper-pagination"></div>
+	    </div>
+	    
+	    
+		<div class="container pb-60">
+			<div class="pro_1">
+				<div class="pro_1_1">
+					<span>我要送花</span>
+					<span>
+					<#list givelist as give>
+						<#if give_index==0>
+						<i id="describe_${give.id}">${give.describe!}</i>
+						<#else>
+						<i id="describe_${give.id}" style="display: none;">${give.describe!}</i>
+						</#if>
+					</#list>
+					</span>
+				</div>
+				<div class="pro_1_2" style="display: none;" onclick="shareProduct()">分享</div>
+			</div>
+			<div class="pro_2">
+				<span>&yen;</span>
+				<span id="price" data-price="${givelist[0].price}"><#list givelist as give><#if give_index==0>${give.price?string('0.00')}</#if></#list></span>
+			</div>
+			<div class="pro_class" style="display: none;">
+				<span>花瓶</span><#if isbuy==0><span>(首单送花瓶)</span></#if>
+				<p><a data-isbuy="0">购买</a><a class="checkclass" data-isbuy="1">不购买</a></p>
+			</div>
+			<div class="pro_5" id="pro_vase_style" style="display: none;">
+				<span>请选择一款您喜欢的花瓶</span>
+				<#list vaselist as vase>
+				<span class="vaselist" data-vase="${vase.id!}" data-price="${vase.price}">
+					<img src="${vase.imgurl!}" />
+					<span style="font-size: 13px;font-weight: bolder;color: #E96388;">&yen;${vase.price?string('0.00')}</span>
+				</span>
+				</#list>
+			</div>
+			
+		    <!-- 商品类型 -->
+			<div class="pro_type" style="width: 100%; margin: 0 auto;">
+				<#list givelist as give>
+				<#if give_index==0>
+				<span id="protype_${give_index}" data-id="${give.id}" data-price="${give.price!}" data-index="${give_index}" class="giveselect">${give.name!}</span>
+				<#else>
+				<span id="protype_${give_index}" data-id="${give.id}" data-price="${give.price!}" data-index="${give_index}">${give.name!}</span>
+				</#if>
+				</#list>
+			</div>
+			
+			<div class="pro_5">
+				<span>送花对象</span>
+				<#list idoneitylist as idoneity>
+				<span class="idoneitylist" data-idoneity="${idoneity.id!}">
+					<img src="${idoneity.imgurl!}" /><i>${idoneity.title!}</i>
+					<#if idoneity_index==0><img src="/resource/flower/image/008.png" class="idoneityselect"/></#if>	
+				</span>
+				</#list>
+			</div>
+			<!-- F1 -->
+<!-- 			<div class="pro_f"> -->
+<!-- 				<span>产品描述</span> -->
+<!-- 				<div class="pro_f_2"> -->
+<!-- 					<div class="give-img"> -->
+<!-- 						<#list givelist as give> -->
+<!-- 						<img src="${give.infoimg!}" width="100%"/> -->
+<!-- 						</#list> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+			<!-- F1 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/1F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<div class="give-img">
+						<#list givelist as give>
+						<img src="${give.itinfo1!}" id="itinfo_${give_index}" style="<#if give_index gt 0>display: none;</#if>" width="100%"/>
+						</#list>
+					</div>
+				</div>
+			</div>
+			<!-- F2 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/2F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<#list givelist as give>
+						<img src="${give.itinfo2!}" id="itinfo2_${give_index}" style="<#if give_index gt 0>display: none;</#if>" width="100%"/>
+					</#list>
+				</div>
+			</div>
+			<!-- F3 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/3F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<#list givelist as give>
+						<img src="${give.itinfo3!}" id="itinfo3_${give_index}" style="<#if give_index gt 0>display: none;</#if>" width="100%"/>
+					</#list>
+				</div>
+			</div>
+			<!-- F4 -->
+			<div class="pro_f" style="display: none;">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/4F.png" class="pro_floor"/>
+					<span class="f_desc">品质保障</span>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2"> 
+					<#list givelist as give>
+						<img src="${give.itinfo4!}" id="itinfo4_${give_index}" style="<#if give_index gt 0>display: none;</#if>" width="100%"/>
+					</#list>
+				</div>
+			</div>
+			<!-- F5 -->
+			<!-- <div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/5F.png" class="pro_floor"/>
+					<span class="f_desc">养护建议</span>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<#list givelist as give>
+						<img src="${give.itinfo5!}" id="itinfo5_${give_index}" style="<#if give_index gt 0>display: none;</#if>" width="100%"/>
+					</#list>
+				</div>
+			</div> -->
+			<div class="gobuy">
+				<a href="/index"></a>
+				<a onclick="gobuy()">立即购买</a>
+			</div>
+		</div>
+		<form action="/service/buy" method="get" style="display: none;">
+			<input type="hidden" name="type" value="2">
+			<input type="hidden" name="pid">
+			<input type="hidden" name="cycle" value="1">
+			<input type="hidden" name="vase">
+			<input type="hidden" name="szdx">
+		</form>
+		<script type="text/javascript">
+			function gobuy(){
+				if($('.checkclass').data('isbuy')==0){
+					var vase = $('.vaseselect').parent('span').data('vase');
+					if(vase == null){
+						layer.open({
+							content: '请选择喜欢的花瓶',
+							skin: 'msg',
+						    time: 3
+						});
+						return;
+					}
+					$('input[name="vase"]').val(vase);
+				}else{
+					$('input[name="vase"]').val('');
+				}
+				var idoneity = $('.idoneityselect').parent('span').data('idoneity');
+				$('input[name="szdx"]').val(idoneity);
+				$('input[name="pid"]').val($('.giveselect').data('id'));
+				$('form').submit();
+			}
+		</script>
+	</body>
+</html>

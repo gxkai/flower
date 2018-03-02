@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/dateUtil.js"></script>
+		<script type="text/javascript" src="/resource/weui/example/zepto.min.js"></script>
+		<script type="text/javascript" src="/resource/weui/example/router.min.js"></script>
+		<title>兑换花束</title>
+
+        <script type="text/javascript">
+			$().ready(function(){
+				$('#firsttime').text(getFristTakeDate(1));
+				$('.buy_1_b span').click(function(){
+					$('.buy_1_b span').removeClass('buy_1_b_c');
+					$(this).addClass('buy_1_b_c');
+					$('#firsttime').text(getFristTakeDate($(this).data('time')));
+				});
+			});
+		</script>
+		
+	</head>
+	<body>
+		<div class="container">
+			<div class="buy_address">
+				<p>
+					<span class="dfaddress">${address.name!}&#12288;${address.tel!}</span>
+					<span class="dfaddress">${address.addr!}</span>
+					<input type="hidden" id="address" value="${address.id}" >
+				</p>
+			</div>
+			
+			<div class="buy_1">
+				<span class="buy_1_a">送达时间：</span>
+				<p class="buy_1_b">
+					<span class="buy_1_b_c" data-time="1">周一送</span>
+					<span data-time="2">周六送</span>
+				</p>
+				<span class="buy_1_c">送达时间<span id="firsttime"></span></span>
+			</div>
+			
+			<div class="buy_2">
+				<div class="buy_2_a">
+					<img src="${product.imgurl!}" width="80"/>
+					<p class="buy_2_a_1">
+						<span><#if pid==1>双品花束兑换<#else>多品花束兑换</#if></span>
+						<span>价值:&yen;${price?string('0.00')}&#12288;兑换次数:${times}</span>
+					</p>
+				</div>
+				
+				<#if jihuis?size gt 0 && pid == 1>
+				<label class="buy_2_check">请选择忌讳的花：</label>
+				<div class="buy_2_jihui weui_cells_checkbox">
+				<#list jihuis as jihui>
+				<label class="buy_2_jihui_lable weui_check_label" for="${jihui.id}">
+		            <div class="weui_cell_hd">
+		                <input type="checkbox" class="weui_check" name="jihuiflower" id="${jihui.id}">
+		                <i class="weui_icon_checked"></i>
+		            </div>
+		            <div class="weui_cell_bd weui_cell_primary">
+		                <p>${jihui.name}</p>
+		            </div>
+		        </label>
+		        </#list>
+		        </#if>
+		        
+		        <#if jhclos?size gt 0 && product.ptid==1>
+					<label class="buy_2_check">请选择忌讳色系（最多选1种）：</label>
+					<div class="buy_2_jihui weui_cells_checkbox">
+					<#list jhclos as color>
+					<label class="buy_2_jihui_lable weui_check_label" for="c_${color.id}">
+			            <div class="weui_cell_hd">
+			                <input type="checkbox" class="weui_check" name="jihuicolor" id="c_${color.id}" onclick="countChoicecolors(this)">
+			                <i class="weui_icon_checked"></i>
+			            </div>
+			            <div class="weui_cell_bd weui_cell_primary">
+			                <p>${color.name}</p>
+			            </div>
+			        </label>
+			        </#list>
+			        </div>
+					</#if>
+		        
+			</div>
+
+		<div class="buy_2_b_flower">
+			<textarea rows="" cols="" placeholder="祝福语" id="zhufu" maxlength="40"></textarea>
+			<div class="buy_2_b_flower_2">
+				<span>送花人:</span>
+				<p class="buy_2_b_xx">
+					<input type="text" class="sh_name" placeholder="请填写您的称呼" id="songhua" />
+				</p>
+			</div>
+		</div>
+
+		<div class="buy_6">
+				<span class="buy_6_a" onclick="ljdh()">立即兑换</span>
+				<span class="buy_6_b" onclick="location.replace('/')">取消兑换</span>
+			</div>
+		</div>
+		
+		<form action="/service/myorder" method="post" style="display: none;">
+	     	<input type="hidden" name="cardNum" class="cardNum" value="${cardNum}">
+			<input type="hidden" name="reach">
+			<input type="hidden" name="jh_list">
+			<input type="hidden" name="zhufu">
+			<input type="hidden" name="songhua">
+		</form>
+		<script type="text/javascript">
+			function ljdh(){
+				// 送达时间
+				var reach = $('.buy_1_b_c').data('time');
+				//卡号
+				var cardNum = $('.cardNum').val();
+				//祝福语 送花
+		        var zhufu = $('#zhufu').val();
+		        var songhua = $('#songhua').val();
+			
+			    $('input[name="reach"]').val(reach);
+			    $('input[name="cardNum"]').val(cardNum);
+			    $('input[name="zhufu"]').val(zhufu);
+			    $('input[name="songhua"]').val(songhua);
+
+			    
+			 // 忌讳的花
+				<#if jihuis?size gt 0>
+					checkboxes = document.getElementsByName("jihuiflower");
+				    str_1 = [];
+				    for(i=0;i<checkboxes.length;i++){
+				        if(checkboxes[i].checked){
+				        	str_1.push(checkboxes[i].id);
+				        }
+				    }
+					if(str_1.length > 3){
+						layer.msg('您最多只能选择3种忌讳的花类', {time: 2000});return;
+					}
+					$('input[name="jh_list"]').val(str_1);
+				</#if>
+				// 忌讳色系
+				<#if jhclos?size gt 0>
+					checkboxes_c = document.getElementsByName("jihuicolor");
+				    str_2 = [];
+				    for(i=0;i<checkboxes_c.length;i++){
+				        if(checkboxes_c[i].checked){
+				        	str_2.push(checkboxes_c[i].id.substring(2));
+				        }
+				    }
+					if(str_2.length > 1){
+						layer.msg('您最多只能选择1种忌讳色系', {time: 2000});return;
+					}
+					$('input[name="jhcolor_list"]').val(str_2);
+				</#if>
+				
+				var load = layer.load();
+				$(".buy_6_a").hide(); 
+				$.ajax({
+					url: '/service/createorderofcard',
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						layer.close(load);
+						if(data){
+							layer.msg('成功下单', {time: 2000});
+							$('form').submit();
+						}else{
+							layer.msg('无法兑换', {time: 2000});return;
+						}
+					}
+				});
+			}
+		</script>
+		
+	</body>
+</html>

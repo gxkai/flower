@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>商品管理 - 色系管理</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 色系管理<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加色系管理</a></span>  	
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入色系查询" value="${fcolor!}" id="fcolor" maxlength="20">
+			</span>
+			<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="color_search()">
+			<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+		</div>	
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th>色系</th>
+						<th width="80">忌讳</th>
+						<th width="60">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if colorlist?? && colorlist?size gt 0>
+					<#list colorlist as color>
+					<tr class="text-c">
+						<td>${color_index+1}</td>
+						<td>${color.name}</td>
+						<td><#if color.jh==0><input type="checkbox" onchange="choose_jh(${color.id}, 1)"><#else><input type="checkbox" onchange="choose_jh(${color.id}, 0)" checked="checked"></#if>忌讳</td>
+						<td class="td-manage">
+							<a title="编辑" onclick="_edit(${color.id})" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe6df;</i></a>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="4" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/product/color/'+e.curr);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function color_search(){
+				fcolor = encodeURI($.trim($('#fcolor').val()));
+				if($.trim($('#fcolor').val())!=''){
+					var reg = /^[a-zA-Z0-9_\u0391-\uFFE5 ]{1,30}$/;
+					if(!reg.test($('#fcolor').val())){
+						layer.tips('不允许有特殊字符', '#fcolor', {tips: [1, '#34495E']});return;
+					}					
+				}
+				location.replace('/manage/iframe/product/color/1-' + fcolor );
+			}
+			function _add(){
+				parent.open_window('添加色系','/product/getProductColor', 540, 340);
+			}
+			function _edit(id){
+				parent.open_window('编辑色系','/product/getProductColor/'+id, 540, 340);
+			}
+			function choose_jh(id, jh){
+				$.post('/manage/iframe/product/set_color_jh',{'id':id , 'jh':jh}, function(){
+					location.replace(location.href);
+				});
+			}
+		</script> 
+	</body>
+</html>

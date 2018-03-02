@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.account.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/resource/weui/style/weui.min.css" />
+		<script type="text/javascript" src="/resource/weui/example/zepto.min.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<style type="text/css">
+			body{
+				background-image: url('/resource/flower/image/cash_get_bg.png');
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+		    .container_cash {
+				margin-top: 40px;
+				margin-bottom: 100px;
+				margin-left: 20px;
+				margin-right: 20px;
+				text-align: center;
+			} 
+			.container_cash img {
+			   	display: block;
+			   	height: 90px;
+               	width: 100%;
+			}
+			.con_mid {
+			   	background-color: white;
+			   	padding-left: 18px;
+    			padding-right: 18px;
+			}
+			.cash_get {
+			  	background-color:white;
+			  	width: 100%;
+			  	height: 100%;
+			  	text-align: center;
+			  	/* margin-top: 20px; */
+			}
+			.cash_get span{
+			  	border: 2px solid #f36b93;
+			  	border-radius: 8px;
+			  	background-color: white;
+              	padding-left: 70px;
+              	padding-right: 70px;
+              	/* margin-top: 50px; */
+              	color: #f36b93;
+              	font-size: 25px;
+			}
+			.weui_dialog {
+			  	border-radius: 10px;
+			  	width: 75%;
+			}
+	        .weui_btn_dialog.primary {
+	          	color: #f36b93;
+	          	font-weight:bold;
+	        }
+	        .weui_btn_dialog.default {
+              	color: #f36b93;
+              	font-weight:bold;
+            }
+	        .weui_dialog_title {
+	          	color: #f36b93;
+	          	font-size: 18px;
+	          	font-weight:bold;
+	        }
+	        .weui_dialog_title span{
+	          	float: right;
+	        }
+	        .close img{
+	          	color: black;
+	          	width:15%;
+	          	position: relative;
+              	left: +22%;
+              	top: -1.3em;
+	        }
+            .weui_dialog_bd img{
+              	width: 60%;
+              	height: 60%;
+            }
+            .dialog_close {
+            	width: 40px;
+    			height: 40px;
+   				margin-top: 38%;
+    			border-radius: 20px;
+    			background-color: transparent;
+            }
+		</style>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<title>花票领取</title>
+		<script type="text/javascript">
+		 function getCash(){
+			 var type = ${type!};
+			 var themeId = ${themeId!};
+			 var MD5str=${MD5str!};
+			 var load = layer.load();
+			 $.post('/account/getcashexact', {'type':type, 'themeId':themeId }, function(data){
+				layer.close(load);
+				if(data.result){
+					
+					document.getElementById('iosDialog1').style.display = 'block';
+				}else{
+					layer.msg(data.msg,{time:2000});
+				}
+			 });
+		 }
+		</script>
+	</head>
+	<body>
+		<#if list??>
+		<div class="container_cash">
+		
+		
+		   <img src="/resource/flower/image/cash_get_1.png">
+		 
+		    <div class="con_mid"  >
+		    
+		    
+		     <#list list as cash>
+  
+	          <div class="cash_list">
+					<div class="cashlist" >
+					
+						<div class="cashlist_a cashlist_1_a" >
+							<a class="a_1">
+								<span class="a_1_l">
+									<span>${cash.money?string('0.00')?substring(0,cash.money?string('0.00')?length-3)}</span><!-- .
+									<span>${cash.money?string('0.00')?substring(cash.money?string('0.00')?length-2)}</span> -->
+								</span>
+								<span class="a_1_r">
+									<i>花美美</i>
+									<i>花票</i>
+								</span>
+							</a>
+							    <a class="a_3">适用范围：${cash.name!}</a>		
+								<a class="a_2">单笔满${cash.benefit}元可用</a>
+						</div>
+						<div class="cashlist_b cashlist_1_b" >
+							<!-- <span>有效日期</span>
+							<span>${cash.time_a}</span>
+							<span>-${cash.time_b}</span> -->
+						</div>
+						  
+						<div class="cashlist_c cashlist_1_c">
+						 <#if cash.state==0> 
+							<a style="padding: 35px 20px;">未领取</a>
+						<#else>
+						<a style="padding: 35px 20px;">已领取</a>
+						</#if>	
+						</div>
+					</div>
+			      
+		          </div>
+		       </#list>    
+		       
+		    </div> 
+		    <div class="cash_get" >
+		          <span onclick="getCash()" style="margin-top:10px;display:inline-block">领取</span>
+		          <table border="0" style="color: #ec7296;font-size: 12px;margin: 8% 3% 1%;text-align: left;">
+					<tr><td rowspan="2" style="vertical-align: top;padding-top: 2px;">注：</td></tr>
+					<tr>
+						<td>
+							<ol style="margin: 0;padding-left: 10px;">
+								<li style="margin-bottom: 5px;">每个订单只能用一张花票，支付时请选择恰当的花票</li>
+								<li>花票过期作废，不兑换现金，不找零</li>
+							</ol>
+						</td>
+					</tr>
+				</table>
+		    </div> 
+		    
+		    <img src="/resource/flower/image/cash_get_2.png" style="height: 23px;"> 
+			  
+		</div>
+		<#else>
+		<center><span style="color:red ;font-size:18px;font-weight:600; margin-top:150px;display:block;">没有可领取花票！</span></center>
+		</#if>
+		<!-- 对话框  -->
+		<div class="js_dialog" id="iosDialog1" style="display: none;">
+			<div class="weui_dialog_confirm">
+				<div class="weui_mask"></div>
+				<div class="weui_dialog">
+					<div class="weui_dialog_hd">
+						 <strong class="weui_dialog_title">花票领取成功！</strong>
+					</div>
+					
+					<div class="weui_dialog_bd" style="text-align: center;">
+					     <img src="/resource/flower/image/cash_congratulation.png">
+					</div>
+					
+					<div class="weui_dialog_ft">
+						<a href="javascript:location.replace('/index');" class="weui_btn_dialog primary ">立即使用</a> 
+						<a href="javascript:location.replace('/account/mycash');" class="weui_btn_dialog default">分享给好友</a>
+					</div>
+				
+				</div>
+               
+				<img class="weui_dialog dialog_close" onclick="closeLog();" src="/resource/flower/image/cash_close.png">
+				
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+		function closeLog () {
+			var themeId = ${themeId!};
+		    var MD5str=${MD5str!};
+			document.getElementById('iosDialog1').style.display = 'none';
+			location.replace('/account/cashexact/'+themeId+'-'+MD5str);
+			/* alert('/account/cashexact/'+${themeId!}+'-'+${MD5str!});
+			location.replace('/account/cashexact/'+${themeId!}+'-'+${MD5str!}); */
+		}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+		.all:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>商品管理 - 产品管理</title>
+	</head>
+	<body>
+		<nav class="breadcrumb">
+			<i class="Hui-iconfont">&#xe67f;</i> 首页 
+			<span class="c-gray en">&gt;</span> 商品管理 
+			<span class="c-gray en">&gt;</span> 
+			<#if type==1>双品系列
+			<#elseif type==2>多品系列
+			<#elseif type==3>送花系列
+			<#elseif type==4>节日系列
+			<#elseif type==5>定制系列
+			<#elseif type==6>闪购系列
+			<#elseif type==7>主题花系列
+			<#elseif type==8>拼团系列
+			<#elseif type==9>玫瑰套餐
+			</#if>
+			<span style="color: red;">切记:新增产品请点击添加产品,而不是编辑其他产品</span>
+			<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+				<i class="Hui-iconfont">&#xe68f;</i>
+			</a>
+		</nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+				<span class="l mr-5">
+					<a href="javascript:;" onclick="_add(${type})" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加
+					<#if type==1>双品产品
+					<#elseif type==2>多品产品
+					<#elseif type==3>送花产品
+					<#elseif type==4>节日产品
+					<#elseif type==5>定制产品
+					<#elseif type==6>闪购产品
+					<#elseif type==7>主题花产品
+					<#elseif type==8>拼团产品
+					<#elseif type==9>玫瑰套餐
+					</#if>
+					</a>
+				</span>
+				
+				<#if type==1 ||type==2 ||type==3||type==5 || type==8 || type==9>
+				<span class="l mr-5"><a href="javascript:;" onclick="_price(${type})" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe647;</i> 批次花价</a></span>
+				</#if>
+				<#if type == 4 || type==6 || type==7>
+				<span class="l mr-5"><a href="javascript:;" onclick="_priceho()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe647;</i> 批次花价</a></span>
+				</#if>
+				
+				<span class="l ml-10" style="width: 170px;">
+					<input type="text" class="input-text" placeholder="输入批次编码查询" value="${batchcode!}" id="code" maxlength="8">
+				</span>
+				<span class="l ml-10" style="width: 70px">
+					<input type="text" class="input-text" placeholder="最低价格" value="${minprice!}" id="minprice" maxlength="8">
+				</span>
+				<span class="l ml-10" style="line-height:31px;">~</span>
+				<span class="l ml-10" style="width: 70px">
+					<input type="text" class="input-text" placeholder="最高价格" value="${maxprice!}" id="maxprice" maxlength="8">
+				</span>
+				<span class="l ml-10 mr-10">
+					<input class="btn btn-primary" type="submit" value="查询" onclick="searchbatchcode(${type})">
+				</span>
+				<span class="l ml-10 mr-10" <#if type==4>style="display: none;"</#if>>
+					<input class="btn btn-primary" type="submit" value="批量复制" onclick="_copy(${type})">
+				</span>
+				<span class="r" style="line-height:31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th width="120">批次编码</th>
+						<th width="80">类型</th>
+						<#if type==3><th width="80">适赠对象</th></#if>
+						<th width="100"><#if type==3>商品类型<#else>商品名称</#if></th>
+						<th width="200">产品名称</th>
+						
+						<th width="200">产品简称</th>
+						<#if type!=5><th width="100">用途</th></#if>
+						<#if type!=5><th width="100">格调</th></#if>
+						<th width="100">价格</th>
+						<#if type==5><th width="80">配花优先级</th></#if>
+						<#if type==1><th width="80">指定订单</th></#if>
+						<th width="80">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if productlist?? && productlist?size gt 0>
+					<#list productlist as product>
+					<tr class="text-c">
+						<td>${product_index+1}</td>
+						<td>${product.code}</td>
+						<td>
+						<#if product.type==1>双品系列
+						<#elseif product.type==2>多品系列
+						<#elseif product.type==3>送花系列
+						<#elseif product.type==4>节日系列
+						<#elseif product.type==5>定制系列
+						<#elseif product.type==6>闪购系列
+						<#elseif product.type==7>主题花系列
+						<#elseif product.type==8>拼团系列
+						<#elseif product.type==9>玫瑰套餐
+						</#if>
+						</td>
+						<#if type==3><td>${product.title}</td></#if>
+						<td>${product.name!}</td>
+						<td>${product.fname!}</td>
+						<td class="all">${product.sname!}</td>
+						<#if type!=5><td>${product.app!}</td></#if>
+						<#if type!=5><td>${product.style!}</td></#if>
+						<td>&yen;${(product.cost!0)?string('0.00')}</td>
+						<#if type==5><td>${product.priority!}</td></#if>
+						<#if type==1><td>${product.appoint!}</td></#if>
+						<td class="td-manage">
+							<a title="编辑" onclick="_edit(${product.id})" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<a title="删除" onclick="_del(${product.id})" class="f-16 ml-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan= <#if type==3>"9"<#else>"8"</#if> style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				maxprice = '${maxprice!}',minprice = '${minprice!}',code = '${batchcode!}';
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/product/product?type=${type}&pageno='+e.curr+'&code='+code+'&minprice='+minprice+'&maxprice='+maxprice);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _add(typeid){
+				parent.open_window('添加产品', '/product/getProduct/'+typeid, 640, 400);
+			}
+			function _edit(id){
+				parent.open_window('修改产品', '/product/getProduct/0-'+id, 640, 400);
+			}
+			function _price(type){
+				parent.open_window('花材价格设定', '/product/priceDetail/'+type, 640, 400);
+			}
+			function _priceho(){
+				parent.open_window('花材价格设定', '/product/priceHoliday', 640, 400);
+			}
+			function searchbatchcode(type){
+				code=$('#code').val();
+				minprice=$('#minprice').val();
+				maxprice=$('#maxprice').val();
+				if($.trim(minprice)!=''||$.trim(maxprice)!=''){
+					reg = /^$|^[0-9]+(.[0-9]{1,9})?$/;;
+					if(!reg.test(minprice)||!reg.test(maxprice)){
+						layer.msg('请正确格式的价格', {time: 1000});return;
+					}
+					if($.trim(minprice)!=''&&$.trim(maxprice)==''){
+						layer.msg('请输入最高价格', {time: 1000});return;
+					}
+					if($.trim(minprice)==''&&$.trim(maxprice)!=''){
+						layer.msg('请输入最低价格', {time: 1000});return;
+					}
+					if(maxprice * 1 < minprice * 1){
+						layer.msg('最低价格不能大于最高价格', {time: 1000});return;
+					}
+				}
+				if($.trim(code)!=''){
+					reg = /^[0-9]{1,8}$/;;
+					if(!reg.test(code)){
+						layer.tips('请输入正确格式','#code', {tips: [1, '#34495E']});return;
+					}
+				}
+				location.replace('/manage/iframe/product/product?type='+type+'&pageno=1&code='+code+'&minprice='+minprice+'&maxprice='+maxprice);
+			}
+			function _del(id){
+				parent.actconfirm('确认要删除吗？', function(){
+					$.post('/manage/iframe/product/delProduct/'+id, function(data){
+						if(data.result){
+							layer.msg('操作成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('操作失败', {time: 1000});
+						}
+					});
+				});
+			}
+			function _copy(type){
+				copycode = $('#code').val();
+				reg = /^[0-9]{8}$/;
+				minprice=$('#minprice').val();
+				maxprice=$('#maxprice').val();
+				if(minprice!='' || maxprice!=''){
+					layer.msg("不可复制", {time: 1000});return;
+				}
+				if(copycode==null || $.trim(copycode)==''){
+					layer.tips('请输入复制的批次', '#code', {tips: [1, '#34495E']});return;
+				}
+				if(!reg.test(copycode)){
+					layer.tips('请输入正确批次格式','#code', {tips: [1, '#34495E']});return;
+				}
+				$.post('/manage/iframe/product/copypaste', {'copycode': copycode,'type': type}, function(data){
+					if(data.R){
+						layer.msg(data.Msg, {time: 1000}, function(){
+							location.replace(location.href);
+						});
+					}else{
+						layer.msg(data.Msg, {time: 1000});
+					}
+				});
+			}
+		</script> 
+	</body>
+</html>

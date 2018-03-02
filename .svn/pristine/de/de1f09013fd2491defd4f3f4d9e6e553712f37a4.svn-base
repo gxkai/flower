@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.logistics.css" />		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<title>所有祝福卡</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	</head>
+	<style type="text/css">
+		.container{
+			margin: 0 auto;
+		}
+		.wishbg{
+			background: url("/resource/flower/image/wishbg.jpg") no-repeat;
+    		background-size: 100% 100%;
+    		min-height: 100vh;
+		}
+		.main{
+			padding: 15px 15px;
+		}
+		.g_1{
+			height: 55px;
+			float: left;
+			background-color: white;
+			margin: 5px 15px 15px;
+			border-radius: 6px;
+		}
+		.g_1 span:nth-child(1){
+			width: 30px;
+			height: 100%;
+			display: inline-block;
+		}
+		.g_1 span:nth-child(2){
+			height: 100%;
+			text-align: left;
+			font: 18px/55px 'Microsoft Yahei';
+			color: #888;
+			display: inline-block;
+			font-size: 15px;
+		}
+		.main{
+			margin-bottom: 5vw;
+		}
+		.main img{
+			width: 100%;
+			border-radius: 10px;
+		}
+		.result{
+			position: absolute;
+			z-index: 99;
+			font-weight:bold;
+			top: 0%;
+		    left: 5%;
+		    font-family: cursive;
+		    color: #504f4f;
+		    animation: word 1s;
+		    -webkit-animation: word 1s;
+		    -o-animation: word 1s;
+		    -moz-animation: word 1s;
+		    width: 80vw;
+		}
+		.result .p1{
+			text-align: left;
+			height: 35vw;
+			text-indent: 9vw;
+		}
+		.result .p2{
+			text-align: right;
+		}
+		.outer{
+			padding: 3px 6px;
+			position: relative;
+			width: calc(100% - 18px);
+			height: 56vw;
+			display: inline-block;
+		}
+		.outer div{
+		    position: absolute;
+		    transform-style: preserve-3d;
+		    -ms-transform-style: preserve-3d;	/* IE 9 */
+			-moz-transform-style: preserve-3d;	/* Firefox */
+			-webkit-transform-style: preserve-3d; /* Safari 和 Chrome */
+			-o-transform-style: preserve-3d; 	/* Opera */
+		    backface-visibility:hidden;
+		    -webkit-backface-visibility:hidden;	/* Chrome 和 Safari */
+			-moz-backface-visibility:hidden; 	/* Firefox */
+			-ms-backface-visibility:hidden; 	/* Internet Explorer */
+		    transition:all 3s;
+		    -ms-transition: all 3s;	/* IE 9 */
+			-moz-transition: all 3s;	/* Firefox */
+			-webkit-transition: all 3s; /* Safari 和 Chrome */
+			-o-transition: all 3s; 	/* Opera */
+		}
+		.div1{
+		    transform:rotateY(0deg);
+			-ms-transform:rotateY(0deg); 	/* IE 9 */
+			-moz-transform:rotateY(0deg);	/* Firefox */
+			-webkit-transform:rotateY(0deg); /* Safari 和 Chrome */
+			-o-transform:rotateY(0deg); 	/* Opera */
+		}
+		.div1.on{
+		    transform:rotateY(0deg);
+			-ms-transform:rotateY(-180deg); 	/* IE 9 */
+			-moz-transform:rotateY(-180deg);	/* Firefox */
+			-webkit-transform:rotateY(-180deg); /* Safari 和 Chrome */
+			-o-transform:rotateY(-180deg); 	/* Opera */
+		}
+		.div2{
+		    transform:rotateY(0deg);
+			-ms-transform:rotateY(-180deg); 	/* IE 9 */
+			-moz-transform:rotateY(-180deg);	/* Firefox */
+			-webkit-transform:rotateY(-180deg); /* Safari 和 Chrome */
+			-o-transform:rotateY(-180deg); 	/* Opera */
+		}
+		.div2.on{
+		    transform:rotateY(0deg);
+			-ms-transform:rotateY(0deg); 	/* IE 9 */
+			-moz-transform:rotateY(0deg);	/* Firefox */
+			-webkit-transform:rotateY(0deg); /* Safari 和 Chrome */
+			-o-transform:rotateY(0deg); 	/* Opera */
+		}
+		.div2 img{
+			opacity: 0.8;
+			border: 1px solid #f1efef;
+		}
+		
+		@keyframes word
+		{
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+		@-wekit-keyframes word
+		{
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+		@-moz-keyframes word
+		{
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+		@-o-keyframes word
+		{
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+		.sh{
+			background-color: #f96585;
+			color: #fff;
+			padding: 10px;
+		    width: 60%;
+		    text-align: center;
+    		border-radius: 20px;
+    		margin: 5vw auto;
+		}
+		.sh a{
+			color: #fff;
+			text-decoration: none;
+		}		
+		.no{
+			width: 100%;
+			text-align: center;
+			margin-top: 60px;
+		}
+		.wish_bottom{
+			text-align: center;
+		}
+		.wish_bottom .p1{
+			text-align: center;
+			color: #000;
+			font-family: cursive;
+			margin: 2vw;
+			position: relative;
+			letter-spacing: 2px;
+		}
+		.wish_bottom .p1:before,.wish_bottom .p1:after {
+		    content: '';                 
+		    position: absolute;         
+		    top: 52%;
+		    background: #000;       
+		    width: 9%;
+		    height: 1px;
+		}
+		.wish_bottom .p1:before{
+		    left: 20%;        
+		}
+		.wish_bottom .p1:after {
+		    right: 20%;
+		}
+	</style>
+	<body>
+		<div class="container">
+			<div class="wishbg">
+				<div class="main">
+					<div class="g_1">
+						<span><img src="/resource/flower/image/warning.png" style="width: 25px;height: 25px;vertical-align: middle;"></span>
+						<span>点击下图查看祝福语，点击右上角分享</span>
+					</div>
+					<#if wish.picId!=0>
+					<div class="outer">
+						<div class="div1">
+							<img src="${wish.imgurl01!}"/>
+						</div>
+						<div class="div2">
+							<img src="/resource/flower/image/wishbg2.jpg"/>
+							<div class="result">
+								<p class="p1">${wish.zhufu!}</p>
+								<p class="p2">送花人：${(card.songhua)!"匿名"}</p>
+							</div>
+						</div>
+					</div>
+					<#else>
+					<div class="outer">
+						<div class="div1">
+							<img src="/resource/flower/image/envelop1.jpg"/>
+						</div>
+						<div class="div2">
+							<img src="/resource/flower/image/wishbg2.jpg"/>
+							<div class="result">
+								<p class="p1">${wish.zhufu!}</p>
+								<p class="p2">送花人：${(card.songhua)!"匿名"}</p>
+							</div>
+						</div>
+					</div>
+					</#if>
+					<div class="sh">
+						<a href="http://www.flowermm.net/index">我也要送花</a>
+					</div>
+				</div>
+				
+				<div class="wish_bottom">
+					<img src="/resource/flower/image/wishlogo.png" style="width: 30vw;"/>
+					<p class="p1">用鲜花传递爱</p>
+				</div>
+			</div>
+		</div>
+	<script type="text/javascript">
+		$(function(){
+			wxconfig(window.location);
+			wx.ready(function(){
+				wx.onMenuShareTimeline({
+					 title:'有花有祝福', // 分享描述
+					 link: 'http://'+window.location.host+'/account/cardcontent/'+'${ordercode!}', // 分享链接
+					 imgUrl: 'http://'+window.location.host+'${wish.imgurl01!}', // 分享图标
+				     type: 'link', // 分享类型,music、video或link，不填默认为link
+				     dataUrl: '',
+				     success: function () {
+				    	 alert('分享成功！')
+					 },
+					 cancel: function () {
+						        // 用户取消分享后执行的回调函数
+					 }
+
+				});
+				wx.onMenuShareAppMessage({
+					title: '有花有祝福', // 分享标题
+					desc: '分享这份暖心的祝福，让爱洒满朋友圈！', // 分享描述
+				    link: 'http://'+window.location.host+'/account/cardcontent/'+'${ordercode!}', // 分享链接
+				    imgUrl: 'http://'+window.location.host+'${wish.imgurl01!}', // 分享图标
+				    type: 'link', // 分享类型,music、video或link，不填默认为link
+				    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+				    success: function () {
+				    	location.replace('/account/cardcontent/'+'${ordercode!}');
+				    },
+				    cancel: function () {
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+			});
+			$(".outer").on('click',function(){
+				var that =this;
+				if($(that).find(".div1").hasClass("on")){
+					$(that).find(".div1").removeClass("on");
+					$(that).find(".div2").removeClass("on");
+					setTimeout(() => {
+						$(that).find(".result").hide();
+					}, 1000);
+				}
+				else{
+					$(that).find(".div1").addClass("on");
+					$(that).find(".div2").addClass("on");
+					setTimeout(() => {
+						$(that).find(".result").show();
+					}, 1000);
+				}
+			})
+		})
+	</script>
+</html>

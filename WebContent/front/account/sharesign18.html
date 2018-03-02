@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8"> 
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />		
+		<style type="text/css">
+		html{
+		       margin: 0;
+		       padding: 0;
+		    }
+		body{
+		        background-color:white;
+				margin: 0;
+		        padding: 0;
+			}
+		.main{
+		      width: 100vw;
+		      height: 100vh; 
+		    }
+	    .main p{
+		      padding: 0;
+		      margin: 0;
+		 }		    
+		.main .footer{
+		      margin-top: 3vh;  
+		}
+		.footer p{
+		       padding: 0 5vw;
+		       font-size: 3vw;
+		       font-weight: 600;
+		       color:black; 
+		} 	                           	    	
+		.main .img02{
+		         width: 100vw;
+		         height: 40vh;
+		         
+		    }
+		.main .bottom{
+                 margin-top: 4vh;
+		    }
+		.main .bottom p{
+		          text-align: center;
+		          font-size: 3vw;
+		}
+		.main .middle{
+		          margin-top:1vh;
+		          margin-left: 3vw;
+		    }
+		.main .middle p{
+		           font-size: 2.5vw;		
+		           color: #CC0000;
+		}
+		.main .line01{
+		      background:linear-gradient(to left,#efefef,#b6b6b6,#efefef);
+		      height: 1px;
+		      margin-top: 2vh;  
+		 }
+		 .main .line02{
+		      background:linear-gradient(to left,#efefef,#b6b6b6,#efefef);
+		      height: 1px;
+		 }
+		.main textarea{
+		          width: 100vw;
+		          height: 17vh;
+		          font-size: 3vw;
+                  color: black;
+                  resize: none;
+                  border-style: none;
+                  outline: 0;
+		}
+		.main .zhan{
+		          margin-left: 75vw;
+		}
+		.main .save{
+		         margin-top: 2vh;
+		}
+		.main .save .button{
+		          margin-left: 40vw;
+		          background-color: #4CAF50;
+		          border:none;
+		          color: white;
+		          padding: 1vw 2vw;
+		          text-align: center;
+		          text-decoration: none;
+		          display: inline-block;
+		          font-size: 3vw;
+		          cursor: pointer;
+		          border-radius: 10vw;
+		          
+		}         	             
+		</style>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<title>签到</title>
+		<script type="text/javascript">
+		var date = '${date!}',content = '${content!}',id='${id!}';
+			 $(function(){
+				checkxinqin(); 
+				wxconfig(window.location);
+				wx.ready(function(){
+					wx.onMenuShareTimeline({
+						 title: '分享快乐时光，分享精彩瞬间......', // 分享标题
+						 desc: '快乐越分享越多，所以我要把今天的快乐分享......', // 分享描述
+						 link: 'http://'+window.location.host+'/account/getsharesign18/'+'${id!}', // 分享链接
+						 imgUrl: 'http://'+window.location.host+'/resource/flower/image/sign18/sign_04.jpg', // 分享图标
+					     type: 'link', // 分享类型,music、video或link，不填默认为link
+					     dataUrl: '',
+					     success: function () {
+					    	 location.replace('/account/getsharesign18/'+'${id!}');
+						 },
+						 cancel: function () {
+							        // 用户取消分享后执行的回调函数
+						 }
+
+					});
+					wx.onMenuShareAppMessage({
+						title: "分享使快乐增加，使悲伤减少", // 分享标题
+						desc: '分享快乐时光，分享精彩瞬间......', // 分享描述
+					    link: 'http://'+window.location.host+'/account/getsharesign18/'+'${id!}', // 分享链接
+					    imgUrl: 'http://'+window.location.host+'/resource/flower/image/sign18/sign_04.jpg', // 分享图标
+					    type: 'link', // 分享类型,music、video或link，不填默认为link
+					    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					    success: function () {
+					    	location.replace('/account/getsharesign18/'+'${id!}');
+					    },
+					    cancel: function () {
+					        // 用户取消分享后执行的回调函数
+					    }
+					});
+					
+					
+				});
+				function checkxinqin() {
+					if (content!="") {
+						$("#xinqin").val(content);
+					}
+				}
+				
+			 });
+		</script>
+		<script type="text/javascript">
+		function isEmojiCharacter(substring) {
+			for (var i = 0; i < substring.length; i++) {
+			var hs = substring.charCodeAt(i);
+			if (0xd800 <= hs && hs <= 0xdbff) {
+			if (substring.length > 1) {
+			var ls = substring.charCodeAt(i + 1);
+			var uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+			if (0x1d000 <= uc && uc <= 0x1f77f) {
+			return true;
+			}
+			}
+			} else if (substring.length > 1) {
+			var ls = substring.charCodeAt(i + 1);
+			if (ls == 0x20e3) {
+			return true;
+			}
+			} else {
+			if (0x2100 <= hs && hs <= 0x27ff) {
+			return true;
+			} else if (0x2B05 <= hs && hs <= 0x2b07) {
+			return true;
+			} else if (0x2934 <= hs && hs <= 0x2935) {
+			return true;
+			} else if (0x3297 <= hs && hs <= 0x3299) {
+			return true;
+			} else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030
+			|| hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b
+			|| hs == 0x2b50) {
+			return true;
+			}
+			}
+			}
+			}
+		    function save() {
+		    	var xinqin = $("#xinqin").val();
+		    /* 	if (isEmojiCharacter(xinqin)) {
+		    		alert("内容不能含有emoji表情");return;
+		    		} */
+		    	$.ajax({
+		    			url: '/account/sharesign18save',
+						data: {'content':xinqin},
+						type: 'post',
+						dataType: 'json',
+						cache: false,
+						success:function(data){
+				    		 if(data.result){
+				    			 alert("提交成功,点击右上角分享");
+				    			location.replace('/account/sharesign18/'+data.id);  
+				    		 }else{
+				    			 alert("您不是幸运花粉或者您已经提交过了!");
+				    		 }
+						}	 
+		    	
+		    	})
+		    	/*  $.post('/account/sharesign18save/'+id+'-'+xinqin, function(data){
+		    		 if(data.result){
+		    			 alert("提交成功,点击右上角分享");
+		    			location.replace('/account/sharesign18/'+data.id);  
+		    		 }else{
+		    			 alert("您不是幸运花粉或者您已经提交过了!");
+		    		 }
+		    	 }) */
+			}
+		    
+		</script>
+		
+	</head>
+	<body>
+	           <div class="main">  
+               <img alt="" src="/resource/flower/image/sign18/sign_04.jpg" class="img02">
+               <div class="middle">
+               <p>
+                           恭喜您成为今天的幸运花粉
+               </p>
+               </div>
+               <div class="line01"></div>
+               <textarea rows="5" cols="51"  id="xinqin"  placeholder="写下您的心情..."  maxlength="255"  onchange="this.value=this.value.substring(0, 255)" onkeydown="this.value=this.value.substring(0, 255)" onkeyup="this.value=this.value.substring(0, 255)"></textarea>
+               <div class="line02"></div>
+               <div class="save"><input type="button" onclick="save()" value="提交" class="button"></div>  
+               <div class="bottom">
+               <p >
+                           提交后点击右上角分享链接,集赞领取鲜花。
+               </p>
+               </div>
+               <div class="footer">
+                    <p>活动规则:</p>
+                    <p>1. 系统每天随机抽取幸运签到用户，用户提交并分享心情后即可额外获赠8粒花籽；</p>
+                    <p>2.抽中后分享给好友点赞，点赞数超过18个且排名第一的可获得"遇见"鲜花一束,排名在会员中心<a href="/account/luckylist" >幸运榜</a>中查看；</p>
+                    <p>3.统计周期：每周刷新，周日00:00:00点到周六23:59:59点为一周。</p>
+                    <p>4. 为方便跟您取得联系,建议在会员中心<a href="/account/myInfo" >绑定您的电话号码</a>。</p> 		  
+               </div> 
+               </div>  
+				
+	</body>
+</html>

@@ -1,0 +1,198 @@
+@CHARSET "UTF-8";
+
+body{
+	margin:0;
+	padding:0;
+	font-family:"微软雅黑"
+}
+
+/* 拼团按钮样式  */
+.btn-group{
+	width:100%;
+	display: flex;
+	justify-content: space-between;
+}
+.btn-group span{
+	width: 24%;
+	height: 40px;
+	float: left;
+	text-align: center;
+	box-sizing: border-box;
+	padding: 4px 3px;
+	color: #666;
+	line-height: 30px;
+	font-size: 13px;
+	overflow: hidden; 
+	text-overflow:ellipsis;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	margin-bottom: 5px;
+ 	margin-right:2px; 
+}
+
+
+.pro_name{
+	display:block;
+	font-size:18px;
+	font-weight:block;
+}
+
+.pro_title{
+	font-size:12px;
+	color:#ababab;
+}
+#price_now{
+	color:#fb6797;
+	font-size:18px
+}
+
+.group_span{
+	font-family:'微软雅黑';
+	font-size:14px;
+	margin:5px;
+	display:inline-block;
+}
+
+/* 凑团 */
+.group_list{
+	/* border:1px red solid; */
+	display: flex;
+	justify-content: center;
+    align-items: center;
+    border-top:1px #eee solid;
+    border-bottom:1px #eee solid;
+}
+.group_list img{
+	width:100%;
+}
+.group_list span{
+	width:68%;
+	font-size:12px;
+	/* border:1px red solid; */
+	margin:0 2%;
+	
+	word-break:keep-all;/* 不换行 */
+    white-space:nowrap;/* 不换行 */
+    overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+    text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+}
+
+.group .group_btn1{
+	background: none;
+	border: 1px #fb6797 solid;
+	width: 20%;
+	height: 30px;
+	background:white;
+	color:#fb6797;
+	border-radius:5px;
+	margin-right:5px;
+}
+
+
+
+/* 商品描述样式 */
+.pro_f{
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px;
+}
+.pro_f span:nth-child(1){
+	font-size: 17px;
+	line-height: 30px;
+	float: left;
+	color: #48505B;
+}
+.pro_f_1{
+	width: 100%;
+	float: left;
+	position: relative;
+}
+.pro_f .pro_floor{
+	width: 100%;
+	float: left;
+}
+.pro_f .f_desc{
+	width: 100px;
+	height: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -10px;
+	margin-left: -50px;
+	text-align: center;
+	color: #FFF;
+	font-size: 16px;
+	line-height: 20px;
+}
+.pro_f .f_u_d{
+	height: 100%;
+	position: absolute;
+	top: 20%;
+	right: 2%;
+	float: left;
+}
+.pro_f .f_u_d img{
+	height: 70%;
+	float: left;
+}
+.pro_f_2{
+	width: 100%;
+	float: left;
+}
+.pro_f_2 .f1_tab{
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 0;
+	border-collapse:collapse;
+    border-spacing:0;
+}
+.pro_f_2 .f1_tab tr:nth-child(1) td{
+	height: 36px;
+	border: 1px solid #799CA6;
+	text-align: center;
+	color: #E96388;
+	font-size: 16px;
+}
+
+/* 底部按钮样式 */
+.footer{
+	outline:none;
+	background:white;
+	width:100%;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+  	position: fixed; 
+  	bottom: 0;
+  	padding:0 !important;
+}
+.footer img{
+	width:40px;
+	height:40px;
+}
+.footer span{
+	height:46px;
+	line-height:46px;
+	width:43%;
+	background:#fb6797;
+	color:white;
+	border:none;
+	font-family:"微软雅黑";
+	
+	display: flex;
+	justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+

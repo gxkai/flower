@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/jquery.autocomplete.css"/>
+		<style type="text/css">
+			.wid{width: 27%;margin-left:5px;}
+			.pd-r{padding-right: 7px;}
+			.fid {  
+			    width: 11%;  
+			    height: 106px;  
+			    margin-left: -15px;  
+			    outline: none;  
+			    border: 1px solid #999;  
+			    margin-top: 40px;
+			    width:200px;
+			    position:relative;
+			    z-index:1;
+			}  
+			.makeupCo {  
+			    width: 200px;  
+			    top: 9px;  
+			    outline: none;  
+			    border: 0pt;  
+			    position: absolute;  
+			    line-height: 30px;  
+			    left: 8px;  
+			    height: 30px;  
+			    border: 1px solid #999; 
+			    margin-left: -10px; 
+			}  
+		</style>
+		<title>采购管理 - 采购列表 - 采购单新增</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>批号：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="code" name="code" value="" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>渠道：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<span class="select-box l wid" style="margin: 1px 2px 10px 1px; width: 70px;" >
+						 <select class="select"  id="channel" name="channel" size="1"  style="width: 60px" >
+							 <option value="1" >上海</option>
+							 <option value="2" >拍市</option>
+							 <option value="3" >市场</option>
+							 <option value="4" >基地</option>							 
+						 </select>
+					    </span>												
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>花材名称：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r"  style="height: 40px;">		    
+						<span class="formControls col-xs-8 col-sm-9 pd-r" >  
+						        <input type="text" name="makeupCo" id="makeupCo" class="input-text makeupCo" onfocus="setfocus(this)" oninput="setinput(this);" placeholder="请选择或输入" value=""/>  
+						        <select name="fid" id="fid" onchange="changeF(this)" size="10" style="display:none;" class="fid">  
+						            <#list flowerlist as flower>
+							            <option value="${flower.id!}" >${flower.name!}</option>
+						            </#list>  
+						        </select> 
+						    </span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>每把单价：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="price" name="price" value="" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>每把数量：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="num" name="num" value="" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>总把数：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="totalNum" name="totalNum" value="" >
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>损耗枝数量：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="lossNum" name="lossNum" value="" >
+					</div>
+				</div>
+                <div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>采购人：</label>
+					<div class="formControls col-xs-8 col-sm-9 pd-r">
+						<input  class="input-text" id="purchaser" name="purchaser" value="" >
+					</div>
+				</div>			   
+				 <input type="button" onClick="save()" class="btn btn-primary btn-block mt-15" value="保存">
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.autocomplete.min.js"></script>		
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript">
+		var TempArr=[],TempArrVal=[];//存储option  
+		  $(function(){  
+		      /*先将数据存入数组*/  
+		      $("#fid option").each(function(index, el) {  
+		          TempArr[index] = $(this).text();
+		          TempArrVal[index] = $(this).val(); 
+		      });  
+		      $(document).bind('click', function(e) {    
+		          var e = e || window.event; //浏览器兼容性     
+		          var elem = e.target || e.srcElement;    
+		          while (elem) { //循环判断至跟节点，防止点击的是div子元素     
+		              if (elem.id && (elem.id == 'fid' || elem.id == "makeupCo")) {    
+		                  return;    
+		              }    
+		              elem = elem.parentNode;    
+		          }    
+		          $('#fid').css('display', 'none'); //点击的不是div或其子元素     
+		      });    
+		  })  
+		    
+		  function changeF(this_) {  
+		      $("#makeupCo").val($(this_).find("option:selected").text());
+		      $("#fid").css({"display":"none"});  
+		  }  
+		  function setfocus(this_){
+			  $("#fid").html("");
+		      $("#fid").css({"display":""});  
+		      for(i=0;i<TempArr.length;i++){  
+		          $("#fid").append("<option value='"+TempArrVal[i]+"'>"+TempArr[i]+"</option>");  
+		      }  
+		  }  
+		    
+		  function setinput(this_){  
+		      $("#fid").html("");  
+		      for(i=0;i<TempArr.length;i++){  
+		          //若找到以txt的内容开头的，添option  
+		          if(TempArr[i].substring(0,this_.value.length).indexOf(this_.value)==0){  
+			          $("#fid").append("<option value='"+TempArrVal[i]+"'>"+TempArr[i]+"</option>");  
+		          }  
+		      }  
+		  } 
+		$().ready(function(){
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+		function save(){
+			if(!checkInput()){
+				  return;	
+				}
+			var load = layer.load();
+			$.post('/manage/iframe/purchase/purchaseSaveAdd/', $('form').serialize(), function(data){
+				layer.close(load);
+				if(data){
+					parent.refresh_iframe();
+					layer.msg('保存成功', {time: 1000}, function(){
+						layer_close();
+					});
+				}else{
+					layer.msg('保存失败', {time: 1000}, function(){
+					});
+				}
+			});
+			
+		}
+		function checkInput() {
+			var reg1 = /^[0-9]{8}$/;//检查批号
+			var reg2 = /^[0-9]{1,16}(\.[0-9]{0,2})?$/;//检查每包单价
+			var reg3 = /^[0-9]{1,11}$/;//检查数量
+			var code = $("#code").val();
+			var price = $("#price").val();
+			var num = $("#num").val();
+			var totalNum = $("#totalNum").val();
+			var lossNum = $("#lossNum").val();
+			var makeupCo = $('#makeupCo').val();
+			if($.trim(makeupCo)==''){
+				layer.tips('请选择花材', '#makeupCo', {tips: [1, '#34495E']});return;
+			}
+			if(!reg1.test(code)){
+				layer.tips('请输入8位数字', "#code", {tips: [1, '#34495E']});
+				return;
+			}
+			if(!reg2.test(price)){
+				layer.tips('最多16位整数,可以带2位小数', "#price", {tips: [1, '#34495E']});
+				return;
+			}
+			if(!reg3.test(num)){
+				layer.tips('只能输入最多11位的整数', "#num", {tips: [1, '#34495E']});
+				return;
+			}
+			if(!reg3.test(totalNum)){
+				layer.tips('只能输入最多11位的整数', "#totalNum", {tips: [1, '#34495E']});
+				return;
+			}
+			if(!reg3.test(lossNum)){
+				layer.tips('只能输入最多11位的整数', "#lossNum", {tips: [1, '#34495E']});
+				return;
+			}
+			return true;
+		}
+		
+			
+		</script>
+	</body>
+</html>

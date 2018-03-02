@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta name="format-detection" content="telephone=no" />
+	<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/resource/layer/layer.js"></script>
+	<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+	<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+	
+	<title>花籽商城</title>
+	
+	
+	<style type="text/css">
+		body{
+			margin:0;
+			padding:0;
+		}
+		.footer{
+			/* position: absolute; 相对定位*/
+			position:fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			/*height: 45px;*/	
+		}
+		.footer span{
+			width:50%;
+			height: 40px;
+			float: right;
+			text-align: center;
+			box-sizing: border-box;
+			padding: 4px 3px;
+			color: white;
+			line-height: 30px;
+			font-size: 13px;
+			overflow: hidden; 
+			text-overflow:ellipsis;
+			border-radius: 3px;
+			border: 1px solid #ccc;
+			/* margin-left:3px;
+			margin-right:1px; */
+			background:#eb6877;
+			font-family:"微软雅黑";
+		}
+		.showimg{
+			margin-bottom: 50px;
+		}
+		.showimg img{
+			width:100%;
+			
+		}
+	</style>
+</head>
+<body>
+	<div class="showimg" >
+		<img src="${imgurl}"/>
+	</div>
+	
+<!-- 	<div class="footer">
+		<span id="" onclick="toshop()" style="float:left">返回商城</span>
+		<span id="" onclick="dhhs(${id})" >立即支付</span>
+	</div> -->
+	
+	<div class="gobuy">
+		<a href="/account/seedshoplist"></a>
+		<a onclick="dhhs(${id})">立即兑换</a>
+	</div>
+	
+	<script type="text/javascript">
+		/* function toshop(){
+			location.replace('/account/seedshoplist');
+		} */
+	
+		function dhhs(id){
+				$.ajax({
+					url: '/service/exchangevalid_new/'+id, 
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if(data){
+							location.replace('/service/exchangeflower?type=4&pid=' + id); 
+						}else{
+							layer.msg('您的花籽不足', {time: 2000});return;
+						}
+					}
+				});				
+			}
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>物流管理 - 预配单物流列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i>首页 <span class="c-gray en">&gt;</span> 物流管理 <span class="c-gray en">&gt;</span> 预配单物流列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			 <div class="cl pd-5 bg-1 bk-gray">
+				<a onclick="_add()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe6a2;</i> 物流预配单</a>
+			    <span class="r" style="line-height: 32px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+			  <div class="cl pd-5 bg-1 bk-gray">
+				
+					<span class="select-box l" style="width: 130px">
+					  	<select class="select" size="1" onchange="searchstate(this)">
+					    	<option value="10" <#if state==10>selected</#if>>--选择状态--</option>
+					    	<option value="0" <#if state==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;异常</option>
+					    	<option value="1" <#if state==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;正常</option>
+					    	<option value="2" <#if state==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;已发货</option>
+					    	<option value="3" <#if state==9>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;已签收</option>
+					  	</select>
+					</span>
+			  </div>
+			  <div class="mt-10">
+			    <table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="30">序列</th>
+						<th width="80">批次</th>
+						<th width="120">订单编号</th>
+						<th width="80">物流公司</th>
+						<th width="130">物流编号</th>
+												
+						<th width="60">收货人</th>
+						<th width="80">收货人电话</th>
+						<th width="130">订购商品</th>
+						<th width="60">发货次数</th>
+						<th width="230">发货产品</th>
+						<th width="230">收货人地址</th>
+						<th width="40">首单</th>
+						<th width="60">状态</th>			
+					</tr>
+				</thead>
+				<tbody>
+					<#if orderinfolist?? && orderinfolist?size gt 0>
+					<#list orderinfolist as orderinfo>
+					<tr class="text-c">
+						<td>${orderinfo_index+1}</td>
+						
+						<td>${orderinfo.code!}</td>
+						<td>${orderinfo.ordercode!}</td>
+						<td>${orderinfo.ename!}</td>
+						<td>${orderinfo.number!}</td>
+						
+						<td>${orderinfo.sname!}</td>
+						<td>${orderinfo.tel!}</td>
+						<td>${orderinfo.gName!}</td>
+						<td>第${orderinfo.ofcycle!}/${orderinfo.cycle!}次</td>
+						<td title="${orderinfo.wlname!}">${orderinfo.wlname!}</td>
+						<td class="alladdr">${orderinfo.address}</td>		
+						<td><#if orderinfo.ishas==0><span class="c-red">首单</span><#else><span class="c-green">普通</span></#if></td>
+						<td>
+							<#if orderinfo.state==0>
+							<span class="c-red">异常</span>
+							<#elseif orderinfo.state==1>
+							<span class="c-green">正常</span>
+							<#elseif orderinfo.state==2>
+							<span class="c-orange">已发货</span>
+							<#else>
+							<span class="c-blue">已签收</span>
+							</#if>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			    <div class="mt-10 text-r" id="forpage"></div>
+			  </div>
+		</div>
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			var state='${state!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/logistics/orderinfo_pre?pageno='+e.curr+'&state='+state);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});		
+			function searchstate(_state){
+				state = $(_state).find('option:selected').val();
+				location.replace('/manage/iframe/logistics/orderinfo_pre?pageno=1&state='+state);				
+			}
+			
+			function _add(){
+				parent.open_schedule('/logistics/startsingle_pre/0','540','90');
+			}
+			
+		</script> 
+	</body>
+</html>

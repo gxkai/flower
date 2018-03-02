@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.order.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<title>我的订单</title>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+		<script type="text/javascript">
+			var pageno='${pageno}',totalpage='${totalpage}',state='${state}';
+			$().ready(function(){
+				$(window).scroll( function() {
+					// 页面的文档高度
+				   	var h1 = $(document).height();
+				 	// 浏览器的高度
+				    var h2 = $(window).height();
+				    // 滚动条到顶部的垂直高度
+				    var h3 = $(document).scrollTop();
+				   	if(h2 + h3 == h1){
+				   		if(pageno < totalpage){
+				   			var load = layer.load();
+				   			$.get('/service/myorder/'+(++pageno)+'-'+state, function(data){
+				   				var html;
+				   				$(data).each(function(){
+				   					var zfc;
+				   					var sendCycleStr="一周一次";
+				   					if(this.sendCycle*1==1){
+				   						sendCycleStr="一周一次";
+				   					}else if(this.sendCycle*1==2){
+				   						sendCycleStr="两周一次";
+				   					}else if(this.sendCycle*1==3){
+				   						sendCycleStr="四周一次";
+				   					}else{
+				   						sendCycleStr="未设置";
+				   							
+				   					}
+				   						
+				   					if(this.type==1){
+				   						zfc = '<span>首次送达:'+this.firstDate+';订阅次数:' + this.cycle + '周;&nbsp;花瓶:' + (this.isvase*1==1?'购买':'未购买') + ';&nbsp;送达时间:' + (this.reach*1==1?'周一送':'周六送') +';&nbsp;发货周期:'+sendCycleStr+ ';</span>';
+				   					}else if(this.type==2){
+				   						zfc = '<span>首次送达:'+this.firstDate+';花瓶:' + (this.isvase*1==1?'购买':'未购买') + ';&nbsp;送达时间:' + (this.reach*1==1?'周一送':'周六送') + ';&nbsp;发货周期:'+sendCycleStr+';</span>';
+				   					}else{
+				   						zfc = '<span>首次送达:'+this.firstDate+';送达时间:' + (this.reach*1==1?'周一送':'周六送') + ';&nbsp;发货周期:'+sendCycleStr+';</span>';
+				   					}
+				   					html = '<div class="om_show">' +
+				   						'<div class="om_1">' +
+				   							'<span><i>订单编号:</i>' + this.ordercode + '</span>'+
+				   							'<span>' + stateSwitch(this.state, this.rstate) + '</span>' +
+				   						'</div>'+
+				   						'<div class="om_2" onclick="location.href=\'/service/orderinfo/' + this.ordercode + '\'">' +
+				   							'<div class="om_2_a">' +
+				   								'<img src="' + this.imgurl + '" width="80">' +
+				   								'<p class="om_2_a_p">' +
+				   									'<span>' + this.name + '</span>' +
+				   									'<span>&yen;' + (this.price*1).toFixed(2) + '</span>' + zfc +
+				   								'</p>' +
+				   							'</div>' +
+				   							'<div class="om_2_b">' +
+				   								'<span><i>付款金额:&yen;' + (this.totalprice*1).toFixed(2) + (this.money==null?"":("&#12288;退款金额&yen;"+(this.money*1).toFixed(2))) + '</i></span>' +
+				   							'</div>' +
+				   						'</div>' +
+				   						'<div class="om_3">' + buttonSwitch(this.state, this.ordercode, this.fpid, this.cycle, this.ocount, this.type, this.ptid) + '</div>'+			   					
+				   					'</div>';			   					
+				   					$('.container').append(html);
+				   				});
+				   				layer.close(load);
+				   			});
+				   		}
+				   	}
+				}); 
+			});
+			function stateSwitch(state, rstate){
+				var stateName;
+				switch(state){
+				case 0: stateName = "待付款";break;
+				case 6: stateName = "待成团";break;
+				case 1: stateName = "服务中";break;	
+				case 2: stateName = "待评价";break;	
+				case 3: stateName = "已完成";break;	
+				case 4: if(rstate==0){stateName = "等待退款"}else{stateName = "退款完成"};break;
+				case 5: stateName = "交易取消";break;}
+				return stateName;
+			}
+			function buttonSwitch(state, ordercode, fpid, cycle, ocount, type, ptid){
+				var html;
+				switch(state){
+				case 0: html = '<a class="om_3_a" onclick="topay(\'' + ordercode + '\')">去付款</a><a class="om_3_b" onclick="cancel(\'' + ordercode + '\')">取消订单</a>';break;
+				case 1: html = '<a class="om_3_c" style="display: none;" href="/service/orderreceive/' + ordercode + '">赠送</a>';
+					    if(cycle > ocount && type != 4){
+					    	html +='<a class="om_3_d" onclick="refund(\''+ordercode+'\')">退款</a>';break;
+					    }else{
+					    	html +='<a class="om_3_c" href="/product/'+ fpid + '-' + ptid +'">再次购买</a>';break;
+					    }
+				case 2: html = '<a class="om_3_a">去评价</a>';
+						if(type != 4){
+							html += '<a class="om_3_c" href="/product/'+ fpid + '-' + ptid +'">再次购买</a>';break;
+						}
+				case 3: html = '<a class="om_3_c" href="/product/'+ fpid + '-' + ptid +'">再次购买</a>';break;
+				case 4: html = '<a class="om_3_c" href="/product/'+ fpid + '-' + ptid +'">再次购买</a>';break;
+				case 5: html = '<a class="om_3_c" href="/product/'+ fpid + '-' + ptid +'">再次购买</a>';break;}
+				return html;
+			}
+			
+			 
+		
+		</script>
+	</head>
+	<body style="background-color: #EEE;">
+		<#if orderlist?? && (orderlist?size > 0)>
+		<div class="container">
+			<div class="om_menu">
+				<a onclick="location.replace('/service/myorder/1')"><span class="<#if state==9>menustate</#if>">全部订单</span></a>
+				<a onclick="location.replace('/service/myorder/1-1')"><span class="<#if state==1>menustate</#if>">服务中</span></a>
+				<a onclick="location.replace('/service/myorder/1-2')"><span class="<#if state==2>menustate</#if>">待评价</span></a>
+				<a onclick="location.replace('/service/myorder/1-3')"><span class="<#if state==3>menustate</#if>">已完成</span></a>
+			</div>
+			<form action="/service/payfororder" method="post" style="display: none;">
+				<input type="text" name="ordercode">
+			</form>
+			<!-- 订单状态:9全部，0未付款，1服务中，2待评价，3已完成，4退款，5交易取消 -->
+			<#list orderlist as order>
+			<div class="om_show">
+			<#if order.state==0>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}</span>
+					<span>待付款</span>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							
+							<#if order.type==7>
+							   <span>现场自提</span>
+							<#elseif order.type==3>   
+							   <span>数量:${order.num};发货时间：${order.firstDate}</span>
+							<#else>
+							   <span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if>送达时间:${order.firstDate};<#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							   <#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							   </#if><#if order.type!=5 && order.type!=10 && order.type!=11>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</#if>
+							   <#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:<#if order.sendCycle==1>一周一次<#elseif order.sendCycle==2>两周一次<#elseif order.sendCycle==4>四周一次<#else>未设置</#if>;</#if></span>
+							</#if>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<span><i>付款金额:&yen;${order.totalprice?string('0.00')}</i></span>
+					</div>
+				</div>
+				
+				<div class="om_3">
+					<a class="om_3_a" onclick="topay('${order.ordercode}')">去付款</a>
+					<a class="om_3_b" onclick="cancel('${order.ordercode}')">取消订单</a>
+				</div>
+				
+			<#elseif order.state==1>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}</span>
+					<span>服务中</span>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							<#if order.type==7>
+							   <span>现场自提</span>
+							<#elseif order.type==3>   
+							   <span>数量:${order.num};发货时间：${order.firstDate}</span>
+							<#else>   
+							  
+							    <span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if>送达时间:${order.firstDate};<#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							    <#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							    </#if><#if order.type!=5 && order.type!=10 && order.type!=11>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</#if>
+						        <#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:<#if order.sendCycle==1>一周一次<#elseif order.sendCycle==2>两周一次<#elseif order.sendCycle==4>四周一次<#else>未设置</#if>;</#if></span>
+						     </#if>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<span><i><#if order.type!=4>付款金额:&yen;${order.totalprice?string('0.00')}<#else>兑换成功</#if></i></span>
+					</div>
+				</div>
+				
+				<div class="om_3">
+				   <#if order.type==1><a class="om_3_c" style="display: none;" href="/service/orderreceive/${order.ordercode}">赠送</a></#if>
+				   <#if (order.cycle gt order.ocount) && order.type!=4>
+				   
+				    <#if order.yhfs=="3">
+					     <a hidden="YES" class="om_3_d" >不可退款</a>
+					<#elseif order.yhfs=="4">
+						 <a hidden="YES" class="om_3_d" >不可退款</a>
+					<#elseif order.countwl gt 0>
+					     <a hidden="YES" class="om_3_d" >已经产生物流单,不可退款</a>
+					<#elseif order.allowRefund==0>
+					     <a hidden="YES" class="om_3_d" >订购的商品不支持退款</a>
+					<#else>
+					     <a class="om_3_d" onclick="refund('${order.ordercode}')">退款</a>
+					</#if>
+					
+			       <#else>
+			          <#if order.type!=4>
+			             
+					         <a class="om_3_c" href="/product/${order.fpid}-${order.fpid}-${order.ptid}">再次购买</a>
+					               
+			           <#else>
+			              <a class="om_3_c" href="/account/seedshoplist">再去兑换</a>
+			           </#if>
+			       </#if>
+				</div>
+				
+			<#elseif order.state==2>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}<#if order.ofcycle??> (NO.${order.ofcycle!})</#if></span>
+					<span>待评价</span>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<span><i><#if order.type!=4>付款金额:&yen;${order.totalprice?string('0.00')}<#else>你已成功兑换花束</#if></i></span>
+					</div>
+				</div>
+				
+				<div class="om_3">
+					<a class="om_3_a" href="/service/evaluate/${order.ordercode}">去评价</a>
+					<#if order.type!=4>
+					<a class="om_3_c" href="/product/${order.fpid}-${order.ptid}">再次购买</a>
+					</#if>
+					<a class="om_3_c" href="/account/invitefri">分享送花籽</a>
+				</div>
+				
+			<#elseif order.state==3>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}</span>
+					<#if order.type!=4>
+						<span>交易成功</span>
+					<#else>
+						<span>兑换成功</span>
+					</#if>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							<#if order.type==7>
+							   <span>现场自提</span>
+							<#elseif order.type==3>   
+							   <span>数量:${order.num};发货时间：${order.firstDate}</span>
+							<#else>   
+							   <span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if><#if order.firstDate??> 送达时间:${order.firstDate};</#if><#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							   <#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							   </#if><#if order.type!=5 && order.type!=10 && order.type!=11>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</#if>
+							   <#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:<#if order.sendCycle==1>一周一次<#elseif order.sendCycle==2>两周一次<#elseif order.sendCycle==4>四周一次<#else>未设置</#if>;</#if></span>
+							</#if>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<#if order.type!=4>
+							<span><i>付款金额:&yen;${order.totalprice?string('0.00')}</i></span>
+						<#else>
+							<span><i>花籽：<#if order.fpid==1>39<#elseif order.fpid==2>59</#if></i></span>
+						</#if>
+					</div>
+				</div>
+				
+				<div class="om_3">
+				    <#if order.type!=7>
+				       <a class="om_3_c" href="/product/${order.fpid}-${order.ptid}">再次购买</a>
+				    </#if>   
+				</div>
+				
+			<#elseif order.state==4>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}</span>
+					<span>
+					  <#if order.rstate??>
+					     <#if order.rstate==0>等待退款<#else>退款完成</#if>
+					  <#else>
+					           退款完成
+					  </#if>
+					</span>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							<#if order.type==7>
+							   <span>现场自提</span>
+							<#elseif order.type==3>   
+							   <span>数量:${order.num};发货时间：${order.firstDate}</span>
+							<#else>   
+							<span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if>送达时间:${order.firstDate};<#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							<#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							</#if><#if order.type!=5 && order.type!=10 && order.type!=11>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</#if>
+							<#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:<#if order.sendCycle==1>一周一次<#elseif order.sendCycle==2>两周一次<#elseif order.sendCycle==4>四周一次<#else>未设置</#if>;</#if></span>
+						    </#if>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<span><i>付款金额:&yen;${order.totalprice?string('0.00')}</i>
+						  <#if order.rstate??>
+						     <#if order.rstate==1>&nbsp;退款金额:&yen;${order.money?string('0.00')}</#if>
+						  </#if>
+						</span>
+					</div>
+				</div>
+				
+				<div class="om_3">
+				    <#if order.rstate??>
+				       <#if order.rstate==0><a class="om_3_c" onclick="_restore('${order.ordercode}')">撤销退款</a></#if>
+				    </#if>
+				    <!-- <a class="om_3_c" onclick="_restore('${order.ordercode}')">撤销退款</a> -->
+				    <#if order.type==8>
+				      <a class="om_3_c" href="/account/groupIndex/${order.fpid}">再次购买</a>
+				    <#else>
+					 <a class="om_3_c" href="/product/${order.fpid}-${order.ptid}">再次购买</a>
+					</#if>
+				</div>
+				
+			<#elseif order.state==5>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}</span>
+					<span>交易取消</span>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							<#if order.type==7>
+							   <span>现场自提</span>
+							<#elseif order.type==3>   
+							   <span>数量:${order.num};发货时间：${order.firstDate}</span>
+							<#else>   
+							<span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if>送达时间:${order.firstDate};<#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							<#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							</#if><#if order.type!=5 && order.type!=10 && order.type!=11>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</#if>
+							<#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:<#if order.sendCycle==1>一周一次<#elseif order.sendCycle==2>两周一次<#elseif order.sendCycle==4>四周一次<#else>未设置</#if>;</#if></span>
+						    </#if>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<span><i>付款金额:&yen;${order.totalprice?string('0.00')}</i></span>
+					</div>
+				</div>
+				
+				<div class="om_3">
+					<a class="om_3_c" href="/product/${order.fpid}-${order.ptid}">再次购买</a>
+				</div>
+			<#elseif order.state==6>
+			
+				<div class="om_1">
+					<span><i>订单编号:</i>${order.ordercode}</span>
+					<span>待成团</span>
+				</div>
+				
+				<div class="om_2" onclick="location.href='/service/orderinfo/${order.ordercode}'">
+					<div class="om_2_a">
+						<img src="${order.imgurl}" width="80">
+						<p class="om_2_a_p">
+							<span>${order.name}</span>
+							<span>&yen;${order.price?string('0.00')}</span>
+							<#if order.type==7>
+							   <span>现场自提</span>
+							<#elseif order.type==3>   
+							   <span>数量:${order.num};发货时间：${order.firstDate}</span>
+							<#else>   
+							<span><#if order.type!=5 && order.type!=10 && order.type!=11>首单</#if>送达时间:${order.firstDate};<#if order.type==1>订阅次数:${order.cycle}周;&nbsp;花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							<#elseif order.type==2>花瓶:<#if order.isvase==1>购买<#else><#if order.ishas==0>首单赠送<#else>未购买</#if></#if>;&nbsp;
+							</#if><#if order.type!=5 && order.type!=10 && order.type!=11>送达时间:<#if order.reach==1>周一送<#else>周六送</#if>;</#if>
+							<#if order.type!=5 && order.type!=10 && order.type!=11>发货周期:<#if order.sendCycle==1>一周一次<#elseif order.sendCycle==2>两周一次<#elseif order.sendCycle==4>四周一次<#else>未设置</#if>;</#if></span>
+						    </#if>
+						</p>
+					</div>
+					<div class="om_2_b">
+						<span><i>付款金额:&yen;${order.totalprice?string('0.00')}</i></span>
+					</div>
+				</div>				
+			</#if>
+			
+			</div>
+			</#list>
+		</div>
+		<#else>
+		<div class="container">
+			<div class="om_menu">
+				<a onclick="location.replace('/service/myorder/1')"><span class="<#if state==9>menustate</#if>">全部订单</span></a>
+				<a onclick="location.replace('/service/myorder/1-1')"><span class="<#if state==1>menustate</#if>">服务中</span></a>
+				<a onclick="location.replace('/service/myorder/1-2')"><span class="<#if state==2>menustate</#if>">待评价</span></a>
+				<a onclick="location.replace('/service/myorder/1-3')"><span class="<#if state==3>menustate</#if>">已完成</span></a>
+			</div>
+		</div>	
+		<div><span style="position: absolute;width: 100%;text-align: center;padding-top: 60px;font-family: Microsoft Yahei;">您当前没有订单信息</span></div>
+		</#if>
+
+    <!-- 去付款-取消订单操作 -->
+	<script type="text/javascript">
+		function topay(ordercode){
+			$.ajax({
+				url: '/service/exchangevalid_new_2/'+ordercode,
+				data: $('form').serialize(),
+				type: 'post',
+				dataType: 'json',
+				cache: false,
+				success: function(data){
+					if(data){
+						
+						$.ajax({
+							url: '/service/unSellCount/'+ordercode,
+							data: $('form').serialize(),
+							type: 'post',
+							dataType: 'json',
+							cache: false,
+							success: function(data){
+								if(data==0){
+									$('input[name="ordercode"]').val(ordercode);
+									$('form').submit();
+								}else{
+									layer.msg('订单所包含的商品已经下架,不再支持付款操作。', {time: 2000});return;
+								}
+							}
+						});
+					}else{
+						layer.msg('花籽不足，无法兑换', {time: 2000});return;
+					}
+				}
+			});
+		}
+		function cancel(ordercode){
+			layer.confirm('确定取消订单?', function(index){
+				$.post('/service/cancelorder/'+ordercode, function(data){
+					if(data){
+						layer.msg('订单已取消',{time:2000},function(){
+							location.replace('/service/myorder');
+						});
+					}else{
+						layer.msg('操作失败',{time:2000});
+					}
+				});
+			});
+		}
+		
+		function refund(ordercode){
+			$.ajax({
+				url: '/service/isallowResund/'+ordercode,
+				data: $('form').serialize(),
+				type: 'post',
+				dataType: 'json',
+				cache: false,
+				success: function(data){
+					if(data){
+						location.href='/service/refund/'+ordercode;
+					}else{
+						alert('购买所得的花籽,已经被您使用了,故此单不支持退订了哦');
+					}
+				}
+			});
+		}
+		function _restore(ordercode){
+			layer.confirm('确认撤销此订单的退款？', function(index){
+				$.post('/service/restorefund/'+ordercode, function(data){
+					if(data){
+						layer.msg('撤销成功', {time: 2000}, function(){
+							location.replace(location.href);
+						});
+					}else{
+						layer.msg('已撤销，不可重复操作', {time: 2000}, function(){
+							location.replace(location.href);
+						});
+					}
+				});
+			});
+		}
+	</script>
+
+</body>
+</html>

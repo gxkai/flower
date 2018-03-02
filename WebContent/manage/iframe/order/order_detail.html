@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>订单管理 - 订单列表 - 订单详情</title>
+	</head>
+	<body>
+		<div class="page-container">
+			<div class="row cl">
+				<label class="col-xs-3 col-sm-3">订单编号：${order.ordercode}</label>
+				<input style="display: none;" id = "ordercode" value="${order.ordercode}">
+				<input style="display: none;" id = "jhlist" value="${order.jh_list!999}">
+				<label class="col-xs-3 col-sm-3">下单时间：${order.ctime}</label>
+				<label class="col-xs-3 col-sm-3">类型：
+				   <#if order.type==1>订阅
+				   <#elseif order.type==4>兑换
+				   <#elseif order.type==2>送花
+				   <#elseif order.type==3>周边
+				   <#elseif order.type==5>节日
+				   <#elseif order.type==6>定制
+				   <#elseif order.type==41>兑换鲜花
+				   <#elseif order.type==43>兑换周边
+				   <#elseif order.type==7>现场活动
+				   <#elseif order.type==8>拼团
+				   <#elseif order.type==9>多双交替
+				   <#elseif order.type==10>主题花
+				   <#elseif order.type==11>闪购花
+				   </#if>
+				 </label>
+				<label class="col-xs-3 col-sm-3">状态：
+					<#if order.state==0>待付款
+					<#elseif order.state==1>服务中
+					<#elseif order.state==2>待评价
+					<#elseif order.state==3>已完成
+					<#elseif order.state==4>退款
+					<#elseif order.state==5>交易取消</#if>
+				</label>
+			</div>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">收货人姓名：${order.name}</label>
+				<label class="col-xs-3 col-sm-3">收货人电话：${order.tel}</label>
+				<label class="col-xs-6 col-sm-6">收货人地址：${order.addr}</label>
+			</div>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">送达时间：<#if order.week??>${order.week!}<#else><#if order.reach==1>周一送<#elseif order.reach==2>周六送<#else>指定日期</#if></#if></label>
+				<label class="col-xs-3 col-sm-3">订阅次数：${order.cycle}</label>
+				<#if order.type!=4><label class="col-xs-3 col-sm-3">支付总额：&yen;${order.price?string('0.00')}</label></#if>
+			</div>
+			<#if order.type!=4>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">优惠金额：&yen;${order.yhje?string('0.00')}</label>
+				<label class="col-xs-9 col-sm-9">优惠方式：${order.yhfs!'无'}</label>
+			</div>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">送花人：${order.songhua!'无'}</label>
+				<label class="col-xs-3 col-sm-3">送花对象：${order.title!'无'}</label>
+				<label class="col-xs-6 col-sm-6">祝福卡：${order.zhufu!'无'}</label>
+			</div>
+			</#if>
+			<#list detaillist as detail>
+			<#if detail.fpid == 1>
+			<div class="row cl lh-30">
+				<label class="col-xs-6 col-sm-6">忌讳花类：${order.jihui!'无'}</label>
+				<label class="col-xs-6 col-sm-6">忌讳色系：${order.color!'无'}</label>
+			</div>
+			</#if>
+			</#list>
+			<#if order.remark??>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">客诉补单</label></div>
+			<div class="row cl lh-30">
+			<label class="col-xs-3 col-sm-3">原订单号：${order.remark!}</label>
+			<label class="col-xs-3 col-sm-3">补单会员ID：${order.aid!}</label>
+			</div>
+			</#if>
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12"><#if order.remark??>补单商品<#else><#if order.type!=4>订购商品<#else>兑换商品</#if></#if></label></div>
+			<#list detaillist as detail>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">商品名称：${detail.name}</label>
+				<#if order.type!=41 && order.type!=43>
+				<label class="col-xs-3 col-sm-3">价格：&yen;${detail.price?string('0.00')}</label>	
+				</#if>
+				<#if order.type!=41 && order.type!=43 && order.type!=6 && order.type!=3 >
+				   <#if detail.type==1>
+				      <label class="col-xs-3 col-sm-3">数量：${order.cycle!}</label>
+				   <#else>
+				      <label class="col-xs-3 col-sm-3">数量：1</label>
+				   </#if>
+				<#elseif order.type==6>
+				   <label class="col-xs-3 col-sm-3">数量：1</label>
+				<#elseif order.type==3>
+				   <label class="col-xs-3 col-sm-3">数量：${detail.num!}</label>
+				<#else>
+				   <label class="col-xs-3 col-sm-3">花籽：${detail.seeds}</label>
+				   <label class="col-xs-3 col-sm-3">支付现金：${detail.price}</label>
+				</#if>
+			</div>
+			</#list>
+			
+			
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">派单记录</label></div>
+			<#if picodeList?? && picodeList?size gt 0>
+			<#list picodeList as picode>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">第${picode.num}次 ,批号：${picode.piCode}</label>
+				<label class="col-xs-3 col-sm-3">物流编号：${picode.number!}</label>
+				<label class="col-xs-6 col-sm-6">产品名称：${picode.fname!}</label>
+			</div>
+			</#list>
+			<#else>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">暂无记录</label>
+			</div>
+			</#if>
+			
+			
+			<div class="row cl lh-30 bg-1 mt-10"><label class="col-xs-12 col-sm-12">顺延/变更送达时间日志</label></div>
+			
+			
+		
+	
+			<#if picodeModifyLog?? && picodeModifyLog?size gt 0>
+			<table border="1" style="width: 700px; margin: 0 auto;background-color: aqua;">
+			<tr>
+				<th>修改时间</th>
+				<th>是否顺延</th>
+				<th>是否修改送达时间</th>
+				<th>修改前送达时间</th>
+				<th>修改后送达时间</th>
+			</tr>
+			<#list picodeModifyLog as log>
+			<tr>
+				<td>${log.modifyTime}</td>
+				<td>${log.isSy}</td>
+				<td>${log.isModifyReach}</td>
+				<td>${log.reachOld}</td>
+				<td>${log.reachNew}</td>
+			</tr>
+			</#list>
+		   </table>
+			
+			
+			<#else>
+			<div class="row cl lh-30">
+				<label class="col-xs-3 col-sm-3">暂无记录</label>
+			</div>
+			</#if>
+			
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+		</script>
+	</body>
+</html>

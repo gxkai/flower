@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/layer/layer.js"></script>
+		<title>领取详情</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	<style type="text/css">
+			.vertical{
+				height:100px;
+				line-height:100px;
+			}
+			body{
+				margin:0;
+				padding:0;
+			}
+			span{
+				font-family:"微软雅黑";
+				font-size:14px;
+				font-weight:300;
+			}
+			.show_div{
+				width:95%;
+				padding-top:5px;
+			}
+			.show_span{
+				width:100%;
+				border-bottom:1px #ccc solid;
+				display:block;
+				padding:8px;
+			}
+	</style>
+</head>
+<body>
+	<div class="content">
+	<#if redCardList?? && (redCardList?size > 0)>
+		<#list redCardList as redCard>
+			<!-- issopen = 0 未拆  -->
+			<div class="show_div">
+			<#if redCard.isopen != 0>
+			<span class="show_span"><span style="color:#eb6876">${redCard.name!}</span> 已被 <span>${redCard.nick!}</span> 领取</span>
+			<#else>
+			<span><span style="color:#eb6876;margin-left: 15px;">${redCard.name!}</span> 还没有被领取 </span>
+			</#if>
+			</div>
+		</#list>
+	<#else>
+		<div class="vertical">
+		<center>
+		<span style="color:#eb6876">该礼品卡还没有人领取哦</span>
+		</center>
+		</div>
+	</#if>
+	</div>
+
+</body>
+</html>

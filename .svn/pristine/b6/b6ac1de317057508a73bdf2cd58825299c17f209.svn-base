@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<title>花艺课带颜榜</title>
+	</head>
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	.hykdy_list{
+		border-bottom: 1px solid #d9d9d9;
+		color: #7b7878;
+	}
+	.weui-cell:before{
+		border-top: none;
+	}
+	#floatpage .headimg{
+		width:9vw;
+		border-radius: 100%;
+		display: inline-block;
+		position: relative;
+	}
+	#floatpage .headimg img:FIRST-CHILD{
+		border-radius: 100%;
+		vertical-align: bottom;
+		width: 9vw;
+    	height: 9vw;
+	}
+	#floatpage .headimg img:NTH-CHILD(2){
+		position: absolute;
+		top: -15px;
+	    width: 74%;
+	    left: 10px;
+	}
+	#floatpage .nick{
+		width:30vw;
+		display: inline-block;
+		font-size: 16px;
+		overflow: hidden;
+	    white-space: nowrap;
+	    text-overflow: ellipsis;
+	}
+	#floatpage .content{
+		width: 39.5vw;
+		padding: 0 5px;
+		font-size: 16px;
+		-webkit-box-orient: vertical;
+	    -webkit-line-clamp: 2;
+	    display: -webkit-inline-box;
+	    overflow:hidden; 
+	}
+</style>
+
+<body>
+
+	<div id="floatpage" class="page" style="">
+		<div class="company_top">
+	        <img src="/image/hykdytop.jpg" style="width: 100%">
+	    </div>
+		<#if hykdylist?? && (hykdylist?size > 0)>
+		<#list hykdylist as hykdy>
+		  	<div class="hykdy_list weui-cell weui-cell_access">
+				<div class="weui-cell__bd">
+					<div class="headimg">
+						<img src="${hykdy.headimg!}"/>
+						<#if hykdy_index == 0>
+							<img src="/resource/flower/image/huangguan.png"/>
+						</#if>
+					</div>
+					<div class="nick"><span>${hykdy.nick!}</span></div>
+					<p class="content">成功带颜${hykdy.countM!}人</p>
+				</div>
+			</div>
+		</#list>
+		<#else>
+		<p style="font-size: 18px;text-align: center;margin-top: 5vh;">暂无排行榜！</p>
+		</#if>
+		<p style="font-size: 18px;margin-top: 5vh;padding: 15px;">规则：邀请好友排名前20位的可以免费上花艺课</p>		
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<html><head>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <title>提交成功</title>
+        <link rel="stylesheet" type="text/css" href="../../resource/weui/style/weui.css">
+        <script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>        
+        <style>
+			.page{
+				box-shadow: 0 0 1px rgba(0,0,0,.2);
+				padding-bottom: 10px;
+			}
+			@media (min-width:960px) {
+				.page{
+					width:640px;
+					margin: 0 auto;
+				}
+			}
+			.weui_icon_success:before {
+			    font-size: 23px;
+			    color: #09BB07;
+			}
+		</style>
+
+    </head>
+  <body ontouchstart="">
+        <div class="page">
+			<div class="weui_msg">
+			  <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+			  <div class="weui_text_area">
+			    <h2 class="weui_msg_title">提交成功</h2>
+			    <p class="weui_msg_desc">感谢您对花美美的信任,您提交的合作申请我们已经收到了,工作人员会尽快与您联系,谢谢!遇见你，生活美美！</p>
+			    <p class="weui_msg_desc" id="return_three">5秒后将返回公众号!</p>
+			  </div>
+			  <div class="weui_opr_area">
+			    <p class="weui_btn_area">
+			      <a href="javascript:;" class="weui_btn weui_btn_primary" onclick="return_index()" >确定</a>
+			      <a href="javascript:;" class="weui_btn weui_btn_default" onclick="return_back()">返回上一层</a>
+			    </p>
+			  </div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			  var num = 5;
+			  setInterval(function () {
+			  num--;
+			  if (num>0) {
+			      $('#return_three').text(num+'秒后将返回公众号!');
+			  }else{
+			     window.location.href="/index"
+			    //WeixinJSBridge.call('closeWindow');
+			  }
+			},1000) 
+			function return_index() {
+			  window.location.href="/index"
+			}
+			function return_back() {
+			  window.history.go(-1);
+			}
+		</script>
+	</body>
+</html>

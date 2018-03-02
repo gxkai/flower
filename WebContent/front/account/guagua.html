@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes, minimum-scale=0.5, maximum-scale=1.0" />
+<title>刮刮有好礼</title>
+<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+<style type="text/css">
+html,body{
+    margin: 0;
+    padding: 0;
+}
+.hidden {
+	display: none;
+	
+}
+.hidden img{
+    float: right;
+}
+#backcanvas{
+	display: none;
+}
+#frontcanvas{
+	display: none;
+}
+#maincanvas{
+margin-left: 20vw;margin-top: 45vw; width: 60vw; height: 25vw;background-color: gray;
+border-style:dotted; 
+border-color:yellow;
+/* border-image:url(/resource/flower/image/guagua/border.png) 30 30 round;
+-webkit-border-image:url(/resource/flower/image/guagua/border.png) 80 80 round;
+-o-border-image:url(/resource/flower/image/guagua/border.png) 30 30 round; */
+}
+footer{
+    background-image: url("/resource/flower/image/guagua/guize.png");
+    background-size:100%;
+    width:94vw;
+    height:60vw;
+    margin-top:5vw;
+    margin-left: 3vw;
+}
+article{
+    position: relative;
+    top: 13vw;
+    margin-left:1vw;
+    font-size: 3vw;
+    font-weight: bold;
+}
+article p{
+    padding: 0;
+    margin: 0;
+}
+</style>
+<script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="/resource/flower/js/guagua.js"></script>
+</head>
+<body style="background-image: url('/resource/flower/image/guagua/backimg.jpg'); background-repeat: no-repeat;background-size: cover;">
+	<canvas id="backcanvas"  ></canvas>
+	<canvas id="frontcanvas" ></canvas>
+	<div class="hidden" id="main">
+	         <img class="arrow" src="/resource/flower/image/guagua/share-it.png" > 
+			<canvas id="maincanvas" >
+			</canvas>
+	</div>
+	<footer>
+	<article>
+	<p>1.每人每天1次刮奖机会,所刮到的奖金每天会自动累计;</p><br/>
+	<p>2.刮奖时间:2017年11月1日00:00:00-2017年11月11日23:59:59;</p><br/>
+	<p>3.刮奖后点击右上角分享给好友来翻牌,每人每天有一次翻牌机会;</p><br/>
+	<p>4.如有任何疑问请加克服微信:FLOWERMM001;</p><br/>
+	<p>5.本活动最终解释权归花美美平台所有.</p><br/>
+	</article>
+	</footer>	
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/multiselect/bootstrap.min.css" />	
+		<link rel="stylesheet" type="text/css" href="/resource/multiselect/bootstrap-multiselect.css" />	
+		<style type="text/css">
+		.all:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>采购管理 - 采购列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 采购管理 <span class="c-gray en">&gt;</span> 采购<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 新增采购单</a></span> 
+						
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入批号查询" value="${code!}" id="code">
+			</span>
+			<span class="l ml-10" style="width: 170px">
+				<input type="text" class="input-text" placeholder="输入花材名称查询" value="${name!}" id="name">
+			</span>
+			<span class="select-box l" style="width: 130px">
+					  	<select class="select" multiple="multiple" id="channel">
+					    	<option value="1" <#if channel?index_of("1")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上海</option>
+					    	<option value="2" <#if channel?index_of("2")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拍市</option>
+					    	<option value="3" <#if channel?index_of("3")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;市场</option>
+					    	<option value="4" <#if channel?index_of("4")!=-1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;基地</option>
+					  	</select>
+		    </span>
+			<input class="l btn btn-primary ml-10" type="submit" value="查询" onclick="search()">	
+			<input class="l btn btn-primary ml-10" type="submit" value="一键核销" onclick="compare()">	
+			<span class="r" style="line-height:31px;">总价：<strong>${sumPrice!0}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共有数据：<strong>${totalrow}</strong> 条</span> </div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">操作</th>					
+						<th width="60">序列</th>
+						<th width="60">批号</th>
+						<th width="80">渠道</th>
+						<th width="100">花材名称</th>
+						<th width="80">每把单价</th>
+						<th width="60">每把数量</th>
+						<th width="60">总把数</th>
+						<th width="60">总价</th>
+						<th width="80">损耗总枝数</th>
+						<th width="60">采购人</th>
+						<th width="80">账号</th>
+						<th width="120">维护时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if purchaselist?? && purchaselist?size gt 0>
+					<#list purchaselist as purchase>
+					<tr class="text-c">
+					    <td class="td-manage red">
+							<a title="编辑" onclick="_edit('${purchase.id!}')" class="f-16 mr-10" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+							<a title="删除" onclick="_del('${purchase.id!}')" class="f-16" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>						    
+							<a title="拆分" onclick="_split('${purchase.id!}')" class="f-16" style="text-decoration:none"><i class="Hui-iconfont">&#xe63c;</i></a>						    			
+						</td> 
+						<td>${purchase_index+1}</td>
+						<td>${purchase.code!}</td>
+						<td>${purchase.channel!}</td>
+						<td class = "all">${purchase.name!}</td>
+						<td>${purchase.price!0.00}</td>
+						<td>${purchase.num!0}</td>
+						<td>${purchase.totalNum!0}</td>
+						<td>${purchase.totalPrice!0}</td>
+						<td>${purchase.lossNum!0}</td>
+						<td>${purchase.purchaser!}</td>
+						<td>${purchase.username!}</td>
+						<td>${purchase.optime!}</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="10" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery-1.8.1.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="/resource/multiselect/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/resource/multiselect/bootstrap-multiselect.js"></script>		
+		 
+		<script type="text/javascript">
+			var code = '${code!}', name='${name!}',channel='${channel!}';
+			$(document).ready(function(){
+				 $('#channel').multiselect({ buttonWidth: '100px',
+			            dropRight: true});
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/purchase/purchaseList?pageno='+e.curr+'&code='+code+'&name='+name+'&channel='+channel);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _add(){
+				parent.open_window('新增采购单','/purchase/purchaseAdd', 500, 540);
+			}
+			function _edit(id){
+				parent.open_window('编辑采购单','/purchase/purchaseEdit/'+id, 500, 540);
+			}
+			function _del(id) {
+				 parent.actconfirm('确定删除？', function(){
+					 var load = layer.load();
+					 $.post('/manage/iframe/purchase/purchaseDel/'+id, function(data){
+							layer.close(load);
+							if(data){
+								parent.refresh_iframe();
+								layer.msg('删除成功', {time: 1000});
+							}else{
+								layer.msg('删除失败', {time: 1000});
+							}
+					 })	
+				 })
+			}
+			function _split(id) {
+				parent.open_window('拆分采购单','/purchase/purchaseSplit/'+id, 500, 540);
+			}
+			function search() {
+				var code =$.trim($("#code").val());
+				var name = $.trim($("#name").val())
+				var channel = $("#channel").val();
+				location.replace('/manage/iframe/purchase/purchaseList?pageno=1&code='+code+'&name='+name+'&channel='+channel);
+			}
+			function compare() {
+				var reg = /^[0-9]{8}$/;//检查批号
+				var code =$.trim($("#code").val());
+				if(code==""){
+					layer.msg('请填写核销批号!', {time: 3000});return;
+				}
+                if(!reg.test(code)){
+                	layer.msg('批号输入有误,应为8位数字!', {time: 3000});return;
+                }
+				parent.actconfirm('确定核销？', function(){
+					 var load = layer.load();
+					 $.post('/manage/iframe/purchase/compare?code='+code, function(data){
+							layer.close(load);
+							if(data){
+								layer.msg('核销成功,请去核销列表查看', {time: 3000});
+							}else{
+								layer.msg('啊哦，该批号核销生成了0笔数据', {time: 3000});
+							}
+					 })	
+				 })
+			}
+		</script> 
+	</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta content="telephone=no" name="format-detection" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<style type="text/css">
+			body{
+				background-color: #EEE;
+			}
+			.p_0{
+				height: 60px;
+				font: 16px/60px 'Microsoft Yahei';
+				padding: 0 18px;
+			}
+			.p_0 span{
+				float: right;
+			}
+			.p_1{
+				width: 100%;
+				box-sizing: border-box;
+				float: left;
+				height: 60px;
+				font: 16px/60px 'Microsoft Yahei';
+				padding: 0 18px;
+				background-color: #FFF;
+				border: 1px solid #DED9D9;
+				display: block;
+			}
+			.p_1 span:nth-child(1){
+				float: left;
+			}
+			.p_1 span:nth-child(2){
+				float: right;
+			}
+			.p_2{
+				margin-top: 75px;
+				padding: 0 0 0 18px;
+				box-sizing: border-box;
+				width: 100%;
+				height: 180px;
+				background-color: #FFF;
+				font: 16px/60px 'Microsoft Yahei';
+				border: 1px solid #DED9D9;
+			}
+			.p_2_1{
+				height: 60px;
+				padding: 0 18px 0 0;
+				border-bottom: 1px solid #DED9D9;
+				box-sizing: border-box;
+			}
+			.p_2_1 span:nth-child(1){
+				width: calc(100% - 60px);
+				float: left;
+			}
+			.p_2_1 span:nth-child(2){
+				width: 60px;
+				color: #999;
+				float: right;
+			}
+			.p_2_2{
+				height: 120px;
+				box-sizing: border-box;
+			}
+			.p_2_2 span:nth-child(1){
+				width: 82px;
+				float: left;
+				line-height: 120px;
+			}
+			.p_2_2 span:nth-child(2){
+				width: calc(100% - 82px);
+				float: right;
+				height: 100%;
+				box-sizing: border-box;
+			}
+			.p_2_2 span span:nth-child(1){
+				height: calc(100% - 30px);
+				float: left;
+				width: calc(100% - 36px);
+				font: 16px/30px 'Microsoft Yahei';
+				color: #999;
+				padding: 15px 0;
+			}
+			.p_2_2 span span:nth-child(2){
+				padding-right: 18px;
+				width: 36px;
+				float: right;
+				line-height: 120px;
+			}
+			i{
+				color: #999;
+			}
+		</style>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript">
+			function chooseAddress(){
+				location.replace('/service/changeaddress?type='+${order.type} + '&addr=' + ${addrid} + '&ordercode=' + $('#ordercode').val());
+			}
+			function deliverpost(){
+				var ordercode = $('#ordercode').val();
+				var addrid = $('#addrid').val();
+				location.replace('/service/deliverdatepost/'+ordercode+'-'+addrid);
+			}
+			function reachpost(){
+				var ordercode = $('#ordercode').val();
+				var addrid = $('#addrid').val();
+				location.replace('/service/reachpost/'+ordercode+'-'+addrid);
+			}
+			function _back(){
+				var ordercode = $('#ordercode').val();
+				location.replace('/service/orderinfo/'+ordercode);
+			}
+		</script>
+		<title>修改配送信息/顺延</title>
+	</head>
+	<body>
+		<input type="hidden" id="ordercode" value="${ordercode!}" >
+		<input type="hidden" id="addrid" value="${addrid!}" >
+		<div class="container">
+			<div class="p_0">修改所有配送<span class="f-30"><i class="Hui-iconfont" onclick="_back()">&#xe6a6;</i></span></div>
+			<div class="p_1" onclick="deliverpost()">
+				<span>配送日期顺延</span>
+				<span><i class="Hui-iconfont">&#xe63d;</i></span>
+			</div>
+			<div class="p_2">
+				<div class="p_2_1" onclick="reachpost()"><span>送达时间</span><span><#if order.reach==1>周一<#else>周六</#if><i class="Hui-iconfont f-r">&#xe63d;</i></span></div>
+				<div class="p_2_2" onclick="chooseAddress()">
+					<span>收货地址</span>
+					<span>
+						<span>${order.addr}<br>${order.receiver}&nbsp;${order.tel}&nbsp;</span>
+						<span><i class="Hui-iconfont">&#xe63d;</i></span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

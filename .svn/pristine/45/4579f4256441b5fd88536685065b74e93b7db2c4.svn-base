@@ -1,0 +1,258 @@
+html,body{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+a,button,input,textarea{-webkit-tap-highlight-color: rgba(255, 255, 255, 0);}
+.container{
+	width: 100%;
+	max-width: 768px;
+	margin: 0 auto;
+	font-family: Microsoft Yahei;
+	position: relative;
+}
+
+/************我的物流************/
+.logistics{
+	width: 100%;
+    float: left;
+    margin-bottom: 15px;
+}
+.ls_1 {
+    width: 100%;
+    height: 40px;
+    float: left;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 0 15px;
+}
+.ls_1 span:nth-child(1) {
+    float: left;
+    line-height: 40px;
+    color: #48505B;
+    font-size: 14px;
+}
+.ls_1 span:nth-child(1) i {
+    font: 14px/40px 'Microsoft Yahei';
+    font-weight: bolder;
+}
+.ls_1 span:nth-child(2) {
+    float: right;
+    line-height: 40px;
+    color: #E96388;
+    font-size: 14px;
+}
+.ls_2 {
+    width: 100%;
+    float: left;
+    background-color: white;
+    border-top: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+    box-sizing: border-box;
+    padding: 0 15px;
+}
+.ls_2_a {
+    width: 100%;
+    float: left;
+    box-sizing: border-box;
+    padding: 10px 0;
+    border-bottom: 1px solid #EEE;
+}
+.ls_2_a_p{
+	width: calc(100% - 90px);
+	height: 80px;
+	float: right;
+	margin: 0;
+}
+.ls_2_a_p span:nth-child(1){
+	width: 60%;
+    height: 30px;
+    float: left;
+    color: #48505B;
+}
+.ls_2_a_p span:nth-child(2){
+	width: 40%;
+    height: 30px;
+    float: left;
+    text-align: right;
+    color: #48505B;
+}
+.ls_2_a_p span:nth-child(3){
+	width: 100%;
+    float: left;
+    line-height: 20px;
+    font-size: 14px;
+    color: #A1A4A9;
+}
+.ls_2_b{
+	width: 100%;
+	height: 40px;
+	float: left;
+	color: #48505B;
+	text-align: right;
+	line-height: 40px;
+	font-size: 14px;
+}
+.ls_2_b i{
+	font: 14px/40px 'Microsoft Yahei';
+	color: #E96388;
+}
+.ls_3{
+	width: 100%;
+	height: 60px;
+	float: left;
+	background-color: white;
+	box-sizing: border-box;
+	padding: 12px 15px;
+}
+.ls_3 span:nth-child(1){
+	width: 78px;
+	height: 34px;
+	float: right;
+	font-size: 14px;
+	line-height: 34px;
+	text-align: center;
+	border-radius: 4px;
+}
+.ls_3 span:nth-child(2){
+	width: 78px;
+	height: 34px;
+	float: right;
+	font-size: 14px;
+	line-height: 34px;
+	text-align: center;
+	border-radius: 4px;
+	margin-right: 10px;
+}
+.ls_3 span{
+	border: 1px solid #799CA6;
+	color: #799CA6;
+}
+
+/************物流详情************/
+.body_hide{
+	height: 100%;
+	overflow: hidden;
+}
+.query_logistics{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(100, 100, 100, 0.3);
+	display: none;
+}
+.ls_body{
+	width: 100%;
+	height: calc(100% - 180px);
+	background-color: white;
+	position: absolute;
+	bottom: 0;
+}
+.body_1{
+	width: 100%;
+	height: 41px;
+	float: left;
+	border-bottom: 1px solid #EEE;
+	box-sizing: border-box;
+	padding: 0 15px;
+}
+.body_1 span:nth-child(1){
+	float: left;
+	line-height: 40px;
+	color: #48505B;
+}
+.body_1 span:nth-child(1) i1{
+	font: 14px/40px 'Microsoft Yahei';
+    font-weight: bolder;
+}
+.body_1 span:nth-child(2){
+	width: 18px;
+	height: 40px;
+	float: right;
+	box-sizing: border-box;
+	padding: 11px 0;
+}
+.body_2{
+	width: 102%;
+	height: calc(100% - 41px);
+	float: left;
+	box-sizing: border-box;
+	padding: 15px 26px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.ls_state{
+	width: 100%;
+	float: left;
+	box-sizing: border-box;
+	padding: 0 0 10px 20px;
+	border-left: 1px solid #EEE;
+	position: relative;
+	color: #A1A4A9;
+}
+.ls_state_top{
+	color: #799CA6;
+}
+.ls_round{
+	width: 12px;
+	height: 12px;
+	background-color: #EEE;
+	border-radius: 6px;
+	position: absolute;
+	left: -6px;
+	top: 0;
+}
+.ls_state_top .ls_round{
+	width: 14px;
+	height: 14px;
+	background-color: #799CA6;
+	box-sizing: border-box;
+	border: 3px solid #EEE;
+	border-radius: 7px;
+	position: absolute;
+	left: -7px;
+	top: 0;
+}
+.ls_state_1{
+	width: 100%;
+	height: 30px;
+	float: left;
+	box-sizing: border-box;
+	padding-bottom: 15px;
+	font-size: 14px;
+	line-height: 15px;
+}
+.ls_state_2{
+	width: 100%;
+	float: left;
+	margin: 0;
+}
+.ls_state_2 span:nth-child(1){
+	width: 0;
+	height: 0;
+	float: left;
+	border-style: solid;
+	border-color: transparent;
+	border-width: 5px;
+    border-bottom-width: 5px;
+    border-top-color: #EEE;
+    border-right-color: #EEE;
+}
+.ls_state_2 span:nth-child(2){
+	width: calc(100% - 18px);
+	float: left;
+	font-size: 13px;
+	line-height: 20px;
+	box-sizing: border-box;
+	padding: 8px;
+	background-color: #EEE;
+}
+.workcode{
+	font-family: Microsoft Yahei;
+	float: right;
+    line-height: 40px;
+    color: #48505B;
+}

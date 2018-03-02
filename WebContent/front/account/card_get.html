@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.logistics.css" />		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<title>所有祝福卡</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	</head>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.container{
+			margin: 0 auto;
+		}
+		.wishbg{
+			background-color: #e3f5f7;
+    		min-height: 100vh;
+		}
+		.main{
+			min-height: 80vh;
+		}
+		
+		.g_1{
+			height: 40px;
+			padding-left: 20px;
+		}
+		.g_1 span{
+			height: 100%;
+			text-align: left;
+			font: 16px/55px 'Microsoft Yahei';
+			color: #888;
+		}
+		.outer{
+			margin: 5vw;
+			background-color: #fff;
+			width: 80%;
+			padding: 5vw;
+			box-shadow: 0px 3px 5px #ccc;
+			border-radius: 4px;
+		}
+		.outer .div1 img{
+			width: 45%;
+			vertical-align: middle;
+		}
+		.outer .div1{
+			padding: 3vw 3vw 0vw;
+		}
+		.outer .time{
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 2vw;
+		}
+		.outer .div1 div{ 
+			display: inline-block;
+			width: 45%;
+		    vertical-align: middle;
+		    margin-left: 5vw;
+		}
+		.outer .div1 div .xq{
+			background-color: #f96585;
+			color: #fff;
+			padding: 10px;
+		    width: 100px;
+		    text-align: center;
+		    margin-top: 3vw;
+    		border-radius: 20px;
+		}
+		.no{
+			width: 100%;
+			text-align: center;
+			padding-top: 60px;
+		}
+		.wish_bottom{
+			text-align: center;
+		}
+		.wish_bottom .p1{
+			text-align: center;
+			color: #000;
+			font-family: cursive;
+			padding: 2vw;
+			position: relative;
+			letter-spacing: 2px;
+		}
+		.wish_bottom .p1:before,.wish_bottom .p1:after {
+		    content: '';                 
+		    position: absolute;         
+		    top: 52%;
+		    background: #000;       
+		    width: 9%;
+		    height: 1px;
+		}
+		.wish_bottom .p1:before{
+		    left: 20%;        
+		}
+		.wish_bottom .p1:after {
+		    right: 20%;
+		}
+	</style>
+	<body>
+		<div class="container">
+			<div class="wishbg">
+				<div class="main">
+					<#if cards?size gt 0>
+						<div class="g_1">
+							<span>惊喜？！激动？！等啥呢？快去看看吧！</span>
+						</div>
+						<#list cards as card>
+							<#if card.picId!=0>
+								<div class="outer">
+									<p class="time">${card.ctime!}</p>
+									<div class="div1">
+										<img src="${card.imgurl01}"/>
+										<div>
+											<p style="font-size: 15px;">送花人：${(card.songhua)!"匿名"}</p>
+											<p class="xq" onclick="location.href='/account/cardcontent/${card.ordercode!}'">祝福语详情</p>
+										</div>
+									</div>
+								</div>
+							<#else>
+								<div class="outer">
+									<p class="time">${card.ctime!}</p>
+									<div class="div1">
+										<img src="/resource/flower/image/envelop1.jpg"/>
+										<div>
+											<p style="font-size: 15px;">送花人：${(card.songhua)!"匿名"}</p>
+											<p class="xq" onclick="location.href='/account/cardcontent/${card.ordercode!}'">祝福语详情</p>
+										</div>
+									</div>
+								</div>
+							 </#if>
+						</#list>
+					<#else>
+						<div class="no">您当前没有祝福卡哦！</div>
+					</#if>
+				</div>
+				
+				<div class="wish_bottom">
+					<img src="/resource/flower/image/wishlogo.png" style="width: 30vw;"/>
+					<p class="p1">用鲜花传递爱</p>
+				</div>
+			</div>
+		</div>
+</html>

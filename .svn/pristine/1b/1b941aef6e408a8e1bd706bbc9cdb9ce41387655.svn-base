@@ -1,0 +1,405 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>物流管理 - 鲜花物流列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 物流管理 <span class="c-gray en">&gt;</span> 鲜花物流列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			 <div class="cl pd-5 bg-1 bk-gray">
+				<a onclick="_add()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe6a2;</i> 物流配单</a>
+				<a onclick="_tiaodan()" class="btn btn-primary"><i class="Hui-iconfont">&#xe642;</i> 挑单</a>
+				<a onclick="_import()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe644;</i> 第三方物流导入</a>
+				<a onclick="_exportGroupLeader()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe644;</i> 团长订单导出</a>																
+				<a onclick="_seed(${istd})" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe669;</i> 发货</a>
+				<a onclick="_sendMsg()" class="btn btn-primary ml-5">发送【订单发货提醒】</a>
+				<a onclick="sendBSMsg()" class="btn btn-primary ml-5">发送特殊通知【管家服务通知】</a>
+				<a onclick="_confirm()" class="btn btn-primary ml-5">确认收货</a>
+				<a onclick="_export()" class="btn btn-primary ml-5"><i class="Hui-iconfont">&#xe644;</i> 物流导出</a>
+				<input class="btn btn-primary ml-5" type="button" value="打印" onclick="print()">
+				<!-- <a onclick="_holiday()" class="btn btn-warning ml-5"><i class="Hui-iconfont">&#xe648;</i> 节日配单</a>
+				<a onclick="_hotiaodan()" class="btn btn-warning ml-5"><i class="Hui-iconfont">&#xe642;</i> 节日挑单</a>
+				<a onclick="_holiseed()" class="btn btn-warning ml-5"><i class="Hui-iconfont">&#xe669;</i> 节日发货</a> -->
+			    <span class="r" style="line-height: 32px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+			  <div class="cl pd-5 bg-1 bk-gray">
+				
+					<span class="select-box l" style="width: 130px">
+					  	<select class="select" size="1" onchange="search()" id = "state">
+					    	<option value="10" <#if state==10>selected</#if>>--选择状态--</option>
+					    	<option value="0" <#if state==0>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;异常</option>
+					    	<option value="1" <#if state==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;正常</option>
+					    	<option value="2" <#if state==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;已发货</option>
+					    	<option value="9" <#if state==9>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;已签收</option>
+					  	</select>
+					</span>
+					<span class="select-box l ml" style="width: 130px" id="wl">
+					  	<select class="select" size="1" onchange="search()" id="wuliucode">
+					    	<option value="xzwl" <#if wuliucode=='xzwl'>selected</#if>>--选择物流--</option>
+							<#if wuliulist?? && wuliulist?size gt 0>
+					    	<#list wuliulist as wuliu>
+					    	<#if wuliu??>
+					    	<option value="${wuliu.code}" <#if wuliucode==wuliu.code>selected</#if>>${wuliu.name}</option> 
+					    	</#if>
+					    	</#list>
+					    	<#else>
+					    	<option value="xzwl" <#if wuliucode=='xzwl'>selected</#if>>无</option>
+							</#if>
+					  	</select>
+					</span>
+					<span class="select-box l ml" style="width: 130px">
+					  	<select class="select" size="1" onchange="search()" id="ishas">
+					    	<option value="10" <#if ishas==10>selected</#if>>--选择是否首单--</option>
+					    	<option value="0" <#if ishas==0>selected</#if>>首单</option>
+					    	<option value="1" <#if ishas==1>selected</#if>>普通</option>
+					  	</select>
+					</span>
+					<span class="select-box l ml" style="width: 130px">
+					  	<select class="select" size="1" onchange="search()" id="type">
+					    	<option value="10" <#if type==10>selected</#if>>--选择类型--</option>
+					    	<option value="0" <#if type==0>selected</#if>>双品</option>
+					    	<option value="1" <#if type==1>selected</#if>>多品</option>
+					    	<option value="2" <#if type==2>selected</#if>>送花</option>
+					    	<option value="3" <#if type==3>selected</#if>>周边</option>
+					    	<option value="4" <#if type==4>selected</#if>>节日</option>
+					    	<option value="5" <#if type==5>selected</#if>>定制</option>
+					  	</select>
+					</span>
+					
+			  </div>
+			  <div class="cl pd-5 bg-1 bk-gray">
+					<span class="l ml" style="width: 80px;background-color: yellow;">
+						<input type="text" class="input-text" placeholder="输入批次查询" value="${picicode!}" id="picicode" maxlength="8">
+					</span>
+					<span class="l ml-5" style="width: 150px">
+						<input type="text" class="input-text" placeholder="输入订单编号查询" value="${ordercode!}" id="ordercode" maxlength="17">
+					</span>
+					<span class="l ml-5" style="width: 170px">
+						<input type="text" class="input-text" placeholder="输入第三方物流编号查询" value="${logisticcode!}" id="logisticcode" maxlength="30">
+					</span>
+					<span class="l ml-5" style="width: 140px">
+						<input type="text" class="input-text" placeholder="输入收货人姓名查询" value="${receiver!}" id="receiver" maxlength="17">
+					</span>
+					<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="search()">
+				</div>
+	
+			  <div class="mt-10">
+			    <table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="30">序列</th>
+						<th width="30">操作</th>
+						<th width="80">批次</th>
+						<th width="120">订单编号</th>
+						<th width="80">物流公司</th>
+						<th width="130">物流编号</th>
+						<th width="130">第三方物流编号</th>						
+						<th width="60">收货人</th>
+						<th width="80">收货人电话</th>
+						<th width="130">订购商品</th>
+						<th width="60">发货次数</th>
+						<th width="230">发货产品</th>
+						<th width="60">产品成本</th>
+						<th width="230">收货人地址</th>
+						<th width="40">首单</th>
+						<th width="60">状态</th>			
+					</tr>
+				</thead>
+				<tbody>
+					<#if orderinfolist?? && orderinfolist?size gt 0>
+					<#list orderinfolist as orderinfo>
+					<tr class="text-c">
+						<td>${orderinfo_index+1}</td>
+						<td class="td-manage">
+							<a title="查看详情" onclick="_see(${orderinfo.id},'${orderinfo.number}')" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe665;</i></a>
+						</td>
+						<td>${orderinfo.code!}</td>
+						<td>${orderinfo.ordercode!}</td>
+						<td>${orderinfo.ename!}</td>
+						<td>${orderinfo.number!}</td>
+						<td>${orderinfo.lognumber!}</td>
+						<td>${orderinfo.sname!}</td>
+						<td>${orderinfo.tel!}</td>
+						<td class="alladdr">${orderinfo.gName!}</td>
+						<td>第${orderinfo.ofcycle!}/${orderinfo.cycle!}次</td>
+						<td title="${orderinfo.wlname!}">${orderinfo.wlname!}</td>
+						<td>&yen;${(orderinfo.cost!0)?string('0.00')}</td>
+						<td class="alladdr">${orderinfo.address}</td>		
+						<td><#if orderinfo.ishas==0><span class="c-red">首单</span><#else><span class="c-green">普通</span></#if></td>
+						<td>
+							<#if orderinfo.state==0>
+							<span class="c-red">异常</span>
+							<#elseif orderinfo.state==1>
+							<span class="c-green">正常</span>
+							<#elseif orderinfo.state==2>
+							<span class="c-orange">已发货</span>
+							<#elseif orderinfo.state==9>
+							<span class="c-blue">已签收</span>
+							<#else>
+							<span class="c-blue">其他</span>
+							</#if>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			    <div class="mt-10 text-r" id="forpage"></div>
+			  </div>
+		</div>
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			var picicode='${picicode!}',ordercode='${ordercode!}',logisticcode='${logisticcode!}',state='${state!}',ishas='${ishas!}',wuliucode='${wuliucode!}',receiver='${receiver!}',type='${type!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/logistics/orderinfo?pageno='+e.curr+'&picicode='+picicode+'&ordercode='+ordercode+'&logisticcode='+logisticcode+'&state='
+				            																+state+'&ishas='+ishas+'&wuliucode='+wuliucode+'&receiver='+receiver+'&type='+type);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function _tiaodan(){
+				parent.actconfirm('确定挑单操作？', function(){
+					var load = layer.load();
+					$.post("/wuliu/synchro_toD2D/0", function(data){
+						layer.close(load);
+						layer.msg(data.msg, {time: 3000});
+						parent.refresh_iframe();
+					});
+				});
+			}
+			function _hotiaodan(){
+				parent.actconfirm('确定挑单操作？', function(){
+					var load = layer.load();
+					$.post("/wuliu/synchro_toD2D/1", function(data){
+						layer.close(load);
+						layer.msg(data.msg, {time: 3000});
+						parent.refresh_iframe();
+					});
+				});
+			}
+			function _add(){
+				/**配单时间限制**/
+				var day = (new Date()).getDay();
+				var hour = (new Date()).getHours();	  
+				if (day==0&&hour>18 ||  day>0&&day<3 || day==3&&hour<18  ) {
+					layer.msg("周日18点至周三18点不能配单！", {time: 3000});
+					return;
+				}
+				parent.open_schedule('/logistics/startsingle/0','540','90');
+			}
+			function _holiday(){
+				parent.open_schedule('/logistics/startsingle/1','540','90');
+			}
+			function _seed(istd){
+				if(istd==1){
+					var wlcode = $('#wuliucode').find("option:selected").val();
+					if(wlcode=='xzwl'){
+						layer.msg("请选择物流发货", {time: 3000});return;
+					}
+					parent.actconfirm('确定发货？', function(){
+						var load = layer.load();
+						ishas = $('#ishas option:selected').val();
+						$.post('/manage/iframe/logistics/seedgoods/'+wlcode+'-'+ishas, function(data){
+							layer.close(load);
+							if (data.result) {
+								layer.alert(data.message, {icon: 5});
+							}else {
+								if(data.R){
+									layer.msg(data.M, {time: 2000}, function(){
+										location.replace(location.href);
+									});
+								}else{
+									layer.msg(data.M, {time: 3000});
+								}
+							}
+							});							
+					});
+				}else{
+					layer.msg("请先进行挑单操作", {time: 2000});return;
+				}
+			}
+			function _sendMsg(){
+				$.post('/manage/iframe/logistics/fahuocookie/', function(data){
+					if (data.result) {
+						picicode = $('#picicode').val();
+						if($.trim(picicode)!=''){
+							picicode = picicode.replace(/(^\s*)|(\s*$)/g,'');
+							reg = /^[0-9]{1,8}$/;;
+							if(!reg.test(picicode)){
+								layer.tips('请输入正确格式','#picicode', {tips: [1, '#34495E']});return;
+							}
+						}else{
+							layer.tips('请输入批号','#picicode', {tips: [1, '#34495E']});return;
+						}
+						
+						
+						parent.actconfirm('预计送达日期：${reachDate!};如果日期不对,请到数据字典【本次发货预计送达日期】中修改;确定发送【订单发货提醒】？', function(){
+							var load = layer.load();
+							ishas = $('#ishas option:selected').val();
+							$.post('/manage/iframe/logistics/sendMsg/'+picicode, function(data){
+								layer.close(load);
+								if(data.R){
+									layer.msg(data.M, {time: 2000}, function(){
+										location.replace(location.href);
+									});
+								}else{
+									layer.msg(data.M, {time: 3000});
+								}
+							});
+						});
+					}else {
+						layer.alert("正在发送中,请勿重复操作", {icon: 5});return;
+					}
+				});	
+			}
+			function sendBSMsg() {
+				picicode = $('#picicode').val();
+				if($.trim(picicode)!=''){
+					picicode = picicode.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[0-9]{1,8}$/;;
+					if(!reg.test(picicode)){
+						layer.tips('请输入正确格式','#picicode', {tips: [1, '#34495E']});return;
+					}
+				}else{
+					layer.tips('请输入批号','#picicode', {tips: [1, '#34495E']});return;
+				}	
+				parent.open_window('编辑管家信息','/logistics/editBSMsg/'+picicode,'540','200');
+			}
+			
+			// 节日发货
+			function _holiseed(){
+				var wlcode = $('#wuliucode').find('option:selected').val();
+				if(wlcode=='xzwl'){
+					layer.msg("请选择物流发货", {time: 3000});return;
+				}
+				parent.actconfirm('请确认是否完成挑单操作！！确定发货？', function(){
+					var load = layer.load();
+					ishas = $('#ishas option:selected').val();
+					$.post('/manage/iframe/logistics/seedgoods/'+wlcode+'-'+ishas+'-1', function(data){
+						layer.close(load);
+						if(data.R){
+							layer.msg(data.M, {time: 2000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg(data.M, {time: 3000});
+						}
+					});
+				});
+			}
+			function _see(id,code){
+				parent.open_window('物流详情','/logistics/orderpro/'+id+'-'+code,'970','540');
+			}
+			function _export(){
+				wuliucode = $('#wl').find('option:selected').val();
+				ishas = $('#ishas option:selected').val();
+				picicode = $('#picicode').val();
+				if($.trim(wuliucode) == "xzwl"){
+					layer.msg('请选择物流',{time : 1000});return;
+				}
+				if($.trim(picicode)==''){
+					layer.msg('请选输入批次',{time : 1000});return;
+				}
+				window.open('/manage/iframe/logistics/exportwuliu/'+wuliucode+'-'+ishas+'-'+picicode, '_blank');
+			}
+			function _import() {
+						parent.open_window('第三方物流导入','/logistics/importwuliu/', 400, 120);			
+			}
+			function search(){
+				state = $("#state").find('option:selected').val();
+				ishas = $("#ishas").find('option:selected').val();
+				type=$("#type").find('option:selected').val();
+				wuliucode = $("#wuliucode").find('option:selected').val();
+				picicode = $('#picicode').val();
+				ordercode = $('#ordercode').val();
+				logisticcode = $('#logisticcode').val();
+				receiver = encodeURI($.trim($('#receiver').val()));
+				if($.trim(picicode)!=''){
+					picicode = picicode.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[0-9]{1,8}$/;;
+					if(!reg.test(picicode)){
+						layer.tips('请输入正确格式','#picicode', {tips: [1, '#34495E']});return;
+					}
+				}
+				if($.trim(ordercode)!=''){
+					ordercode = ordercode.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[0-9]{1,17}$/;
+					if(!reg.test(ordercode)){
+						layer.tips('请输入正确格式', '#ordercode', {tips: [1, '#34495E']});return;
+					}
+				}
+				if($.trim(logisticcode)!=''){
+					logisticcode = logisticcode.replace(/(^\s*)|(\s*$)/g,'');
+					reg = /^[a-zA-Z0-9]{1,30}$/;
+					if(!reg.test(logisticcode)){
+						layer.tips('请输入正确格式', '#logisticcode', {tips: [1, '#34495E']});return;
+					}
+				}
+				location.replace('/manage/iframe/logistics/orderinfo?pageno=1&picicode='+picicode+'&ordercode='+ordercode+'&logisticcode='+logisticcode+'&state='+state+'&ishas='+ishas+'&wuliucode='+wuliucode+'&receiver='+receiver+'&type='+type);				
+			}
+			// 打印
+			function print(){
+				parent.print_show('打印详情','/manage/iframe/logistics/printlist','10.5cm','14.6cm');
+			}
+			function _confirm() {
+				var picode = $.trim($("#picicode").val());
+				if (picode=="") {
+					layer.msg('请输入批次',{time : 2000});return;
+				}
+				var fpid = $("#fpid").find("option:selected").val();
+				parent.actconfirm("批次【"+picode+"】无误？",function(){
+					$.post('/manage/iframe/logistics/confirm/',{'picode':picode},function(data){
+						if (data) {
+							layer.msg('成功',{time : 2000});return;
+						}else{
+							layer.msg('失败',{time : 2000});return;
+						}
+					});
+				});
+			}
+			
+			function _exportGroupLeader() {
+				picicode = $('#picicode').val();
+				if($.trim(picicode)==''){
+					layer.msg('请选输入批次',{time : 1000});return;
+				}
+				window.open('/manage/iframe/logistics/exportgroupleader?code='+picicode, '_blank');
+			}
+		</script> 
+	</body>
+</html>

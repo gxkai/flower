@@ -1,0 +1,173 @@
+package com.util;
+
+import com.controller.WeixinApiCtrl;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.weixin.sdk.api.ApiConfig;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.TemplateData;
+import com.jfinal.weixin.sdk.api.TemplateMsgApi;
+
+public class SendMouldMsgUtil {
+	
+	/**
+	 * 服务完成之后，给客户发信息，希望客户再次续订
+	 * @param cycle 订阅周期
+	 * @param aid 账号ID
+	 * @param ordercode 订单号
+	 * @param tradeName 商品名称
+	 * @param minTime 第一次服务(发货)时间
+	 * @param maxTime 最后一次服务(发货)时间
+	 */
+	public static void SendMsgWhereLast(int cycle,int aid,String ordercode,String tradeName,String minTime,String maxTime){
+		// 发送模板消息
+		// 绑定 apiConfig 到线程之上
+		ApiConfig ac = new ApiConfig();
+		// 配置微信 API 相关常量
+		ac.setToken(PropKit.get("token"));
+		ac.setAppId(PropKit.get("appId"));
+		ac.setAppSecret(PropKit.get("appSecret"));
+		ac.setEncryptMessage(PropKit.getBoolean("encryptMessage", false));
+		ac.setEncodingAesKey(
+				PropKit.get("encodingAesKey", "setting it in config file"));
+		// 发送模板消息
+		Record account = Db.findById("f_account", aid);
+		ApiConfigKit.setThreadLocalApiConfig(ac);
+		ApiResult result = TemplateMsgApi.send(TemplateData.New()
+				// 消息接收者
+				.setTouser(account.getStr("openid"))
+				// 模板id
+				.setTemplate_id(WeixinApiCtrl.gettemplateId("服务完成提醒"))
+				.setTopcolor("#eb414a").setUrl( "http://www.flowermm.net/index")
+				.add("first", "您的服务已完成\n", "#333")//标题
+				.add("keyword1", ordercode, "#0000FF")//订单号
+				.add("keyword2", tradeName+String.format("(%d)次", cycle), "#0000FF")//服务项目（商品名称+订阅次数）
+				.add("keyword3", minTime, "#0000FF")//开始服务时间(下单时间)
+				.add("keyword4", maxTime, "#0000FF")//完成服务时间(最后一次收花时间)
+				.add("remark", String.format("\n不忍离开！亲爱的，有花的日子过的真快，您订购的%d次鲜花本周是最后一次收花，小美正在想下周带给您什么惊喜呢，所以，请别走~",cycle), "#FF8000")//备注
+				.build());
+		WeixinApiCtrl.sendTemplateMsg(result.getJson()); 
+		     
+	}
+	/**
+	 * 每次对接成功都发【订单发货提醒】模板消息
+	 * @param aid 客户账号ID
+	 * @param ordercode 订单号
+	 * @param goodsName 商品名称
+	 * @param wlName 物流名称
+	 * @param cycle 订阅周期数
+	 * @param ocount 当前发货次数
+	 * @param number 物流单号
+	 * @param piCode 送达批号
+	 */
+	public static void SendMsgEvery(int aid,String ordercode,String pName,String wlName, int cycle,int ocount,String number,String piCode,String reachDate,String name){
+		// 发送模板消息
+				// 绑定 apiConfig 到线程之上
+				ApiConfig ac = new ApiConfig();
+				// 配置微信 API 相关常量
+				ac.setToken(PropKit.get("token"));
+				ac.setAppId(PropKit.get("appId"));
+				ac.setAppSecret(PropKit.get("appSecret"));
+				ac.setEncryptMessage(PropKit.getBoolean("encryptMessage", false));
+				ac.setEncodingAesKey(
+						PropKit.get("encodingAesKey", "setting it in config file"));
+				// 发送模板消息
+				Record account = Db.findById("f_account", aid);
+				ApiConfigKit.setThreadLocalApiConfig(ac);
+				ApiResult result = TemplateMsgApi.send(TemplateData.New()
+						// 消息接收者
+						.setTouser(account.getStr("openid"))
+						// 模板id
+						.setTemplate_id(WeixinApiCtrl.gettemplateId("订单发货提醒"))
+						.setTopcolor("#eb414a").setUrl( "http://www.flowermm.net/knowledge")
+						.add("first",String.format("您的鲜花已经发货,收花人:%s,预计%s送达,请留意快递小哥的电话\n",name,reachDate), "#333")//标题
+						.add("keyword1", ordercode, "#0000FF")//订单编号
+						.add("keyword2", wlName, "#0000FF")//物流公司
+						.add("keyword3", number, "#0000FF")//物流单号
+						.add("remark", String.format("\n亲，本周是您订单的%d/%d次配送，产品名称【%s】，请您收到花后及时修剪，加水养护，包装盒内有鲜花养护卡片，请您参照养护，鲜花收到后立即插养护瓶，放置阴凉地方,每天换水并加保鲜剂。更多鲜花养护知识点击详情查看", ocount,cycle,pName), "#FF8000")//备注
+						.build());
+				WeixinApiCtrl.sendTemplateMsg(result.getJson());
+	}
+	
+	/**
+	 * 周边发货模板消息
+	 * @param aid
+	 * @param ordercode
+	 * @param pName
+	 * @param wlName
+	 * @param cycle
+	 * @param ocount
+	 * @param number
+	 * @param name
+	 */
+	public static void SendMsgEvery_ZB(int aid,String ordercode,String pName,String wlName, int cycle,int ocount,String number,String name){
+		// 发送模板消息
+				// 绑定 apiConfig 到线程之上
+				ApiConfig ac = new ApiConfig();
+				// 配置微信 API 相关常量
+				ac.setToken(PropKit.get("token"));
+				ac.setAppId(PropKit.get("appId"));
+				ac.setAppSecret(PropKit.get("appSecret"));
+				ac.setEncryptMessage(PropKit.getBoolean("encryptMessage", false));
+				ac.setEncodingAesKey(
+						PropKit.get("encodingAesKey", "setting it in config file"));
+				// 发送模板消息
+				Record account = Db.findById("f_account", aid);
+				ApiConfigKit.setThreadLocalApiConfig(ac);
+				ApiResult result = TemplateMsgApi.send(TemplateData.New()
+						// 消息接收者
+						.setTouser(account.getStr("openid"))
+						// 模板id
+						.setTemplate_id(WeixinApiCtrl.gettemplateId("订单发货提醒"))
+						.setTopcolor("#eb414a").setUrl( "http://www.flowermm.net/service/myorder")
+						.add("first",String.format("您的订单已经发货,收货人:%s,请留意快递小哥的电话\n",name), "#333")//标题
+						.add("keyword1", ordercode, "#0000FF")//订单编号
+						.add("keyword2", wlName, "#0000FF")//物流公司
+						.add("keyword3", number, "#0000FF")//物流单号
+						.add("remark", String.format("\n产品名称:%s",pName), "#FF8000")//备注
+						.build());
+				WeixinApiCtrl.sendTemplateMsg(result.getJson());
+	}
+	/** 
+	 * @param aid
+	 * @param ordercode
+	 * @param pName
+	 * @param wlName
+	 * @param cycle
+	 * @param ocount
+	 * @param number
+	 * @param piCode
+	 * @param reachDate
+	 * @param name
+	 */
+	public static void SendBSMsg(int aid,String number,String ordercode,String reachDate,String BSMsg){
+		// 发送模板消息
+		// 绑定 apiConfig 到线程之上
+		ApiConfig ac = new ApiConfig();
+		// 配置微信 API 相关常量
+		ac.setToken(PropKit.get("token"));
+		ac.setAppId(PropKit.get("appId"));
+		ac.setAppSecret(PropKit.get("appSecret"));
+		ac.setEncryptMessage(PropKit.getBoolean("encryptMessage", false));
+		ac.setEncodingAesKey(
+				PropKit.get("encodingAesKey", "setting it in config file"));
+		// 发送模板消息
+		Record account = Db.findById("f_account", aid);
+		ApiConfigKit.setThreadLocalApiConfig(ac);
+		ApiResult result = TemplateMsgApi.send(TemplateData.New()
+				// 消息接收者
+				.setTouser(account.getStr("openid"))
+				// 模板id
+				.setTemplate_id(WeixinApiCtrl.gettemplateId("订单发货提醒"))
+				.setTopcolor("#eb414a").setUrl(Constant.getHost + "/service/orderinfo/"+ordercode)
+				.add("first",String.format("针对您于%s配送的鲜花订单的服务通知",reachDate), "#333")//标题
+				.add("keyword1", ordercode, "#0000FF")//订单编号
+				.add("keyword2", "未知", "#0000FF")//物流公司
+				.add("keyword3", number, "#0000FF")//物流单号
+				.add("remark", BSMsg, "#FF8000")//备注
+				.build());
+		WeixinApiCtrl.sendTemplateMsg(result.getJson());
+	}
+}

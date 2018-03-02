@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>商品管理 - 花材管理 - 花材详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<#if flower??>
+				<input type="hidden" name="id" value="${flower.id}" id="v0">
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>分类：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v1">
+						  	<select class="select" size="1" name="tid">
+						    	<option value="0" selected>--选择分类--</option>
+						    	<#list typelist as type>
+						    	<#if type.id==flower.tid>
+						    	<option value="${type.id}" selected>${type.name}</option>
+						    	<#else>
+						    	<option value="${type.id}">${type.name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>色系：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v4">
+						  	<select class="select" size="1" name="cid">
+						    	<option value="0" selected>--选择色系--</option>
+						    	<#list colors as color>
+						    	<#if color.id==flower.cid>
+						    	<option value="${color.id}" selected>${color.name}</option>
+						    	<#else>
+						    	<option value="${color.id}">${color.name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="name" value="${flower.name}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>损耗率：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v5" name="loss" value="${flower.loss}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>成打量：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v6" name="dozen" value="${flower.dozen}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>花材用途分类：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v7">
+							<select class="select" size="1" name="ftype">
+						       <option value="1" <#if flower.ftype==1>selected</#if>>主花材</option>
+						       <option value="2" <#if flower.ftype==2>selected</#if>>辅助花材</option>
+							</select>
+						</span>
+					</div>
+				</div>
+				
+				<div class="row cl" style="display: none;">
+					<label class="col-xs-3 col-sm-2 text-r">图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: 100%">
+							<input class="input-text upload-url" type="text" id="v2" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr">
+						</span>
+					</div>
+				</div>
+				<#else>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>分类：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v1">
+						  	<select class="select" size="1" name="tid">
+						    	<option value="0" selected>--选择分类--</option>
+						    	<#list typelist as type>
+						    	<option value="${type.id}">${type.name}</option>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>色系：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v4">
+						  	<select class="select" size="1" name="cid">
+						    	<option value="0" selected>--选择色系--</option>
+						    	<#list colors as color>
+						    	<option value="${color.id}">${color.name}</option>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="name">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>损耗率：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v5" name="loss">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>成打量：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v6" name="dozen">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>花材用途分类：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" id="v7">
+						  	<select class="select" size="1" name="ftype">
+						    	<option value="1">主花材</option>
+						    	<option value="2">辅助花材</option>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl" style="display: none;">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red"></span>图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: 100%">
+							<input class="input-text upload-url" type="text" id="v3" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 115px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="basestr">
+						</span>
+					</div>
+				</div>
+				</#if>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2">
+						<input type="button" onClick="_save()" class="btn btn-primary btn-block" value="保存">
+					</div>
+				</div>
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+			$().ready(function(){
+				$('.input-file').on('change', function(){
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						var base64 = e.target.result;
+						$('input[name="basestr"]').val(base64);
+					};
+					reader.readAsDataURL(this.files[0]);
+					this.files = [];
+				});
+			});
+			function _save(){
+				var tid = $("select[name='tid'] option:selected").val();
+				var name = $('#v2').val();
+				var imgurl = $('#v3').val();
+				var cid = $("select[name='cid'] option:selected").val();
+				var loss = $('input[name="loss"]').val();
+				var dozen = $('input[name="dozen"]').val();
+				
+				var reg = /^[a-zA-Z0-9_\u0391-\uFFE5]+$/;
+				if(tid==0){
+					layer.tips('请选择分类', '#v1', {tips: [1, '#34495E']});return;
+				}
+				if($.trim(name)==''){
+					layer.tips('请输入名称', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(name)=='null' || $.trim(name)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}else if(!reg.test(name)){
+					layer.tips('不能包含特殊字符', '#v2', {tips: [1, '#34495E']});return;
+				}
+				if(cid==0){
+					layer.tips('请选择花材颜色', '#v4', {tips: [1, '#34495E']});return;
+				}
+				if($.trim(loss)==''){
+					layer.tips('请输入损耗率', '#v5', {tips: [1, '#34495E']});return;
+				}else{
+					var reg2 = /^[0-9]+(.[0-9]{1,2})?$/;
+					if(!reg2.test(loss)){
+						layer.tips('请输入正确格式', '#v5', {tips: [1, '#34495E']});return;
+					}else{
+						if(loss >= 1){
+							layer.tips('损耗率不能大于等于1', '#v5', {tips: [1, '#34495E']});return;
+						}
+					}
+				}
+				if($.trim(dozen)==''){
+					layer.tips('请输入成打量', '#v6', {tips: [1, '#34495E']});return;
+				}else{
+					if(dozen == 0){
+						layer.tips('成打量不能为0', '#v6', {tips: [1, '#34495E']});return;
+					}else{
+						var reg1= /^[0-9]*$/;
+						if(!reg1.test(dozen)){
+							layer.tips('请输入正确格式', '#v6', {tips: [1, '#34495E']});return;
+						}
+					}
+				}
+				
+				var lock = true;
+				if(lock){
+					lock = false;
+					$.post('/manage/iframe/product/saveFlower', $('form').serialize(), function(data){
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/LArea.css">
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/LArea3.js"></script>
+		<title>新增地址</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<script type="text/javascript">
+			var areadata = new Array();
+			var queryString = '${queryString!}';
+			$().ready(function(){
+				areadata = ${areajson};
+				selectArea('address', 'addrvalue', areadata);
+			});
+			
+			//请求参数格式化，方便读取
+			function getQueryString(name) {
+			    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+			    var r = queryString.match(reg);
+			    if (r != null) {
+			        return unescape(r[2]);
+			    }
+			    return null;
+			}
+			var excid=getQueryString("excId");//兑换红包的id号
+			var id=getQueryString("id");//地址的ID号
+			var type=getQueryString("type");//类型
+			//保存地址
+			function saveAddress(state){
+				$('#state').val(state);
+				var name = $('input[name="name"]').val();
+				var tel = $('input[name="tel"]').val();
+				var area = $('#addrvalue').val();
+				var addr = $('input[name="addr"]').val();
+				if($.trim(name)==''){
+					layer.msg('请录入收货人姓名', {time:2000});return;
+				}
+				var reggh = /^0[\d]{10,11}$/;
+				var regsj = /^1(3|4|5|7|8)\d{9}$/;
+				if($.trim(tel)==''){
+					layer.msg('请录入收货人手机号或固话', {time:2000});return;
+				}
+				if(!reggh.test(tel) && !regsj.test(tel)){
+					layer.msg('手机号或固话格式错误', {time:2000});return;
+				}
+				if($.trim(area)==''){
+					layer.msg('请选择所在地区', {time:2000});return;
+				}else{
+					var c = ","; // 要计算的字符
+					var regex = new RegExp(c, 'g'); // 使用g表示整个字符串都要匹配
+					var result = area.match(regex);
+					var count = !result ? 0 : result.length;
+					if(count<2){
+						layer.msg('所选区域必须包含【省市区】三级地址', {time:2000});return;
+					}
+				}
+				if($.trim(addr)==''){
+					layer.msg('请录入详细地址', {time:2000});return;
+				}
+				
+				/* 去除confirm提示 url  有问题 */
+				/* window.confirm = function (message) {
+				    try {
+				        var iframe = document.createElement("IFRAME");
+				        iframe.style.display = "none";
+				        iframe.setAttribute("src", 'data:text/plain,');
+				        document.documentElement.appendChild(iframe);
+				        var alertFrame = window.frames[0];
+				        var iwindow = alertFrame.window;
+				        if (iwindow == undefined) {
+				            iwindow = alertFrame.contentWindow;
+				        }
+				        iwindow.confirm(message);
+				        iframe.parentNode.removeChild(iframe);
+				        
+				        
+				    }
+				    catch (exc) {
+				        return wConfirm(message);
+				    }
+				} */ 
+				
+				if (window.confirm("请确认您的收货地址和手机?\n"+$('#address').val()+","+addr+"\n"+tel)) {
+					 var load = layer.load();
+						$.ajax({
+							url: '/account/saveAddress',
+							data: $('form').serialize(),
+							type: 'post',
+							dataType: 'json',
+							cache: false,
+							success: function(data){
+								layer.close(load);
+								if(data){
+									layer.msg('保存成功', {time: 2000}, function(){
+										if(type==41||type==43){
+											location.replace('/service/exchangeflower_new?type='+type+'&pid=' + getQueryString("pid"));
+										}else if(type==7){
+											 var search = window.location.search;
+											 search = search.substr(0, search.lastIndexOf("=")+1) + id;
+											 var tmp = search.lastIndexOf('&');
+											 var search2 = search.substr(14, tmp - 14);
+											 location.replace('/service/redPacketExchange/' + search2); 
+										}else if(type ==71){ //上面那个不敢改 加一个吧 
+											var id = getQueryString("id");
+											console.log(getQueryString("id"));
+											location.replace('/service/redPacketExchange/' + id); 
+											
+										}else if(queryString == ''){
+											location.replace('/account/address');
+										}else{
+											var isaddr = queryString.indexOf("addr")==-1?false:true;
+											if(isaddr){
+												location.replace('/service/chooseaddress?' + queryString);
+											}else{
+												location.replace('/service/buy?' + queryString);
+											}
+											
+										}
+									});
+								}else{
+									layer.msg('保存失败', {time: 2000});
+								}
+							}
+						});
+				} else {
+					window.close();
+				}
+			}
+			
+			//获取参数
+			function getQueryString(name) {
+				var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) {
+				return unescape(r[2]);
+				}
+				return null;
+				}
+			
+			// 送花人地址
+			function setGive(_obj){
+				var give = $(_obj).data('give');
+				if(give == 1){
+					$(_obj).data('give', 2);
+					$('#give').val(2);
+					$(_obj).addClass('address_selected');
+					$(_obj).find('img').get(0).src='/resource/flower/image/icon/012.png';
+					$(".address_add_3_b").hide();
+				}else{
+					$(_obj).data('give', 1);
+					$('#give').val(1);
+					$(_obj).removeClass('address_selected');
+					$(_obj).find('img').get(0).src='/resource/flower/image/icon/013.png';
+					$(".address_add_3_b").show();
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<form>
+			<input type="hidden" name="state" id="state">
+			<input type="hidden" name="give" value="1" id="give">
+			<div class="address_add_1">
+				<span>收货人</span><p><input type="text" name="name" placeholder="姓名" maxlength="20"/></p>
+			</div>
+			<div class="address_add_1">
+				<span>联系电话</span><p><input type="tel" name="tel" placeholder="收货人手机号或固话" maxlength="12"/></p>
+			</div>
+			<div class="address_add_1">
+				<span>所在地区</span>
+				<p>
+					<input  type="text" id="address" readonly="readonly" placeholder="选择省份&#12288;选择城市&#12288;选择区县"/>
+					<input type="hidden" name="area" id="addrvalue"/>
+				</p>
+			</div>
+			<div class="address_add_1">
+				<span>详细地址</span><p><input type="text" name="addr" placeholder="街道门牌信息" maxlength="60"/></p>
+			</div>
+			<!-- <div class="address_add_2">
+				<span class="address_add_2_a" onclick="setGive(this)" data-give="1"><i class="address_choose"><img src="/resource/flower/image/icon/013.png" /></i>存为领花人地址</span>
+			</div> -->
+			<div class="address_add_3">
+				<span class="address_add_3_a" onclick="saveAddress(0)">保存</span>
+				<span class="address_add_3_b" onclick="saveAddress(1)">设为默认地址</span>
+			</div>
+			</form>
+		</div>
+	</body>
+</html>

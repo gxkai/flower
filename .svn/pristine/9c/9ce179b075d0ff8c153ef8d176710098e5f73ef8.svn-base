@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.zhoubian{display: none;}
+			.none{display: none;}
+		</style>
+		<title>系统设置 - 弹框管理-弹框详情</title>
+	</head>
+	<body>
+		<article class="page-container">
+			<form class="form form-horizontal">
+				<input type="hidden" name="id" value="${layer.id}" id="v0">
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r"><span class="c-red">*</span>功能描述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v1" name="remark" value="${layer.remark}">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">展示的文字信息：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v2" name="content" value="${layer.content!}">
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">展示的图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="btn-upload form-group" style="width: calc(100% - 26px)">
+							<input class="input-text upload-url" type="text"  id="v3" value="${layer.img!}" readonly style="display:block;float:left;margin-right:5px;width:calc(100% - 116px)">
+							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+							<input type="file" multiple name="file" class="input-file">
+							<input type="hidden" name="img" class="pro-imgsrc">
+						</span>
+						<i class="Hui-iconfont f-20" title="预览"  style="cursor: pointer;" onclick="parent.showimgage('${layer.img!}')">&#xe695;</i>
+					</div>
+				</div>
+				
+
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">礼品ID号 ：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<span class="select-box" >
+						  	<select class="select" size="1" id="v4" name="fpid">
+						    	<option value="0" selected>--选择适商品类型--</option>
+						    	<#list giftList as gift>
+						    	<#if gift?? && gift.id==layer.fpid>
+						    	<option value=${gift.id} selected>${gift.name}</option>
+						    	<#else>
+						    	<option value=${gift.id}>${gift.name}</option>
+						    	</#if>
+						    	</#list>
+						  	</select>
+						</span>
+					</div>
+				</div>
+				
+
+				<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">状态0暂停 1启用：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="v5" name="state" value="${layer.state!}">
+					</div>
+				</div>
+				
+               <input type="button" onClick="save()" class="btn btn-primary btn-block mt-15" value="保存">
+			</form>
+		</article>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		
+		<script type="text/javascript">
+		$().ready(function(){
+			$('.input-file').on('change', function(){
+				var $proImg = $(this).siblings(".pro-imgsrc");
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					var base64 = e.target.result;
+					$proImg.val(base64);
+				};
+				reader.readAsDataURL(this.files[0]);
+				this.files = [];
+			});
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+		
+			function save(){
+				var id = $('#v0').val();
+			    var remark=$('#v1').val();
+			    var state=$('#v5').val();
+			   
+			    if(state!=0&&state!=1){
+			    	layer.tips('状态0暂停 1启用', '#v11', {tips: [1, '#34495E']});return;
+			    }
+
+				if($.trim(remark)==''){
+					layer.tips('请输入功能描述', '#v2', {tips: [1, '#34495E']});return;
+				}else if($.trim(remark)=='null' || $.trim(name)=='NULL'){
+					layer.tips('不能为NULL或者null', '#v2', {tips: [1, '#34495E']});return;
+				}
+				
+				
+				var lock = true;
+				
+				
+		 		if(lock){
+					lock = false;
+					var load = layer.load();
+					$.post('/manage/iframe/systom/EditLayer', $('form').serialize(), function(data){
+						layer.close(load);
+						if(data.result){
+							parent.refresh_iframe();
+							layer.msg('保存成功', {time: 1000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('保存失败', {time: 1000}, function(){
+								lock = true;
+							});
+						}
+					});
+				} 
+			}
+		</script>
+	</body>
+</html>

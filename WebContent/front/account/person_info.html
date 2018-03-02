@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.account.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.1/weui.min.css" />
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+
+<style type="text/css">
+.weui-cell__ft span {
+	padding: 5px;
+	font-size: 10px;
+	border-radius: 8px;
+	color: white;
+	background-color: #f36b93;
+}
+
+.weui-actionsheet {
+	width: 90%;
+	margin: 5%;
+	margin-bottom: 2%;
+	border-radius: 10px;
+}
+
+.weui-cell:before {
+	border-top: 0px solid #d9d9d9;
+}
+ .weui-actionsheet__menu {
+    border-radius: 10px;
+}
+.weui-actionsheet__action {
+    border-radius: 10px;
+} 
+.weui-actionsheet__cell {
+    font-weight:bold;
+}
+.weui-picker__action {
+    color: #e96388;
+    font-weight: bold;
+}
+</style>
+<title>我的资料</title>
+	</head>
+	<body>
+	
+		<div class="container">
+
+		<div class="weui-cells__title">小提示：请填写以下信息，全部完成送花籽哦！</div>
+		<div class="weui-cells">
+		
+           <!--  手机号 -->
+			<div class="weui-cell" style="border-bottom: 10px solid #EEE;">
+				<div class="weui-cell__bd">
+					<p>绑定手机&nbsp;&nbsp;&nbsp;<span style="font-size: 15px;color: #888888;">${tel!'未绑定'}</span></p>
+				</div>
+				
+				<#if tel??>
+				     <a class="weui-cell__ft"  href="/account/binding"><span>修改</span></a> 
+				<#else>
+				     <a class="weui-cell__ft"  href="/account/binding"><span>绑定</span></a> 
+				</#if>
+				
+			</div>
+			
+            <!-- 性别 -->
+			<a style="border-bottom: 3px solid #EEE;" class="weui-cell weui-cell_access" id="showIOSActionSheet">
+				<div class="weui-cell__bd">
+					<p>性别</p>
+				</div>
+				
+				<#if sex == 0>
+				     <div class="weui-cell__ft" id="showSex" style="font-size: 15px;">未填写</div>
+				<#elseif sex == 1>
+				     <div class="weui-cell__ft" id="showSex" style="font-size: 15px;">美女</div>
+				<#else>
+				     <div class="weui-cell__ft" id="showSex" style="font-size: 15px;">帅哥</div>
+				</#if>
+				
+				<input hidden="YES" name="sex" value="${sex}">
+			</a>
+			
+			<!-- 生日 -->
+			<a class="weui-cell weui-cell_access" id="showDatePicker">
+				<div class="weui-cell__bd">
+					<p>生日</p>
+				</div>
+				<div class="weui-cell__ft" id="showBirthday" style="font-size: 15px;">${birthday!'未填写'}</div>
+				<input hidden="YES" name="birthday" value="${birthday!'未填写'}">
+			</a>
+            
+		</div>
+		
+		<p class="binding" style="display: none;" id="saveInfo">
+			    <span class="binding_over" onclick="savePersonInfo(this)" data-lock="0">保存修改</span>
+		</p>
+		
+	</div>
+	 <!--BEGIN actionSheet-->
+    <div>
+        <div class="weui-mask" id="iosMask" style="display: none"></div>
+        <div class="weui-actionsheet" id="iosActionsheet">
+            <div class="weui-actionsheet__menu">
+                <div class="weui-actionsheet__cell" style="color: #e96388">性别修改</div>
+                <div class="weui-actionsheet__cell" id="selectWoman" style="color: #0099FF;">美女</div>
+                <div class="weui-actionsheet__cell" id="selectMan" style="color: #0099FF;">帅哥</div>
+            </div>
+            <div class="weui-actionsheet__action">
+                <div class="weui-actionsheet__cell" id="iosActionsheetCancel" style="color: #0099FF;">取消</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+	 /* 日期选择 */
+	 $('#showDatePicker').on('click', function (){
+		    
+		   /* 生日不可修改限制  */
+		   /* var msg = $("input[name='birthday']").val();
+		   if (msg != "未填写") {
+			   layer.msg(" 生日保存后不可修改哦！" , {time: 2000});
+			   return;
+		   } */
+		   
+	        weui.datePicker({
+	            start: 1960,
+	            end: new Date().getFullYear(),
+	            /* 滚动日期响应事件 */
+	           /*  onChange: function (result) {
+	                console.log(result); 
+	            }, */
+	            onConfirm: function (result) {
+	            	
+	            	var birthday = result; 
+	                $("input[name='birthday']").val(birthday);
+	                /* 转换日期样式 */
+				
+	            	$("#showBirthday").text(birthday);
+	                $("#saveInfo").css('display','block'); 
+	
+	            	//询问框
+	            	/* layer.confirm('生日保存后不可修改 确定保存吗？', {
+	            	  btn: ['确定','取消'] 
+	            	}, function(){
+	            		// 关闭对话框  执行后续操作 
+	            		layer.closeAll('dialog');
+	      
+	            	    var birthday = result; 
+		                $("input[name='birthday']").val(birthday);
+		                // 转换日期样式 
+					
+		            	$("#showBirthday").text(birthday);
+		                $("#saveInfo").css('display','block'); 
+		              
+	            	}, function(){            		
+	            	});	 */            	
+	            	  	
+	            }
+	        });
+	    });
+	/* 性别选择 */
+    $(function(){
+    	
+        var $iosActionsheet = $('#iosActionsheet');
+        var $iosMask = $('#iosMask');
+        
+        function hideActionSheet() {
+            $iosActionsheet.removeClass('weui-actionsheet_toggle');
+            $iosMask.fadeOut(200);
+        } 
+        
+        $iosMask.on('click', hideActionSheet);
+        $('#iosActionsheetCancel').on('click', hideActionSheet);
+        $("#showIOSActionSheet").on("click", function(){
+            $iosActionsheet.addClass('weui-actionsheet_toggle');
+            $iosMask.fadeIn(200);
+        });
+        
+          /* 选择美女 */
+	    $('#selectWoman').on('click', function() {
+			hideActionSheet();
+			$("#showSex").text("美女");
+			$("input[name='sex']").val(1);
+			
+			$("#saveInfo").css('display','block'); 
+			
+		});
+        /* 选择帅哥 */
+		$('#selectMan').on('click', function() {
+			hideActionSheet();
+			$("#showSex").text("帅哥");
+			$("input[name='sex']").val(2);
+			
+			$("#saveInfo").css('display','block'); 
+			
+		});
+	});
+</script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+    
+	</body>
+</html>

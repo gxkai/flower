@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.css" />
+		
+		<title>定制花束</title>
+		
+		<style type="text/css">
+			.vase_1{
+			    float: left;
+			    box-sizing: border-box;
+			    padding-left: 10px;
+			    font-size: 17px;
+			    line-height: 30px;
+			    color: #48505B;
+			}
+			.vase_2{
+			    font-size: 14px;
+				line-height: 30px;
+				float: left;
+				margin-left: 12px;
+				color: #A1A4A9;
+			}
+			.gray{
+				background-color: #CCC;
+				color: #666 !important;
+			}
+			
+			.page {
+				margin: 10px;	
+			}
+			.weui-grid {
+    			padding: 0px;
+    			width: 30%;
+    		    margin: 1.5%;
+			}
+			.weui-grids:before {
+    			border: 0px; 
+			}
+			.weui-grids:after {
+    		    border: 0px; 
+			}
+			.weui-grid__icon::after {
+				content: "";
+				display: block;
+				padding-top: 100%;
+			}
+			.weui-grid__icon {
+			    background-size:cover;
+    			margin: 0 auto;
+    			width: 100%;
+    			height: 100%;
+    			border-radius: 2px;
+			}
+			.weui-grid__label {
+    			color: white;
+    			background-color: gray;
+    			font-size: 12px;
+    			position: absolute;
+    			bottom: 0px;
+    			width: 100%;
+    			opacity: 0.8;
+			}
+		    .weui-cells {
+		    	float: right;
+		    	margin-top: 0px;
+		        background-color: transparent;
+		        border-radius: 10px;
+			}
+			.weui-cells:after {
+    			border-bottom: 0px solid #e5e5e5;
+			}
+			.weui-cell {
+    			 padding:0px;
+			}
+			.weui-cells_checkbox .weui-cell__hd {
+    			padding-right: 0;
+			}
+			
+			.weui-dialog__ft img{
+				width: 100%;
+				height: 100%;
+			}
+			
+			.weui-dialog {
+			    width: 65%;
+    			height: 90%;
+    			background-color: transparent; 
+			}
+			.dialog_close {
+            	width: 35px;
+    			height: 35px;
+   				margin-top: 10%;
+    			background-color: transparent; 
+            }
+            
+            /* 加购 部分  */
+			.add {
+				float: left;
+				padding-left: 10px;
+    			padding-top: 5px;
+			}
+			.add_t {
+    			font-size: 17px;
+    			color: #48505B;
+			}
+			.add_list span:nth-child(1){
+				padding-top: 5px;
+    			padding-left: 5px;
+				font-size: 13px;
+				color: #666;
+			}
+			.add_list span:nth-child(2){
+				padding-top: 5px;
+				color: #f36b93;
+				font-size: 13px;
+			}
+			.add_list span:nth-child(3){
+				display: table;
+    			padding: 8px;
+    			text-align: center;
+    			border-radius: 4px;
+    			font-size: 14px;
+    			border: 1px solid #ccc;
+    			color: #666;
+			}
+			.addselect_1{
+				background-color: #E96388;
+				color: white!important;
+				/* border: 0!important; */
+			}
+		</style>
+		
+		
+		<script type="text/javascript">
+			$().ready(function(){
+				wxconfig(window.location);
+				wx.ready(function(){
+					wx.onMenuShareTimeline({
+						title: '${flower.shareTitle!}',
+					    desc: '${flower.shareDes!}', // 分享描述
+						link: 'http://' +window.location.host+window.location.pathname,
+						imgUrl: 'http://'+window.location.host+'${flower.imgurl}'
+					});
+					wx.onMenuShareAppMessage({
+						title: '${flower.shareTitle!}',
+					    desc: '${flower.shareDes!}', // 分享描述
+					    link: 'http://' +window.location.host+window.location.pathname, // 分享链接
+					    imgUrl: 'http://'+window.location.host+'${flower.imgurl}', // 分享图标
+					    type: 'link', // 分享类型,music、video或link，不填默认为link
+					    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					    success: function () {
+					        // 用户确认分享后执行的回调函数
+					    },
+					    cancel: function () {
+					        // 用户取消分享后执行的回调函数
+					    }
+					});
+				});
+			});
+		</script>
+		
+		<script type="text/javascript">
+	        var pid = '${flower.id!}';
+			var dmlj = '${dmlj!''}';	// 双品多买立减
+			var activitylist = ${activitylist};	// 购满优惠活动
+			
+			$().ready(function(){
+				
+				vaseinit('vaselist', 'vaseselect');
+				upordown('f_u_d');
+				
+				// 选择鲜花
+				$('.weui-grids input').click(function(event){	
+					event.stopPropagation();
+					if(this.checked == false) {
+						this.checked == true;
+					}else {
+						var row = this.id.substring(0,1); //行
+						var column = this.id.substring(2,3); //列
+					
+						var str = '[id^="'+row+'_"]';
+						var row_input = $(str); 
+						
+						for (var i = 0; i < 3; i++) {	
+							row_input.get(i).checked = false;	
+						}
+						this.checked = true;				
+					    
+						// 用户鲜花超过两种
+						var input_all = $('.weui-grids input');
+						var flowerNum = 0;
+						for(var i = 0; i < 12; i++) {
+							if(input_all.get(i).checked == true){	
+								flowerNum++;
+							}
+						}
+					
+						if(flowerNum == 1) {
+							$('.pro_type span:first-child').click();
+						}
+						if(flowerNum > 1) {
+							$('.pro_type span:last-child').click();
+						}
+						
+					}						
+					
+				});
+				
+				//  选择鲜花  屏蔽 父元素响应 点击事件
+				$('[id^="selectFlo_"]').click(function(event){	
+					event.stopPropagation();
+				});
+				
+				// 订阅 次数
+				$('.pro_type span').click(function(){
+					
+					var gindex = $(this).data("index");
+					var i;
+					if(gindex == 1){
+						i = 0;
+						// 用户鲜花超过两种
+						var input_all = $('.weui-grids input');
+						var flowerNum = 0;
+						for(var j = 0; j < 12; j++) {
+							if(input_all.get(j).checked == true){	
+								flowerNum++;
+							}
+						}
+						if(flowerNum > 1) {
+							layer.msg("体验一次只能选择一种鲜花哦！" , {time: 2000});
+							return;
+						}
+						
+					}else if(gindex == 4){
+						i = 1;
+					}else{
+						i = 2;
+					}
+					
+					$('.giveselect').removeClass('giveselect');
+					$(this).addClass('giveselect');
+					
+					var yhprice = 0;
+					if(dmlj!=''){
+						yhprice = dmlj.split('_')[i] * 1;
+					}
+					
+					$('#yhprice').remove();
+					var total_price;
+					if($('.pro_type_vase span').hasClass('vaseselect_1')){
+						total_price = $('#price_now').data('price')*gindex + $('.pro_type_vase .vaseselect_1').data("price");
+					}else{
+						total_price = $('#price_now').data('price')*gindex;
+					}
+					var yuanjia = total_price;
+					if($('.checkclass').data('isbuy') == 0){
+						var vaseprice = $('.vaseselect').parent('span').data('price');
+						total_price += vaseprice;
+						yuanjia = total_price;
+					}
+					total_price -= yhprice;
+					if(activitylist.length > 0){
+						for(var ai=0;ai<activitylist.length;ai++){
+							if(total_price >= activitylist[0]['money']){
+								yhprice += activitylist[0]['benefit'];
+								total_price -= activitylist[0]['benefit'];
+								break;
+							}
+						}
+					}
+					$('#price_now').text(total_price.toFixed(2));
+					if(yhprice > 0){
+						$('.pro_2').append('<span id="yhprice">(原价:&yen;' + yuanjia.toFixed(2) + ')</span>');
+				   	}
+					
+				});
+				
+			    // 花瓶
+				$('.pro_type_vase span').click(function(){
+					
+					var gindex = $('.pro_type .giveselect').data("index");
+					if(gindex != null){
+						var i;
+						if(gindex == 1){
+							i = 0;
+						}else if(gindex == 4){
+							i = 1;
+						}else{
+							i = 2;
+						}
+						var yhprice = 0;
+						if(dmlj!=''){
+							yhprice = dmlj.split('_')[i] * 1;
+						}
+						if($(this).hasClass('gray')){
+							return;
+						}else{
+							if($(this).hasClass('vaseselect_1')){
+								$(this).removeClass('vaseselect_1');
+								var total_price = $('#price_now').data('price')*gindex;
+								total_price -= yhprice;
+								$('#price_now').text(total_price.toFixed(2));
+							}else{
+			 					$('.vaseselect_1').removeClass('vaseselect_1');
+								$(this).addClass('vaseselect_1');
+								var price_vase = $('.pro_type_vase .vaseselect_1').data("price");
+								var total_price = $('#price_now').data('price')*gindex;
+								total_price -= yhprice;
+								total_price = total_price + price_vase;
+								$('#price_now').text(total_price.toFixed(2));
+							}
+						}
+						
+					}else{
+						if($(this).hasClass('gray')){
+							return;
+						}else{
+							if($(this).hasClass('vaseselect_1')){
+								$(this).removeClass('vaseselect_1');
+							}else{
+			 					$('.vaseselect_1').removeClass('vaseselect_1');
+								$(this).addClass('vaseselect_1');
+							}
+						}
+						
+					}
+				});
+			});
+			
+			function selectcycle(_obj){
+				$('#cycle').val($(_obj).val());
+			}
+			
+			function customcycle(num){
+				var lineW = $('.pro_4_1_a').width();
+				var priceArr = [1,2,4,6,12,26,52];
+				var i = $('.pro_4_2_2').data('index');
+				i += num
+				if(i>=0 && i<=6){
+					$('.pro_4_2_2').text(priceArr[i]);
+					$('.pro_4_2_2').data('index', i);
+					$('#slider').css("left",((lineW/7)*(i+1))-(lineW/14 + 6));
+					var yhprice = 0;
+					
+					if(dmlj!=''){
+						yhprice = dmlj.split('_')[i] * 1;
+					}
+					
+					$('#yhprice').remove();
+					var total_price = $('#price_now').data('price')*priceArr[i];
+					var yuanjia = total_price;
+					if($('.checkclass').data('isbuy') == 0){
+						var vaseprice = $('.vaseselect').parent('span').data('price');
+						total_price += vaseprice;
+						yuanjia = total_price;
+					}
+					total_price -= yhprice;
+					if(activitylist.length > 0){
+						for(var ai=0;ai<activitylist.length;ai++){
+							if(total_price >= activitylist[0]['money']){
+								yhprice += activitylist[0]['benefit'];
+								total_price -= activitylist[0]['benefit'];
+								break;
+							}
+						}
+					}
+					$('#price_now').text(total_price.toFixed(2));
+					if(yhprice > 0){
+						$('.pro_2').append('<span id="yhprice">(原价:&yen;' + yuanjia.toFixed(2) + ')</span>');
+					}
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+	
+<div class="page">
+
+    <!-- <div class="page__hd">
+        <h1 class="page__title">Grid</h1>
+        <p class="page__desc">选择花材</p>
+    </div> -->
+    
+    <div class="weui-grids">
+       
+		<#list flowerList as flower>		
+        <a id="showIntro_${flower.id!}" class="weui-grid">
+        
+            <div class="weui-grid__icon" style="background-image: url('${flower.imgurl!}')">
+	
+				<div id="selectFlo_${flower.id!}" class="weui-cells weui-cells_checkbox"> 
+					<label class="weui-cell weui-check__label" for="${flower.x!}_${flower.y!}">
+						<div class="weui-cell__hd">
+							<input type="checkbox" class="weui-check" name="ck_${flower.x!}_${flower.y!}" id="${flower.x!}_${flower.y!}" value="${flower.id!}"> 
+							<i class="weui-icon-checked"></i>
+						</div>
+					</label> 
+				</div> 
+			    <p class="weui-grid__label">${flower.name!}</p>
+			    
+            </div>
+                
+        </a>
+      	</#list>
+      
+    </div>
+</div>
+	    
+	    
+		<div class="container pb-60">
+			<!-- 订阅次数 -->
+			<div class="pro_3">
+				<span>订阅次数</span><span style="display: none;">(多加一次，价格立减)</span>
+			</div>
+			<div class="pro_type">
+				<span data-id="1" data-index="1">体验一次</span>
+				<span data-id="2" data-index="4">订阅四次</span>
+			</div>
+		
+		    <!-- 商品信息 -->
+			<div class="pro_1">
+				<div class="pro_1_1">
+					<!-- <span>${flower.name!}</span> -->
+					<span>定制鲜花</span>
+					<span>${flower.describe!}</span>
+				</div>
+				<div class="pro_1_2" style="display: none;">分享</div>
+			</div>
+			<!-- 商品价格 -->
+			<div class="pro_2">
+				<span>&yen;</span>
+				<span id="price_now" data-price="${flower.price}">${flower.price?string('0.00')}</span>
+			</div>
+			
+			
+			<span class="vase_1">花瓶</span><#if isbuy==0><span class="vase_2">(首单送花瓶，无需购买)</span></#if>
+			<div class="pro_type_vase">
+				<#list vaselist as vase>
+					<#if vase.state == 2>
+					<span data-vase="${vase.id!}" data-state="${vase.state!}" data-price="${vase.price!}" class="gray">${vase.name}</span>
+					<#else>
+					<span data-vase="${vase.id!}" data-state="${vase.state!}" data-price="${vase.price!}">${vase.name}</span>
+					</#if>				
+				</#list>
+			</div>
+			
+			<div class="pro_class" style="display: none;">
+				<span>花瓶</span><#if isbuy==0><span>(首单送花瓶，无需购买)</span></#if>
+				<p><a data-isbuy="0">购买</a><a class="checkclass" data-isbuy="1">不购买</a></p>
+			</div>
+			<div class="pro_5" style="display: none;">
+				<span>请选择一款您喜欢的花瓶</span>
+				<#list vaselist as vase>
+				<span class="vaselist" data-vase="${vase.id!}" data-price="${vase.price!}">
+					<img src="${vase.imgurl!}" />
+					<span style="font-size: 13px;font-weight: bolder;color: #E96388;">&yen;${vase.price?string('0.00')}</span>
+				</span>
+				</#list>
+			</div>
+			
+			<!-- 加购-->
+			<div class="add">
+				<span class="add_t">随套餐优惠换购</span>
+				
+				<#list addlist as add>
+					<div class="add_list">
+						<span>${add.name!}：</span><span>${add.describe2!}</span>
+						<span data-add="${add.id!}" data-state="${add.state!}" data-price="${add.price!}" id="additem_${add.id!}">${add.describe!}</span>
+					</div>
+				</#list>
+				<input type="hidden" name="sumPrice" value = '0'>
+				
+			</div>
+			
+			<!-- F1 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/1F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo1!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F2 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/2F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo2!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F3 -->
+			<div class="pro_f">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/3F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo3!}" width="100%"/>
+				</div>
+			</div>
+			<!-- F4 -->
+			<div class="pro_f" style="display: none;">
+				<div class="pro_f_1">
+					<img src="/resource/flower/image/4F.png" class="pro_floor"/>
+					<span class="f_u_d" data-state="0"><img src="/resource/flower/image/down.png"/></span>
+				</div>
+				<div class="pro_f_2">
+					<img src="${flower.itinfo4!}" width="100%"/>
+				</div>
+			</div>
+
+            <!-- 购买 -->
+			<div class="gobuy">
+				<a href="/index"></a>
+				<a onclick="gobuy()">立即购买</a>
+			</div>
+			
+		</div>
+		
+		<form action="/service/buy" method="get" style="display: none;">
+			<input type="hidden" name="type" value="6">
+			<input type="hidden" name="pid" value="${flower.id!}">
+			<input type="hidden" name="cycle">
+			<input type="hidden" name="vase">
+			<input type="hidden" name="fpid">
+			<input type="hidden" name="add">
+		</form>
+		
+		<!-- 商品详情  弹窗  -->
+		<div class="js_dialog" id="iosDialog1" style="display: none;">
+            <div class="weui-mask"></div>
+            
+            <div class="weui-dialog">
+                <div class="weui-dialog__ft">
+                	<img class="floDetail" src="" alt="sorry 服务器的图片找不见了！">
+                </div>
+                <img class="dialog_close" onclick="closeLog();" src="/resource/flower/image/cash_close.png">
+            </div>
+            
+		</div>
+		
+		<script type="text/javascript">
+		
+		//加购商品 选择
+   		$('[id^="additem_"]').click(function(event){	
+	
+			var gindex = $('.pro_type .giveselect').data("index");
+			if(gindex != null){ // 是否选择 订阅次数
+				var price_vase = $('.pro_type_vase .vaseselect_1').data("price");
+		
+				if($(this).hasClass('addselect_1')){
+						
+					$(this).removeClass('addselect_1');
+						
+					var tmp = $('input[name="sumPrice"]').val();
+					var addold = parseInt(tmp); // 转成 整形相加
+						
+					var price_add = $(this).data("price");
+					var addnow = addold - price_add
+					$('input[name="sumPrice"]').val(addnow);
+					
+					// 如果购买花瓶 加上花瓶的价格
+					if(price_vase == null){
+						var total_price = $('#price_now').data('price')*gindex + addnow;
+					}else {
+						var total_price = $('#price_now').data('price')*gindex + addnow + price_vase;
+					}
+					
+					$('#price_now').text(total_price.toFixed(2));
+				}else{
+						
+					$(this).addClass('addselect_1');
+						
+					var tmp = $('input[name="sumPrice"]').val();
+					var addold = parseInt(tmp); // 转成 整形相加
+						
+					var price_add = $(this).data("price");
+					var addnow = addold + price_add
+						
+					$('input[name="sumPrice"]').val(addnow);
+						
+								
+					var total_price = $('#price_now').data('price')*gindex;
+					
+					// 如果购买花瓶 加上花瓶的价格
+					if(price_vase == null){
+						total_price = total_price + addnow ;
+					}else {
+						total_price = total_price + addnow + price_vase;
+					}
+						
+					$('#price_now').text(total_price.toFixed(2)); 
+				}
+				
+				
+			}else{
+				layer.msg("请选择订阅次数哦！" , {time: 2000});
+				return;
+		 	}
+	  	}); 
+		    // 展示 花材
+		    $('[id^="showIntro_"]').click(function(event){	
+				var id = this.id;
+				idArr = id.split('_');
+				proId = idArr[1];
+				
+				var load = layer.load();
+				$.post('/getIntroImg', {'proId':proId}, function(data){
+					layer.close(load);
+					if(data.result){
+						console.log(data.itinfo4);
+						
+						$(".floDetail").attr('src',data.itinfo4);
+						document.getElementById('iosDialog1').style.display = 'block';
+					}else {
+						layer.msg("加载失败了，请检查一下网络哦！" , {time: 2000});
+					}
+					
+				});
+				
+			}); 
+		    
+			function gobuy(){
+				// 订阅次数
+				var cycle = $('.pro_type .giveselect').data("index");
+				if(cycle == null){
+					layer.msg("请选择订阅次数！！！" , {time: 2000});
+					return;
+				}
+				// 花瓶
+				$('input[name="cycle"]').val(cycle);
+				if($('.pro_type_vase>span').hasClass('vaseselect_1')){
+					var vase = $('.pro_type_vase .vaseselect_1').data("vase");
+					$('input[name="vase"]').val(vase);
+				}else{
+					$('input[name="vase"]').val('');
+				}
+				
+				// 花材
+				var input_all = $('.weui-grids input');
+				var pidStr = "";
+				var flowerNum = 0;
+				for(var i = 0; i < 12; i++) {
+					if(input_all.get(i).checked == true){						
+						var inputId = input_all.get(i).value;
+						var tmp  = inputId + '-';
+						pidStr += tmp;
+						flowerNum++;
+					}
+				}
+				if(cycle == 4 && flowerNum < 4) {
+					layer.msg("您可以选择四种鲜花哦！" , {time: 2000});
+					return;
+				}
+				if(flowerNum < 1) {
+					layer.msg("您至少要选择一种鲜花哦！" , {time: 2000});
+					return;
+				}
+				
+				$('input[name="fpid"]').val(pidStr);
+				
+				// 加购 商品
+				var adds = "";
+				$(".addselect_1").each(function(){
+					if(adds == ""){
+						adds = adds + $(this).data("add");
+					}else {
+						adds = adds + "-" + $(this).data("add");
+					}
+             	});
+				console.log(adds);
+				$('input[name="add"]').val(adds);
+				
+			    $('form').submit(); 
+			}
+			
+			function closeLog () {
+				document.getElementById('iosDialog1').style.display = 'none';
+			}
+		</script>
+	</body>
+</html>

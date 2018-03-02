@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="UTF-8">
+		
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.cookie.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		
+		<title>小美商城</title>
+		<script type="text/javascript">
+          window.onload = function (){
+    	     $.cookie('isChild', 'y',{path: "/account/center"}); 
+         }
+        </script>
+	</head>
+	
+	<style type="text/css">
+		/*页面容器*/
+		.container{
+			 /* border: 1px red solid;  */
+			 margin-left:8px;
+		}
+		label{
+		 	text-align: center;
+		 	display:block;
+		 	font-size:12px;
+		 	margin-top:10px;
+		}
+		.flower_goods{
+			/* border: 1px red solid; */
+		}
+		.vase_goods{
+			/* border: 1px red solid; */
+		}
+		.lace_goods{
+			/* border: 1px red solid; */
+		}
+		.goods{
+			width: 48%;
+			display:inline-block;
+			margin-top:10px;
+			box-sizing: border-box; 
+			/* background:#fcfcfa; */
+			background:#FFFAFA;
+			/* border:1px #ccc solid; */
+			/* margin:2%; */
+		}
+		.goods img{
+			width:100%;
+		}
+		.goods p{
+			width:53%;
+			font-size:10px;
+			font-family: "微软雅黑";
+			margin-top:2px;
+			padding-left:2px;
+			float: left;
+			overflow: hidden
+		}
+		.goods input[type=button]{
+			float:right;
+			/* width:40%; */
+			width:60px;
+			height:30px;
+			color:white;
+			border: none;
+			background:#eb6877;
+			border-radius:4px;
+    	    -webkit-border-radius: 4px;
+		}
+		
+		.pro_type{
+			width: 100%;
+		 	float: left; 
+		 	padding-right: 10px;
+		}
+		.goods span{
+			width: calc(100% / 3 - 5px);
+			height: 40px;
+			float: right;
+			text-align: center;
+			box-sizing: border-box;
+			padding: 4px 3px;
+			color: white;
+			line-height: 30px;
+			font-size: 13px;
+			overflow: hidden; 
+			text-overflow:ellipsis;
+			border-radius: 3px;
+			border: 1px solid #ccc;
+			margin-top:4px;
+			margin-left:3px;
+			margin-right:1px;
+			background:#eb6877;
+			font-family:"微软雅黑";
+			/* margin-left:8px; */
+		}
+		body{
+			margin:0;
+			padding:0;
+		}
+		.body_top{
+			width:100%;
+			height: 45px;
+			background:#eee;
+			font-size:12px;
+			font-family:"微软雅黑";
+			
+		}
+		.body_top a{
+			text-decoration: none;
+			color:#aeaeae;
+		}
+		.body_top span{
+			margin-left:5px;
+			color:#aeaeae;
+			line-height:45px;   
+  			overflow:hidden;  
+  			/* border: 1px red solid;  */
+  			ertical-align:middle;
+		}
+		.body_top img{
+			width:13px;
+			margin:0 2px;
+			/* line-height:45px; */
+			/* border:1px black solid; */
+		}
+	</style>
+	
+	<body>
+		<div class="body_top" >
+			<span>兑换商品不计入首单！</span>
+			<span c style="float:right;padding-right:10px;">花籽 <img src="/resource/flower/image/icon/duihuan_hz.png"/>${seeds!} 
+			<a href="flowerseed"><!-- <img src="/resource/flower/image/icon/duihuan_yw.png"/> -->
+			我想要花籽
+			</span></a>
+		</div>
+		<div id="" class="container" >
+			
+		
+			<div class="flower_goods">
+			
+				<#if (flowerlist?size>0)>
+				<label> ————— 鲜花  ————— </label>
+				<#list flowerlist as flower>
+					<div class="goods">
+						<img src="${flower.imgurl!}" id ="pic" data-id="${flower.id!}"/>
+						<p>${flower.name}</br>
+						   ${flower.describe} </br> 
+						   ${flower.describe2}</br>
+						       优惠花籽: ${yh_seeds}粒
+						</p>
+						<span  id="flower_${flower_index!}"  data-flowerid="${flower.id!}"  data-flowertype="${flower.type!}" style="width:60px;">兑换</span>
+					</div>
+				</#list>
+				</#if>
+			</div>
+			
+			<div class="vase_goods">
+				<#if (vaselist?size>0)>
+			    <label> ————— 花瓶  ————— </label>
+				<#list vaselist as vase>
+						<div class="goods">
+							<img src="${vase.imgurl!}" id ="pic" data-id="${vase.id!}"/>
+							<p>
+							${vase.name!}</br> 
+							${vase.describe!} </br> 
+							${vase.describe2}</br>
+							 优惠花籽: ${yh_seeds}粒
+							</p>
+							<span  id="vase_${vase_index!}"  data-vaseid="${vase.id!}" data-vasetype="${vase.type!}" style="width:60px;">兑换</span>
+						</div>
+					</#list>
+				</#if>	
+			</div>
+			
+			<div class="lace_goods">
+				<#if (lacelist?size>0)>
+			 	<label> ————— 花边好物  ————— </label>
+				<#list lacelist as lace>
+						<div class="goods">
+							<img src="${lace.imgurl!}" id ="pic" data-id="${lace.id!}"/>	
+							<p>
+							${lace.name}</br> 
+							${lace.describe} </br> 
+							${lace.describe2}</br>
+							 优惠花籽: ${yh_seeds}粒
+							</p>
+							<span id="lace_${lace_index!}"  data-laceid="${lace.id!}" data-lacetype="${lace.type!}" style="width:60px;">兑换</span>
+						</div>
+					</#list>
+				</#if>
+			</div>
+		</div>
+		
+		
+		<script type="text/javascript">
+			
+			$('[id^="pic"]').click(function(event){
+				var id = $(this).data("id");
+				location.replace('/account/seedgoodshow/' + id);
+			})
+			
+	 		$('[id^="flower_"]').click(function(event){
+				var flowerid = $(this).data("flowerid");
+				var type=$(this).data("flowertype");
+				$.ajax({
+					url: '/service/exchangevalid_new/'+flowerid, 
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if(data){
+							location.replace('/service/exchangeflower_new?type='+type+'&pid=' + flowerid); 
+						}else{
+							layer.msg('您的花籽不足,无法兑换', {time: 2000});return;
+						}
+					}
+				});		
+				
+			})
+	
+			$('[id^="vase_"]').click(function(event){
+				var vaseid = $(this).data("vaseid");
+				var type=$(this).data("vasetype");
+				$.ajax({
+					url: '/service/exchangevalid_new/'+vaseid, 
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if(data){
+				location.replace('/service/exchangeflower_new?type='+type+'&pid=' + vaseid);
+						}else{
+							layer.msg('您的花籽不足,无法兑换', {time: 2000});return;
+						}
+					}
+				});		
+				
+			})
+	
+			$('[id^="lace_"]').click(function(event){
+				var laceid = $(this).data("laceid");
+				var type=$(this).data("lacetype");
+				$.ajax({
+					url: '/service/exchangevalid_new/'+laceid, 
+					data: $('form').serialize(),
+					type: 'post',
+					dataType: 'json',
+					cache: false,
+					success: function(data){
+						if(data){
+				location.replace('/service/exchangeflower_new?type='+type+'&pid=' + laceid);
+						}else{
+							layer.msg('您的花籽不足,无法兑换', {time: 2000});return;
+						}
+					}
+				});	
+				
+			}) 
+		</script>
+		
+	</body>
+</html>

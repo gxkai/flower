@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/pintuan.css" />
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<title>闺蜜团</title>
+		<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+	</head>
+	<body>
+		<div class="group" >
+		<#if grouplist ??>
+			<#list grouplist as group>
+				<div class="group_list">
+				<!-- 头像 -->
+				<div style="width:12%;padding-top:3px;padding-left:3px"><img src="${group.headimg!}"/></div>
+				
+				<!-- 昵称 -->
+				<span>
+				${group.nick!} 开团 <br/>
+				仅差${group.needCount - group.hadCount}人
+				</span>
+				
+				<!-- 凑团 -->
+				<#if group.isIn==1>
+				   <button class="group_btn1" data-id="${group.ptNo!}" >已参团</button>
+				<#else>
+				   <button class="group_btn1" data-id="${group.ptNo!}" >凑团</button>
+				</#if>
+				
+				</div>
+			</#list> 
+		 </#if>
+		</div>
+		
+		<script type="text/javascript">
+			
+			//凑团 			
+			$(function(){
+				$('.group_btn1').click(function(){
+					window.location.href = '/account/groupDetail/'+ $(this).data("id") ; 
+				})
+			})
+			
+		   /*  function tojoinGroup(){
+		    	alert($(this).data('ptNo'))
+		    	// window.location.href = 'groupDetail/'+ $(this).data('ptNo') ; 
+		    } */
+		
+		</script>
+		
+	</body>
+</html>

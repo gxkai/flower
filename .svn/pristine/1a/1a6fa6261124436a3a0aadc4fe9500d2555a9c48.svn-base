@@ -1,0 +1,131 @@
+@CHARSET "UTF-8";
+		body{
+			padding: 0;
+			margin: 0;
+			/*border: 1px red solid;*/
+		}
+		.container{
+			width: 100%;
+			margin-bottom:100px ;
+		}
+		.header{
+			width: 95%;
+			margin: 5px auto;
+		}
+		.header img{
+			width: 100%;
+			border-radius: 5px;
+		}
+		
+		.title_div{
+			display: flex;align-items: center;
+			padding: 5px 0px 5px 25px;
+			font-family: "微软雅黑";
+			font-size: 14px;
+			margin-top: 5px;
+		}
+		
+		.content{
+			width: 95%;
+			margin: 5px auto;
+			/*border: 1px yellow solid;*/
+			display: flex;
+		  	flex-flow: row wrap;
+		  	align-content: flex-start;
+		}
+		
+		.goods{
+			width: 95%;
+			margin: 5px auto;
+			/*border: 1px yellow solid;*/
+			
+			display: flex;
+			flex-flow: row wrap;
+			align-content: flex-start;
+		}
+		
+		/* .good_div{
+			flex: 0 0 45%;
+			margin-right: 2.5%;
+			margin-top: 3.5%;
+			border-radius: 5px;
+			border: 0.1px #ccc solid;
+		
+		} */
+		/* .good_info{
+			width:100%;
+			line-height: 2em;
+			height: 2em;
+			font-family: "微软雅黑";
+			
+			display: flex;
+  			align-items: center;
+		} */
+		/* .good_span{
+			font-size: 14px;
+			font-weight: 300;
+		} */
+		
+		
+		
+		.good_btns{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.sub_btn,.add_btn,.num_show{
+			width: 33%;
+			height: 3.5em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.sub_btn,.add_btn{
+			background: #fbfbfb;
+			color: #eb6876;
+			font-weight: 600;
+		}
+		
+		.footer{
+			width: 100%;
+			border-top: 1px #f9f9f9 solid;
+			position: fixed;
+			z-index: 100;
+			bottom: 0;
+  			display: flex;
+  			justify-content: center;
+ 			align-items: center;
+ 			background: white;
+		}
+		.span_btn{
+			margin: 15px auto;
+			width: 80%;
+			height: 40px;
+			float: left;
+			text-align: center;
+			box-sizing: border-box;
+			padding: 4px 3px;
+			color: white;
+			background: #eb6876;
+			line-height: 30px;
+			font-size: 13px;
+			overflow: hidden; 
+			text-overflow:ellipsis;
+			border-radius: 5px;
+			outline: none;
+		}
+		
+		.text_div{
+			width: 90%;
+			margin: 0 auto;
+			height: 2.5em;
+			border: 1px #ccc solid;
+			padding: 5px;
+			outline: none;
+			word-wrap: break-word;
+		    overflow-x: hidden;
+		    overflow-y: auto;
+		    font-family:"微软雅黑";
+		    font-size:12px;
+		}

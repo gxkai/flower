@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>系统设置 - 数据字典</title>
+		<style>
+			.area_ul{display: table;}
+			.area_ul li{display: table;padding: 5px;cursor: pointer;position: relative;}
+			.areadiv{width:200px;height:30px;border-bottom: 1px solid #EEE;border-left: 3px solid #EEE;padding-left: 4px;float: left;}
+			.area_ul span{width: 160px;height: 100%;float: left;line-height: 30px;}
+			.postion{position: absolute;left: 217px;top: 0;}
+		</style>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统设置 <span class="c-gray en">&gt;</span> 地区管理<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="area_add()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加地区</a></span> <span class="r" style="line-height:31px;">共有数据：<strong>${arealist?size}</strong> 条</span> </div>
+			<div class="mt-10">
+				<ul class="area_ul">
+					<#list arealist as area1>
+					<#if area1.pid==0>
+						<li>
+							<div class="areadiv">
+								<span>${area1.name}</span>
+								<i class="Hui-iconfont lh-30" title="修改" onclick="area_edit(${area1.id})">&#xe647;</i>
+								<i class="Hui-iconfont lh-30 f-r" title="删除" onclick="area_del(${area1.id})">&#xe609;</i>
+								<ul class="area_ul postion hidden">
+									<#list arealist as area2>
+									<#if area2.pid==area1.id>
+										<li>
+											<div class="areadiv">
+												<span>${area2.name}</span>
+												<i class="Hui-iconfont lh-30" title="修改" onclick="area_edit(${area2.id})">&#xe647;</i>
+												<i class="Hui-iconfont lh-30 f-r" title="删除" onclick="area_del(${area2.id})">&#xe609;</i>
+												<ul class="area_ul postion hidden" id="area">
+													<#list arealist as area3>
+													<#if area3.pid==area2.id>
+														<li>
+															<div class="areadiv">
+																<span>${area3.name}</span>
+																<i class="Hui-iconfont lh-30" title="修改" onclick="area_edit(${area3.id})">&#xe647;</i>
+																<i class="Hui-iconfont lh-30 f-r" title="删除" onclick="area_del(${area3.id})">&#xe609;</i>
+															</div>
+														</li>
+													</#if>
+													</#list>
+												</ul>
+											</div>
+										</li>
+									</#if>
+									</#list>
+								</ul>
+							</div>
+						</li>
+					</#if>
+					</#list>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			$(function(){
+				$('.area_ul li').mouseenter(function(){
+					$(this).children('.areadiv').children('.area_ul').removeClass("hidden");
+				});
+				$('.area_ul li').mouseleave(function(){
+					$(this).children('.areadiv').children('.area_ul').addClass("hidden");
+				});
+			});
+			function area_add(){
+				parent.open_window('添加地区','/systom/getArea','540','340');
+			}
+			function area_edit(id){
+				parent.open_window('编辑地区','/systom/getArea/'+id,'540','340');
+			}
+			function area_del(id){
+				parent.actconfirm('确认要删除吗？', function(){
+					$.post('/manage/iframe/systom/delArea/'+id, function(data){
+						if(data){
+							layer.msg('删除成功', {time: 1000}, function(){
+								location.replace(location.href);
+							});
+						}else{
+							layer.msg('删除失败', {time: 1000});
+						}
+					});
+				});
+			}
+		</script> 
+	</body>
+</html>

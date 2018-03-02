@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>订单管理 - 分享订单</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 分享订单<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+				<span class="select-box l" style="width: 140px">
+				  	<select class="select" size="1" onchange="searchtime(this)">
+				    	<option value="0" <#if time==0>selected</#if>>--选择送达时间--</option>
+				    	<option value="1" <#if time==1>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周一送</option>
+				    	<option value="2" <#if time==2>selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周六送</option>
+				  	</select>
+				</span>
+				<span class="l ml-10" style="width: 170px">
+					<input type="text" class="input-text" placeholder="输入订单编号查询" value="${ordercode!}" id="code" maxlength="17">
+				</span>
+				<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="searchordercode()">
+				<span class="r" style="line-height: 32px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="60">序列</th>
+						<th width="136">订单编号</th>
+						<th width="100">商品名称</th>
+						<th width="60">收货人</th>
+						<th>忌讳的花类</th>
+						<th>忌讳色系</th>
+						<th width="60">发货次数</th>
+						<th width="60">送达时间</th>
+						<th width="60">类型</th>
+						<th width="120">下单时间</th>
+						<th width="60">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if sharelist?? && sharelist?size gt 0>
+					<#list sharelist as order>
+					<tr class="text-c">
+						<td>${order_index+1}</td>
+						<td>${order.ordercode}</td>
+						<td>${order.name}</td>
+						<td>${order.receiver!'-'}</td>
+						<td>${order.jihui!'未填'}</td>
+						<td>${order.color!'未填'}</td>
+						<td>${order.ocount}</td>
+						<td><#if order.reach==1>周一送<#else>周六送</#if></td>
+						<td><#if order.type==1>订阅<#elseif order.type==2>送花<#elseif order.type==3>周边<#else>兑换</#if></td>
+						<td>${order.ctime}</td>
+						<td class="td-manage">
+							<a title="查看详情" onclick="_see('${order.ordercode}')" style="text-decoration:none" class="f-16"><i class="Hui-iconfont">&#xe665;</i></a>
+						</td>
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="11" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript">
+			var time='${time!}',code='${ordercode!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/order/sharelist/'+e.curr+'-'+time+'-'+type+'-'+code);
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+			function searchtime(_time){
+				time=$(_time).find('option:selected').val();
+				location.replace('/manage/iframe/order/sharelist/1-'+time+'-'+code);
+			}
+			function searchordercode(){
+				code=$('#code').val();
+				if($.trim(code)!=''){
+					reg = /^[0-9]{1,17}$/;
+					if(!reg.test(code)){
+						layer.tips('请输入正确格式', '#code', {tips: [1, '#34495E']});return;
+					}
+
+				}
+				location.replace('/manage/iframe/order/sharelist/1-'+time+'-'+code);
+			}
+			function _see(ordercode){
+				parent.open_window('查看订单详情','/order/shareinfo/'+ordercode, 970, 540);
+			}
+		</script> 
+	</body>
+</html>

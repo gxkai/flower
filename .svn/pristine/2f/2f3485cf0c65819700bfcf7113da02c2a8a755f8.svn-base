@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+			.wid{width: 32%;margin-left:5px;}
+			.pd-r{padding-right: 7px;}
+		</style>
+		<title>订单管理 - 订单列表 - 客诉补单</title>
+	</head>
+	<body>
+		<div class="page-container">
+			<#if order??>
+			<div class="row cl">
+					<label class="col-xs-3 col-sm-2 text-r">原订单号：</label>
+					<div class="formControls col-xs-8 col-sm-9">${order.ordercode}</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">下单会员ID：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">${order.aid}</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">商品名称：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">
+						<span class="select-box l" style="width: 170px">
+						  	<select class="select" size="1" id="pid" onclick="flodisplay()">
+						  		<#if flopros?size gt 0>
+						    	<option value="0" <#if floid==0>selected</#if>>无</option>
+						  		<#list flopros as flo>
+						    	<option value="${flo.id}" <#if floid==flo.id>selected</#if>>${flo.name}</option>
+						    	</#list>
+						    	</#if>
+						  	</select>
+						</span>
+					</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">收货人姓名：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">${order.name}</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">收货人电话：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">${order.tel}</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">订阅次数：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">
+						<span class="select-box l" style="width: 170px">
+						  	<select class="select" size="1" name="cycle">
+						    	<option value="1" <#if order.cycle==1>selected</#if>>1</option>
+						    	<option value="4" <#if order.cycle==4>selected</#if>>4</option>
+						    	<option value="12" <#if order.cycle==12>selected</#if>>12</option>
+						  	</select>
+						</span>
+					</div>
+					<div id="va">
+						<label class="col-xs-3 col-sm-2 text-r mt-10">订阅花瓶：</label>
+						<div class="formControls col-xs-8 col-sm-9 mt-10">
+							<span class="select-box l" style="width: 170px">
+							  	<select class="select" size="1" id="vase">
+							  		<#if vases?size gt 0>
+							    	<option value="0" <#if vaseid==0>selected</#if>>无</option>
+							  		<#list vases as vase>
+							    	<option value="${vase.id}" <#if vaseid==vase.id>selected</#if>>${vase.name}</option>
+							    	</#list>
+							    	</#if>
+							  	</select>
+							</span>
+						</div>
+					</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">所在地区：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">
+						<span class="select-box l" style="width: 32%;">
+						  	<select class="select" id="prov" size="1" onchange="searchprovince(this)">
+						    	<option value="a" >--选择省--</option>
+						    	<option value="${prov.id}" selected="selected" >${prov.name}</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="city" size="1" onchange="searchcity(this)">
+						    	<option value="a" >--选择市--</option>
+						    	<option value="${city.id}" selected="selected" >${city.name}</option>
+						  	</select>
+						</span>
+						<span class="select-box l wid ml-2">
+						  	<select class="select" id="county" size="1">
+						    	<option value="a" >--选择县--</option>
+						    	<option value="${county.id}" selected="selected">${county.name}</option>
+						  	</select>
+						</span>
+					</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">详细地址：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">
+						<input type="text" class="input-text" id="addrname" name="addrname" value="${place}">
+					</div>
+					<label class="col-xs-3 col-sm-2 text-r mt-10">送达时间：</label>
+					<div class="formControls col-xs-8 col-sm-9 mt-10">
+						<input type="radio" id="reach" name="reach" value="1" <#if order.reach==1>checked</#if>>周一送
+						<input style="margin-left: 100px;" type="radio" id="reach" name="reach" value="2" <#if order.reach==2>checked</#if>>周六送
+					</div>
+					<div class="col-xs-8 col-sm-9 col-xs-offset-3 col-sm-offset-2 mt-20">
+						<input type="button" onClick="_ksbd()" class="btn btn-primary btn-block" value="补单">
+					</div>
+				</div>
+				<form style="display: none;">
+					<input type="hidden" name="ordercode" value="${order.ordercode!}">
+					<input type="hidden" name="aid" value="${order.aid!}">
+					<input type="hidden" name="name" value="${order.name!}">
+					<input type="hidden" name="tel" value="${order.tel!}">
+					<input type="hidden" name="pid">
+					<input type="hidden" name="vase">
+					<input type="hidden" name="address">
+					<input type="hidden" name="szdx" value="${order.szdx!}">
+					<input type="hidden" name="reach">
+					<input type="hidden" name="cycle">
+					<input type="hidden" name="zhufu" value="${order.zhufu!}">
+					<input type="hidden" name="songhua" value="${order.songhua!}">
+					<input type="hidden" name="jh_list" value="${order.jh_list!}">
+					<input type="hidden" name="jhcolor_list" value="${order.jh_color!}">
+					<input type="hidden" name="recommend"  value="${order.recommend!}">
+					<input type="hidden" name="cash">
+					<input type="hidden" name="activity">
+					<input type="hidden" name="yh" value="0">
+					<input type="hidden" name="prov">
+			  		<input type="hidden" name="city">
+			  		<input type="hidden" name="county">
+				</form>
+			<#else>
+			<div style="height: 30px;width: 100%;text-align: center;font: 16px/30px Microsoft Yahei;font-weight: bolder;">此订单不存在</div>
+			</#if>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript">
+			var areadata = new Array();
+			arealist = ${arealist};
+			var provs_data=[],citys_data=[],dists_data=[];
+			for(var i=0;i<arealist.length;i++){
+				if(arealist[i]['pid'] == 0){
+					// 省级
+					var prov = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString()};
+					provs_data.push(prov);
+				}else{
+					if(arealist[i]['ppid']==0 && arealist[i]['pid']!=0){
+						// 市级
+						var city = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+						citys_data.push(city);
+					}else{
+						// 区县
+						var county = {'text':arealist[i]['name'], 'value':arealist[i]['id'].toString(), 'pid': arealist[i]['pid']};
+						dists_data.push(county);
+					}
+				}
+			}
+			
+			$(document).ready(function(){
+				prov = $('#prov').find('option:selected').val();
+				city = $('#city').find('option:selected').val();
+				county = $('#county').find('option:selected').val();
+				if(prov == 'a'){
+					for(var i=0;i<provs_data.length;i++){
+						var prov_name = provs_data[i]['text'];
+						var prov_id = provs_data[i]['value'];
+						$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+					}
+				}else{
+					for(var i=0;i<provs_data.length;i++){
+						var prov_name = provs_data[i]['text'];
+						var prov_id = provs_data[i]['value'];
+						if(prov!=prov_id){
+							$('#prov').append('<option value="'+prov_id+'" >'+prov_name+'</option>');
+						}
+					}
+					for(var j=0;j<citys_data.length;j++){
+						if(prov == citys_data[j]['pid']){
+							var city_name = citys_data[j]['text'];
+							var city_id = citys_data[j]['value'];
+							if(city!=city_id){
+								$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+							}
+						}
+					}
+					for(var z=0;z<dists_data.length;z++){
+						if(city == dists_data[z]['pid']){
+							var dist_name = dists_data[z]['text'];
+							var dist_id = dists_data[z]['value'];
+							if(county!=dist_id){
+								$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+							}
+						}
+					}
+				}
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+				pid = $('#pid option:selected').val();
+				if(pid==1||pid==2){
+					$('#va').show();
+				}else{
+					$('#va').hide();
+				}
+			});
+			
+			function searchprovince(_obj){
+				prov = $(_obj).find('option:selected').val();
+				$('#city').find("option:not(:first)").remove();
+				$('#county').find("option:not(:first)").remove();
+				for(var j=0;j<citys_data.length;j++){
+					if(prov == citys_data[j]['pid']){
+						var city_name = citys_data[j]['text'];
+						var city_id = citys_data[j]['value'];
+						$('#city').append('<option value="'+city_id+'" >'+city_name+'</option>');
+					}
+				}
+				
+			}
+			
+			function searchcity(_obj){
+				city = $(_obj).find('option:selected').val();
+				$('#county').find("option:not(:first)").remove();
+				for(var z=0;z<dists_data.length;z++){
+					if(city == dists_data[z]['pid']){
+						var dist_name = dists_data[z]['text'];
+						var dist_id = dists_data[z]['value'];
+						$('#county').append('<option value="'+dist_id+'" >'+dist_name+'</option>');
+					}
+				}
+			}
+			
+			function flodisplay(_obj){
+				pid = $('#pid option:selected').val();
+				if(pid==1||pid==2){
+					$('#va').show();
+				}else{
+					$('#va').hide();
+				}
+			}
+			
+			function _ksbd(){
+				var pid = $('#pid').find('option:selected').val();
+				var vase = $('#vase').find('option:selected').val();
+				var reach = $('input[name="reach"]:checked').val();
+				var cycle = $('select[name="cycle"] option:selected').val();
+				prov = $('#prov').find('option:selected').val();
+				city = $('#city').find('option:selected').val();
+				county = $('#county').find('option:selected').val();
+				//省
+				$('input[name="prov"]').val(prov);
+				//市
+				$('input[name="city"]').val(city);
+				//区县
+				$('input[name="county"]').val(county);
+				
+				$('input[name="address"]').val($('#addrname').val());
+				
+				if(pid == 0){
+					layer.tips('请选择商品', '#pid', {tips: [1, '#34495E']});return;
+				}
+				$('input[name="pid"]').val(pid);
+				if(pid==1||pid==2){
+					$('input[name="vase"]').val(vase==0?'':vase);	
+				}else{
+					$('input[name="vase"]').val('');	
+				}
+				// 送达时间
+				$('input[name="reach"]').val(reach);
+				$('input[name="cycle"]').val(cycle);
+				var lock = true;
+				if(lock){
+					lock = false;
+					$.post('/manage/iframe/order/createorderks', $('form').serialize(), function(data){
+						if(data){
+							parent.refresh_iframe();
+							layer.msg('补单成功', {time: 2000}, function(){
+								layer_close();
+							});
+						}else{
+							layer.msg('补单失败', {time: 2000}, function(){
+								lock = true;
+							});
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/html5.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/respond.min.js"></script>
+			<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/PIE_IE678.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<title>报表管理 - 地推下单数据分析</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 地推管理 <span class="c-gray en">&gt;</span> 地推下单数据分析<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray">
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow!}</strong> 条</span> 
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray">
+			<span class="l ml-10">
+               <input type="text" placeholder="开始时间" class="input-text Wdate" id="ctime_start" name="ctime_start" value="${ctime_start!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+            </span>
+            <span class="l ml-10">
+               <input type="text" placeholder="结束时间" class="input-text Wdate" id="ctime_end" name="ctime_end" value="${ctime_end!}" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>			
+            </span>
+            <span class="l ml-5" style="width: 140px">
+				<input type="text" class="input-text" placeholder="二维码下单" value="${xiadan!}" id="xiadan" >
+			</span>
+			<input class="l btn btn-primary ml-10" type="submit" value="查找" onclick="search()">					
+			</div>
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="100">活动日期</th>
+						<th width="80">二维码下单</th>
+						<th width="80">是否首单</th>
+						<th width="80">送达日期</th>
+						<th width="60">订阅次数</th>
+						<th width="140">商品类别</th>
+						<th width="80">订单数</th>
+						<th width="80">订单金额</th>			
+					</tr>
+				</thead>
+				<tbody>
+					<#if dtanalysislist?? && dtanalysislist?size gt 0>
+					<#list dtanalysislist as dtanalysis>
+					<tr class="text-c">
+						<td>${dtanalysis.活动日期!}</td>
+						<td>${dtanalysis.二维码下单!}</td>
+						<td>${dtanalysis.是否首单!}</td>
+						<td>${dtanalysis.送达日期!}</td>
+						<td>${dtanalysis.订阅次数!}</td>
+						<td>${dtanalysis.商品类别!}</td>
+						<td>${dtanalysis.订单数!}</td>
+						<td>${dtanalysis.订单金额!}</td>			
+					</tr>
+					</#list>
+					<#else>
+						<tr>
+							<td colspan="17" style="text-align: center;"><span>没有数据信息</span></td>
+						</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script> 
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/lib/My97DatePicker/WdatePicker.js"></script> 	
+		<script type="text/javascript">
+		var ctime_start = '${ctime_start!}',ctime_end = '${ctime_end!}',xiadan = '${xiadan!}';
+        $(document).ready(function () {
+        	laypage({
+			    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+			    pages: ${totalpage}, //总页数
+			    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+			    groups: 5, //连续显示分页数
+			    curr: ${pageno!},
+			    jump: function(e, first){ //触发分页后的回调
+			        if(!first){ //一定要加此判断，否则初始时会无限刷新
+			        	var load = layer.load();
+			            location.replace('/manage/iframe/report/dtanalysis?pageno='+e.curr+'&ctime_start='+ctime_start+'&ctime_end='+ctime_end+'&xiadan='+xiadan);
+			            load.close(); 
+			        }
+			    }
+			});
+			$("html").niceScroll({
+				cursorcolor:"#333",
+				cursoropacitymin: 0.6,
+				cursoropacitymax:0.6,
+				demode: false
+			});
+		});
+        function search() {
+        	var ctime_start = $("#ctime_start").val();
+        	var ctime_end= $("#ctime_end").val();
+        	var xiadan = $.trim($("#xiadan").val());
+        	var load = layer.load();
+            location.replace('/manage/iframe/report/dtanalysis?pageno=1'+'&ctime_start='+ctime_start+'&ctime_end='+ctime_end+'&xiadan='+xiadan);
+            load.close(); 		
+        }
+		</script> 
+	</body>
+</html>

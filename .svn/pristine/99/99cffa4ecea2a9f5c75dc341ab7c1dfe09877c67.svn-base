@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+
+body{
+				padding: 5px;
+				margin: 0;
+				font-family: "微软雅黑";
+			}
+			.container{
+				
+			}
+			.content{
+				/*border: 1px red solid;*/
+			}
+			.good_div{
+				display: flex;
+				padding: 10px;
+				border-bottom: 1px solid #f0f0f0;
+				
+			}
+			.good_div_left{
+				flex: 0 0 32%;
+			}
+			.good_div_left img{
+				width: 100%;
+				border-radius: 5px;
+			}
+			.good_div_right{
+				flex: 1;
+				padding-left:10px ;
+			}
+			.good_div_right span{
+				display: block;
+			}
+			

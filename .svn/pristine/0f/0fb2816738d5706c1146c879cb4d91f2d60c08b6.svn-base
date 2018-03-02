@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- GrowingIo的接口，用于统计分析用户行为数据 -->
+		<!-- <script type='text/javascript'>
+            var _vds = _vds || [];
+            window._vds = _vds;
+            (function(){
+               _vds.push(['setAccountId', '98f0d63603fe182a']);
+            (function() {
+               var vds = document.createElement('script');
+               vds.type='text/javascript';
+               vds.async = true;
+               vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+               var s = document.getElementsByTagName('script')[0];
+               s.parentNode.insertBefore(vds, s);
+            })();
+            })();
+        </script> -->
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/flower/css/flower.logistics.css" />
+		<style type="text/css">
+			body{background-color: #F2F2F2;}
+			.c_1{width: 100%;height: 315px;float: left;}
+			.c_1 img{width:270px;height:270px;margin-left: calc(50% - 135px);margin-top: calc(30% - 55px);}
+			.c_1_1{width: 100%;height: 70px;float: left;text-align: center;font: 16px/100px 'Microsoft Yahei';color: #888;}
+			.c_1_2{width: 100%;height: calc(50% - 100px);float: left;;text-align: center;font: 34px/55px 'Microsoft Yahei';color: #028CC9;}
+			.c_1_3{width: calc(100% - 30px);padding: 10px 15px;}
+			.c_1_3 a:nth-child(1){width: 100%;height: 56px; float: left;font: 18px/56px 'Microsoft Yahei';text-align: center;text-decoration: none;background-color: #E96388;margin: 10px 0 10px;border-radius: 4px;color: white;}
+			.c_1_3 a:nth-child(2){width: 100%; height: 56px;float: left;font: 18px/56px 'Microsoft Yahei';text-align: center;text-decoration: none;background-color: #fff; margin: 10px 0 10px;border-radius: 4px; color: #999;}
+		
+			.b_1_1{width: 100%;height: 70px;float: left;text-align: center;font: 14px/100px 'Microsoft Yahei';color: #888;}
+			.b_1_2{width: calc(100% - 30px);padding: 10px 15px;float: left;height: 115px;}
+			.b_1_3{width: calc(100% - 30px);padding: 10px 15px;float: left;}
+			.binding_tel{
+				-webkit-appearance: none;
+			    width: 100%;
+			    height: 50px;
+			    float: left;
+			    border: 1px solid #A1A4A9;
+			    color: #A1A4A9;
+			    box-sizing: border-box;
+			    padding: 7px 10px;
+			    font: 15px/26px 'Microsoft Yahei';
+			    border-radius: 4px;
+			    outline: none;
+			}
+			.binding_msm{
+				-webkit-appearance: none;
+			    width: calc(100% - 140px);
+			    height: 50px;
+			    float: left;
+			    border: 1px solid #A1A4A9;
+			    color: #A1A4A9;
+			    box-sizing: border-box;
+			    padding: 7px 10px;
+			    font: 15px/50px 'Microsoft Yahei';
+			    border-radius: 4px;
+			    outline: none;
+			    margin-top: 20px;
+			}
+			.binding_send{
+				width: 120px;
+			    height: 50px;
+			    float: right;
+			    border-radius: 4px;
+			    background-color: #F9A326;
+			    color: white;
+			    font: 15px/50px 'Microsoft Yahei';
+			    text-align: center;
+			    margin-top: 20px;
+			}
+			.binding_send_lock{
+				width: 120px;
+			    height: 50px;
+			    float: right;
+			    border-radius: 4px;
+			    background-color: #F5F3F3;
+			    color: #A1A4A9;
+			    font: 15px/50px 'Microsoft Yahei';
+			    text-align: center;
+			    margin-top: 20px;
+			}
+			.binding_over{
+				width: 100%;
+			    height: 50px;
+			    float: left;
+			    line-height: 50px;
+			    text-align: center;
+			    background-color: #E96388;
+			    border-radius: 4px;
+			    color: white;
+			    text-decoration: none;
+			}
+			.msg{width: 100%; text-align: center;}		
+		</style>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/flower.js"></script>
+		<title>查看祝福卡</title>
+		<script type="text/javascript">
+			function seeBlessCard(){
+				var tel = $('#tel').val();
+				$('input[name="tel"]').val(tel);
+				$('form').submit();
+			}
+			// 使用其他手机
+			function useotherphone(){
+				location.href = "/account/seecardinfo/1";
+			}
+			// 保存绑定号码
+			function saveBindSee(_obj){
+				var tel = $('.binding_tel').val();
+				var msm = $('.binding_msm').val();
+				var tel = $('#tel').val();
+				var reg = /^1(3|4|5|7|8)\d{9}$/;
+				var code = /^\d{6}$/;
+				if($(_obj).data('lock') == 0){
+					if($.trim(tel) == ''){
+						layer.tips('请录入手机号码', '.binding_tel', {tips: [1, '#34495E']});return;
+					}else if(!reg.test(tel)){
+						layer.tips('手机号格式错误', '.binding_tel', {tips: [1, '#34495E']});return;
+					}
+					if($.trim(msm) == ''){
+						layer.tips('请录入验证码', '.binding_msm', {tips: [1, '#34495E']});return;
+					}else if(!code.test(msm)){
+						layer.tips('验证码为6位数字', '.binding_msm', {tips: [1, '#34495E']});return;
+					}
+					$(_obj).data('lock', 1);
+					var load = layer.load();
+					$.post('/account/saveBinding', {'number':tel,'msgcode':msm}, function(data){
+						layer.close(load);
+						$(_obj).data('lock', 0);
+						if(data.reslut){
+							layer.msg("验证成功", {time: 3000},function(){
+								location.replace('/account/cardget/');
+							});
+						}else{
+							if(data.msg=="保存成功"){
+								layer.msg("验证成功", {time: 3000},function(){
+									location.replace('/account/cardget/');
+								});
+							}else{
+								layer.msg(data.msg);
+							}
+						}
+					});
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="c_1"><img src="/resource/flower/image/ecard1.jpg"></div>
+			<#if msg??>
+			<div class="msg">${msg}</div>
+			<#else>
+			<#if tel??>
+			<input type="hidden" id="tel" value="${tel!}">
+			<div class="c_1">
+				<div class="c_1_1">您已绑定该手机号码</div>
+				<div class="c_1_2">${tel!}</div>
+				<div class="c_1_3"><a onclick="seeBlessCard()">查看祝福卡</a><a onclick="useotherphone()">使用其他手机</a></div>
+			</div>
+			<#else>
+			<div class="c_1">
+				<div class="b_1_1">请验证您的手机号，查看送花人的祝福语</div>
+				<div class="b_1_2">
+					<input type="tel" id="tel" class="binding_tel" placeholder="输入手机号">
+					<input type="tel" class="binding_msm" placeholder="输入短信验证码">
+					<span class="binding_send" id="send" onclick="getBindingCode()" data-lock="0">获取验证码</span>
+				</div>
+				<div class="b_1_3"><span class="binding_over" onclick="saveBindSee(this)" data-lock="0">查看祝福卡</span></div>
+			</div>
+			</#if>
+			</#if>
+			<form action="/account/cardget/" method="post" style="display: none;">
+				<input type="hidden" name="tel"/>
+			</form>
+		</div>
+	</body>
+</html>

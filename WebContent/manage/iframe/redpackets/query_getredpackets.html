@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui/css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/static/h-ui.admin/css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="/resource/H-ui.admin_v2.5/lib/Hui-iconfont/1.0.7/iconfont.css" />
+		<style type="text/css">
+         .alladdr:hover {overflow:visible;position: absolute;font-weight: bolder;}
+		</style>
+		<title>红包管理 - 拆包列表</title>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>红包管理 <span class="c-gray en">&gt;</span>拆包列表<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="page-container">
+				<div class="cl pd-5 bg-1 bk-gray">
+				<span class="select-box l" style="width: 150px">
+					  	<select class="select" size="1"  id="isopen" onchange="search()">
+					    	<option value="10" <#if isopen==10>selected</#if>>--选择状态--</option>
+					    	<option value="0" <#if isopen==0>selected</#if>>未拆</option>
+					    	<option value="1" <#if isopen==1>selected</#if>>已拆</option>
+					    	<option value="2" <#if isopen==2>selected</#if>>未拆已退款</option>
+					    	<option value="3" <#if isopen==3>selected</#if>>转赠中</option>
+					    	<option value="4" <#if isopen==4>selected</#if>>已兑换</option>
+					  	</select>
+				</span>
+				<span class="select-box l" style="width: 150px">
+					  	<select class="select" size="1"  id="isduihuan" onchange="search()">
+					    	<option value="10" <#if isduihuan==10>selected</#if>>--是否兑换--</option>
+					    	<option value="0" <#if isduihuan==0>selected</#if>>未兑换</option>
+					    	<option value="1" <#if isduihuan==1>selected</#if>>已兑换</option>
+					  	</select>
+				</span>
+				<span class="l ml-5" style="width: 150px">
+						<input type="text" class="input-text" placeholder="输入拆包人ID" value="${caid!}" id="caid" maxlength="17">
+				</span>	
+				<span class="l ml-5" style="width: 150px">
+						<input type="text" class="input-text" placeholder="输入拆包人昵称" value="${cnick!}" id="cnick" maxlength="17">
+				</span>
+				<span class="l ml-5" style="width: 150px">
+						<input type="text" class="input-text" placeholder="输入发包人ID" value="${faid!}" id="faid" maxlength="17">
+				</span>
+				<span class="l ml-5" style="width: 150px">
+						<input type="text" class="input-text" placeholder="输入发包编号" value="${rpid!}" id="rpid" maxlength="17">
+				</span>
+				<input class="btn btn-primary ml-10" type="submit" value="查找" onclick="search()">
+				<span class="r" style="line-height: 31px;">共有数据：<strong>${totalrow}</strong> 条</span>
+			</div>
+	
+			
+			<div class="mt-10">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="80">拆包编号</th>
+						<th width="80">拆包人ID</th>
+						<th width="85">拆包人昵称</th>
+						<th width="130">拆包时间</th>
+						<th width="120">兑换订单号</th>
+						<th width="80">状态</th>
+						<th width="80">发包编号</th>
+						<th width="140">发包人ID</th>
+						<th width="140">发包人昵称</th>
+						<th width="140">红包内容</th>
+						<th width="80">红包金额</th>
+						<th width="600">触发红包的单号</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if list?? && list?size gt 0>
+					<#list list as li>
+					<tr class="text-c">
+						<td>${li.id!}</td>
+						<td>${li.caid!}</td>
+						<td>${li.cnick!}</td>
+						<td>${li.gtime!}</td>
+						<td>${li.oid!}</td>
+						<td>${li.isopen!}</td>
+						<td>${li.rpid!}</td>
+						<td>${li.faid!}</td>
+						<td>${li.fnick!}</td>
+						<td>${li.name!}</td>
+						<td>${li.dmoney!}</td>
+						<td>${li.orderlist!}</td>
+					</tr>
+					</#list>
+					<#else>
+					<tr>
+						<td colspan="16" style="text-align: center;"><span>没有数据信息</span></td>
+					</tr>
+					</#if>
+				</tbody>
+			</table>
+			<div class="mt-10 text-r" id="forpage"></div>
+			</div>
+		
+		</div>
+		<script type="text/javascript" src="/resource/flower/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/resource/flower/js/jquery.nicescroll.min.js"></script>
+		<script type="text/javascript" src="/resource/layer/layer.js"></script>
+		<script type="text/javascript" src="/resource/laypage/laypage.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui/js/H-ui.js"></script>
+		<script type="text/javascript" src="/resource/H-ui.admin_v2.5/static/h-ui.admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript">
+		
+		var isopen='${isopen!}',caid='${caid!}',cnick='${cnick!}',isduihuan='${isduihuan!}',rpid='${rpid!}',faid='${faid!}';
+			$(document).ready(function(){
+				laypage({
+				    cont: document.getElementById('forpage'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: ${totalpage}, //总页数
+				    skin: '#5A98DE', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+				    groups: 5, //连续显示分页数
+				    curr: ${pageno},
+				    jump: function(e, first){ //触发分页后的回调
+				        if(!first){ //一定要加此判断，否则初始时会无限刷新
+				            location.replace('/manage/iframe/redpackets/QueryGetRedPackets?pageno='+e.curr+'&isopen='+isopen+'&caid='+caid+'&cnick='+cnick+'&isduihuan='+isduihuan+'&faid='+faid+'&rpid='+rpid);
+				            
+				        }
+				    }
+				});
+				$("html").niceScroll({
+					cursorcolor:"#333",
+					cursoropacitymin: 0.6,
+					cursoropacitymax:0.6,
+					demode: false
+				});
+			});
+		 function search(){
+			 isopen=$('#isopen').find('option:selected').val();
+			 isduihuan=$('#isduihuan').find('option:selected').val();
+			 caid=$('#caid').val();
+			 cnick=$('#cnick').val();
+			 rpid=$('#rpid').val();
+			 faid=$('#faid').val();
+			 location.replace('/manage/iframe/redpackets/QueryGetRedPackets?pageno=1'+'&isopen='+isopen+'&caid='+caid+'&cnick='+cnick+'&isduihuan='+isduihuan+'&faid='+faid+'&rpid='+rpid);
+		 }
+			 
+		 
+		 
+		 
+			
+		</script> 
+	</body>
+</html>
